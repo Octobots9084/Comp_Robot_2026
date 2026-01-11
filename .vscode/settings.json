@@ -3,7 +3,7 @@
   "java.server.launchMode": "Standard",
   "files.exclude": {
     "**/.git": true,
-    "**/.svn": true, 
+    "**/.svn": true,
     "**/.hg": true,
     "**/CVS": true,
     "**/.DS_Store": true,
@@ -56,5 +56,6 @@
     "edu.wpi.first.math.proto.*",
     "edu.wpi.first.math.**.proto.*",
     "edu.wpi.first.math.**.struct.*",
-  ]
+  ],
+  "java.dependency.enableDependencyCheckup": false
 }
