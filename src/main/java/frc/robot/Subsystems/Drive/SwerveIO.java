@@ -25,24 +25,9 @@ public interface SwerveIO {
         public double OdometryPeriod;
         public int SuccessfulDaqs;
         public int FailedDaqs;
-
-        void logState(SwerveDrivetrain.SwerveDriveState state) {
-            this.Pose = state.Pose;
-            this.RawHeading = state.RawHeading;
-            this.ModuleStates = state.ModuleStates;
-            this.ModuleTargets = state.ModuleTargets;
-            this.ModulePositions = state.ModulePositions;
-            this.Speeds = state.Speeds;
-            this.SuccessfulDaqs = state.SuccessfulDaqs;
-            this.FailedDaqs = state.FailedDaqs;
-            this.OdometryPeriod = state.OdometryPeriod;
-            this.Timestamp = state.OdometryPeriod;
-            // RobotState.getInstance().addPoseObservation(new RobotState.SwerveDriveObservation(this.Pose, this.Speeds));
-        }
     }
-    default void updateSwerveInputs(SwerveIOInputs inputs) {}
 
-    // default void updateModuleInputs(ModuleIOInputs... inputs) {}
+    default void updateInputs(SwerveIOInputs inputs) {}
 
     default void registerTelemetryFunction(SwerveIOInputs inputs) {}
 

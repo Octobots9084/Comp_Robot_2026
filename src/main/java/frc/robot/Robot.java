@@ -8,6 +8,9 @@ import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
+import org.littletonrobotics.urcl.URCL;
+
+import com.revrobotics.util.StatusLogger;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -33,20 +36,35 @@ public class Robot extends LoggedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
+    // Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
+    // Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
+    // Logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA);
+    // Logger.recordMetadata("GitDate", BuildConstants.GIT_DATE);
+    // Logger.recordMetadata("GitBranch", BuildConstants.GIT_BRANCH);
+    // Logger.recordMetadata(
+    //     "GitDirty",
+    //     switch (BuildConstants.DIRTY) {
+    //       case 0 -> "All changes committed";
+    //       case 1 -> "Uncommitted changes";
+    //       default -> "Unknown";
+    //     });
+    
+    // Choose log storage location (on robot)
+    Logger.addDataReceiver(new WPILOGWriter());
+    
+    // Also stream logs to AdvantageScope live
+    Logger.addDataReceiver(new NT4Publisher());
+
+    // Initialize URCL
+    Logger.registerURCL(URCL.startExternal());
+    StatusLogger.disableAutoLogging(); // Disable REVLib's built-in logging
+    // Start the logger
+    Logger.start();
   }
 
   @Override
   public void robotInit(){
     robotContainer = new RobotContainer();
-
-    // Choose log storage location (on robot)
-    Logger.addDataReceiver(new WPILOGWriter("/home/lvuser/logs"));
-    
-    // Also stream logs to AdvantageScope live
-    Logger.addDataReceiver(new NT4Publisher());
-
-    // Start the logger
-    Logger.start();
   }
 
   /**

@@ -11,8 +11,9 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
-import frc.robot.Subsystems.Drive.SwerveSubsystem;
+import frc.robot.Subsystems.Drive.Swerve;
 import frc.robot.Subsystems.Drive.TunerConstants;
 import frc.robot.Subsystems.Drive.SwerveIO;
 import frc.robot.Subsystems.Drive.SwerveIOSystem;
@@ -27,8 +28,8 @@ import frc.robot.Subsystems.Drive.SwerveIOSystem;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-    private final SendableChooser<Command> autoChooser;
-    private final SwerveSubsystem swerveSubsystem;
+    // private final SendableChooser<Command> autoChooser;
+    private final Swerve swerveSubsystem;
     static CommandJoystick driverLeft = ControlMap.DRIVER_LEFT;
     static CommandJoystick driverRight = ControlMap.DRIVER_RIGHT;
     static CommandJoystick driverButtons = ControlMap.DRIVER_BUTTONS;
@@ -41,7 +42,7 @@ public class RobotContainer {
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
-        this.swerveSubsystem = SwerveSubsystem.setInstance(TunerConstants.createDrivetrain(), driverLeft, driverRight, Constants.maxAngularVelocity, Constants.maxVelocity);
+        this.swerveSubsystem = Swerve.setInstance(TunerConstants.createDrivetrain(), driverLeft, driverRight, Constants.maxAngularVelocity, Constants.maxVelocity);
         switch (Constants.currentMode) {
             case REAL:
                 break;
@@ -51,9 +52,9 @@ public class RobotContainer {
                 break;
         }
 
-        autoChooser = AutoBuilder.buildAutoChooser();
+        // autoChooser = AutoBuilder.buildAutoChooser();
         //NAMED COMMANDS IN SWERVE
-        SmartDashboard.putData("Autonomous Path", autoChooser);
+        // SmartDashboard.putData("Autonomous Path", autoChooser);
         // VisionSubsystem.getInstance();
         ButtonConfig buttons = new ButtonConfig();
         buttons.initTeleop();
@@ -65,6 +66,7 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return autoChooser.getSelected();
+        // return autoChooser.getSelected();
+        return new InstantCommand();
     }
 }

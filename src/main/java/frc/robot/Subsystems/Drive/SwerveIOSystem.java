@@ -239,9 +239,19 @@ public class SwerveIOSystem extends TunerSwerveDrivetrain implements Subsystem, 
         super.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds), visionMeasurementStdDevs);
     }
 
-     public void updateSwerveInputs(SwerveIOInputs inputs) {
+    @Override
+     public void updateInputs(SwerveIOInputs inputs) {
         SwerveDriveState state = this.getStateCopy();
-        inputs.logState(state);
+        inputs.Pose = state.Pose;
+        inputs.RawHeading = state.RawHeading;
+        inputs.ModuleStates = state.ModuleStates;
+        inputs.ModuleTargets = state.ModuleTargets;
+        inputs.ModulePositions = state.ModulePositions;
+        inputs.Speeds = state.Speeds;
+        inputs.SuccessfulDaqs = state.SuccessfulDaqs;
+        inputs.FailedDaqs = state.FailedDaqs;
+        inputs.OdometryPeriod = state.OdometryPeriod;
+        inputs.Timestamp = state.OdometryPeriod;
      }
 
      public void registerTelemetryFunction(SwerveIOInputs inputs) {}

@@ -1,6 +1,9 @@
 package frc.robot.Subsystems.Drive;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
+
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.swerve.SwerveModule;
 
 import edu.wpi.first.math.MathUtil;
@@ -10,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import frc.robot.Constants;
 import frc.robot.FieldConstants;
 
-public class SwerveSubsystem extends SubsystemBase{
+public class Swerve extends SubsystemBase{
     public enum SystemState {
         MANUAL,
         IDLE,
@@ -18,18 +21,17 @@ public class SwerveSubsystem extends SubsystemBase{
         REVERSE,
         ALIGN
     }
-    private static SwerveSubsystem instance;
+    private static Swerve instance;
+    public SwerveIO io;
+    private final SwerveIOInputsAutoLogged inputs = new SwerveIOInputsAutoLogged();
     public SystemState wantedState = SystemState.MANUAL;
     public SystemState systemState = SystemState.IDLE;
-    public SwerveIO io;
     public CommandJoystick driverLeft;
     public CommandJoystick driverRight;
     public double maxVelocity;
     public double maxAngularVelocity;
 
-    final SwerveIOInputsAutoLogged swerveInputs = new SwerveIOInputsAutoLogged();
-
-    public SwerveSubsystem(
+    public Swerve(
         SwerveIO io, CommandJoystick driverLeft, CommandJoystick driverRight, double maxAngularVelocity, double maxVelocity
     ){
         this.io = io;
@@ -40,19 +42,21 @@ public class SwerveSubsystem extends SubsystemBase{
 
     }
 
-    public static SwerveSubsystem getInstance() {
+    public static Swerve getInstance() {
         if(instance == null)
             throw new IllegalStateException("Swerve instance not set");
         else
             return instance;
     }
 
-    public static SwerveSubsystem setInstance(SwerveIO io, CommandJoystick driverLeft, CommandJoystick driverRight, double maxAngularVelocity, double maxVelocity) {
-        return instance = new SwerveSubsystem(io,driverLeft,driverRight,maxAngularVelocity,maxVelocity);
+    public static Swerve setInstance(SwerveIO io, CommandJoystick driverLeft, CommandJoystick driverRight, double maxAngularVelocity, double maxVelocity) {
+        return instance = new Swerve(io,driverLeft,driverRight,maxAngularVelocity,maxVelocity);
     }
 
     @Override
     public void periodic() {
+        this.io.updateInputs(inputs);
+        Logger.processInputs("Swerve Drive", inputs);
         systemState = handleStateTransition();
         applyStates();
     }
@@ -89,7 +93,7 @@ public class SwerveSubsystem extends SubsystemBase{
                 
                 break;
             case REVERSE:
-                io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(-0.3, 0, 0))
+                io.setSwerveState(new SwerveRequest.ApplyRobotSpeeds().withSpeeds(new ChassisSpeeds(-0.3, 0, 0))
                 .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
                 break;
             case ALIGN:
