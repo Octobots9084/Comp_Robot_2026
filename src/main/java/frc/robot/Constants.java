@@ -7,6 +7,10 @@
 
 package frc.robot;
 
+import java.util.Optional;
+
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.RobotBase;
 
 /**
@@ -17,6 +21,16 @@ import edu.wpi.first.wpilibj.RobotBase;
 public final class Constants {
   public static final Mode simMode = Mode.SIM;
   public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;
+
+  public static final double maxTelopVelocity = 1;//TODO
+    public static final double maxTelopAngularVelocity = 1;//TODO
+    public static final double leftYDeadband = 0.05;//TODO
+    public static final double leftXDeadband = 0.05;//TODO
+    public static final double rightXDeadband = 0.05;//TODO
+    public static final double maxAngularVelocity = 1;//TODO
+    // public static final enum currentMode = 1;//TODO
+    public static final double maxVelocity = 1;//TODO
+    public static Alliance allianceColor = DriverStation.getAlliance().orElse(Alliance.Blue);
 
   public static enum Mode {
     /** Running on a real robot. */
