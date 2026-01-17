@@ -1,5 +1,4 @@
 package frc.robot;
-import com.revrobotics.spark.ClosedLoopSlot;
 
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 public class ButtonConfig {

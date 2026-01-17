@@ -1,4 +1,4 @@
-package frc.robot.subsystems.Shooter;
+package frc.robot.Subsystems.Shooter;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 

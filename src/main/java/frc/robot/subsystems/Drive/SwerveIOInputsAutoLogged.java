@@ -1,9 +1,9 @@
-package frc.robot.subsystems.drive;
+package frc.robot.Subsystems.Drive;
 
 import org.littletonrobotics.junction.LogTable;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
-public class ModuleIOInputsAutoLogged extends ModuleIO.ModuleIOInputs implements LoggableInputs, Cloneable {
+public class SwerveIOInputsAutoLogged extends SwerveIO.SwerveIOInputs implements LoggableInputs, Cloneable {
     @Override
     public void toLog(LogTable table){
 
