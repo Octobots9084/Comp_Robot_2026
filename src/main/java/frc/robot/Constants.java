@@ -7,8 +7,6 @@
 
 package frc.robot;
 
-import java.util.Optional;
-
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -24,9 +22,9 @@ public final class Constants {
 
   public static final double maxTelopVelocity = 1;//TODO
     public static final double maxTelopAngularVelocity = 1;//TODO
-    public static final double leftYDeadband = 0.15;//TODO
-    public static final double leftXDeadband = 0.15;//TODO
-    public static final double rightXDeadband = 0.05;//TODO
+    public static final double leftYDeadband = 0.5;//TODO
+    public static final double leftXDeadband = 0.5;//TODO
+    public static final double rightXDeadband = 0.15;//TODO
     public static final double maxAngularVelocity = 3;//TODO
     // public static final enum currentMode = 1;//TODO
     public static final double maxVelocity = 3;//TODO

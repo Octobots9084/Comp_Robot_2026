@@ -1,6 +1,9 @@
 package frc.robot.Subsystems.Drive;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
+
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.swerve.SwerveModule;
 
 import edu.wpi.first.math.MathUtil;
@@ -55,6 +58,10 @@ public class SwerveSubsystem extends SubsystemBase{
     public void periodic() {
         systemState = handleStateTransition();
         applyStates();
+        Logger.recordOutput("front left absolute", io.getAbsoluteEncoderPositiosn(0));
+        Logger.recordOutput("front right absolute", io.getAbsoluteEncoderPositiosn(1));
+        Logger.recordOutput("back left absolute", io.getAbsoluteEncoderPositiosn(2));
+        Logger.recordOutput("back right absolute", io.getAbsoluteEncoderPositiosn(3));
     }
 
     private SystemState handleStateTransition() {

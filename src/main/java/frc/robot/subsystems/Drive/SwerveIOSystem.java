@@ -247,6 +247,10 @@ public class SwerveIOSystem extends TunerSwerveDrivetrain implements Subsystem, 
         this.setControl(request);
      }
 
+     public double getAbsoluteEncoderPositiosn(int index) {
+        return this.getModule(index).getEncoder().getAbsolutePosition().getValueAsDouble();
+     }
+
      public void resetRotation() {}
 
      public void resetToParamaterizedRotation(Rotation2d rotation2d) {}

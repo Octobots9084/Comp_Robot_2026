@@ -53,6 +53,8 @@ public interface SwerveIO {
     default void resetToParamaterizedRotation(Rotation2d rotation2d) {}
 
     default void updateSimState() {}
+    
+    default double getAbsoluteEncoderPositiosn(int index) {return 0;}
 
     default void resetRobotTranslation(Translation2d translation2d) {}
 
