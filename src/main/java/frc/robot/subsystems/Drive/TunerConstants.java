@@ -118,7 +118,8 @@ public class TunerConstants {
             .withSteerMotorInitialConfigs(steerInitialConfigs)
             .withEncoderInitialConfigs(encoderInitialConfigs)
             .withSteerInertia(kSteerInertia)
-            .withDriveInertia(kDriveInertia)
+            .withDriveInertia
+            (kDriveInertia)
             .withSteerFrictionVoltage(kSteerFrictionVoltage)
             .withDriveFrictionVoltage(kDriveFrictionVoltage);
 
@@ -160,7 +161,7 @@ public class TunerConstants {
     private static final int kBackRightDriveMotorId = 3;
     private static final int kBackRightSteerMotorId = 4;
     private static final int kBackRightEncoderId = 10;
-    private static final Angle kBackRightEncoderOffset = Rotations.of(0.280);
+    private static final Angle kBackRightEncoderOffset = Rotations.of(0.338);
     private static final boolean kBackRightSteerMotorInverted = false;
     private static final boolean kBackRightEncoderInverted = false;
 
