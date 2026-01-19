@@ -1,9 +1,11 @@
 package frc.robot.subsystems.Shooter;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.Vision.ShooterAngleCalculator;
 
 public class Shooter extends SubsystemBase{
     ShooterStates currentShooterState;
+    private ShooterAngleCalculator AngleCalculator = new ShooterAngleCalculator();
     private static Shooter instance = null;
     public final ShooterIO io;
     public Shooter(ShooterIO io){
