@@ -7,7 +7,7 @@ import org.littletonrobotics.junction.AutoLog;
 public interface IntakeIO {
     
     @AutoLog
-    public static class WristIOInputs {
+    public static class IntakeIOInputs {
         
     }
 }
