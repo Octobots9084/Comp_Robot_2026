@@ -28,4 +28,18 @@ public final class Constants {
     /** Replaying from a log file. */
     REPLAY
   }
+  public static class ShooterConstants {
+    public static int flyWheelRightID = 0;
+    public static int flyWheelLeftID = 0;
+    public static int hoodID = 0;
+    public static int turretID = 0;
+    public static int multiFeedertID = 0;
+    public static int singleFeederID = 0;
+    public static int topRollerID = 0;
+  }
+
+  public static class IntakeConstants {
+    public static int intakePivotID = 0;
+    public static int intakeRollerID = 0;
+  }
 }

@@ -3,15 +3,23 @@ package frc.robot.subsystems.Intake;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase{
+    public static IntakeIO io = new IntakeIOTalonFX();
+    public static Intake currentInstance;
     
     IntakeStates currentState = IntakeStates.SAFE;
     IntakeStates wantedState = IntakeStates.SAFE;
 
-    /*
-    Motor liftMotor = new Motor();
-    Motor spinMotor = new Motor();
-    */
-    
+    public Intake(){
+        currentInstance = this;
+    }
+
+    public static Intake getInstance(){
+        return currentInstance;
+    }
+
+    public static void setInstance(Intake instance){
+        currentInstance = instance;
+    }
     
     @Override
     public void periodic() {
@@ -90,11 +98,28 @@ public class Intake extends SubsystemBase{
     public IntakeStates getWantedState() {
         return this.wantedState;
     }
+
+    public void setIntakePosition(IntakeStates state){
+        io.setIntakeState(state);
+    }
+
+    public double getIntakeVelocity(){
+        return io.getIntakeVelocity();
+    }
+
+    public double getPivotPosition(){
+        return io.getPivotPosition();
+    }
+
+    public boolean pivotInTolerance(double tolerance){
+        return io.pivotInTolerance(tolerance);
+    }
+
+    public boolean rollerInTolerance(double tolerance){
+        return io.rollerInTolerance(tolerance);
+    }
+
+    public boolean intakeInTolerance(double tolerance){
+        return io.intakeInTolerance(tolerance);
+    }
 }
-
-
-
-
-
-
-//67

@@ -1,19 +1,34 @@
 package frc.robot.subsystems.Shooter;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Vision.ShooterAngleCalculator;
+import frc.robot.subsystems.Shooter.Feeder.FeederIO;
+import frc.robot.subsystems.Shooter.Feeder.FeederIOInputsAutoLogged;
+import frc.robot.subsystems.Shooter.Flywheel.FlywheelIO;
+import frc.robot.subsystems.Shooter.Flywheel.FlywheelIOInputsAutoLogged;
+import frc.robot.subsystems.Shooter.Turret.TurretIO;
+import frc.robot.subsystems.Shooter.Turret.TurretIOInputsAutoLogged;
 
 public class Shooter extends SubsystemBase{
     ShooterStates currentShooterState;
     private ShooterAngleCalculator AngleCalculator = new ShooterAngleCalculator();
     private static Shooter instance = null;
-    public final ShooterIO io;
-    public Shooter(ShooterIO io){
-        this.io = io;
+    private final FeederIOInputsAutoLogged feederInputs = new FeederIOInputsAutoLogged();
+    private final FlywheelIOInputsAutoLogged flywheelInputs = new FlywheelIOInputsAutoLogged();
+    private final TurretIOInputsAutoLogged turretInputs = new TurretIOInputsAutoLogged();
+    public final FeederIO fIO;
+    public final FlywheelIO fwIO;
+    public final TurretIO tIO;
+    public Shooter(FeederIO fIO,FlywheelIO fwIO, TurretIO tIO){
+        this.fIO = fIO;
+        this.fwIO = fwIO;
+        this.tIO = tIO;
     }
 
-    public static Shooter setInstance(ShooterIO io){
-        instance = new Shooter(io);
+    public static Shooter setInstance(FeederIO fIO,FlywheelIO fwIO, TurretIO tIO){
+        instance = new Shooter(fIO,fwIO,tIO);
         return instance;
     }
     public static Shooter getInstance(){
@@ -28,6 +43,10 @@ public class Shooter extends SubsystemBase{
     public void periodic(){
         ApplyStates();
         handleStateTransitions();
+        fIO.updateInputs(feederInputs);
+        Logger.processInputs("Feeder",feederInputs);
+        fwIO.updateInputs(flywheelInputs);
+        Logger.processInputs("Flywheels",flywheelInputs);
 
     }
     public void ApplyStates(){

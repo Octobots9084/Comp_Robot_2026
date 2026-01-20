@@ -186,5 +186,5 @@ compile_commands.json
 # Eclipse generated file for annotation processors
 .factorypath
 
-#BuildConstants
-BuildConstants.javas
+#ignoring build constants
+BuildConstants.java
