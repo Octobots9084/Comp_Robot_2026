@@ -37,4 +37,9 @@ public final class Constants {
     public static int singleFeederID = 0;
     public static int topRollerID = 0;
   }
+
+  public static class IntakeConstants {
+    public static int intakePivotID = 0;
+    public static int intakeRollerID = 0;
+  }
 }
