@@ -1,5 +1,11 @@
 package frc.robot;
 
+
+import org.littletonrobotics.junction.Logger;
+
+import com.ctre.phoenix6.swerve.jni.SwerveJNI.DriveState;
+
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 public class ButtonConfig {
     static CommandJoystick driverLeft = ControlMap.DRIVER_LEFT;
@@ -10,6 +16,6 @@ public class ButtonConfig {
     static CommandJoystick coDriverButtons = ControlMap.CO_DRIVER_BUTTONS;
 
     public void initTeleop() {
- 
+        driverLeft.button(0).onTrue(new InstantCommand(() -> Logger.recordOutput("On??", false)));
     }
 }

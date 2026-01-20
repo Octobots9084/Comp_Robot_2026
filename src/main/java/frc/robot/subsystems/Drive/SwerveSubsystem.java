@@ -1,14 +1,20 @@
-package frc.robot.Subsystems.Drive;
+package frc.robot.subsystems.Drive;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.pathplanner.lib.auto.NamedCommands;
+
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.swerve.SwerveModule;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import frc.robot.Constants;
 import frc.robot.FieldConstants;
+import frc.robot.commands.auto.DriveOverBump;
 
 public class SwerveSubsystem extends SubsystemBase{
     public enum SystemState {
@@ -54,8 +60,53 @@ public class SwerveSubsystem extends SubsystemBase{
     @Override
     public void periodic() {
         systemState = handleStateTransition();
+        Logger.recordOutput("Xrot", this.io.getRotation3d().getX());
+        Logger.recordOutput("Yrot", this.io.getRotation3d().getY());
+        Logger.recordOutput("Zrot", this.io.getRotation3d().getZ());
+        Logger.recordOutput("Tilt", Math.acos(this.io.getRotation3d().toMatrix().get(2, 2)));
+        Logger.recordOutput("onRamp", onRamp(0, 3));
         applyStates();
     }
+    
+
+
+
+        //TODO: move somewhere important
+
+    public boolean onRamp (double wanted, double tolerance) { /////////////////////
+      boolean inTolerance = true;
+
+      tolerance = Units.degreesToRadians(tolerance);
+
+      double tilt = Math.acos(this.io.getRotation3d().toMatrix().get(2, 2));
+
+      Logger.recordOutput("tilt", tilt);
+
+    //   double therealthingmakenosense = 15*Units.radiansToDegrees(Math.sqrt(Math.pow(realX, 2) + Math.pow(realY, 2)));//0 = level, 2026 ramp is 0.26 (1 rad)
+
+    //   return tilt >= 30;//REMOVE THE *15 its already 15 tra la laaaa
+    //   Logger.recordOutput("the og logic", Math.sqrt(Math.pow(realX, 2) + Math.pow(realY, 2)));
+    //   Logger.recordOutput("the og logic but not og", Units.radiansToDegrees(15*Math.sqrt(Math.pow(realX, 2) + Math.pow(realY, 2))));
+    //   Logger.recordOutput("tilt", tilt);
+      if (tilt <= (wanted + tolerance) && tilt >= (wanted - tolerance)) {
+        inTolerance = false;
+      }
+
+
+      return inTolerance;
+    }
+
+
+
+
+    public void registerNamedCommands () {
+      NamedCommands.registerCommand("DriveOverBump",
+                  new DriveOverBump());
+    }
+
+
+
+
 
     private SystemState handleStateTransition() {
         switch (wantedState){

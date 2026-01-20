@@ -1,9 +1,10 @@
-package frc.robot.Subsystems.Drive;
+package frc.robot.subsystems.Drive;
 
 
 import java.util.function.Supplier;
 
 import com.ctre.phoenix6.Utils;
+import com.ctre.phoenix6.swerve.SwerveDrivetrain;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
@@ -16,16 +17,18 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.Subsystems.Drive.TunerConstants.TunerSwerveDrivetrain;
+import frc.robot.subsystems.Drive.TunerConstants.TunerSwerveDrivetrain;
 
 /**
  * Class that extends the Phoenix 6 SwerveDrivetrain class and implements
@@ -126,6 +129,7 @@ public class SwerveIOSystem extends TunerSwerveDrivetrain implements Subsystem, 
         }
         configureAutoBuilder();
     }
+    
 
     private void configureAutoBuilder() {
         try {
@@ -238,7 +242,7 @@ public class SwerveIOSystem extends TunerSwerveDrivetrain implements Subsystem, 
 
      public void updateSwerveInputs(SwerveIOInputs inputs) {
         SwerveDriveState state = this.getStateCopy();
-        inputs.logState(state);
+        // inputs.logState(sxtate);
      }
 
      public void registerTelemetryFunction(SwerveIOInputs inputs) {}
@@ -254,4 +258,8 @@ public class SwerveIOSystem extends TunerSwerveDrivetrain implements Subsystem, 
      public void updateSimState() {}
 
      public void resetRobotTranslation(Translation2d translation2d) {}
+
+     public Rotation3d geRotation3d () {
+        return this.getRotation3d();
+     }
 }

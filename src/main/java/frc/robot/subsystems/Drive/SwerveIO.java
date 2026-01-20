@@ -1,4 +1,7 @@
-package frc.robot.Subsystems.Drive;
+package frc.robot.subsystems.Drive;
+
+import static edu.wpi.first.units.Units.Degree;
+import static edu.wpi.first.units.Units.Radian;
 
 import org.littletonrobotics.junction.AutoLog;
 
@@ -7,10 +10,13 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.units.measure.Angle;
+import frc.robot.subsystems.Drive.TunerConstants.TunerSwerveDrivetrain;
 
 public interface SwerveIO {
     @AutoLog
@@ -25,22 +31,8 @@ public interface SwerveIO {
         public double OdometryPeriod;
         public int SuccessfulDaqs;
         public int FailedDaqs;
-
-        void logState(SwerveDrivetrain.SwerveDriveState state) {
-            this.Pose = state.Pose;
-            this.RawHeading = state.RawHeading;
-            this.ModuleStates = state.ModuleStates;
-            this.ModuleTargets = state.ModuleTargets;
-            this.ModulePositions = state.ModulePositions;
-            this.Speeds = state.Speeds;
-            this.SuccessfulDaqs = state.SuccessfulDaqs;
-            this.FailedDaqs = state.FailedDaqs;
-            this.OdometryPeriod = state.OdometryPeriod;
-            this.Timestamp = state.OdometryPeriod;
-            // RobotState.getInstance().addPoseObservation(new RobotState.SwerveDriveObservation(this.Pose, this.Speeds));
-        }
     }
-    default void updateSwerveInputs(SwerveIOInputs inputs) {}
+    default void updateInputs(SwerveIOInputs inputs) {}
 
     // default void updateModuleInputs(ModuleIOInputs... inputs) {}
 
@@ -55,6 +47,10 @@ public interface SwerveIO {
     default void updateSimState() {}
 
     default void resetRobotTranslation(Translation2d translation2d) {}
+
+    default Rotation3d getRotation3d () {return new Rotation3d();}
+
+
 
    // @Override
     //default void refreshData() {}

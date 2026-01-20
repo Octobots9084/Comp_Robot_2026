@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 0.47854216868054533,
+        "y": 5.903638554223644
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.8647021601520615,
+        "y": 5.561485737690809
+      },
+      "isLocked": false,
+      "linkedName": "Depot bottom (out)"
+    },
+    {
+      "anchor": {
+        "x": 3.534450784593438,
+        "y": 5.1800713266761775
+      },
+      "prevControl": {
+        "x": 2.3678965990682617,
+        "y": 5.456146299920227
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Hump 1 BL"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 8.0,
+    "rotation": 180.0
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 8.0,
+    "rotation": 88.49256424122504
+  },
+  "useDefaultConstraints": true
+}
