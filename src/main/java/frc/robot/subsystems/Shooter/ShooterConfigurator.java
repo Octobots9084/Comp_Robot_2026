@@ -5,7 +5,6 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 public class ShooterConfigurator {
-    public TalonFXConfiguration flyWheelLeftConfig;
     public TalonFXConfiguration flyWheelRightConfig;
     public TalonFXConfiguration turretConfig;
     public TalonFXConfiguration hoodConfig;
