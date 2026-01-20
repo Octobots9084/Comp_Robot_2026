@@ -30,7 +30,7 @@ public class SwerveSubsystem extends SubsystemBase{
     public double maxVelocity;
     public double maxAngularVelocity;
 
-    final SwerveIOInputsAutoLogged swerveInputs = new SwerveIOInputsAutoLogged();
+    private final SwerveIOInputsAutoLogged inputs = new SwerveIOInputsAutoLogged();
 
     public SwerveSubsystem(
         SwerveIO io, CommandJoystick driverLeft, CommandJoystick driverRight, double maxAngularVelocity, double maxVelocity
@@ -56,6 +56,8 @@ public class SwerveSubsystem extends SubsystemBase{
 
     @Override
     public void periodic() {
+        this.io.updateInputs(inputs);
+        Logger.processInputs("Swerve", inputs);
         systemState = handleStateTransition();
         applyStates();
         Logger.recordOutput("front left absolute", io.getAbsoluteEncoderPositiosn(0));

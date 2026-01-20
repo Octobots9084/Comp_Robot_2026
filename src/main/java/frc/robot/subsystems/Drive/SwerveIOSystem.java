@@ -17,6 +17,9 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -236,10 +239,33 @@ public class SwerveIOSystem extends TunerSwerveDrivetrain implements Subsystem, 
         super.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds), visionMeasurementStdDevs);
     }
 
-     public void updateSwerveInputs(SwerveIOInputs inputs) {
-        SwerveDriveState state = this.getStateCopy();
-        inputs.logState(state);
-     }
+     @Override
+    public void updateInputs(SwerveIOInputs inputs) {
+            SwerveDriveState state = this.getState();
+            inputs.Pose = state.Pose;
+            inputs.Speeds = state.Speeds;
+            inputs.ModuleStates = state.ModuleStates;
+            inputs.ModuleTargets = state.ModuleTargets;
+            inputs.ModulePositions = state.ModulePositions;
+            inputs.RawHeading = state.RawHeading;
+            inputs.Timestamp = state.Timestamp;
+            inputs.OdometryPeriod = state.OdometryPeriod;
+            inputs.SuccessfulDaqs = state.SuccessfulDaqs;
+            inputs.FailedDaqs = state.FailedDaqs;
+
+        //public Pose2d Pose = new Pose2d();
+       // public ChassisSpeeds Speeds = new ChassisSpeeds();
+       // public SwerveModuleState[] ModuleStates;
+       // public SwerveModuleState[] ModuleTargets;
+       // public SwerveModulePosition[] ModulePositions;
+       // public Rotation2d RawHeading = new Rotation2d();
+       // public double Timestamp;
+        //public double OdometryPeriod;
+        //public int SuccessfulDaqs;
+       // public int FailedDaqs;
+    }
+
+     
 
      public void registerTelemetryFunction(SwerveIOInputs inputs) {}
 
