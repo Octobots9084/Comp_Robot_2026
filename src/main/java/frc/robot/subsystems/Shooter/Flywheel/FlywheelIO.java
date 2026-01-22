@@ -4,33 +4,30 @@ import org.littletonrobotics.junction.AutoLog;
 
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.AngularVelocity;
+import frc.robot.subsystems.Shooter.Feeder.FeederIO.FeederIOInputs;
 
 public interface FlywheelIO{
-    @AutoLog
-    public static class FlywheelIOInputs {
-      public double FlywheelRPS = 0.0;
-      public double LeftMotorTemp = 0.0;
-      public double RightMotorTemp = 0.0;
+  @AutoLog
+  public static class FlywheelIOInputs {
+    public double FlywheelLeftRPS = 0.0;
+    public double FlywheelLeftMotorTemp = 0.0;
+    public double FlywheelRightRPS = 0.0;
+    public double FlywheelRightMotorTemp = 0.0;
   }
   public default void updateInputs(FlywheelIOInputs inputs){}
-
-  public default void setFlyWheelVelocity(double RPS){}
-
-  public default AngularVelocity getFlyWheelVelocity(){
-    return Units.RadiansPerSecond.of(0);
+  public default void setFlywheelVelocity(double FlywheelRPS){}
+  public default double[] getFlywheelVelocity(){
+    double[] defaultOut = new double[2];
+    return defaultOut;
+  }
+    public default double getRightMotorVelocity(){
+    return 0;
   }
 
-  public default boolean flywheelInTolerance(double tolerance){
-    return false;
+  public default double getLeftMotorVelocity(){
+    return 0;
   }
-
-  public default void setTopRollerVelocity(double RPS){}
-
-  public default AngularVelocity getTopRollerVelocity(){
-    return Units.RadiansPerSecond.of(0);
-  }
-
-  public default boolean topRollerInTolerance(double tolerance){
+  public default boolean FlywheelInTolerance(double flywheelTolerance){
     return false;
   }
 }

@@ -2,50 +2,45 @@ package frc.robot.subsystems.Shooter.Flywheel;
 
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.Shooter.Flywheel.Flywheel;
+import frc.robot.subsystems.Shooter.Flywheel.FlywheelIO;
+import frc.robot.subsystems.Shooter.Flywheel.FlywheelIOTalonFX;
+import frc.robot.subsystems.Shooter.Flywheel.FlywheelStates;
 
 public class Flywheel extends SubsystemBase{
-    public static Flywheel currentInstance = null;
+     public static Flywheel currentFlywheelInstance = null;
 
     public FlywheelIO io = new FlywheelIOTalonFX();
     
     public Flywheel(){
-        currentInstance = this;
+        currentFlywheelInstance = this;
     }
 
     public static Flywheel getInstance(){
-        return currentInstance;
+        return currentFlywheelInstance;
     }
 
     public static void setInstance(Flywheel instance){
-        currentInstance = instance;
+        currentFlywheelInstance = instance;
     }
 
-    public void setFlyWheelVelocity(FlywheelStates currentState){
-        io.setFlyWheelVelocity(currentState.flywheelRPS);
+    public void setFlywheelVelocity(FlywheelStates currentState){
+        io.setFlywheelVelocity(currentState.FlywheelRightRPS);
     }
 
-    public AngularVelocity getFlyWheelVelocity(){
-        return io.getFlyWheelVelocity();
+    public double[] getFlywheelVelocity(){
+        return io.getFlywheelVelocity();
     }
 
-    public boolean flywheelInTolerance(double tolerance){
-        return io.flywheelInTolerance(tolerance);
+    public double getLeftMotorVelocity(){
+        return io.getLeftMotorVelocity();
     }
 
-    public void setTopRollerVelocity(FlywheelStates currentState){
-        io.setTopRollerVelocity(currentState.topRollerRPS);
+    public double getRightMotorVelocity(){
+        return io.getRightMotorVelocity();
     }
 
-    public void setAllFlywheelVelocities(FlywheelStates currentState){
-        setTopRollerVelocity(currentState);
-        setFlyWheelVelocity(currentState);
-    }
-
-    public AngularVelocity getTopRollerVelocity(){
-        return io.getTopRollerVelocity();
-    }
-
-    public boolean topRollerInTolerance(double tolerance){
-        return io.topRollerInTolerance(tolerance);
+    public boolean FlywheelInTolerance(double tolerance){
+        return io.FlywheelInTolerance(tolerance);
     }
 }
