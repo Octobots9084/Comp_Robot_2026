@@ -7,6 +7,7 @@ import com.ctre.phoenix6.swerve.jni.SwerveJNI.DriveState;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
+import frc.robot.commands.auto.DriveBack;
 public class ButtonConfig {
     static CommandJoystick driverLeft = ControlMap.DRIVER_LEFT;
     static CommandJoystick driverRight = ControlMap.DRIVER_RIGHT;
@@ -16,6 +17,8 @@ public class ButtonConfig {
     static CommandJoystick coDriverButtons = ControlMap.CO_DRIVER_BUTTONS;
 
     public void initTeleop() {
-        driverLeft.button(0).onTrue(new InstantCommand(() -> Logger.recordOutput("On??", false)));
+        driverRight.button(1).whileTrue(new DriveBack());
+        Logger.recordOutput("Test1", false);
+
     }
 }
