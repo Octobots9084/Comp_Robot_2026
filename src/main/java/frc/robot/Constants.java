@@ -7,6 +7,8 @@
 
 package frc.robot;
 
+import com.ctre.phoenix6.CANBus;
+
 import edu.wpi.first.wpilibj.RobotBase;
 
 /**
@@ -41,5 +43,15 @@ public final class Constants {
   public static class IntakeConstants {
     public static int intakePivotID = 0;
     public static int intakeRollerID = 0;
+  }
+
+  public static class ClimbConstants {
+    public static int climbRotateControlledID = 0;
+    public static int climbRotateFollowerID = 0;
+    public static int climbDeployID = 0;
+  }
+
+  public static class GeneralConstants {
+    public static CANBus krakenBus = new CANBus("krakenbus");
   }
 }

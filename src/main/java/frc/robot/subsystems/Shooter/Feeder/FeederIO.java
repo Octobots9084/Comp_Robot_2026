@@ -9,7 +9,7 @@ public interface FeederIO{
       public double SingleFeederRPS = 0.0;
       public double MultiFeederMotorTemp = 0.0;
       public double SingleFeederMotorTemp = 0.0;
-  }
+    }
   public default void updateInputs(FeederIOInputs inputs){}
 
   public default void setFeederVelocity(double mulitFeederRPS, double singleFeederRPS){}

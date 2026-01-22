@@ -5,6 +5,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.units.Units;
+import frc.robot.Constants.GeneralConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.Shooter.ShooterConfigurator;
 
@@ -17,8 +18,8 @@ public class TurretIOTalonFX implements TurretIO{
 
     public TurretIOTalonFX(){
         shooterConfigs = new ShooterConfigurator();
-        hoodMotor = new TalonFX(ShooterConstants.hoodID, "krakenbus");
-        turretMotor = new TalonFX(ShooterConstants.turretID,"krakenbus");
+        hoodMotor = new TalonFX(ShooterConstants.hoodID, GeneralConstants.krakenBus);
+        turretMotor = new TalonFX(ShooterConstants.turretID,GeneralConstants.krakenBus);
 
         hoodMotor.getConfigurator().apply(shooterConfigs.hoodConfig);
         turretMotor.getConfigurator().apply(shooterConfigs.turretConfig);

@@ -4,6 +4,7 @@ import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import frc.robot.Constants.GeneralConstants;
 import frc.robot.Constants.IntakeConstants;
 
 public class IntakeIOTalonFX implements IntakeIO{
@@ -16,8 +17,8 @@ public class IntakeIOTalonFX implements IntakeIO{
     public IntakeIOTalonFX () {
         config = new IntakeConfigurator();
 
-        roller = new TalonFX(IntakeConstants.intakeRollerID, "krakenbus");
-        pivot = new TalonFX(IntakeConstants.intakePivotID, "krakenbus");
+        roller = new TalonFX(IntakeConstants.intakeRollerID, GeneralConstants.krakenBus);
+        pivot = new TalonFX(IntakeConstants.intakePivotID, GeneralConstants.krakenBus);
     }
 
    public void updateInputs(IntakeIOInputs inputs) {
