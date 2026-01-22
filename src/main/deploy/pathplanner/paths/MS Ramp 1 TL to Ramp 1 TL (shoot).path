@@ -8,11 +8,11 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.0982596291012836,
-        "y": 5.943452211126962
+        "x": 2.098673121964623,
+        "y": 5.943439393361582
       },
       "isLocked": false,
-      "linkedName": "Hump 1 TL"
+      "linkedName": null
     },
     {
       "anchor": {
@@ -22,6 +22,22 @@
       "prevControl": {
         "x": 5.6046362339514975,
         "y": 5.814065620542083
+      },
+      "nextControl": {
+        "x": 0.39536376604850254,
+        "y": 5.985934379457918
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": -0.36008559201141244,
+        "y": 7.263195435092724
+      },
+      "prevControl": {
+        "x": 0.017639087018545052,
+        "y": 6.624564907275321
       },
       "nextControl": null,
       "isLocked": false,
