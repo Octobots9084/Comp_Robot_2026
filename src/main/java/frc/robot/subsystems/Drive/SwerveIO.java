@@ -1,8 +1,5 @@
 package frc.robot.subsystems.Drive;
 
-import static edu.wpi.first.units.Units.Degree;
-import static edu.wpi.first.units.Units.Radian;
-
 import org.littletonrobotics.junction.AutoLog;
 
 import com.ctre.phoenix6.swerve.SwerveDrivetrain;
@@ -32,6 +29,7 @@ public interface SwerveIO {
         public int SuccessfulDaqs;
         public int FailedDaqs;
     }
+
     default void updateInputs(SwerveIOInputs inputs) {}
 
     // default void updateModuleInputs(ModuleIOInputs... inputs) {}
@@ -45,6 +43,8 @@ public interface SwerveIO {
     default void resetToParamaterizedRotation(Rotation2d rotation2d) {}
 
     default void updateSimState() {}
+    
+    default double getAbsoluteEncoderPositiosn(int index) {return 0;}
 
     default void resetRobotTranslation(Translation2d translation2d) {}
 

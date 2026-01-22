@@ -2,6 +2,7 @@ package frc.robot.subsystems.Drive;
 
 
 import java.util.function.Supplier;
+import frc.robot.subsystems.Drive.SwerveSubsystem;
 
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveDrivetrain;
@@ -19,6 +20,9 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.units.measure.Angle;
@@ -132,6 +136,7 @@ public class SwerveIOSystem extends TunerSwerveDrivetrain implements Subsystem, 
     
 
     private void configureAutoBuilder() {
+        // SwerveSubsystem.getInstance().registerNamedCommands();
         try {
             var config = RobotConfig.fromGUISettings();
             AutoBuilder.configure(
@@ -240,15 +245,42 @@ public class SwerveIOSystem extends TunerSwerveDrivetrain implements Subsystem, 
         super.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds), visionMeasurementStdDevs);
     }
 
-     public void updateSwerveInputs(SwerveIOInputs inputs) {
-        SwerveDriveState state = this.getStateCopy();
-        // inputs.logState(sxtate);
-     }
+     @Override
+    public void updateInputs(SwerveIOInputs inputs) {
+            SwerveDriveState state = this.getState();
+            inputs.Pose = state.Pose;
+            inputs.Speeds = state.Speeds;
+            inputs.ModuleStates = state.ModuleStates;
+            inputs.ModuleTargets = state.ModuleTargets;
+            inputs.ModulePositions = state.ModulePositions;
+            inputs.RawHeading = state.RawHeading;
+            inputs.Timestamp = state.Timestamp;
+            inputs.OdometryPeriod = state.OdometryPeriod;
+            inputs.SuccessfulDaqs = state.SuccessfulDaqs;
+            inputs.FailedDaqs = state.FailedDaqs;
+
+        //public Pose2d Pose = new Pose2d();
+       // public ChassisSpeeds Speeds = new ChassisSpeeds();
+       // public SwerveModuleState[] ModuleStates;
+       // public SwerveModuleState[] ModuleTargets;
+       // public SwerveModulePosition[] ModulePositions;
+       // public Rotation2d RawHeading = new Rotation2d();
+       // public double Timestamp;
+        //public double OdometryPeriod;
+        //public int SuccessfulDaqs;
+       // public int FailedDaqs;
+    }
+
+     
 
      public void registerTelemetryFunction(SwerveIOInputs inputs) {}
 
      public void setSwerveState(SwerveRequest request) {
         this.setControl(request);
+     }
+
+     public double getAbsoluteEncoderPositiosn(int index) {
+        return this.getModule(index).getEncoder().getAbsolutePosition().getValueAsDouble();
      }
 
      public void resetRotation() {}

@@ -40,13 +40,14 @@ public class DriveOverBump extends Command {
         
         //
         if (onRamp) {
-            swerve.io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(0.1, 0, 0))
+            swerve.io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(0.5, 0, 0))
                 .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
         }
     }
 
-    // @Override
-    // public boolean isFinished() {
-    //     return !onRamp;
-    // }
+    @Override
+    public boolean isFinished() {
+        // return !onRamp;
+        return false;
+    }
 }

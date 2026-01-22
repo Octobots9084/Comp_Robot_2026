@@ -8,6 +8,7 @@ import com.ctre.phoenix6.swerve.jni.SwerveJNI.DriveState;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import frc.robot.commands.auto.DriveBack;
+import frc.robot.commands.auto.DriveOverBump;
 public class ButtonConfig {
     static CommandJoystick driverLeft = ControlMap.DRIVER_LEFT;
     static CommandJoystick driverRight = ControlMap.DRIVER_RIGHT;
@@ -18,7 +19,6 @@ public class ButtonConfig {
 
     public void initTeleop() {
         driverRight.button(1).whileTrue(new DriveBack());
-        Logger.recordOutput("Test1", false);
-
+        driverLeft.button(1).onTrue(new DriveOverBump());
     }
 }

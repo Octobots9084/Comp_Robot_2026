@@ -1,4 +1,5 @@
 package frc.robot.subsystems.Drive;
+package frc.robot.subsystems.Drive;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -14,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import frc.robot.Constants;
 import frc.robot.FieldConstants;
+import frc.robot.commands.auto.DriveBack;
 import frc.robot.commands.auto.DriveOverBump;
 
 public class SwerveSubsystem extends SubsystemBase{
@@ -33,7 +35,7 @@ public class SwerveSubsystem extends SubsystemBase{
     public double maxVelocity;
     public double maxAngularVelocity;
 
-    final SwerveIOInputsAutoLogged swerveInputs = new SwerveIOInputsAutoLogged();
+    private final SwerveIOInputsAutoLogged inputs = new SwerveIOInputsAutoLogged();
 
     public SwerveSubsystem(
         SwerveIO io, CommandJoystick driverLeft, CommandJoystick driverRight, double maxAngularVelocity, double maxVelocity
@@ -59,12 +61,14 @@ public class SwerveSubsystem extends SubsystemBase{
 
     @Override
     public void periodic() {
+        this.io.updateInputs(inputs);
+        Logger.processInputs("Swerve", inputs);
         systemState = handleStateTransition();
-        Logger.recordOutput("Xrot", this.io.getRotation3d().getX());
-        Logger.recordOutput("Yrot", this.io.getRotation3d().getY());
-        Logger.recordOutput("Zrot", this.io.getRotation3d().getZ());
-        Logger.recordOutput("Tilt", Math.acos(this.io.getRotation3d().toMatrix().get(2, 2)));
-        Logger.recordOutput("onRamp", onRamp(0, 3));
+        // Logger.recordOutput("Xrot", this.io.getRotation3d().getX());
+        // Logger.recordOutput("Yrot", this.io.getRotation3d().getY());
+        // Logger.recordOutput("Zrot", this.io.getRotation3d().getZ());
+        // Logger.recordOutput("Tilt", Math.acos(this.io.getRotation3d().toMatrix().get(2, 2)));
+        // Logger.recordOutput("onRamp", onRamp(0, 3)); TODO: remove comments
         applyStates();
     }
     
@@ -80,7 +84,7 @@ public class SwerveSubsystem extends SubsystemBase{
 
       double tilt = Math.acos(this.io.getRotation3d().toMatrix().get(2, 2));
 
-      Logger.recordOutput("tilt", tilt);
+    //   Logger.recordOutput("tilt", tilt);
 
     //   double therealthingmakenosense = 15*Units.radiansToDegrees(Math.sqrt(Math.pow(realX, 2) + Math.pow(realY, 2)));//0 = level, 2026 ramp is 0.26 (1 rad)
 
@@ -102,6 +106,8 @@ public class SwerveSubsystem extends SubsystemBase{
     public void registerNamedCommands () {
       NamedCommands.registerCommand("DriveOverBump",
                   new DriveOverBump());
+      NamedCommands.registerCommand("DriveBack",
+                  new DriveBack().withTimeout(3));
     }
 
 

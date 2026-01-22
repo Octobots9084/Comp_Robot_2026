@@ -50,7 +50,7 @@ public class RobotContainer {
 
         autoChooser = AutoBuilder.buildAutoChooser();
         //NAMED COMMANDS IN SWERVE
-       SmartDashboard.putData("Autonomous Path", autoChooser);
+       SmartDashboard.putData("Auto", autoChooser);
         // VisionSubsystem.getInstance();
         ButtonConfig buttons = new ButtonConfig();
         buttons.initTeleop();
