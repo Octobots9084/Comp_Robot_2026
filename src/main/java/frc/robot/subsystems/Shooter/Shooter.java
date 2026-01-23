@@ -39,12 +39,14 @@ public class Shooter extends SubsystemBase{
     
     @Override
     public void periodic(){
-        ApplyStates();
-        handleStateTransitions();
+        // ApplyStates();
+        // handleStateTransitions();
         fIO.updateInputs(feederInputs);
-        Logger.processInputs("Feeder",feederInputs);
+        Logger.processInputs("Shooter/Feeder",feederInputs);
         fwIO.updateInputs(flywheelInputs);
-        Logger.processInputs("Flywheels",flywheelInputs);
+        Logger.processInputs("Shooter/Flywheels",flywheelInputs);
+        tIO.updateInputs(turretInputs);
+        Logger.processInputs("Shooter/Turret and Hood",turretInputs);
 
     }
     public void ApplyStates(){
@@ -60,7 +62,9 @@ public class Shooter extends SubsystemBase{
                 break;
             case BUMP:
                 //dont shoot
-            break;
+                break;
+            default:
+                break;
         }
     }
 
@@ -80,6 +84,9 @@ public class Shooter extends SubsystemBase{
                 
                 case SAFE:
                     //driver input (presumably)
+                    break;
+
+                default:
                     break;
             };
     }

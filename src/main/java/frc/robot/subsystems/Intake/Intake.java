@@ -1,21 +1,31 @@
 package frc.robot.subsystems.Intake;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase{
     
     IntakeStates currentState = IntakeStates.SAFE;
     IntakeStates wantedState = IntakeStates.SAFE;
-    public IntakeIO io = new IntakeIOTalonFX();
+    public IntakeIO io;
+    public IntakeIOInputsAutoLogged inputs = new IntakeIOInputsAutoLogged();
+
+    public Intake(IntakeIO io){
+        this.io = io;
+    }
 
     @Override
     public void periodic() {
         //This will handle changing between states at the user's request.
-        handleStateTransitions();
+        // handleStateTransitions();
 
         //this is where states actually take effect.
-        applyStates();
+        // applyStates();
+        io.updateInputs(inputs);
+        Logger.processInputs("Intake", inputs);
     }
+
     public void handleStateTransitions() {
     
         switch(wantedState) {

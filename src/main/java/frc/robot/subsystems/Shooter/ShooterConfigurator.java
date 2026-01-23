@@ -12,6 +12,12 @@ public class ShooterConfigurator {
     public TalonFXConfiguration singleFeederConfig;
     public TalonFXConfiguration topRollerConfig;
     public ShooterConfigurator(){
+        flyWheelRightConfig = new TalonFXConfiguration();
+        turretConfig = new TalonFXConfiguration();
+        hoodConfig = new TalonFXConfiguration();
+        multiFeederConfig = new TalonFXConfiguration();
+        singleFeederConfig = new TalonFXConfiguration();
+        topRollerConfig = new TalonFXConfiguration();
 
         //fly wheel right config
         topRollerConfig.CurrentLimits.SupplyCurrentLimit = 20;

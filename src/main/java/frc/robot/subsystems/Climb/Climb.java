@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Climb extends SubsystemBase{
     ClimbStates currentState = ClimbStates.IDLE;
     ClimbStates wantedState = ClimbStates.IDLE;
-    public ClimbIO io = new ClimbIOTalonFX();
+    public ClimbIO io;
 
 
     public double getClimbPosition(){

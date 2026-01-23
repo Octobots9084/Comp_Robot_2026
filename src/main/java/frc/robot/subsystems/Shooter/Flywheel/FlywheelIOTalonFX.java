@@ -1,5 +1,7 @@
 package frc.robot.subsystems.Shooter.Flywheel;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 
@@ -29,6 +31,7 @@ public class FlywheelIOTalonFX implements FlywheelIO{
         FlywheelRightMotor.getConfigurator().apply(shooterConfigs.flyWheelRightConfig);
 
     }
+    @Override
       public void updateInputs(FlywheelIOInputs inputs){
         inputs.FlywheelLeftRPS = FlywheelLeftMotor.getVelocity().getValueAsDouble();
         inputs.FlywheelRightRPS = FlywheelRightMotor.getVelocity().getValueAsDouble();

@@ -14,7 +14,6 @@ public class ClimbConfigurator {
     public double deployGearRatio = 1;
 
     //1 deploy the climb
-    
 
     public ClimbConfigurator() {
         climbRotateControlledConfig = new TalonFXConfiguration()

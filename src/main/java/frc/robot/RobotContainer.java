@@ -18,6 +18,12 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
 import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.Intake.Intake;
+import frc.robot.subsystems.Intake.IntakeIOTalonFX;
+import frc.robot.subsystems.Shooter.Shooter;
+import frc.robot.subsystems.Shooter.Feeder.FeederIOTalonFX;
+import frc.robot.subsystems.Shooter.Flywheel.FlywheelIOTalonFX;
+import frc.robot.subsystems.Shooter.Turret.TurretIOTalonFX;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
@@ -35,7 +41,8 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 public class RobotContainer {
   // Subsystems
   private final Drive drive;
-
+  private Shooter shooter;
+  private Intake intake;
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
 
@@ -56,6 +63,12 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.FrontRight),
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
+
+        shooter = new Shooter(
+            new FeederIOTalonFX(), 
+            new FlywheelIOTalonFX(), 
+            new TurretIOTalonFX());
+        intake = new Intake(new IntakeIOTalonFX());
 
         // The ModuleIOTalonFXS implementation provides an example implementation for
         // TalonFXS controller connected to a CANdi with a PWM encoder. The
@@ -85,6 +98,9 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.FrontRight),
                 new ModuleIOSim(TunerConstants.BackLeft),
                 new ModuleIOSim(TunerConstants.BackRight));
+
+        shooter = new Shooter(new FeederIOTalonFX(), new FlywheelIOTalonFX(), new TurretIOTalonFX());
+        intake = new Intake(new IntakeIOTalonFX());
         break;
 
       default:
