@@ -1,5 +1,28 @@
 package frc.robot.subsystems.Climb;
 
-public class ClimbIO {
-    
+import org.littletonrobotics.junction.AutoLog;
+
+public interface ClimbIO {
+    @AutoLog
+    public static class ClimbIOInputs {
+        public double climbPosition = 0.0;
+        public double deployPosition = 0.0;
+    }
+    public default void updateInputs(ClimbIOInputs inputs){}
+
+    public default void setClimbState(ClimbStates states){}
+
+    public default double getClimbPosition() {
+        return 0;
+    }
+
+    public default double getDeployPosition() {
+        return 0;
+    }
+
+    public default void setDeploymentPostion(ClimbStates states){}
+
+    public default boolean climbInTolerance(double climbTolerance){
+        return false;
+    }
 }
