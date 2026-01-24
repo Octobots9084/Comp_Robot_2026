@@ -11,6 +11,9 @@ public class ShooterAngleCalculator {
     private final double hubRadius = 1.27; // radius of the hub
     private final int maxNewtonsMethodIterations = 30; // prevents an ifinate loop 
     
+
+
+    
     public ShooterAngle getShooterAngleToFerry(double vx, double vy, double pfx, double pfy, double s){
         // needed height
         double pfz = ferryHeight - shooterHeight;

@@ -6,5 +6,6 @@ public class ShooterAngle{
     public ShooterAngle(double turretRotation, double hoodRotation){
         this.turretRotation = turretRotation;
         this.hoodRotation = hoodRotation;
+        
     }
 }
