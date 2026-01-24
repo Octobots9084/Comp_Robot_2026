@@ -1,5 +1,4 @@
 package frc.robot.subsystems.Drive;
-package frc.robot.subsystems.Drive;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -11,6 +10,7 @@ import com.ctre.phoenix6.swerve.SwerveModule;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import frc.robot.Constants;
@@ -46,6 +46,9 @@ public class SwerveSubsystem extends SubsystemBase{
         this.maxAngularVelocity = maxAngularVelocity;
         this.maxVelocity = maxVelocity;
 
+        instance = this;
+
+        registerNamedCommands();
     }
 
     public static SwerveSubsystem getInstance() {
@@ -56,7 +59,9 @@ public class SwerveSubsystem extends SubsystemBase{
     }
 
     public static SwerveSubsystem setInstance(SwerveIO io, CommandJoystick driverLeft, CommandJoystick driverRight, double maxAngularVelocity, double maxVelocity) {
-        return instance = new SwerveSubsystem(io,driverLeft,driverRight,maxAngularVelocity,maxVelocity);
+        SwerveSubsystem instance = new SwerveSubsystem(io,driverLeft,driverRight,maxAngularVelocity,maxVelocity);
+        instance.registerNamedCommands();
+        return instance;
     }
 
     @Override
@@ -68,7 +73,7 @@ public class SwerveSubsystem extends SubsystemBase{
         // Logger.recordOutput("Yrot", this.io.getRotation3d().getY());
         // Logger.recordOutput("Zrot", this.io.getRotation3d().getZ());
         // Logger.recordOutput("Tilt", Math.acos(this.io.getRotation3d().toMatrix().get(2, 2)));
-        // Logger.recordOutput("onRamp", onRamp(0, 3)); TODO: remove comments
+        SmartDashboard.putBoolean("onRamp", onRamp(0, 3));
         applyStates();
     }
     

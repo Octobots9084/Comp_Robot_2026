@@ -7,7 +7,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "M Depot top to Depot bottom (out)"
+            "pathName": "NOTHING"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "DriveOverBump"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "NOTHING"
           }
         }
       ]

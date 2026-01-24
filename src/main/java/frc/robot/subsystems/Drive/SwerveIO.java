@@ -50,6 +50,8 @@ public interface SwerveIO {
 
     default Rotation3d getRotation3d () {return new Rotation3d();}
 
+    default void zeroGyro() {}
+
 
 
    // @Override
