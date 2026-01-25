@@ -10,6 +10,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.Vision.Vision;
+import frc.robot.subsystems.Shooter.Shooter;
 
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
@@ -28,6 +29,7 @@ public class Robot extends LoggedRobot {
   private Command autonomousCommand;
   private RobotContainer robotContainer;
   private Vision vision;
+  private Shooter shooter;
 
   public Robot() {
     // Set up data receivers & replay source
@@ -68,6 +70,10 @@ public class Robot extends LoggedRobot {
     // Start AdvantageKit logger
     Logger.start();
 
+    // creates objects for the robot subsystems
+    vision = new Vision();
+    shooter = new Shooter();
+    
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our autonomous chooser on the dashboard.
     robotContainer = new RobotContainer();
@@ -122,8 +128,6 @@ public class Robot extends LoggedRobot {
     // continue until interrupted by another command, remove
     // this line or comment it out.
 
-    vision = new Vision();
-
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
     }
@@ -134,6 +138,7 @@ public class Robot extends LoggedRobot {
   public void teleopPeriodic() {
     // runs the vision periodic
     vision.periodic();
+    shooter.periodic();
   }
 
   /** This function is called once when test mode is enabled. */
