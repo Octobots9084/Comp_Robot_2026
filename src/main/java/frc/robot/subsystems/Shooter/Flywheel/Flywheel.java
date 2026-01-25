@@ -4,6 +4,7 @@ import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Flywheel extends SubsystemBase{
+    public static final double flywheelRadius = 0.1; // in M
     public static Flywheel currentInstance = null;
 
     public FlywheelIO io = new FlywheelIOTalonFX();

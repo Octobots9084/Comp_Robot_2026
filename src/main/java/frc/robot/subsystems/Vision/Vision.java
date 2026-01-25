@@ -4,7 +4,7 @@ import org.photonvision.PhotonCamera;
 
 import edu.wpi.first.cameraserver.CameraServer;
 
-//implement directional 45deg rot lock
+//implement directional 45deg rot lock for intake
 
 public class Vision {
 
@@ -14,7 +14,8 @@ public class Vision {
     public Vision(){
         intakeCamera = new PhotonCamera("IntakeCam");
         intakeCamera.setDriverMode(true);
-        CameraServer.startAutomaticCapture("IntakeCam", 0);
+        
+        CameraServer.startAutomaticCapture("IntakeCam", "/dev/video0");
     }
 
     public void periodic(){

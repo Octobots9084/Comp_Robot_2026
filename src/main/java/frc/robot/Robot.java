@@ -11,6 +11,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.Vision.Vision;
 import frc.robot.subsystems.Shooter.Shooter;
+import frc.robot.subsystems.Shooter.Feeder.FeederIOTalonFX;
+import frc.robot.subsystems.Shooter.Flywheel.FlywheelIOTalonFX;
+import frc.robot.subsystems.Shooter.Turret.TurretIOTalonFX;
 
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
@@ -28,8 +31,6 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 public class Robot extends LoggedRobot {
   private Command autonomousCommand;
   private RobotContainer robotContainer;
-  private Vision vision;
-  private Shooter shooter;
 
   public Robot() {
     // Set up data receivers & replay source
@@ -69,10 +70,6 @@ public class Robot extends LoggedRobot {
 
     // Start AdvantageKit logger
     Logger.start();
-
-    // creates objects for the robot subsystems
-    vision = new Vision();
-    shooter = new Shooter();
     
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our autonomous chooser on the dashboard.
@@ -137,8 +134,8 @@ public class Robot extends LoggedRobot {
   @Override
   public void teleopPeriodic() {
     // runs the vision periodic
-    vision.periodic();
-    shooter.periodic();
+    robotContainer.vision.periodic();
+    robotContainer.shooter.periodic();
   }
 
   /** This function is called once when test mode is enabled. */
@@ -158,5 +155,8 @@ public class Robot extends LoggedRobot {
 
   /** This function is called periodically whilst in simulation. */
   @Override
-  public void simulationPeriodic() {}
+  public void simulationPeriodic() {
+    robotContainer.vision.periodic();
+    robotContainer.shooter.periodic();
+  }
 }

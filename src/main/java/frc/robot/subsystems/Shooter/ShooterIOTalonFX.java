@@ -22,33 +22,33 @@ public class ShooterIOTalonFX{
 
     public TalonFX flyWheelLeftMotor;
     public TalonFX flyWheelRightMotor;
-    public TalonFX turretMotor;
-    public TalonFX hoodMotor;
-    public TalonFX multiFeederMotor;
-    public TalonFX singleFeederMotor;
+    //public TalonFX turretMotor;
+    //public TalonFX hoodMotor;
+    //public TalonFX multiFeederMotor;
+    //public TalonFX singleFeederMotor;
     public ShooterConfigurator shooterConfigs;
     private MotionMagicVelocityVoltage flyWheelRequest;
 
     public ShooterIOTalonFX(){
         //TODO - set the canID's
         shooterConfigs = new ShooterConfigurator();
-        flyWheelLeftMotor = new TalonFX(ShooterConstants.flyWheelLeftID,"krakenbus");
-        flyWheelRightMotor = new TalonFX(0,"krakenbus");
-        turretMotor = new TalonFX(0,"krakenbus");
-        hoodMotor = new TalonFX(0,"krakenbus");
-        multiFeederMotor = new TalonFX(0,"krakenbus");
-        singleFeederMotor = new TalonFX(0,"krakenbus");
+        //flyWheelLeftMotor = new TalonFX(ShooterConstants.flyWheelLeftID,"Default Name");
+        //flyWheelRightMotor = new TalonFX(0,"Default Name");
+       // turretMotor = new TalonFX(0,"Default Name");
+        //hoodMotor = new TalonFX(0,"Default Name");
+        //multiFeederMotor = new TalonFX(0,"Default Name");
+        //singleFeederMotor = new TalonFX(0,"Default Name");
 
-        flyWheelRightMotor.getConfigurator().apply(shooterConfigs.flyWheelRightConfig);
-        turretMotor.getConfigurator().apply(shooterConfigs.turretConfig);
-        hoodMotor.getConfigurator().apply(shooterConfigs.hoodConfig);
-        multiFeederMotor.getConfigurator().apply(shooterConfigs.multiFeederConfig);
-        singleFeederMotor.getConfigurator().apply(shooterConfigs.singleFeederConfig);
-        flyWheelRequest = new MotionMagicVelocityVoltage(0);
+        //flyWheelRightMotor.getConfigurator().apply(shooterConfigs.flyWheelRightConfig);
+        //turretMotor.getConfigurator().apply(shooterConfigs.turretConfig);
+        //hoodMotor.getConfigurator().apply(shooterConfigs.hoodConfig);
+        //multiFeederMotor.getConfigurator().apply(shooterConfigs.multiFeederConfig);
+        //singleFeederMotor.getConfigurator().apply(shooterConfigs.singleFeederConfig);
+        //flyWheelRequest = new MotionMagicVelocityVoltage(0);
     }
     public void setFlyWheelVelocity(double RPS){
-        flyWheelRequest.Velocity = RPS;
-        flyWheelRightMotor.setControl(flyWheelRequest);
-        flyWheelRightMotor.setControl(new Follower(ShooterConstants.flyWheelRightID,MotorAlignmentValue.Opposed));
+        //flyWheelRequest.Velocity = RPS;
+        //flyWheelRightMotor.setControl(flyWheelRequest);
+        //flyWheelRightMotor.setControl(new Follower(ShooterConstants.flyWheelRightID,MotorAlignmentValue.Opposed));
     }
 }

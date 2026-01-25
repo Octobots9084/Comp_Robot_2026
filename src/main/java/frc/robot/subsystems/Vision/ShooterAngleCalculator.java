@@ -3,15 +3,18 @@ package frc.robot.subsystems.Vision;
 public class ShooterAngleCalculator {
     
     //contants
-    private final double g = 9.81; // gravity
-    private final double hubHeight = 1.8288; // hub height
-    private final double ferryHeight = 0.5; // hub height
-    private final double minHoodAngle = 1.012; // 58 deg
-    private final double shooterHeight = 0.4572; // shooter height
-    private final double hubRadius = 1.27; // radius of the hub
-    private final int maxNewtonsMethodIterations = 30; // prevents an ifinate loop 
+    private static final double g = 9.81; // gravity
+    private static final double hubHeight = 1.8288; // hub height
+    private static final double ferryHeight = 0.5; // hub height
+    private static final double minHoodAngle = 1.012; // 58 deg
+    private static final double shooterHeight = 0.4572; // shooter height
+    private static final double hubRadius = 1.27; // radius of the hub
+    private static final int maxNewtonsMethodIterations = 30; // prevents an ifinate loop
+    private static final double flywheelSpeedLoss = 0.9;
     
-    public ShooterAngle getShooterAngleToFerry(double vx, double vy, double pfx, double pfy, double s){
+    public static ShooterAngle getShooterAngleToFerry(double vx, double vy, double pfx, double pfy, double speedBeforeReduction){
+        double s = speedBeforeReduction * flywheelSpeedLoss;
+        
         // needed height
         double pfz = ferryHeight - shooterHeight;
 
@@ -61,7 +64,9 @@ public class ShooterAngleCalculator {
         
     }
 
-    public ShooterAngle getShooterAngleToHub(double vx, double vy, double phx, double phy, double s){
+    public static ShooterAngle getShooterAngleToHub(double vx, double vy, double phx, double phy, double speedBeforeReduction){
+        double s = speedBeforeReduction * flywheelSpeedLoss;
+        
         // needed height
         double phz = hubHeight - shooterHeight;
 
@@ -112,11 +117,11 @@ public class ShooterAngleCalculator {
         
     }
 
-    private double quarticFunction(double t, double vx, double vy, double phx, double phy, double phz, double s){
+    private static double quarticFunction(double t, double vx, double vy, double phx, double phy, double phz, double s){
         return (1/4) * (g*g) * (t*t*t*t) + ((vx*vx) + (vy*vy) + g*phz - (s*s)) * (t*t) - 2 * (phx*vx + phy*vy) * t + (phx*phx) + (phy*phy) + (phz*phz);
     }
 
-    private double quarticDerivative(double t, double vx, double vy, double phx, double phy, double phz, double s){
+    private static double quarticDerivative(double t, double vx, double vy, double phx, double phy, double phz, double s){
         return (g*g) * (t*t*t) + 2 * t * ((vx*vx) + (vy*vy) + g * phz - (s*s)) - 2 * (phx * vx + phy * vy);
     }
 
