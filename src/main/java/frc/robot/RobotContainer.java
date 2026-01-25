@@ -20,8 +20,12 @@ import frc.robot.commands.DriveCommands;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Intake.Intake;
 import frc.robot.subsystems.Intake.IntakeIOTalonFX;
+import frc.robot.subsystems.Climb.Climb;
+import frc.robot.subsystems.Climb.ClimbIOTalonFX;
 import frc.robot.subsystems.Shooter.Shooter;
+import frc.robot.subsystems.Shooter.Feeder.Feeder;
 import frc.robot.subsystems.Shooter.Feeder.FeederIOTalonFX;
+import frc.robot.subsystems.Shooter.Flywheel.Flywheel;
 import frc.robot.subsystems.Shooter.Flywheel.FlywheelIOTalonFX;
 import frc.robot.subsystems.Shooter.Turret.TurretIOTalonFX;
 import frc.robot.subsystems.drive.Drive;
@@ -43,6 +47,7 @@ public class RobotContainer {
   private final Drive drive;
   private Shooter shooter;
   private Intake intake;
+  private Climb climb;
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
 
@@ -69,6 +74,7 @@ public class RobotContainer {
             new FlywheelIOTalonFX(), 
             new TurretIOTalonFX());
         intake = new Intake(new IntakeIOTalonFX());
+        climb = new Climb(new ClimbIOTalonFX());
 
         // The ModuleIOTalonFXS implementation provides an example implementation for
         // TalonFXS controller connected to a CANdi with a PWM encoder. The
@@ -101,6 +107,7 @@ public class RobotContainer {
 
         shooter = new Shooter(new FeederIOTalonFX(), new FlywheelIOTalonFX(), new TurretIOTalonFX());
         intake = new Intake(new IntakeIOTalonFX());
+        climb = new Climb(new ClimbIOTalonFX());
         break;
 
       default:

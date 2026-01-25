@@ -1,11 +1,7 @@
 package frc.robot.subsystems.Shooter.Flywheel;
 
-import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Shooter.Flywheel.Flywheel;
-import frc.robot.subsystems.Shooter.Flywheel.FlywheelIO;
-import frc.robot.subsystems.Shooter.Flywheel.FlywheelIOTalonFX;
-import frc.robot.subsystems.Shooter.Flywheel.FlywheelStates;
 
 public class Flywheel extends SubsystemBase{
      public static Flywheel currentFlywheelInstance = null;

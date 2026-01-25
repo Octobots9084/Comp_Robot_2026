@@ -36,9 +36,24 @@ public class ClimbIOTalonFX implements ClimbIO{
         climbRotateMotorControlled.getConfigurator().apply(climbConfig.climbRotateControlledConfig);
         climbRotateMotorFollower.getConfigurator().apply(climbConfig.climbDeployConfig);
         climbDeploymentMotor.getConfigurator().apply(climbConfig.climbDeployConfig);
+    
+        climbMotionControlledRequest = new MotionMagicVoltage(0.0);
+        climbDeployRequest = new MotionMagicVoltage(0.0);
+    
     }
     @Override
-    public void setDeploymentPostion(ClimbStates state) {
+    public void updateInputs(ClimbIOInputs inputs){
+        inputs.climbMotorControlledTemperature = climbRotateMotorControlled.getDeviceTemp().getValueAsDouble();
+        inputs.climbMotorFollowerTemperature = climbRotateMotorFollower.getDeviceTemp().getValueAsDouble();
+        inputs.deployMotorTemperature = climbDeploymentMotor.getDeviceTemp().getValueAsDouble();
+        inputs.climbPosition = climbRotateMotorControlled.getPosition().getValueAsDouble();
+        inputs.deployPosition = climbRotateMotorControlled.getPosition().getValueAsDouble();
+        
+        
+    }
+
+    @Override
+    public void setClimbState(ClimbStates state) {
         climbMotionControlledRequest.Position = state.climbPosition;
         climbRotateMotorControlled.setControl(climbMotionControlledRequest);
         climbRotateMotorFollower.setControl(new Follower(ClimbConstants.climbRotateControlledID, MotorAlignmentValue.Opposed));

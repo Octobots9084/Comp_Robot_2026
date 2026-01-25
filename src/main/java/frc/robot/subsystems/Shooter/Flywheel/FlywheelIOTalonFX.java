@@ -1,6 +1,5 @@
 package frc.robot.subsystems.Shooter.Flywheel;
 
-import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
@@ -8,15 +7,12 @@ import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import frc.robot.Constants.GeneralConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.Shooter.ShooterConfigurator;
-import frc.robot.subsystems.Shooter.Feeder.FeederIO.FeederIOInputs;
-import frc.robot.subsystems.Shooter.Feeder.FeederIO;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.units.Units;
-import edu.wpi.first.units.measure.AngularVelocity;
 
 public class FlywheelIOTalonFX implements FlywheelIO{
     public TalonFX FlywheelLeftMotor;

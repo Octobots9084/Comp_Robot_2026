@@ -1,5 +1,7 @@
 package frc.robot.subsystems.Climb;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -7,7 +9,17 @@ public class Climb extends SubsystemBase{
     ClimbStates currentState = ClimbStates.IDLE;
     ClimbStates wantedState = ClimbStates.IDLE;
     public ClimbIO io;
+    public static Climb instance;
+    public ClimbIOInputsAutoLogged inputs = new ClimbIOInputsAutoLogged();
 
+    public Climb(ClimbIO io){
+        this.io = io;
+        instance = this;
+    }
+
+    public static Climb getInstance(){
+        return instance;
+    }
 
     public double getClimbPosition(){
         return io.getClimbPosition();
@@ -22,33 +34,13 @@ public class Climb extends SubsystemBase{
         io.setClimbState(state);
     }
 
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     @Override
     public void periodic() {
         handleStateTransitions();
         applyStates();
+
+        io.updateInputs(inputs);
+        Logger.processInputs("Climb", inputs);
     }
 
     public void handleStateTransitions() {

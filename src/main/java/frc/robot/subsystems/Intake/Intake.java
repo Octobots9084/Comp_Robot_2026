@@ -9,10 +9,16 @@ public class Intake extends SubsystemBase{
     IntakeStates currentState = IntakeStates.SAFE;
     IntakeStates wantedState = IntakeStates.SAFE;
     public IntakeIO io;
+    public static Intake instance;
     public IntakeIOInputsAutoLogged inputs = new IntakeIOInputsAutoLogged();
 
     public Intake(IntakeIO io){
         this.io = io;
+        instance = this;
+    }
+
+    public static Intake getIntake(){
+        return instance;
     }
 
     @Override

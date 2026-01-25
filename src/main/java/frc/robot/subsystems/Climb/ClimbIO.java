@@ -7,7 +7,11 @@ public interface ClimbIO {
     public static class ClimbIOInputs {
         public double climbPosition = 0.0;
         public double deployPosition = 0.0;
+        public double deployMotorTemperature = 0.0;
+        public double climbMotorControlledTemperature = 0.0;
+        public double climbMotorFollowerTemperature = 0.0;
     }
+
     public default void updateInputs(ClimbIOInputs inputs){}
 
     public default void setClimbState(ClimbStates states){}
@@ -19,8 +23,6 @@ public interface ClimbIO {
     public default double getDeployPosition() {
         return 0;
     }
-
-    public default void setDeploymentPostion(ClimbStates states){}
 
     public default boolean climbInTolerance(double climbTolerance){
         return false;

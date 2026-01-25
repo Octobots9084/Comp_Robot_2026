@@ -8,15 +8,15 @@ public class ShooterConfigurator {
     public TalonFXConfiguration flyWheelRightConfig;
     public TalonFXConfiguration turretConfig;
     public TalonFXConfiguration hoodConfig;
-    public TalonFXConfiguration multiFeederConfig;
-    public TalonFXConfiguration singleFeederConfig;
+    public TalonFXConfiguration spindexerConfig;
+    public TalonFXConfiguration verticalFeederConfig;
     public TalonFXConfiguration topRollerConfig;
     public ShooterConfigurator(){
         flyWheelRightConfig = new TalonFXConfiguration();
         turretConfig = new TalonFXConfiguration();
         hoodConfig = new TalonFXConfiguration();
-        multiFeederConfig = new TalonFXConfiguration();
-        singleFeederConfig = new TalonFXConfiguration();
+        spindexerConfig = new TalonFXConfiguration();
+        verticalFeederConfig = new TalonFXConfiguration();
         topRollerConfig = new TalonFXConfiguration();
 
         //fly wheel right config
@@ -115,48 +115,48 @@ public class ShooterConfigurator {
         hoodConfig.MotionMagic.MotionMagicCruiseVelocity = 0;
 
 
-        //multiFeeder config(four lane highway)
-        multiFeederConfig.CurrentLimits.SupplyCurrentLimit = 20;
-        multiFeederConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-        multiFeederConfig.CurrentLimits.StatorCurrentLimit = 40;
-        multiFeederConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+        //spindexer config(four lane highway)
+        spindexerConfig.CurrentLimits.SupplyCurrentLimit = 20;
+        spindexerConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+        spindexerConfig.CurrentLimits.StatorCurrentLimit = 40;
+        spindexerConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 
         // set break mode and inversion
-        multiFeederConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+        spindexerConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
         // create PID gains
-        multiFeederConfig.Slot0.kP = 0.0;
-        multiFeederConfig.Slot0.kI = 0.0;
-        multiFeederConfig.Slot0.kD = 0.0;
-        multiFeederConfig.Slot0.kA = 0.0;
-        multiFeederConfig.Slot0.kV = 0.0;
-        multiFeederConfig.Slot0.kS = 0.0;
-        multiFeederConfig.Slot0.kG = 0.0;
+        spindexerConfig.Slot0.kP = 0.0;
+        spindexerConfig.Slot0.kI = 0.0;
+        spindexerConfig.Slot0.kD = 0.0;
+        spindexerConfig.Slot0.kA = 0.0;
+        spindexerConfig.Slot0.kV = 0.0;
+        spindexerConfig.Slot0.kS = 0.0;
+        spindexerConfig.Slot0.kG = 0.0;
 
-        multiFeederConfig.MotionMagic.MotionMagicAcceleration = 0;
-        multiFeederConfig.MotionMagic.MotionMagicJerk = 0;
-        multiFeederConfig.MotionMagic.MotionMagicCruiseVelocity = 0;
+        spindexerConfig.MotionMagic.MotionMagicAcceleration = 0;
+        spindexerConfig.MotionMagic.MotionMagicJerk = 0;
+        spindexerConfig.MotionMagic.MotionMagicCruiseVelocity = 0;
 
 
 
-        //single Feeder config(rural road)
-        singleFeederConfig.CurrentLimits.SupplyCurrentLimit = 20;
-        singleFeederConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-        singleFeederConfig.CurrentLimits.StatorCurrentLimit = 40;
-        singleFeederConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+        //vertical Feeder config(rural road)
+        verticalFeederConfig.CurrentLimits.SupplyCurrentLimit = 20;
+        verticalFeederConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+        verticalFeederConfig.CurrentLimits.StatorCurrentLimit = 40;
+        verticalFeederConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 
         // set break mode and inversion
-        singleFeederConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+        verticalFeederConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
         // create PID gains
-        singleFeederConfig.Slot0.kP = 0.0;
-        singleFeederConfig.Slot0.kI = 0.0;
-        singleFeederConfig.Slot0.kD = 0.0;
-        singleFeederConfig.Slot0.kA = 0.0;
-        singleFeederConfig.Slot0.kV = 0.0;
-        singleFeederConfig.Slot0.kS = 0.0;
-        singleFeederConfig.Slot0.kG = 0.0;
+        verticalFeederConfig.Slot0.kP = 0.0;
+        verticalFeederConfig.Slot0.kI = 0.0;
+        verticalFeederConfig.Slot0.kD = 0.0;
+        verticalFeederConfig.Slot0.kA = 0.0;
+        verticalFeederConfig.Slot0.kV = 0.0;
+        verticalFeederConfig.Slot0.kS = 0.0;
+        verticalFeederConfig.Slot0.kG = 0.0;
 
-        singleFeederConfig.MotionMagic.MotionMagicAcceleration = 0;
-        singleFeederConfig.MotionMagic.MotionMagicJerk = 0;
-        singleFeederConfig.MotionMagic.MotionMagicCruiseVelocity = 0;
+        verticalFeederConfig.MotionMagic.MotionMagicAcceleration = 0;
+        verticalFeederConfig.MotionMagic.MotionMagicJerk = 0;
+        verticalFeederConfig.MotionMagic.MotionMagicCruiseVelocity = 0;
     }
 }

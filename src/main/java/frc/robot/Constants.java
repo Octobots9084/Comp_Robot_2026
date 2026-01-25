@@ -10,6 +10,7 @@ package frc.robot;
 import com.ctre.phoenix6.CANBus;
 
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.Timer;
 
 /**
  * This class defines the runtime mode used by AdvantageKit. The mode is always "real" when running
@@ -19,6 +20,8 @@ import edu.wpi.first.wpilibj.RobotBase;
 public final class Constants {
   public static final Mode simMode = Mode.SIM;
   public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;
+  public static boolean isBlueAlliance = true;
+  public static Timer timer;
 
   public static enum Mode {
     /** Running on a real robot. */
@@ -35,9 +38,10 @@ public final class Constants {
     public static int flyWheelLeftID = 0;
     public static int hoodID = 0;
     public static int turretID = 0;
-    public static int multiFeedertID = 0;
-    public static int singleFeederID = 0;
+    public static int spindexerID = 0;
+    public static int verticalFeederID = 0;
     public static int topRollerID = 0;
+    public static boolean driverShoot = false;
   }
 
   public static class IntakeConstants {
