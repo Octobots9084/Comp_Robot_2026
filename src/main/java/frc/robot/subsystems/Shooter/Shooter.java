@@ -5,7 +5,7 @@ import java.security.spec.ECPublicKeySpec;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj.DriverStation;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ShooterConstants;
@@ -64,6 +64,7 @@ public class Shooter extends SubsystemBase{
         Logger.processInputs("Shooter/Flywheels",flywheelInputs);
         tIO.updateInputs(turretInputs);
         Logger.processInputs("Shooter/Turret and Hood",turretInputs);
+        SmartDashboard.putBoolean("HubAcivity",isHubActive());
     }
      
     public void ApplyStates(){
@@ -72,7 +73,9 @@ public class Shooter extends SubsystemBase{
                 //stop the flywheel
                 break;
             case FERRY:
-                //shoot over bump
+                if(ferry()){
+                    wantedShooterState = ShooterStates.BUMP;
+                }
                 break;
             case HUB:
                 if(hub()){
@@ -81,6 +84,13 @@ public class Shooter extends SubsystemBase{
                 break;
             case BUMP:
                 //dont shoot
+                if(true){//!tilted
+                    if(true){ //in alliance zone
+                        wantedShooterState = ShooterStates.HUB;
+                    }else{
+                        wantedShooterState = ShooterStates.FERRY;
+                    }
+                }
                 break;
             default:
                 break;
@@ -89,17 +99,26 @@ public class Shooter extends SubsystemBase{
     }
 
  public void handleStateTransitions(){
-        switch (currentShooterState) {
+        switch (wantedShooterState) {
                 case HUB:
                     //if we're on our side of the field
+                    if(true){//!tilted and in alliance
+                        currentShooterState = ShooterStates.HUB;
+                    }
                     break;
                 
                 case FERRY:
                     //if we're in neutral or enemy zone
+                    if(true){//!tilted and !in alliance
+                        currentShooterState = ShooterStates.FERRY;
+                    }
                     break;
                 
                 case BUMP:
                     //if we're on the bump (SHOCKING!!!) ha good one
+                    if(true){ //robot is tilted
+                        currentShooterState = ShooterStates.BUMP;
+                    }
                     break;
                 
                 case SAFE:
@@ -113,6 +132,8 @@ public class Shooter extends SubsystemBase{
     public boolean hub(){
         if(aim(true) && isHubActive()){
             if(ShooterConstants.driverShoot){
+                feeder.setFeederVelocity(FeederStates.SCORING);
+            }else{
                 if(true){//in alliance zone
                     if(true){ // if we have fuel(stop after 2s after no fuel)
                         feeder.setFeederVelocity(FeederStates.SCORING);
@@ -123,7 +144,6 @@ public class Shooter extends SubsystemBase{
                     feeder.setFeederVelocity(FeederStates.OFF);
                     return true;
                 }
-
             }
         }
         return false;
@@ -131,7 +151,20 @@ public class Shooter extends SubsystemBase{
 
     public boolean ferry(){
         if(aim(false)){
-            
+            if(ShooterConstants.driverShoot){
+                feeder.setFeederVelocity(FeederStates.FERRYING);
+            }else{
+                if(true){//!in alliance zone
+                    if(true){ // if we have fuel(stop after 2s after no fuel)
+                        feeder.setFeederVelocity(FeederStates.FERRYING);
+                    }else{
+                        feeder.setFeederVelocity(FeederStates.OFF);
+                    }
+                }else{
+                    feeder.setFeederVelocity(FeederStates.OFF);
+                    return true;
+                }
+            }
         }
         return false;
     }
