@@ -38,8 +38,6 @@ public interface SwerveIO {
 
     default void setSwerveState(SwerveRequest request) {}
 
-    default void resetRotation() {}
-
     default void resetToParamaterizedRotation(Rotation2d rotation2d) {}
 
     default void updateSimState() {}

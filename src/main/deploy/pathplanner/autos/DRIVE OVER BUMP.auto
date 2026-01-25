@@ -15,12 +15,6 @@
           "data": {
             "name": "DriveOverBump"
           }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "NOTHING"
-          }
         }
       ]
     }

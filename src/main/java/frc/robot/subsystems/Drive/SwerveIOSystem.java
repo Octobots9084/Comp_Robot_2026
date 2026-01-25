@@ -283,8 +283,6 @@ public class SwerveIOSystem extends TunerSwerveDrivetrain implements Subsystem, 
         return this.getModule(index).getEncoder().getAbsolutePosition().getValueAsDouble();
      }
 
-     public void resetRotation() {}
-
      public void resetToParamaterizedRotation(Rotation2d rotation2d) {}
 
      public void updateSimState() {}
@@ -296,6 +294,6 @@ public class SwerveIOSystem extends TunerSwerveDrivetrain implements Subsystem, 
      }
 
      public void zeroGyro() {
-        //MAKE
+        this.getPigeon2().setYaw(0);
      }
 }

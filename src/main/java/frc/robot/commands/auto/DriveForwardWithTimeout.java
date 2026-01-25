@@ -7,20 +7,26 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Drive.SwerveIO;
 import frc.robot.subsystems.Drive.SwerveSubsystem;
     
-public class DriveBack extends Command {
+public class DriveForwardWithTimeout extends Command {
     SwerveSubsystem swerve;
+    double time;
 
-    @Override
-    public void initialize () {
-        swerve = SwerveSubsystem.getInstance();
+    public DriveForwardWithTimeout (double time) {
+        this.time = time;
+        SmartDashboard.putBoolean("did the thing", true);
+    }
+
+    public DriveForwardWithTimeout () {
+        this.time = 0;
     }
 
     @Override
-    public void execute() {
-        swerve.io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(0.5, 0, 0)).withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
+    public void initialize () {
+        new DriveForward();//.withTimeout(time); 
     }   
 }
