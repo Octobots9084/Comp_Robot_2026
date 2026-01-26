@@ -112,6 +112,7 @@ public class Robot extends LoggedRobot {
             }
         }
         SmartDashboard.putBoolean("IsBlueAlliance", Constants.isBlueAlliance);
+  
   }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */

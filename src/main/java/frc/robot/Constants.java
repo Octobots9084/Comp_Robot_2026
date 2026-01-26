@@ -22,6 +22,7 @@ public final class Constants {
   public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;
   public static boolean isBlueAlliance = true;
   public static Timer timer = new Timer();
+  public static int NUM_LEDS;
 
   public static enum Mode {
     /** Running on a real robot. */
