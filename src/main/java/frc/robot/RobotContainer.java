@@ -7,6 +7,7 @@
 
 package frc.robot;
 
+import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -17,7 +18,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
-import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Intake.Intake;
 import frc.robot.subsystems.Intake.IntakeIOTalonFX;
 import frc.robot.subsystems.Climb.Climb;
@@ -34,6 +34,11 @@ import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
+import frc.robot.subsystems.drive.SwerveIO;
+import frc.robot.subsystems.drive.SwerveIOSystem;
+import frc.robot.subsystems.drive.SwerveSubsystem;
+import frc.robot.subsystems.drive.TunerConstants;
+
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -48,6 +53,7 @@ public class RobotContainer {
   private Shooter shooter;
   private Intake intake;
   private Climb climb;
+  private SwerveSubsystem swerve;
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
 
@@ -75,6 +81,7 @@ public class RobotContainer {
             new TurretIOTalonFX());
         intake = new Intake(new IntakeIOTalonFX());
         climb = new Climb(new ClimbIOTalonFX());
+
 
         // The ModuleIOTalonFXS implementation provides an example implementation for
         // TalonFXS controller connected to a CANdi with a PWM encoder. The

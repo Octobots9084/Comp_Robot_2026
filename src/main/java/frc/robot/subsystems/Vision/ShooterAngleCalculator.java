@@ -3,7 +3,7 @@ package frc.robot.subsystems.Vision;
 public class ShooterAngleCalculator {
     
     //contants
-    private final double g = 9.81; // gravity
+    private final double g = 9.81; //gravity
     private final double hubHeight = 1.8288; // hub height
     private final double ferryHeight = 0.5; // hub height
     private final double minHoodAngle = 1.012; // 58 deg
@@ -63,7 +63,9 @@ public class ShooterAngleCalculator {
         else return null;
         
     }
-
+//paramaters are vx is the x velocity of the robot vy is the y velocity of the robot 
+// phx is the x position of the hub in relation to the robot phy is the same for the y 
+//s is the speed of the flywheels
     public ShooterAngle getShooterAngleToHub(double vx, double vy, double phx, double phy, double s){
         // needed height
         double phz = hubHeight - shooterHeight;
@@ -109,6 +111,8 @@ public class ShooterAngleCalculator {
             }
                 
             return new ShooterAngle(phi, theta);
+            //phi is the angle of the turrent with respect to the field
+            //theta is the angle of elevation of the hood
         }
 
         else return null;

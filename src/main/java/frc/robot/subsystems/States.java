@@ -5,6 +5,4 @@ public enum States {
     MANUAL,
     CLIMB,
     SHOOTER,
-    SHOOTERCON; //stands for continous(meaning auto shoot)
-
 }

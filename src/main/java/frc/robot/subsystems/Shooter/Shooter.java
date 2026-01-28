@@ -4,11 +4,15 @@ import java.security.spec.ECPublicKeySpec;
 
 import org.littletonrobotics.junction.Logger;
 
-import edu.wpi.first.wpilibj.DriverStation;
+import com.ctre.phoenix6.hardware.CANrange;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.Constants.ShooterConstants;
+import frc.robot.Constants;
+import frc.robot.subsystems.Lights.LightAnimations;
+import frc.robot.subsystems.Lights.Lights;
 import frc.robot.subsystems.Shooter.Feeder.Feeder;
 import frc.robot.subsystems.Shooter.Feeder.FeederIO;
 import frc.robot.subsystems.Shooter.Feeder.FeederIOInputsAutoLogged;
@@ -19,6 +23,7 @@ import frc.robot.subsystems.Shooter.Flywheel.FlywheelIOInputsAutoLogged;
 import frc.robot.subsystems.Shooter.Turret.Turret;
 import frc.robot.subsystems.Shooter.Turret.TurretIO;
 import frc.robot.subsystems.Shooter.Turret.TurretIOInputsAutoLogged;
+import frc.robot.subsystems.drive.SwerveSubsystem;
 
 public class Shooter extends SubsystemBase{
     ShooterStates currentShooterState;
@@ -34,8 +39,11 @@ public class Shooter extends SubsystemBase{
     public Turret turret = new Turret();
     public Flywheel flywheel = new Flywheel();
     public final double prefire = 1;
+    public CANrange lemonDetector = new CANrange(Constants.lemonDetector,Constants.krakenBus);
 
     private String gameData;
+    private SwerveSubsystem swerve = SwerveSubsystem.getInstance();
+    private double lemonDetectionTimestamp;
 
     public Shooter(FeederIO fIO,FlywheelIO fwIO, TurretIO tIO){
         this.fIO = fIO;
@@ -64,6 +72,7 @@ public class Shooter extends SubsystemBase{
         Logger.processInputs("Shooter/Flywheels",flywheelInputs);
         tIO.updateInputs(turretInputs);
         Logger.processInputs("Shooter/Turret and Hood",turretInputs);
+        SmartDashboard.putBoolean("HubAcivity",isHubActive());
     }
      
     public void ApplyStates(){
@@ -72,15 +81,26 @@ public class Shooter extends SubsystemBase{
                 //stop the flywheel
                 break;
             case FERRY:
-                //shoot over bump
+                if(ferry()){
+                    wantedShooterState = ShooterStates.BUMP;
+                    Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTREADYMANUAL;
+                }
                 break;
             case HUB:
                 if(hub()){
                     wantedShooterState = ShooterStates.BUMP;
+                    Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTREADYMANUAL;
                 }
                 break;
             case BUMP:
                 //dont shoot
+                if(swerve.onRamp(0,3)){//!tilted
+                    if(true){ //in alliance zone
+                        wantedShooterState = ShooterStates.HUB;
+                    }else{
+                        wantedShooterState = ShooterStates.FERRY;
+                    }
+                }
                 break;
             default:
                 break;
@@ -89,17 +109,26 @@ public class Shooter extends SubsystemBase{
     }
 
  public void handleStateTransitions(){
-        switch (currentShooterState) {
+        switch (wantedShooterState) {
                 case HUB:
                     //if we're on our side of the field
+                    if(true){//!tilted and in alliance
+                        currentShooterState = ShooterStates.HUB;
+                    }
                     break;
                 
                 case FERRY:
                     //if we're in neutral or enemy zone
+                    if(true){//!tilted and !in alliance
+                        currentShooterState = ShooterStates.FERRY;
+                    }
                     break;
                 
                 case BUMP:
                     //if we're on the bump (SHOCKING!!!) ha good one
+                    if(true){ //robot is tilted
+                        currentShooterState = ShooterStates.BUMP;
+                    }
                     break;
                 
                 case SAFE:
@@ -110,12 +139,19 @@ public class Shooter extends SubsystemBase{
                     break;
             };
     }
+    //automatically shoots a ball if it can score and allows zeo to override some factors
     public boolean hub(){
         if(aim(true) && isHubActive()){
-            if(ShooterConstants.driverShoot){
-                if(true){//in alliance zone
-                    if(true){ // if we have fuel(stop after 2s after no fuel)
+            if(Constants.driverShoot){
+                feeder.setFeederVelocity(FeederStates.SCORING);
+                // manual shooting
+                Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTREADYMANUAL;
+            }else{
+                if(true && swerve.onRamp(0, 3)){//in alliance zone
+                    if(hasFuel()){ // if we have fuel(stop after 2s after no fuel)
                         feeder.setFeederVelocity(FeederStates.SCORING);
+                        //automatic shooting
+                        Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTREADYCONTINIOUS;
                     }else{
                         feeder.setFeederVelocity(FeederStates.OFF);
                     }
@@ -123,15 +159,41 @@ public class Shooter extends SubsystemBase{
                     feeder.setFeederVelocity(FeederStates.OFF);
                     return true;
                 }
-
             }
         }
         return false;
     }
 
+    public boolean inAllianceZone(){
+        return true; //TODO rui needs to make working pose...
+    }
+
+    public boolean hasFuel(){
+        if(lemonDetector.getDistance().getValueAsDouble()<7){
+            lemonDetectionTimestamp  = Constants.timer.get();
+        }
+        if(Constants.timer.get() - lemonDetectionTimestamp >= 1.5){
+            return false;
+        }
+        return true;
+    }
+
     public boolean ferry(){
         if(aim(false)){
-            
+            if(Constants.driverShoot){
+                feeder.setFeederVelocity(FeederStates.FERRYING);
+            }else{
+                if(inAllianceZone()){//!in alliance zone
+                    if(hasFuel()){ // if we have fuel(stoap after 2s after no fuel)
+                        feeder.setFeederVelocity(FeederStates.FERRYING);
+                    }else{
+                        feeder.setFeederVelocity(FeederStates.OFF);
+                    }
+                }else{
+                    feeder.setFeederVelocity(FeederStates.OFF);
+                    return true;
+                }
+            }
         }
         return false;
     }

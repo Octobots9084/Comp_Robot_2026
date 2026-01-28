@@ -6,8 +6,7 @@ import com.ctre.phoenix6.signals.MotorAlignmentValue;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.units.Unit;
-import frc.robot.Constants.ClimbConstants;
-import frc.robot.Constants.GeneralConstants;
+import frc.robot.Constants;
 
 import static edu.wpi.first.units.Units.Revolutions;
 
@@ -29,9 +28,9 @@ public class ClimbIOTalonFX implements ClimbIO{
     public ClimbIOTalonFX() {
         climbConfig = new ClimbConfigurator();
         
-        climbRotateMotorControlled = new TalonFX(ClimbConstants.climbRotateControlledID, GeneralConstants.krakenBus);
-        climbRotateMotorFollower = new TalonFX(ClimbConstants.climbRotateFollowerID, GeneralConstants.krakenBus);
-        climbDeploymentMotor = new TalonFX(ClimbConstants.climbDeployID, GeneralConstants.krakenBus);
+        climbRotateMotorControlled = new TalonFX(Constants.climbRotateControlledID, Constants.krakenBus);
+        climbRotateMotorFollower = new TalonFX(Constants.climbRotateFollowerID, Constants.krakenBus);
+        climbDeploymentMotor = new TalonFX(Constants.climbDeployID, Constants.krakenBus);
 
         climbRotateMotorControlled.getConfigurator().apply(climbConfig.climbRotateControlledConfig);
         climbRotateMotorFollower.getConfigurator().apply(climbConfig.climbDeployConfig);
@@ -56,7 +55,7 @@ public class ClimbIOTalonFX implements ClimbIO{
     public void setClimbState(ClimbStates state) {
         climbMotionControlledRequest.Position = state.climbPosition;
         climbRotateMotorControlled.setControl(climbMotionControlledRequest);
-        climbRotateMotorFollower.setControl(new Follower(ClimbConstants.climbRotateControlledID, MotorAlignmentValue.Opposed));
+        climbRotateMotorFollower.setControl(new Follower(Constants.climbRotateControlledID, MotorAlignmentValue.Opposed));
     
         
         climbDeployRequest.Position = state.climbPosition;

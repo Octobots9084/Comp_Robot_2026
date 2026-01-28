@@ -2,8 +2,7 @@ package frc.robot.subsystems.Shooter.Feeder;
 
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 
-import frc.robot.Constants.GeneralConstants;
-import frc.robot.Constants.ShooterConstants;
+import frc.robot.Constants;
 import frc.robot.subsystems.Shooter.ShooterConfigurator;
 
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -20,8 +19,8 @@ public class FeederIOTalonFX implements FeederIO{
 
     public FeederIOTalonFX(){
         shooterConfigs = new ShooterConfigurator();
-        spindexerMotor = new TalonFX(ShooterConstants.spindexerID,GeneralConstants.krakenBus);
-        verticalFeederMotor = new TalonFX(ShooterConstants.verticalFeederID,GeneralConstants.krakenBus);
+        spindexerMotor = new TalonFX(Constants.spindexerID,Constants.krakenBus);
+        verticalFeederMotor = new TalonFX(Constants.verticalFeederID,Constants.krakenBus);
 
         spindexerMotor.getConfigurator().apply(shooterConfigs.spindexerConfig);
         verticalFeederMotor.getConfigurator().apply(shooterConfigs.verticalFeederConfig);

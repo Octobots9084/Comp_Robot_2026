@@ -61,13 +61,21 @@ public class Robot extends LoggedRobot {
     Logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA);
     Logger.recordMetadata("GitDate", BuildConstants.GIT_DATE);
     Logger.recordMetadata("GitBranch", BuildConstants.GIT_BRANCH);
-    Logger.recordMetadata(
-        "GitDirty",
-        switch (BuildConstants.DIRTY) {
-          case 0 -> "All changes committed";
-          case 1 -> "Uncommitted changes";
-          default -> "Unknown";
-        });
+    String gitDirty;
+    switch (BuildConstants.DIRTY) {
+      case 0:
+        gitDirty = "All changes committed";
+        break;
+      case 1:
+        gitDirty = "Uncommitted changes";
+        break;
+      default:
+        gitDirty = "Unknown";
+        break;
+    }
+
+    Logger.recordMetadata("GitDirty", gitDirty);
+
 
     // Start AdvantageKit logger
     Logger.start();
@@ -132,17 +140,14 @@ public class Robot extends LoggedRobot {
 
   /** This function is called once when teleop is enabled. */
   @Override
-  public void teleopInit() {
+  public void teleopInit(){
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
     if (autonomousCommand != null) {
-      autonomousCommand.cancel();
+      CommandScheduler.getInstance().cancel(autonomousCommand);
     }
-    Constants.timer.reset();
-    
-
   }
 
   /** This function is called periodically during operator control. */
