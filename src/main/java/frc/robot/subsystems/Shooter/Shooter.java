@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Vision.ShooterAngle;
 import frc.robot.subsystems.Vision.ShooterAngleCalculator;
-import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.drive.SwerveSubsystem;
 import frc.robot.Constants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.Shooter.Feeder.Feeder;
@@ -44,14 +44,13 @@ public class Shooter extends SubsystemBase{
     public final FeederIO fIO;
     public final FlywheelIO fwIO;
     public final TurretIO tIO;
+    public SwerveSubsystem swerve = SwerveSubsystem.getInstance();
     public Feeder feeder = new Feeder();
     public Turret turret = new Turret();
     public Flywheel flywheel = new Flywheel();
     public final double prefire = 1;
 
     private String gameData;
-
-    private Drive drive = Drive.GetInstance();
     private ShooterAngle shooterAngle;
     private Pose2d hubPose = new Pose2d(10, 10, new Rotation2d());
 
@@ -98,10 +97,10 @@ public class Shooter extends SubsystemBase{
                 break;
             case HUB:
                 shooterAngle = ShooterAngleCalculator.getShooterAngleToHub(
-                    drive.getChassisSpeeds().vxMetersPerSecond + 1,
-                    drive.getChassisSpeeds().vxMetersPerSecond + 5,
-                    hubPose.getX() - drive.getPose().getY(),
-                    hubPose.getY() - drive.getPose().getX(),
+                    swerve.io.getChassisSpeeds().vxMetersPerSecond,
+                    swerve.io.getChassisSpeeds().vxMetersPerSecond,
+                    hubPose.getX() - swerve.io.getPose2d().getY(),
+                    hubPose.getY() - swerve.io.getPose2d().getX(),
                     (Flywheel.getInstance().getFlywheelVelocity()[1] * Flywheel.flywheelRadius + Flywheel.getInstance().getFlywheelVelocity()[0] * Flywheel.flywheelRadius)/2.0
                 );
                 if (shooterAngle != null){

@@ -1,4 +1,4 @@
-package frc.robot.subsystems.Drive;
+package frc.robot.subsystems.drive;
 
 import org.littletonrobotics.junction.AutoLog;
 
@@ -15,7 +15,6 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 public interface SwerveIO {
     @AutoLog
     class SwerveIOInputs {
-        public Pose2d Pose = new Pose2d();
         public ChassisSpeeds Speeds = new ChassisSpeeds();
         public SwerveModuleState[] ModuleStates;
         public SwerveModuleState[] ModuleTargets;
@@ -25,6 +24,7 @@ public interface SwerveIO {
         public double OdometryPeriod;
         public int SuccessfulDaqs;
         public int FailedDaqs;
+        public Pose2d robotPose;
     }
 
     default void updateInputs(SwerveIOInputs inputs) {}
@@ -44,6 +44,10 @@ public interface SwerveIO {
     default double getAbsoluteEncoderPositiosn(int index) {return 0;}
 
     default void resetRobotTranslation(Translation2d translation2d) {}
+
+    default ChassisSpeeds getChassisSpeeds() {return new ChassisSpeeds();}
+
+    default Pose2d getPose2d() {return new Pose2d();}
 
    // @Override
     //default void refreshData() {}

@@ -4,33 +4,19 @@
 
 package frc.robot;
 
-import com.pathplanner.lib.auto.AutoBuilder;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.subsystems.Intake.Intake;
 import frc.robot.subsystems.Intake.IntakeIOTalonFX;
 import frc.robot.subsystems.Climb.Climb;
 import frc.robot.subsystems.Climb.ClimbIOTalonFX;
 import frc.robot.subsystems.Shooter.Shooter;
-import frc.robot.subsystems.Shooter.Feeder.Feeder;
-import frc.robot.subsystems.Shooter.Feeder.FeederIOTalonFX;
-import frc.robot.subsystems.Shooter.Flywheel.Flywheel;
-import frc.robot.subsystems.Shooter.Flywheel.FlywheelIOTalonFX;
-import frc.robot.subsystems.Shooter.Turret.TurretIOTalonFX;
-import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.Feeder.FeederIOTalonFX;
 import frc.robot.subsystems.Shooter.Flywheel.FlywheelIOTalonFX;
 import frc.robot.subsystems.Shooter.Turret.TurretIOTalonFX;
 import frc.robot.subsystems.Vision.Vision;
-import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.SwerveSubsystem;
 import frc.robot.subsystems.drive.TunerConstants;
 
-import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 
@@ -51,6 +37,7 @@ public class RobotContainer {
     public Intake intake;
     public Climb climb;
     public Vision vision;
+
     private final SwerveSubsystem swerveSubsystem;
     static CommandJoystick driverLeft = ControlMap.DRIVER_LEFT;
     static CommandJoystick driverRight = ControlMap.DRIVER_RIGHT;
@@ -60,7 +47,12 @@ public class RobotContainer {
     static CommandJoystick coDriverButtons = ControlMap.CO_DRIVER_BUTTONS;
     // The robot's subsystems and commands are defined here...
 
-    // creates objects for the robot subsystems
+    /**
+     * The container for the robot. Contains subsystems, OI devices, and commands.
+     */
+    public RobotContainer() {
+        // creates objects for the robot subsystems
+        this.swerveSubsystem = SwerveSubsystem.setInstance(TunerConstants.createDrivetrain(), driverLeft, driverRight, Constants.maxAngularVelocity, Constants.maxVelocity);
         vision = new Vision();
         shooter = new Shooter(
             new FeederIOTalonFX(), 
@@ -68,12 +60,6 @@ public class RobotContainer {
             new TurretIOTalonFX());
         intake = new Intake(new IntakeIOTalonFX());
         climb = new Climb(new ClimbIOTalonFX());
-
-    /**
-     * The container for the robot. Contains subsystems, OI devices, and commands.
-     */
-    public RobotContainer() {
-        this.swerveSubsystem = SwerveSubsystem.setInstance(TunerConstants.createDrivetrain(), driverLeft, driverRight, Constants.maxAngularVelocity, Constants.maxVelocity);
         switch (Constants.currentMode) {
             case REAL:
                 break;

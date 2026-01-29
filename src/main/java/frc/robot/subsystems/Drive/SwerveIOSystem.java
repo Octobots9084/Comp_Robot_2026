@@ -1,4 +1,4 @@
-package frc.robot.subsystems.Drive;
+package frc.robot.subsystems.drive;
 
 
 import java.util.function.Supplier;
@@ -28,7 +28,7 @@ import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.subsystems.Drive.TunerConstants.TunerSwerveDrivetrain;
+import frc.robot.subsystems.drive.TunerConstants.TunerSwerveDrivetrain;
 
 /**
  * Class that extends the Phoenix 6 SwerveDrivetrain class and implements
@@ -39,6 +39,7 @@ public class SwerveIOSystem extends TunerSwerveDrivetrain implements Subsystem, 
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
     private SwerveIOSystem io;
+    private Pose2d robotPose;
 
     /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
     private static final Rotation2d kBlueAlliancePerspectiveRotation = Rotation2d.kZero;
@@ -70,6 +71,12 @@ public class SwerveIOSystem extends TunerSwerveDrivetrain implements Subsystem, 
             startSimThread();
         }
         configureAutoBuilder();
+        robotPose = new Pose2d();
+    }
+
+    @Override
+    public Pose2d getPose2d(){
+        return robotPose;
     }
 
     /**
@@ -169,6 +176,7 @@ public class SwerveIOSystem extends TunerSwerveDrivetrain implements Subsystem, 
         return run(() -> this.setControl(requestSupplier.get()));
     }
 
+    
     @Override
     public void periodic() {
         /*
@@ -203,6 +211,11 @@ public class SwerveIOSystem extends TunerSwerveDrivetrain implements Subsystem, 
             updateSimState(deltaTime, RobotController.getBatteryVoltage());
         });
         m_simNotifier.startPeriodic(kSimLoopPeriod);
+    }
+
+    /** Get the chassis speeds of the robot (vx, vy, omega) from the swerve module states. */
+    public ChassisSpeeds getChassisSpeeds() {
+        return new ChassisSpeeds();
     }
 
     /**
@@ -242,7 +255,7 @@ public class SwerveIOSystem extends TunerSwerveDrivetrain implements Subsystem, 
      @Override
     public void updateInputs(SwerveIOInputs inputs) {
             SwerveDriveState state = this.getState();
-            inputs.Pose = state.Pose;
+            inputs.robotPose = state.Pose;
             inputs.Speeds = state.Speeds;
             inputs.ModuleStates = state.ModuleStates;
             inputs.ModuleTargets = state.ModuleTargets;

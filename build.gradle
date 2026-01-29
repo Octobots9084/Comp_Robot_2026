@@ -59,10 +59,6 @@ dependencies {
     simulationRelease wpi.sim.enableRelease()
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.1'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-<<<<<<< HEAD
-
-=======
->>>>>>> origin/coolSwerve
     def akitJson = new groovy.json.JsonSlurper().parseText(new File(projectDir.getAbsolutePath() + "/vendordeps/AdvantageKit.json").text)
     annotationProcessor "org.littletonrobotics.akit:akit-autolog:$akitJson.version"
 }
@@ -92,18 +88,10 @@ wpi.java.configureTestTasks(test)
 tasks.withType(JavaCompile) {
     options.compilerArgs.add '-XDstringConcat=inline'
 }
-<<<<<<< HEAD
-
-=======
->>>>>>> origin/coolSwerve
 task(replayWatch, type: JavaExec) {
     mainClass = "org.littletonrobotics.junction.ReplayWatch"
     classpath = sourceSets.main.runtimeClasspath
 }
-<<<<<<< HEAD
-
-=======
->>>>>>> origin/coolSwerve
 project.compileJava.dependsOn(createVersionFile)
 gversion {
   srcDir       = "src/main/java/"
@@ -113,10 +101,6 @@ gversion {
   timeZone     = "America/California"
   indent       = "  "
 }
-<<<<<<< HEAD
-
-=======
->>>>>>> origin/coolSwerve
 repositories {
     maven {
         url = uri("https://maven.pkg.github.com/Mechanical-Advantage/AdvantageKit")
