@@ -164,7 +164,6 @@ public class SwerveSubsystem extends SubsystemBase{
                 * Constants.maxTelopVelocity;
         double yVelocity = (Constants.isBlueAlliance ? yMagnitude * maxVelocity : -yMagnitude * maxVelocity)
                 * Constants.maxTelopVelocity;
-
         double angularVelocity = angularMagnitude * maxAngularVelocity * Constants.maxTelopAngularVelocity;
 
         return new ChassisSpeeds(xVelocity, yVelocity, angularVelocity);

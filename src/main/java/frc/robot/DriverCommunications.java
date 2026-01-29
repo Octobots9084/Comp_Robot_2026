@@ -8,5 +8,6 @@ public class DriverCommunications{
     public static void pushToElastic(){
               SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime());
               SmartDashboard.putBoolean("Is Hub Active?", Shooter.getInstance().isHubActive());
+              SmartDashboard.putBoolean("In Manual?", ButtonConfig.getDriverShootInstance());
     }
 }

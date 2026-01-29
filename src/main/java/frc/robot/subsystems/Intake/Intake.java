@@ -7,8 +7,8 @@ import frc.robot.subsystems.Lights.LightAnimations;
 import frc.robot.subsystems.Lights.Lights;
 public class Intake extends SubsystemBase{
     
-    IntakeStates currentState = IntakeStates.SAFE;
-    IntakeStates wantedState = IntakeStates.SAFE;
+    public IntakeStates currentState = IntakeStates.SAFE;
+    public IntakeStates wantedState = IntakeStates.SAFE;
     public IntakeIO io;
     public static Intake instance;
     public IntakeIOInputsAutoLogged inputs = new IntakeIOInputsAutoLogged();
@@ -18,7 +18,7 @@ public class Intake extends SubsystemBase{
         instance = this;
     }
 
-    public static Intake getIntake(){
+    public static Intake getInstance(){
         return instance;
     }
 
