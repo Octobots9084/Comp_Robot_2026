@@ -2,67 +2,68 @@ package frc.robot.subsystems.Shooter.Feeder;
 
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 
+import frc.robot.Constants.GeneralConstants;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.Shooter.ShooterConfigurator;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.units.Units;
 
 public class FeederIOTalonFX implements FeederIO{
-    //public TalonFX multiFeederMotor;
-    //public TalonFX singleFeederMotor;
+    //public TalonFX spindexerMotor;
+    //public TalonFX verticalFeederMotor;
     public ShooterConfigurator shooterConfigs;
-    private MotionMagicVelocityVoltage multiFeederRequest;
-    private MotionMagicVelocityVoltage singleFeederRequest;
+    private MotionMagicVelocityVoltage spindexerRequest;
+    private MotionMagicVelocityVoltage verticalFeederRequest;
 
     public FeederIOTalonFX(){
         shooterConfigs = new ShooterConfigurator();
-      //  multiFeederMotor = new TalonFX(ShooterConstants.multiFeedertID,"Default Name");
-        //singleFeederMotor = new TalonFX(ShooterConstants.singleFeederID,"Default Name");
+        // spindexerMotor = new TalonFX(ShooterConstants.spindexerID,GeneralConstants.krakenBus);
+        // verticalFeederMotor = new TalonFX(ShooterConstants.verticalFeederID,GeneralConstants.krakenBus);
 
-        //multiFeederMotor.getConfigurator().apply(shooterConfigs.multiFeederConfig);
-        //singleFeederMotor.getConfigurator().apply(shooterConfigs.singleFeederConfig);
+        // spindexerMotor.getConfigurator().apply(shooterConfigs.spindexerConfig);
+        // verticalFeederMotor.getConfigurator().apply(shooterConfigs.verticalFeederConfig);
     }
 
     public void updateInputs(FeederIOInputs inputs){
-        //inputs.MultiFeederRPS = multiFeederMotor.getVelocity().getValueAsDouble();
-        //inputs.SingleFeederRPS = singleFeederMotor.getVelocity().getValueAsDouble();
-        //inputs.MultiFeederMotorTemp = multiFeederMotor.getDeviceTemp().getValueAsDouble();
-        //inputs.SingleFeederMotorTemp = singleFeederMotor.getDeviceTemp().getValueAsDouble();
+        // inputs.spindexerRPS = spindexerMotor.getVelocity().getValueAsDouble();
+        // inputs.verticalFeederRPS = verticalFeederMotor.getVelocity().getValueAsDouble();
+        // inputs.spindexerMotorTemp = spindexerMotor.getDeviceTemp().getValueAsDouble();
+        // inputs.verticalFeederMotorTemp = verticalFeederMotor.getDeviceTemp().getValueAsDouble();
     }
 
     @Override
-    public void setFeederVelocity(double multiFeederRPS, double singleFeederRPS){
-        multiFeederRequest.Velocity = multiFeederRPS;
-        singleFeederRequest.Velocity = singleFeederRPS;
-        //multiFeederMotor.setControl(multiFeederRequest);
-        //singleFeederMotor.setControl(singleFeederRequest);
+    public void setFeederVelocity(double spindexerRPS, double verticalFeederRPS){
+        spindexerRequest.Velocity = spindexerRPS;
+        verticalFeederRequest.Velocity = verticalFeederRPS;
+        // spindexerMotor.setControl(spindexerRequest);
+        // verticalFeederMotor.setControl(verticalFeederRequest);
     }
 
     @Override
-    public double getMultiFeederVelocity(){
-        //return multiFeederMotor.getVelocity().getValueAsDouble();
-        return 0;
+    public double getSpindexerVelocity(){
+        return -1; //spindexerMotor.getVelocity().getValueAsDouble();
     }
 
     @Override
-    public double getSingleFeederVelocity(){
-        return 0;// singleFeederMotor.getVelocity().getValueAsDouble();
+    public double getVerticalFeederVelocity(){
+        return -1;// verticalFeederMotor.getVelocity().getValueAsDouble();
     }
 
     @Override
     public double[] getFeederVelocity(){
-        double[] feederVelocity = {this.getMultiFeederVelocity(),this.getSingleFeederVelocity()};
+        double[] feederVelocity = {this.getSpindexerVelocity(),this.getVerticalFeederVelocity()};
         return feederVelocity;
     }
 
     @Override
-    public boolean multiFeederInTolerance(double tolerance){
-        return MathUtil.isNear(multiFeederRequest.getVelocityMeasure().in(Units.RadiansPerSecond), this.getMultiFeederVelocity(), tolerance);
+    public boolean spindexerInTolerance(double tolerance){
+        return MathUtil.isNear(spindexerRequest.getVelocityMeasure().in(Units.RadiansPerSecond), this.getSpindexerVelocity(), tolerance);
     }
 
     @Override
-    public boolean singleFeederInTolerance(double tolerance){
-        return MathUtil.isNear(singleFeederRequest.getVelocityMeasure().in(Units.RadiansPerSecond), this.getSingleFeederVelocity(), tolerance);
+    public boolean verticalFeederInTolerance(double tolerance){
+        return MathUtil.isNear(verticalFeederRequest.getVelocityMeasure().in(Units.RadiansPerSecond), this.getVerticalFeederVelocity(), tolerance);
     }
 
 

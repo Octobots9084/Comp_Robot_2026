@@ -7,7 +7,20 @@
 
 package frc.robot;
 
+import com.ctre.phoenix6.CANBus;
+
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.Timer;
 
 /**
  * This class defines the runtime mode used by AdvantageKit. The mode is always "real" when running
@@ -15,8 +28,20 @@ import edu.wpi.first.wpilibj.RobotBase;
  * (log replay from a file).
  */
 public final class Constants {
+  // vision
+  public static final String frontCameraName = "FrontCamera";
+  public static final AprilTagFieldLayout kTagLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
+  private static final double camPitch = Units.degreesToRadians(30.0);
+  public static final Transform3d robotToCamFront = new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0, -camPitch, 0));
+  // The standard deviations of our vision estimated poses, which affect correction rate
+  // (Fake values. Experiment and determine estimation noise on an actual robot.)
+  public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
+  public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
+
   public static final Mode simMode = Mode.SIM;
   public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;
+  public static boolean isBlueAlliance = true;
+  public static Timer timer = new Timer();
 
   public static enum Mode {
     /** Running on a real robot. */
@@ -33,13 +58,24 @@ public final class Constants {
     public static int flyWheelLeftID = 0;
     public static int hoodID = 0;
     public static int turretID = 0;
-    public static int multiFeedertID = 0;
-    public static int singleFeederID = 0;
+    public static int spindexerID = 0;
+    public static int verticalFeederID = 0;
     public static int topRollerID = 0;
+    public static boolean driverShoot = false;
   }
 
   public static class IntakeConstants {
     public static int intakePivotID = 0;
     public static int intakeRollerID = 0;
+  }
+
+  public static class ClimbConstants {
+    public static int climbRotateControlledID = 0;
+    public static int climbRotateFollowerID = 0;
+    public static int climbDeployID = 0;
+  }
+
+  public static class GeneralConstants {
+    public static CANBus krakenBus = new CANBus("krakenbus");
   }
 }

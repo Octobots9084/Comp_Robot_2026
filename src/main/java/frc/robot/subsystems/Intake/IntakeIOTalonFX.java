@@ -5,56 +5,47 @@ import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.units.Units;
+import frc.robot.Constants.GeneralConstants;
 import frc.robot.Constants.IntakeConstants;
 
 public class IntakeIOTalonFX implements IntakeIO{
-    //public TalonFX intakePivotMotor;
-    //public TalonFX intakeRollerMotor;
-    //do intake configs
-    public IntakeConfigurator intakeConfigs;
-    private MotionMagicVoltage intakePivotRequest;
-    private MotionMagicVelocityVoltage intakeRollerRequest;
+    public IntakeConfigurator config;
+    // public TalonFX roller;
+    // public TalonFX pivot;
+    private MotionMagicVelocityVoltage rollerRequest;
+    private MotionMagicVoltage pivotRequest;
 
-    public IntakeIOTalonFX(){
-        intakeConfigs = new IntakeConfigurator();
-        //intakePivotMotor = new TalonFX(IntakeConstants.intakePivotID, "Default Name");
-        //intakeRollerMotor = new TalonFX(IntakeConstants.intakeRollerID, "Default Name");
+    public IntakeIOTalonFX () {
+        config = new IntakeConfigurator();
 
-    //    intakePivotMotor.getConfigurator().apply(intakeConfigs.intakePivotConfig);
-      //  intakeRollerMotor.getConfigurator().apply(intakeConfigs.intakeRollerConfig);
+        // roller = new TalonFX(IntakeConstants.intakeRollerID, GeneralConstants.krakenBus);
+        // pivot = new TalonFX(IntakeConstants.intakePivotID, GeneralConstants.krakenBus);
     }
 
-    @Override
-    public void setIntakeState(IntakeStates state){
-        intakePivotRequest.Position = state.intakePosition;
-        intakeRollerRequest.Velocity = state.rollerRPS;
-        //intakePivotMotor.setControl(intakePivotRequest);
-        //intakeRollerMotor.setControl(intakeRollerRequest);
-    }
+   public void updateInputs(IntakeIOInputs inputs) {
+        // inputs.intakePosition = pivot.getPosition().getValueAsDouble();
+        // inputs.rollerRPS = roller.getVelocity().getValueAsDouble();
+        // inputs.rollerTemp = roller.getDeviceTemp().getValueAsDouble();
+        // inputs.pivotTemp = pivot.getDeviceTemp().getValueAsDouble();
+   }
 
-    @Override
-    public double getPivotPosition(){
-        return 0;//intakePivotMotor.getPosition().getValueAsDouble();
-    }
+   @Override
+    public void setIntakeState(IntakeStates states){
+        pivotRequest.Position = states.intakePosition;
+        rollerRequest.Velocity = states.rollerRPS;
+        // pivot.setControl(pivotRequest);
+        // roller.setControl(rollerRequest);
+   }
 
-    @Override
-    public double getIntakeVelocity(){
-        return 0;//intakeRollerMotor.getVelocity().getValueAsDouble();
-    }
+   @Override
+   public double getRollerRPS() {
+        return -1;// roller.getVelocity().getValueAsDouble();
+   }
 
-    @Override 
-    public boolean pivotInTolerance(double tolerance){
-        return true;//MathUtil.isNear(intakePivotRequest.getPositionMeasure().in(Units.Revolution), this.getPivotPosition(), tolerance);
-    }
+   @Override
+   public double getIntakePosition() {
+        return -1; // pivot.getPosition().getValueAsDouble(); 
+   }
 
-    @Override 
-    public boolean rollerInTolerance(double tolerance){
-        return MathUtil.isNear(intakeRollerRequest.getVelocityMeasure().in(Units.RadiansPerSecond), this.getIntakeVelocity(), tolerance);
-    }
 
-     @Override 
-    public boolean intakeInTolerance(double tolerance){
-        return rollerInTolerance(tolerance) && pivotInTolerance(tolerance);
-    }
 }

@@ -1,5 +1,7 @@
 package frc.robot.subsystems.Shooter;
 
+import java.security.spec.ECPublicKeySpec;
+
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -9,21 +11,32 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Vision.ShooterAngle;
 import frc.robot.subsystems.Vision.ShooterAngleCalculator;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.Constants;
+import frc.robot.Constants.ShooterConstants;
+import frc.robot.subsystems.Shooter.Feeder.Feeder;
 import frc.robot.subsystems.Shooter.Feeder.FeederIO;
 import frc.robot.subsystems.Shooter.Feeder.FeederIOInputsAutoLogged;
 import frc.robot.subsystems.Shooter.Flywheel.Flywheel;
+import frc.robot.subsystems.Shooter.Feeder.FeederStates;
+import frc.robot.subsystems.Shooter.Flywheel.Flywheel;
 import frc.robot.subsystems.Shooter.Flywheel.FlywheelIO;
 import frc.robot.subsystems.Shooter.Flywheel.FlywheelIOInputsAutoLogged;
+import frc.robot.subsystems.Shooter.Turret.Turret;
 import frc.robot.subsystems.Shooter.Turret.TurretIO;
 import frc.robot.subsystems.Shooter.Turret.TurretIOInputsAutoLogged;
 
 public class Shooter extends SubsystemBase{
-    ShooterStates currentShooterState = ShooterStates.HUB;//SAFE;
+    private ShooterAngle pastShooterAngle = new ShooterAngle(0, 0);
+    
+    ShooterStates currentShooterState = ShooterStates.HUB;//SAFE; //should be safe but useing hub for testing
     private ShooterAngleCalculator AngleCalculator = new ShooterAngleCalculator();
+    ShooterStates wantedShooterState = ShooterStates.HUB;
     private static Shooter instance = null;
     private final FeederIOInputsAutoLogged feederInputs = new FeederIOInputsAutoLogged();
     private final FlywheelIOInputsAutoLogged flywheelInputs = new FlywheelIOInputsAutoLogged();
@@ -31,8 +44,14 @@ public class Shooter extends SubsystemBase{
     public final FeederIO fIO;
     public final FlywheelIO fwIO;
     public final TurretIO tIO;
+    public Feeder feeder = new Feeder();
+    public Turret turret = new Turret();
+    public Flywheel flywheel = new Flywheel();
+    public final double prefire = 1;
+
+    private String gameData;
+
     private Drive drive = Drive.GetInstance();
-    private Pose2d pose;
     private ShooterAngle shooterAngle;
     private Pose2d hubPose = new Pose2d(10, 10, new Rotation2d());
 
@@ -40,22 +59,6 @@ public class Shooter extends SubsystemBase{
         this.fIO = fIO;
         this.fwIO = fwIO;
         this.tIO = tIO;
-        // Shuffleboard.getTab("Drive")
-        //     .add("Vx", 1)
-        //     .withWidget(BuiltInWidgets.kNumberSlider)
-        //     .getEntry();
-        // Shuffleboard.getTab("Drive")
-        //     .add("Vy", 1)
-        //     .withWidget(BuiltInWidgets.kNumberSlider)
-        //     .getEntry();
-        // Shuffleboard.getTab("Drive")
-        //     .add("Prx", 1)
-        //     .withWidget(BuiltInWidgets.kNumberSlider)
-        //     .getEntry();
-        // Shuffleboard.getTab("Drive")
-        //     .add("Prx", 1)
-        //     .withWidget(BuiltInWidgets.kNumberSlider)
-        //     .getEntry();
     }
 
     public static Shooter setInstance(FeederIO fIO,FlywheelIO fwIO, TurretIO tIO){
@@ -66,66 +69,174 @@ public class Shooter extends SubsystemBase{
 
         if (instance == null){
             throw new IllegalStateException("Shooter Instance Not Set");
-
         }
         return instance;
     }
     
     @Override
     public void periodic(){
-        pose = drive.getPose();
         ApplyStates();
         handleStateTransitions();
         fIO.updateInputs(feederInputs);
-        Logger.processInputs("Feeder",feederInputs);
+        Logger.processInputs("Shooter/Feeder",feederInputs);
         fwIO.updateInputs(flywheelInputs);
-        Logger.processInputs("Flywheels",flywheelInputs);
+        Logger.processInputs("Shooter/Flywheels",flywheelInputs);
+        tIO.updateInputs(turretInputs);
+        Logger.processInputs("Shooter/Turret and Hood",turretInputs);
+        SmartDashboard.putBoolean("HubAcivity",isHubActive());
     }
+     
     public void ApplyStates(){
         switch(currentShooterState){
             case SAFE:
                 //stop the flywheel
                 break;
             case FERRY:
-                //shoot over bump
+                if(ferry()){
+                    wantedShooterState = ShooterStates.BUMP;
+                }
                 break;
             case HUB:
                 shooterAngle = ShooterAngleCalculator.getShooterAngleToHub(
                     drive.getChassisSpeeds().vxMetersPerSecond + 1,
                     drive.getChassisSpeeds().vxMetersPerSecond + 5,
-                    hubPose.getX() - pose.getY(),
-                    hubPose.getY() - pose.getX(),
-                    Flywheel.getInstance().getFlyWheelVelocity().in(Units.RadiansPerSecond) * Flywheel.flywheelRadius
+                    hubPose.getX() - drive.getPose().getY(),
+                    hubPose.getY() - drive.getPose().getX(),
+                    (Flywheel.getInstance().getFlywheelVelocity()[1] * Flywheel.flywheelRadius + Flywheel.getInstance().getFlywheelVelocity()[0] * Flywheel.flywheelRadius)/2.0
                 );
-                SmartDashboard.putNumber("shooterHoodAngle",shooterAngle.hoodRotation);
-                SmartDashboard.putNumber("shooterHoodAngle",shooterAngle.turretRotation);
-                //shoot at our hub
+                if (shooterAngle != null){
+                    pastShooterAngle = shooterAngle;
+                }
+                SmartDashboard.putNumber("shooterHoodAngle",pastShooterAngle.hoodRotation);
+                SmartDashboard.putNumber("shooterAngle",pastShooterAngle.turretRotation);
+                
+                if(hub()){
+                    wantedShooterState = ShooterStates.BUMP;
+                }
                 break;
             case BUMP:
                 //dont shoot
-            break;
+                if(true){//!tilted
+                    if(true){ //in alliance zone
+                        wantedShooterState = ShooterStates.HUB;
+                    }else{
+                        wantedShooterState = ShooterStates.FERRY;
+                    }
+                }
+                break;
+            default:
+                break;
         }
+
     }
 
  public void handleStateTransitions(){
-        switch (currentShooterState) {
+        switch (wantedShooterState) {
                 case HUB:
                     //if we're on our side of the field
+                    if(true){//!tilted and in alliance
+                        currentShooterState = ShooterStates.HUB;
+                    }
                     break;
                 
                 case FERRY:
                     //if we're in neutral or enemy zone
+                    if(true){//!tilted and !in alliance
+                        currentShooterState = ShooterStates.FERRY;
+                    }
                     break;
                 
                 case BUMP:
-                    //if we're on the bump (SHOCKING!!!)
+                    //if we're on the bump (SHOCKING!!!) ha good one
+                    if(true){ //robot is tilted
+                        currentShooterState = ShooterStates.BUMP;
+                    }
                     break;
                 
                 case SAFE:
                     //driver input (presumably)
                     break;
+
+                default:
+                    break;
             };
     }
+    public boolean hub(){
+        // there is no feederrequest so this causes an error
+        if(aim(true) && isHubActive()){
+            if(ShooterConstants.driverShoot){
+                // feeder.setFeederVelocity(FeederStates.SCORING);
+            }else{
+                if(true){//in alliance zone
+                    if(true){ // if we have fuel(stop after 2s after no fuel)
+                        // feeder.setFeederVelocity(FeederStates.SCORING);
+                    }else{
+                        // feeder.setFeederVelocity(FeederStates.OFF);
+                    }
+                }else{
+                    // feeder.setFeederVelocity(FeederStates.OFF);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean ferry(){
+        if(aim(false)){
+            if(ShooterConstants.driverShoot){
+                // feeder.setFeederVelocity(FeederStates.FERRYING);
+            }else{
+                if(true){//!in alliance zone
+                    if(true){ // if we have fuel(stop after 2s after no fuel)
+                        // feeder.setFeederVelocity(FeederStates.FERRYING);
+                    }else{
+                        // feeder.setFeederVelocity(FeederStates.OFF);
+                    }
+                }else{
+                    // feeder.setFeederVelocity(FeederStates.OFF);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean aim(boolean atHub){
+        return true;
+    }
+
+
+    public boolean isHubActive(){
+        double timer = Constants.timer.get();
+        gameData = DriverStation.getGameSpecificMessage();
+            if(gameData.length() > 0)
+            {
+                switch (gameData.charAt(0))
+                {
+                    case 'B' :
+                        if(Constants.isBlueAlliance){
+                            return (timer <= 10||(timer >= (40-prefire) && timer <= 70 )|| (timer >= (100-prefire) && timer <= 161));
+                        }else{
+                            return (timer <= 40) || (timer >= (70-prefire) && timer <= 100) || (timer >= (130-prefire) && timer <=  161);
+                        }
+                    case 'R' :
+                        if(!Constants.isBlueAlliance){
+                            return (timer <= 10||(timer >= (40-prefire) && timer <= 70 )|| (timer >= (100-prefire) && timer <= 161));
+                        }else{
+                            return (timer <= 40) || (timer >= (70-prefire) && timer <= 100) || (timer >= (130-prefire) && timer <=  161);
+                        }
+                        
+                    default:
+                        return true;
+                }
+            }else{
+                return true;
+            }
+        }
+
+    
+    
 }
 
     

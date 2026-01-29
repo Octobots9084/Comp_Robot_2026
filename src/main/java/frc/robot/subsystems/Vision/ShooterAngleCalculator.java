@@ -9,11 +9,12 @@ public class ShooterAngleCalculator {
     private static final double minHoodAngle = 1.012; // 58 deg
     private static final double shooterHeight = 0.4572; // shooter height
     private static final double hubRadius = 1.27; // radius of the hub
-    private static final int maxNewtonsMethodIterations = 30; // prevents an ifinate loop
-    private static final double flywheelSpeedLoss = 0.9;
+    private static final int maxNewtonsMethodIterations = 30; // prevents an ifinate loop 
     
-    public static ShooterAngle getShooterAngleToFerry(double vx, double vy, double pfx, double pfy, double speedBeforeReduction){
-        double s = speedBeforeReduction * flywheelSpeedLoss;
+
+
+    
+    public static ShooterAngle getShooterAngleToFerry(double vx, double vy, double pfx, double pfy, double s){
         
         // needed height
         double pfz = ferryHeight - shooterHeight;
@@ -64,9 +65,7 @@ public class ShooterAngleCalculator {
         
     }
 
-    public static ShooterAngle getShooterAngleToHub(double vx, double vy, double phx, double phy, double speedBeforeReduction){
-        double s = speedBeforeReduction * flywheelSpeedLoss;
-        
+    public static ShooterAngle getShooterAngleToHub(double vx, double vy, double phx, double phy, double s){
         // needed height
         double phz = hubHeight - shooterHeight;
 

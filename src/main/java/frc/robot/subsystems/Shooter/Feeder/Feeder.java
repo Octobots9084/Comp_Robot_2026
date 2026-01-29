@@ -27,11 +27,11 @@ public class Feeder extends SubsystemBase{
     }
 
     public double getSingleFeederVelocity(){
-        return io.getSingleFeederVelocity();
+        return io.getVerticalFeederVelocity();
     }
 
     public double getMultiFeederVelocity(){
-        return io.getMultiFeederVelocity();
+        return io.getSpindexerVelocity();
     }
 
     public boolean feederInTolerance(double tolerance){

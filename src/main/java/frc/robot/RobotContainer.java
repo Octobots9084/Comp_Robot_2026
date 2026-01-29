@@ -18,6 +18,16 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
 import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.Intake.Intake;
+import frc.robot.subsystems.Intake.IntakeIOTalonFX;
+import frc.robot.subsystems.Climb.Climb;
+import frc.robot.subsystems.Climb.ClimbIOTalonFX;
+import frc.robot.subsystems.Shooter.Shooter;
+import frc.robot.subsystems.Shooter.Feeder.Feeder;
+import frc.robot.subsystems.Shooter.Feeder.FeederIOTalonFX;
+import frc.robot.subsystems.Shooter.Flywheel.Flywheel;
+import frc.robot.subsystems.Shooter.Flywheel.FlywheelIOTalonFX;
+import frc.robot.subsystems.Shooter.Turret.TurretIOTalonFX;
 import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.Feeder.FeederIOTalonFX;
 import frc.robot.subsystems.Shooter.Flywheel.FlywheelIOTalonFX;
@@ -40,8 +50,11 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 public class RobotContainer {
   // Subsystems
   private final Drive drive;
-  public Vision vision;
   public Shooter shooter;
+  public Intake intake;
+  public Climb climb;
+  public Vision vision;
+
 
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
@@ -66,8 +79,13 @@ public class RobotContainer {
 
         // creates objects for the robot subsystems
         vision = new Vision();
-        shooter = new Shooter(new FeederIOTalonFX(), new FlywheelIOTalonFX(), new TurretIOTalonFX());
-        
+        shooter = new Shooter(
+            new FeederIOTalonFX(), 
+            new FlywheelIOTalonFX(), 
+            new TurretIOTalonFX());
+        intake = new Intake(new IntakeIOTalonFX());
+        climb = new Climb(new ClimbIOTalonFX());
+
         // The ModuleIOTalonFXS implementation provides an example implementation for
         // TalonFXS controller connected to a CANdi with a PWM encoder. The
         // implementations
@@ -96,8 +114,11 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.FrontRight),
                 new ModuleIOSim(TunerConstants.BackLeft),
                 new ModuleIOSim(TunerConstants.BackRight));
-        vision = new Vision();
+
         shooter = new Shooter(new FeederIOTalonFX(), new FlywheelIOTalonFX(), new TurretIOTalonFX());
+        intake = new Intake(new IntakeIOTalonFX());
+        climb = new Climb(new ClimbIOTalonFX());
+        vision = new Vision();
         break;
 
       default:

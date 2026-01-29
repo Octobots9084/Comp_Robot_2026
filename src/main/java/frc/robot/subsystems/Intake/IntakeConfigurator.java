@@ -8,6 +8,8 @@ public class IntakeConfigurator {
     public TalonFXConfiguration intakeRollerConfig;
     public TalonFXConfiguration intakePivotConfig;
     public IntakeConfigurator(){
+        intakeRollerConfig = new TalonFXConfiguration();
+        intakePivotConfig = new TalonFXConfiguration();
 
         //intake roller config
         intakeRollerConfig.CurrentLimits.SupplyCurrentLimit = 20;

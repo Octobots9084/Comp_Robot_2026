@@ -7,13 +7,12 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.Vision.Vision;
-import frc.robot.subsystems.Shooter.Shooter;
-import frc.robot.subsystems.Shooter.Feeder.FeederIOTalonFX;
-import frc.robot.subsystems.Shooter.Flywheel.FlywheelIOTalonFX;
-import frc.robot.subsystems.Shooter.Turret.TurretIOTalonFX;
+import java.util.Optional;
 
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
@@ -100,7 +99,18 @@ public class Robot extends LoggedRobot {
 
   /** This function is called periodically when disabled. */
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+    Optional<Alliance> ally = DriverStation.getAlliance();
+        if (ally.isPresent()) {
+            if (ally.get() == Alliance.Red) {
+                Constants.isBlueAlliance = false;
+            }
+            if (ally.get() == Alliance.Blue) {
+                Constants.isBlueAlliance = true;
+            }
+        }
+        SmartDashboard.putBoolean("IsBlueAlliance", Constants.isBlueAlliance);
+  }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
@@ -128,6 +138,9 @@ public class Robot extends LoggedRobot {
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
     }
+    Constants.timer.reset();
+    
+
   }
 
   /** This function is called periodically during operator control. */
