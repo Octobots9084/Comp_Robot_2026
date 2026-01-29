@@ -7,7 +7,7 @@ import frc.robot.Constants;
 import com.ctre.phoenix6.controls.StrobeAnimation;
 public enum LightAnimations{
     DEFAULT(new StrobeAnimation(0,0).withColor(new RGBWColor(255,255,0,0)), 0),             // Yellow
-    BUMP(new StrobeAnimation(0,0).withColor(new RGBWColor(255,120,0,0)), 0),                 // Orange
+    CANTSHOOT(new StrobeAnimation(0,0).withColor(new RGBWColor(255,120,0,0)), 0),                 // Orange
     INTAKING(new StrobeAnimation(0,0).withColor(new RGBWColor(0,55,255,0)), 0),             // Blue
     REVERSEINTAKING(new StrobeAnimation(0,0).withColor(new RGBWColor(255,0,255,0)), 0),     // The hottest pink
     SHOOTREADYMANUAL(new StrobeAnimation(0,0).withColor(new RGBWColor(0,255,100,0)), 0),    // Green

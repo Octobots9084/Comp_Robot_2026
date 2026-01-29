@@ -27,8 +27,8 @@ public class Lights {
             case REVERSEINTAKING:
                 lightsCurrentState = LightAnimations.REVERSEINTAKING;
                 break;
-            case BUMP:
-                lightsCurrentState = LightAnimations.BUMP;
+            case CANTSHOOT:
+                lightsCurrentState = LightAnimations.CANTSHOOT;
                 break;
             case SHOOTREADYCONTINIOUS:
                 lightsCurrentState = LightAnimations.SHOOTREADYCONTINIOUS;
