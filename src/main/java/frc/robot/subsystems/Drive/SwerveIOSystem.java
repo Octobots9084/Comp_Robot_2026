@@ -15,6 +15,7 @@ import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -296,4 +297,9 @@ public class SwerveIOSystem extends TunerSwerveDrivetrain implements Subsystem, 
      public void zeroGyro() {
         this.getPigeon2().setYaw(0);
      }
+
+     public void driveFieldRelative(ChassisSpeeds fieldRelativeSpeeds) {
+
+        // this.driveFieldOriented(fieldRelativeSpeeds);
+    }
 }

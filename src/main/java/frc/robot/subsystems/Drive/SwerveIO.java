@@ -50,6 +50,7 @@ public interface SwerveIO {
 
     default void zeroGyro() {}
 
+    public default void driveFieldRelative(ChassisSpeeds fieldRelativeSpeeds) {}
 
 
    // @Override

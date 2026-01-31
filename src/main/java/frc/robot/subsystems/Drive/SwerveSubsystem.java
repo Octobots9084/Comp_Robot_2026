@@ -158,9 +158,9 @@ public class SwerveSubsystem extends SubsystemBase{
         }
     }
     public ChassisSpeeds calculateSpeedsBasedOnJoystickInputs(){
-        double yMagnitude = MathUtil.applyDeadband(driverLeft.getRawAxis(1), Constants.leftYDeadband);
-        double xMagnitude = MathUtil.applyDeadband(driverLeft.getRawAxis(0), Constants.leftXDeadband);
-        double angularMagnitude = MathUtil.applyDeadband(driverRight.getRawAxis(0), Constants.rightXDeadband);
+        double yMagnitude = MathUtil.applyDeadband(driverLeft.getRawAxis(0), Constants.leftYDeadband);
+        double xMagnitude = -MathUtil.applyDeadband(driverLeft.getRawAxis(1), Constants.leftXDeadband);
+        double angularMagnitude = -MathUtil.applyDeadband(driverRight.getRawAxis(0), Constants.rightXDeadband);
         angularMagnitude = Math.copySign(angularMagnitude * angularMagnitude, angularMagnitude);
         double xVelocity = (FieldConstants.isBlueAlliance() ? -xMagnitude * maxVelocity : xMagnitude * maxVelocity)
                 * Constants.maxTelopVelocity;
@@ -170,5 +170,9 @@ public class SwerveSubsystem extends SubsystemBase{
         double angularVelocity = angularMagnitude * maxAngularVelocity * Constants.maxTelopAngularVelocity;
 
         return new ChassisSpeeds(xVelocity, yVelocity, angularVelocity);
+    }
+
+    public void driveFieldRelative(ChassisSpeeds fieldRelativeSpeeds) {
+        this.io.driveFieldRelative(fieldRelativeSpeeds);
     }
 }

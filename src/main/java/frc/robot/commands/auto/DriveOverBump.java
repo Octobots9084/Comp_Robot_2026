@@ -37,6 +37,7 @@ public class DriveOverBump extends Command {
     @Override
     public boolean isFinished () {
         return (!onRamp && hasBeenOnRamp);
+        // return false;
     }
     
     @Override
@@ -46,7 +47,7 @@ public class DriveOverBump extends Command {
     }
 
     public void move () {
-        swerve.io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(0, -2, 0))
+        swerve.io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(-0.5, 0, 0))
             .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
     }
 

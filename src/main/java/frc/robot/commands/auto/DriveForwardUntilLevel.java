@@ -16,7 +16,7 @@ public class DriveForwardUntilLevel extends Command {
 
     @Override
     public void execute() {        
-        swerve.io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(0, -1, 0))
+        swerve.io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(-0.5, 0, 0))
             .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));        
     }   
 
