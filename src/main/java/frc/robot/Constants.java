@@ -22,19 +22,19 @@ public final class Constants {
 
   public static final double maxTelopVelocity = 1;//TODO
     public static final double maxTelopAngularVelocity = 1;//TODO
-    public static final double leftYDeadband = 0.5;//TODO
-    public static final double leftXDeadband = 0.5;//TODO
+    public static final double leftYDeadband = 0.1;//TODO
+    public static final double leftXDeadband = 0.1;//TODO
     public static final double rightXDeadband = 0.15;//TODO
     public static final double maxAngularVelocity = 2;//TODO
     // public static final enum currentMode = 1;//TODO
     public static final double maxVelocity = 1;//TODO
     public static Alliance allianceColor = DriverStation.getAlliance().orElse(Alliance.Blue);
-    public static RobotTypes robotType = RobotTypes.ALPHA;
+    public static RobotTypes robotType = RobotTypes.BETA;
     public static enum RobotTypes {
-    // mango
+    // alpha
     ALPHA,
 
-    // other bot
+    // beta
     BETA,
 
     //swervebot

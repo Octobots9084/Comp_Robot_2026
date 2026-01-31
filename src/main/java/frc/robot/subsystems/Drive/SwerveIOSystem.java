@@ -245,6 +245,7 @@ public class SwerveIOSystem extends TunerSwerveDrivetrain implements Subsystem, 
             inputs.Pose = state.Pose;
             inputs.Speeds = state.Speeds;
             inputs.ModuleStates = state.ModuleStates;
+            //inputs./*something*/ = state.ModuleStates.
             inputs.ModuleTargets = state.ModuleTargets;
             inputs.ModulePositions = state.ModulePositions;
             inputs.RawHeading = state.RawHeading;
@@ -288,6 +289,15 @@ public class SwerveIOSystem extends TunerSwerveDrivetrain implements Subsystem, 
      public void updateSimState() {}
 
      public void resetRobotTranslation(Translation2d translation2d) {}
+
+    private double wrapToPie(double angle) {
+        angle = (angle + Math.PI) % (2* Math.PI);
+        if (angle < 0) {
+            angle += 2 * Math.PI;
+        }
+
+        return angle - Math.PI;
+     }
 
      public void zeroGyro() {
         this.getPigeon2().setYaw(0);
