@@ -27,6 +27,18 @@
           "data": {
             "pathName": "M Ramp 2 BL to Neutral 4"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Neutral 4 to Neutral 3(aura)"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Neutral 3 to Shoot"
+          }
         }
       ]
     }
