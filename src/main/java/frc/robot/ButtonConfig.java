@@ -2,7 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
-import frc.robot.subsystems.Drive.SwerveSubsystem;
+import frc.robot.subsystems.drive.SwerveSubsystem;
 public class ButtonConfig {
     static CommandJoystick driverLeft = ControlMap.DRIVER_LEFT;
     static CommandJoystick driverRight = ControlMap.DRIVER_RIGHT;
