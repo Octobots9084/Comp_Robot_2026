@@ -60,10 +60,10 @@ public class SwerveSubsystem extends SubsystemBase{
         Logger.processInputs("Swerve", inputs);
         systemState = handleStateTransition();
         applyStates();
-        Logger.recordOutput("front left absolute", io.getAbsoluteEncoderPositiosn(0));
-        Logger.recordOutput("front right absolute", io.getAbsoluteEncoderPositiosn(1));
-        Logger.recordOutput("back left absolute", io.getAbsoluteEncoderPositiosn(2));
-        Logger.recordOutput("back right absolute", io.getAbsoluteEncoderPositiosn(3));
+        Logger.recordOutput("front left absolute", io.getAbsoluteEncoderPositions(0));
+        Logger.recordOutput("front right absolute", io.getAbsoluteEncoderPositions(1));
+        Logger.recordOutput("back left absolute", io.getAbsoluteEncoderPositions(2));
+        Logger.recordOutput("back right absolute", io.getAbsoluteEncoderPositions(3));
     }
 
     private SystemState handleStateTransition() {

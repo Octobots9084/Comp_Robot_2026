@@ -7,6 +7,7 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -25,6 +26,10 @@ public interface SwerveIO {
         public double OdometryPeriod;
         public int SuccessfulDaqs;
         public int FailedDaqs;
+        public Rotation3d GyroRotation;
+        public double GyroRoll;
+        public double GyroPitch;
+        public double GyroYaw;
     }
 
     default void updateInputs(SwerveIOInputs inputs) {}
@@ -41,11 +46,18 @@ public interface SwerveIO {
 
     default void updateSimState() {}
     
-    default double getAbsoluteEncoderPositiosn(int index) {return 0;}
+    default double getAbsoluteEncoderPositions(int index) {return 0;}
 
     default void resetRobotTranslation(Translation2d translation2d) {}
 
+    default void zeroGyro() {}
+
+    default ChassisSpeeds getSpeed() {
+        return new ChassisSpeeds();
+    }
+
    // @Override
     //default void refreshData() {}
+
 
 }

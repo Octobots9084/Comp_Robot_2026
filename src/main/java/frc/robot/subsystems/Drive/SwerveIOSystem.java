@@ -28,7 +28,7 @@ import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.subsystems.Drive.TunerConstants.TunerSwerveDrivetrain;
+import frc.robot.subsystems.Drive.BetaConstants.TunerSwerveDrivetrain;
 
 /**
  * Class that extends the Phoenix 6 SwerveDrivetrain class and implements
@@ -252,6 +252,10 @@ public class SwerveIOSystem extends TunerSwerveDrivetrain implements Subsystem, 
             inputs.OdometryPeriod = state.OdometryPeriod;
             inputs.SuccessfulDaqs = state.SuccessfulDaqs;
             inputs.FailedDaqs = state.FailedDaqs;
+            inputs.GyroRotation = this.getPigeon2().getRotation3d();
+            inputs.GyroRoll = this.getPigeon2().getRoll().getValueAsDouble();
+            inputs.GyroPitch = this.getPigeon2().getPitch().getValueAsDouble();
+            inputs.GyroYaw = this.getPigeon2().getYaw().getValueAsDouble();
 
         //public Pose2d Pose = new Pose2d();
        // public ChassisSpeeds Speeds = new ChassisSpeeds();
@@ -273,7 +277,7 @@ public class SwerveIOSystem extends TunerSwerveDrivetrain implements Subsystem, 
         this.setControl(request);
      }
 
-     public double getAbsoluteEncoderPositiosn(int index) {
+     public double getAbsoluteEncoderPositions(int index) {
         return this.getModule(index).getEncoder().getAbsolutePosition().getValueAsDouble();
      }
 
@@ -284,4 +288,12 @@ public class SwerveIOSystem extends TunerSwerveDrivetrain implements Subsystem, 
      public void updateSimState() {}
 
      public void resetRobotTranslation(Translation2d translation2d) {}
+
+     public void zeroGyro() {
+        this.getPigeon2().setYaw(0);
+     }
+
+     public ChassisSpeeds getSpeed() {
+        return this.getState().Speeds;
+     }
 }
