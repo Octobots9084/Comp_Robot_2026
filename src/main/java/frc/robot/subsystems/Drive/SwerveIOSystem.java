@@ -1,9 +1,11 @@
-package frc.robot.subsystems.drive;
+package frc.robot.subsystems.Drive;
 
 
 import java.util.function.Supplier;
+import frc.robot.subsystems.Drive.SwerveSubsystem;
 
 import com.ctre.phoenix6.Utils;
+import com.ctre.phoenix6.swerve.SwerveDrivetrain;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
@@ -13,22 +15,25 @@ import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.subsystems.drive.BetaConstants.TunerSwerveDrivetrain;
+import frc.robot.subsystems.Drive.BetaConstants.TunerSwerveDrivetrain;
 
 /**
  * Class that extends the Phoenix 6 SwerveDrivetrain class and implements
@@ -129,8 +134,10 @@ public class SwerveIOSystem extends TunerSwerveDrivetrain implements Subsystem, 
         }
         configureAutoBuilder();
     }
+    
 
     private void configureAutoBuilder() {
+        // SwerveSubsystem.getInstance().registerNamedCommands();
         try {
             var config = RobotConfig.fromGUISettings();
             AutoBuilder.configure(
@@ -282,8 +289,6 @@ public class SwerveIOSystem extends TunerSwerveDrivetrain implements Subsystem, 
         return this.getModule(index).getEncoder().getAbsolutePosition().getValueAsDouble();
      }
 
-     public void resetRotation() {}
-
      public void resetToParamaterizedRotation(Rotation2d rotation2d) {}
 
      public void updateSimState() {}
@@ -297,6 +302,10 @@ public class SwerveIOSystem extends TunerSwerveDrivetrain implements Subsystem, 
         }
 
         return angle - Math.PI;
+    }
+
+     public Rotation3d geRotation3d () {
+        return this.getRotation3d();
      }
 
      public void zeroGyro() {
@@ -306,4 +315,8 @@ public class SwerveIOSystem extends TunerSwerveDrivetrain implements Subsystem, 
      public ChassisSpeeds getSpeed() {
         return this.getState().Speeds;
      }
+     public void driveFieldRelative(ChassisSpeeds fieldRelativeSpeeds) {
+
+        // this.driveFieldOriented(fieldRelativeSpeeds);
+    }
 }

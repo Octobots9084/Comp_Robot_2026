@@ -10,10 +10,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
-import frc.robot.subsystems.drive.SwerveSubsystem;
+import frc.robot.subsystems.Drive.SwerveSubsystem;
 import frc.robot.Constants.RobotTypes;
-import frc.robot.subsystems.drive.BetaConstants;
-import frc.robot.subsystems.drive.MangoConstants;
+import frc.robot.subsystems.Drive.BetaConstants;
+import frc.robot.subsystems.Drive.MangoConstants;
 
 
 /**
@@ -26,7 +26,7 @@ import frc.robot.subsystems.drive.MangoConstants;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-    // private final SendableChooser<Command> autoChooser;
+    private final SendableChooser<Command> autoChooser;
     private final SwerveSubsystem swerveSubsystem;
     static CommandJoystick driverLeft = ControlMap.DRIVER_LEFT;
     static CommandJoystick driverRight = ControlMap.DRIVER_RIGHT;
@@ -56,12 +56,17 @@ public class RobotContainer {
                 break;
         }
 
-        //autoChooser = AutoBuilder.buildAutoChooser();
+        autoChooser = AutoBuilder.buildAutoChooser();
         //NAMED COMMANDS IN SWERVE
-      //  SmartDashboard.putData("Autonomous Path", autoChooser);
+       SmartDashboard.putData("Auto", autoChooser);
         // VisionSubsystem.getInstance();
         ButtonConfig buttons = new ButtonConfig();
         buttons.initTeleop();
+        
+    }
+
+    public SwerveSubsystem getSwerveSubsystem () {
+        return swerveSubsystem;
     }
 
     /**
@@ -70,7 +75,7 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        //return autoChooser.getSelected();
-        return new InstantCommand();
+        return autoChooser.getSelected();
+        // return new InstantCommand();
     }
 }

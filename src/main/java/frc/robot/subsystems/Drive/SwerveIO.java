@@ -1,4 +1,4 @@
-package frc.robot.subsystems.drive;
+package frc.robot.subsystems.Drive;
 
 import org.littletonrobotics.junction.AutoLog;
 
@@ -12,6 +12,8 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.units.measure.Angle;
+import frc.robot.subsystems.Drive.MangoConstants.TunerSwerveDrivetrain;
 
 public interface SwerveIO {
     @AutoLog
@@ -40,8 +42,6 @@ public interface SwerveIO {
 
     default void setSwerveState(SwerveRequest request) {}
 
-    default void resetRotation() {}
-
     default void resetToParamaterizedRotation(Rotation2d rotation2d) {}
 
     default void updateSimState() {}
@@ -50,11 +50,12 @@ public interface SwerveIO {
 
     default void resetRobotTranslation(Translation2d translation2d) {}
 
+    default Rotation3d getRotation3d () {return new Rotation3d();}
+
     default void zeroGyro() {}
 
-    default ChassisSpeeds getSpeed() {
-        return new ChassisSpeeds();
-    }
+    public default void driveFieldRelative(ChassisSpeeds fieldRelativeSpeeds) {}
+
 
    // @Override
     //default void refreshData() {}

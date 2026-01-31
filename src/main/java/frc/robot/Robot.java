@@ -101,9 +101,10 @@ public class Robot extends LoggedRobot {
   public void autonomousInit() {
     autonomousCommand = robotContainer.getAutonomousCommand();
 
+        Logger.recordOutput("EXECUTING!!!!", false);
     // schedule the autonomous command (example)
     if (autonomousCommand != null) {
-      CommandScheduler.getInstance().schedule(autonomousCommand);
+      CommandScheduler.getInstance().schedule(autonomousCommand);//TODO: not command
     }
   }
 
@@ -118,6 +119,8 @@ public class Robot extends LoggedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
+        Logger.recordOutput("EXECUTING!!!!", false);
+
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
     }

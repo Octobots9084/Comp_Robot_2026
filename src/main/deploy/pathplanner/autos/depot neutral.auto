@@ -1,0 +1,61 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "M Start 1 to Depot top"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "M Depot top to Depot bottom (out)"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "M Depot bottom (out) to Ramp 1 BL"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "DriveOverBump"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "M Ramp 1 BR to Neutral 2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "I Neutral 2 to Neutral 1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "M Neutral 1 to Ramp 1 TL"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "MS Ramp 1 TL to Ramp 1 TL (shoot)"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
