@@ -58,11 +58,11 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     //TODO change the buttons from driverleft and right to the xbox controller
-    // if (Constants.robotType == RobotTypes.ALPHA) {
-    //         this.swerve = SwerveSubsystem.setInstance(MangoConstants.createDrivetrain(), driverLeft, driverRight, Constants.maxAngularVelocity, Constants.maxVelocity);
-    //     } else {
-    //         this.swerve = SwerveSubsystem.setInstance(BetaConstants.createDrivetrain(), driverLeft, driverRight, Constants.maxAngularVelocity, Constants.maxVelocity);
-    //     }
+    if (Constants.robotType == RobotTypes.ALPHA) {
+            this.swerve = SwerveSubsystem.setInstance(MangoConstants.createDrivetrain(), ButtonConfig.driverController, Constants.maxAngularVelocity, Constants.maxVelocity);
+        } else {
+            this.swerve = SwerveSubsystem.setInstance(BetaConstants.createDrivetrain(), ButtonConfig.driverController, Constants.maxAngularVelocity, Constants.maxVelocity);
+        }
     switch (Constants.currentMode) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
