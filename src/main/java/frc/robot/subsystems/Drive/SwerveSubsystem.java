@@ -48,7 +48,6 @@ public class SwerveSubsystem extends SubsystemBase{
         this.maxVelocity = maxVelocity;
 
         instance = this;
-
         registerNamedCommands();
     }
 

@@ -1,3 +1,4 @@
+
 package frc.robot.subsystems.Drive;
 
 
@@ -252,7 +253,6 @@ public class SwerveIOSystem extends TunerSwerveDrivetrain implements Subsystem, 
             inputs.Pose = state.Pose;
             inputs.Speeds = state.Speeds;
             inputs.ModuleStates = state.ModuleStates;
-            //inputs./*something*/ = state.ModuleStates.
             inputs.ModuleTargets = state.ModuleTargets;
             inputs.ModulePositions = state.ModulePositions;
             inputs.RawHeading = state.RawHeading;

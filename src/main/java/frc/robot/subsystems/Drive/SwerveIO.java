@@ -1,3 +1,4 @@
+
 package frc.robot.subsystems.Drive;
 
 import org.littletonrobotics.junction.AutoLog;
@@ -14,7 +15,6 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.units.measure.Angle;
 import frc.robot.subsystems.Drive.MangoConstants.TunerSwerveDrivetrain;
-
 public interface SwerveIO {
     @AutoLog
     class SwerveIOInputs {
@@ -56,9 +56,6 @@ public interface SwerveIO {
 
     public default void driveFieldRelative(ChassisSpeeds fieldRelativeSpeeds) {}
 
-
    // @Override
     //default void refreshData() {}
-
-
 }
