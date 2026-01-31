@@ -11,7 +11,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import frc.robot.subsystems.Drive.SwerveSubsystem;
-import frc.robot.subsystems.Drive.TunerConstants;
+import frc.robot.Constants.RobotTypes;
+import frc.robot.subsystems.Drive.BetaConstants;
+import frc.robot.subsystems.Drive.MangoConstants;
 
 
 /**
@@ -32,13 +34,19 @@ public class RobotContainer {
     static CommandJoystick coDriverLeft = ControlMap.CO_DRIVER_LEFT;
     static CommandJoystick coDriverRight = ControlMap.CO_DRIVER_RIGHT;
     static CommandJoystick coDriverButtons = ControlMap.CO_DRIVER_BUTTONS;
-    // The robot's subsystems and commands are defined here...
-
-    /**
-     * The container for the robot. Contains subsystems, OI devices, and commands.
-     */
+     
+        // The robot's subsystems and commands are defined here...
+    
+        /**
+         * The container for the robot. Contains subsystems, OI devices, and commands.
+         */
     public RobotContainer() {
-        this.swerveSubsystem = SwerveSubsystem.setInstance(TunerConstants.createDrivetrain(), driverLeft, driverRight, Constants.maxAngularVelocity, Constants.maxVelocity);
+        if (Constants.robotType == RobotTypes.ALPHA) {
+            this.swerveSubsystem = SwerveSubsystem.setInstance(MangoConstants.createDrivetrain(), driverLeft, driverRight, Constants.maxAngularVelocity, Constants.maxVelocity);
+        } else {
+            this.swerveSubsystem = SwerveSubsystem.setInstance(BetaConstants.createDrivetrain(), driverLeft, driverRight, Constants.maxAngularVelocity, Constants.maxVelocity);
+        }
+        
         switch (Constants.currentMode) {
             case REAL:
                 break;
