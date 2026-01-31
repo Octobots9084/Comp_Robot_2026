@@ -39,7 +39,7 @@ public class SwerveSubsystem extends SubsystemBase{
     private final SwerveIOInputsAutoLogged inputs = new SwerveIOInputsAutoLogged();
 
     public SwerveSubsystem(
-        SwerveIO io, CommandJoystick driverLeft, CommandJoystick driverRight, double maxAngularVelocity, double maxVelocity
+        SwerveIO io , double maxAngularVelocity, double maxVelocity
     ){
         this.io = io;
         this.driverLeft = driverLeft;
@@ -60,7 +60,7 @@ public class SwerveSubsystem extends SubsystemBase{
     }
 
     public static SwerveSubsystem setInstance(SwerveIO io, CommandJoystick driverLeft, CommandJoystick driverRight, double maxAngularVelocity, double maxVelocity) {
-        SwerveSubsystem instance = new SwerveSubsystem(io,driverLeft,driverRight,maxAngularVelocity,maxVelocity);
+        SwerveSubsystem instance = new SwerveSubsystem(io,/*driverLeft,driverRight,*/maxAngularVelocity,maxVelocity);
         // instance.registerNamedCommands();
         return instance;
     }

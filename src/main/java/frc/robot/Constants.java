@@ -41,7 +41,7 @@ public final class Constants {
     public static int spindexerID = 0;
     public static int verticalFeederID = 0;
     public static int topRollerID = 0;
-    public static boolean driverShoot = false;
+   
     public static int lemonDetector = 0;
 
     public static int intakePivotID = 0;

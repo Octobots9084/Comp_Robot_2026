@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
 import frc.robot.subsystems.Intake.Intake;
 import frc.robot.subsystems.Intake.IntakeIOTalonFX;
+import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Climb.Climb;
 import frc.robot.subsystems.Climb.ClimbIOTalonFX;
 import frc.robot.subsystems.Shooter.Shooter;
@@ -54,6 +55,7 @@ public class RobotContainer {
   private Intake intake;
   private Climb climb;
   private SwerveSubsystem swerve;
+  private Superstructure superstructure;
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
 
@@ -81,6 +83,9 @@ public class RobotContainer {
             new TurretIOTalonFX());
         intake = new Intake(new IntakeIOTalonFX());
         climb = new Climb(new ClimbIOTalonFX());
+        superstructure = new Superstructure();
+        swerve = new SwerveSubsystem(TunerConstants.createDrivetrain(), Constants.maxAngularVelocity, Constants.maxVelocity);
+        
 
 
         // The ModuleIOTalonFXS implementation provides an example implementation for
@@ -115,6 +120,7 @@ public class RobotContainer {
         shooter = new Shooter(new FeederIOTalonFX(), new FlywheelIOTalonFX(), new TurretIOTalonFX());
         intake = new Intake(new IntakeIOTalonFX());
         climb = new Climb(new ClimbIOTalonFX());
+        superstructure = new Superstructure();
         break;
 
       default:

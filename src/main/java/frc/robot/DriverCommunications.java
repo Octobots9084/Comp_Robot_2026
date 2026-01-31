@@ -2,12 +2,14 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.subsystems.States;
+import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Shooter.Shooter;
 
 public class DriverCommunications{
     public static void pushToElastic(){
               SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime());
               SmartDashboard.putBoolean("Is Hub Active?", Shooter.getInstance().isHubActive());
-              SmartDashboard.putBoolean("In Manual?", ButtonConfig.getDriverShootInstance());
+              SmartDashboard.putBoolean("In Manual?", Superstructure.getInstance().getCurrentState() == States.MANUAL);
     }
 }

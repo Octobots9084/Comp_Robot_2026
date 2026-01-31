@@ -9,6 +9,7 @@ import com.ctre.phoenix6.hardware.CANrange;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.ButtonConfig;
 import frc.robot.Constants;
 import frc.robot.Constants;
 import frc.robot.subsystems.Lights.LightAnimations;
@@ -40,7 +41,7 @@ public class Shooter extends SubsystemBase{
     public Flywheel flywheel = new Flywheel();
     public final double prefire = 1;
     public CANrange lemonDetector = new CANrange(Constants.lemonDetector,Constants.krakenBus);
-
+    public static boolean driverOverride = false;
     private String gameData;
     private SwerveSubsystem swerve = SwerveSubsystem.getInstance();
     private double lemonDetectionTimestamp;
@@ -83,13 +84,13 @@ public class Shooter extends SubsystemBase{
             case FERRY:
                 if(ferry()){
                     wantedShooterState = ShooterStates.BUMP;
-                    Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTREADYMANUAL;
+                    Lights.getLightInstance().lightsWantedState = LightAnimations.CANTSHOOT;
                 }
                 break;
             case HUB:
                 if(hub()){
                     wantedShooterState = ShooterStates.BUMP;
-                    Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTREADYMANUAL;
+                    Lights.getLightInstance().lightsWantedState = LightAnimations.CANTSHOOT;
                 }
                 break;
             case BUMP:
@@ -97,8 +98,11 @@ public class Shooter extends SubsystemBase{
                 if(swerve.onRamp(0,3)){//!tilted
                     if(true){ //in alliance zone
                         wantedShooterState = ShooterStates.HUB;
+                        Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTREADYCONTINIOUS;
                     }else{
                         wantedShooterState = ShooterStates.FERRY;
+                        Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTREADYCONTINIOUS;
+
                     }
                 }
                 break;
@@ -125,7 +129,7 @@ public class Shooter extends SubsystemBase{
                     break;
                 
                 case BUMP:
-                    //if we're on the bump (SHOCKING!!!) ha good one
+                    //if we're on the bump (SHOCKING!!!) 
                     if(true){ //robot is tilted
                         currentShooterState = ShooterStates.BUMP;
                     }
@@ -142,7 +146,7 @@ public class Shooter extends SubsystemBase{
     //automatically shoots a ball if it can score and allows zeo to override some factors
     public boolean hub(){
         if(aim(true) && isHubActive()){
-            if(Constants.driverShoot){
+            if(driverOverride){
                 feeder.setFeederVelocity(FeederStates.SCORING);
                 // manual shooting
                 Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTREADYMANUAL;
@@ -180,7 +184,7 @@ public class Shooter extends SubsystemBase{
 
     public boolean ferry(){
         if(aim(false)){
-            if(Constants.driverShoot){
+            if(driverOverride){
                 feeder.setFeederVelocity(FeederStates.FERRYING);
             }else{
                 if(inAllianceZone()){//!in alliance zone

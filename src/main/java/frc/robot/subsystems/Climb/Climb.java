@@ -14,6 +14,7 @@ public class Climb extends SubsystemBase{
     public ClimbIO io;
     public static Climb instance;
     public ClimbIOInputsAutoLogged inputs = new ClimbIOInputsAutoLogged();
+    public boolean climbL3 = false;
 
     public Climb(ClimbIO io){
         this.io = io;
@@ -37,6 +38,10 @@ public class Climb extends SubsystemBase{
         io.setClimbState(state);
     }
 
+    public ClimbStates getClimbState(){
+        return currentState;
+    }
+
     @Override
     public void periodic() {
         handleStateTransitions();
@@ -47,52 +52,36 @@ public class Climb extends SubsystemBase{
     }
 
     public void handleStateTransitions() {
-        switch (wantedState) {
+        switch (wantedState){
             case IDLE:
-                //when the driver presses the idle button
-               if (currentState == ClimbStates.DEPLOYED) {
+                if(currentState == ClimbStates.DEPLOYEDL1 || currentState == ClimbStates.DEPLOYEDL3){
                     currentState = ClimbStates.IDLE;
-               }
-                break;
-            case CLIMBING:
-                if (currentState == ClimbStates.GRABBING) {
-                    currentState = ClimbStates.CLIMBING;
-                } 
-                break;
-            case GRABBING:
-                if (currentState == ClimbStates.DEPLOYED || currentState == ClimbStates.CLIMBING) {
-                    currentState = ClimbStates.GRABBING;
                 }
-                break;
-            case DEPLOYED:
-                if (currentState == ClimbStates.IDLE || currentState == ClimbStates.GRABBING) {
-                    currentState = ClimbStates.DEPLOYED;
+            case DEPLOYEDL1:
+                if(currentState == ClimbStates.IDLE || currentState == ClimbStates.CLIMBEDL1){
+                    currentState = ClimbStates.DEPLOYEDL1;
                 }
-                break;
-            default:
-                
-                break;
+            case CLIMBEDL1:
+                if(currentState == ClimbStates.DEPLOYEDL1){
+                    currentState = ClimbStates.CLIMBEDL1;
+                }
+            case DEPLOYEDL3:
+                if(currentState == ClimbStates.IDLE || currentState == ClimbStates.ENGAGED){
+                    currentState = ClimbStates.DEPLOYEDL3;
+                }
+            case ENGAGED:
+                if(currentState == ClimbStates.DEPLOYEDL3 || currentState == ClimbStates.CLIMBEDL3){
+                    currentState = ClimbStates.ENGAGED;
+                }
+            case CLIMBEDL3:
+                if(currentState == ClimbStates.ENGAGED){
+                    currentState = ClimbStates.CLIMBEDL3;
+                }
         }
+
     }
 
     public void applyStates()  {
-        setClimbState(currentState); // I think
-        // switch (currentState) {
-        //     case IDLE:
-        //         //to do nothing, wait fo wanted state
-        //         break;
-        //     case CLIMBING:
-        //         //rotates,
-        //         break;
-        //     case GRABBING:
-        //         //grab the bar go to climbing
-        //         break;
-        //     case DEPLOYED:
-        //         //deploy the climb,go to grab,
-        //         break;
-        //     default:
-        //         // this is bad i think
-        //         break;
-        // }
+        setClimbState(currentState);
     }
 }
