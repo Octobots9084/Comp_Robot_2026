@@ -3,32 +3,37 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.9100722891566262,
-        "y": 1.4888433734939759
+        "x": 7.0,
+        "y": 2.9
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.7077951807228917,
-        "y": 1.838530120481928
+        "x": 6.259301204819276,
+        "y": 2.898518072289156
       },
       "isLocked": false,
-      "linkedName": "Outpost Shoot"
+      "linkedName": "Neutral 3 (out)"
     },
     {
       "anchor": {
-        "x": 3.534450784593438,
-        "y": 2.18
+        "x": 3.254180722891566,
+        "y": 2.9
       },
       "prevControl": {
-        "x": 2.653156626506024,
-        "y": 1.827602409638554
+        "x": 4.172108433734939,
+        "y": 2.9203734939759034
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Bump 2 BL"
+      "linkedName": "Neutral 3 Shoot"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.38405797101448896,
+      "rotationDegrees": 0.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -41,14 +46,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 4.0,
-    "rotation": 180.0
+    "velocity": 0,
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
-    "velocity": 0.0,
-    "rotation": 0.0
+    "velocity": 4.0,
+    "rotation": -90.0
   },
   "useDefaultConstraints": true
 }
