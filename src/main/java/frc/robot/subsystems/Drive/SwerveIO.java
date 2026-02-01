@@ -38,6 +38,10 @@ public interface SwerveIO {
         public double steerCurrent1;
         public double steerCurrent2;
         public double steerCurrent3;
+        public double driveCurrent0;
+        public double driveCurrent1;
+        public double driveCurrent2;
+        public double driveCurrent3;
     }
 
     default void updateInputs(SwerveIOInputs inputs) {}
