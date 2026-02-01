@@ -80,11 +80,7 @@ public class SwerveSubsystem extends SubsystemBase{
         Logger.recordOutput("back right absolute", io.getAbsoluteEncoderPositions(3));
     }
     
-
-
-
-        //TODO: move somewhere important
-
+    //TODO: move somewhere important
     public boolean onRamp (double wanted, double tolerance) { /////////////////////
       boolean inTolerance = true;
       tolerance = Units.degreesToRadians(tolerance);
@@ -93,13 +89,8 @@ public class SwerveSubsystem extends SubsystemBase{
       if (tilt <= (wanted + tolerance) && tilt >= (wanted - tolerance)) {
         inTolerance = false;
       }
-
-
       return inTolerance;
     }
-
-
-
 
     public void registerNamedCommands () {
       NamedCommands.registerCommand("DriveOverBump",
@@ -107,14 +98,7 @@ public class SwerveSubsystem extends SubsystemBase{
       NamedCommands.registerCommand("DriveBack",
                   new DriveBack().withTimeout(3));
         SmartDashboard.putBoolean("FinishedDriveForwardUntilLevel", false);
-                
-
-
     }
-
-
-
-
 
     private SystemState handleStateTransition() {
         switch (wantedState){
@@ -159,6 +143,7 @@ public class SwerveSubsystem extends SubsystemBase{
 
         }
     }
+
     public ChassisSpeeds calculateSpeedsBasedOnJoystickInputs(){
         // double yMagnitude = MathUtil.applyDeadband(driverLeft.getRawAxis(0), Constants.leftYDeadband);
         // double xMagnitude = -MathUtil.applyDeadband(driverLeft.getRawAxis(1), Constants.leftXDeadband);

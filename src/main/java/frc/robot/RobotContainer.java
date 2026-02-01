@@ -69,13 +69,13 @@ public class RobotContainer {
         // ModuleIOTalonFX is intended for modules with TalonFX drive, TalonFX turn, and
         // a CANcoder
 
-        shooter = new Shooter(
-            new FeederIOTalonFX(), 
-            new FlywheelIOTalonFX(), 
-            new TurretIOTalonFX());
-        intake = new Intake(new IntakeIOTalonFX());
-        climb = new Climb(new ClimbIOTalonFX());
-        superstructure = new Superstructure();
+        // shooter = new Shooter(
+        //     new FeederIOTalonFX(), 
+        //     new FlywheelIOTalonFX(), 
+        //     new TurretIOTalonFX());
+        // intake = new Intake(new IntakeIOTalonFX());
+        // climb = new Climb(new ClimbIOTalonFX());
+        // superstructure = new Superstructure();
         
 
 
