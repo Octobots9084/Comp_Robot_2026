@@ -8,54 +8,43 @@ import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import frc.robot.Constants;
-import frc.robot.Robot;
 
 public class VisionIOSystem implements VisionIO{
-    public final PhotonCamera frontCam;
+    private final PhotonCamera frontCamera;
+    private final PhotonCamera intakeCamera;
     private final PhotonPoseEstimator photonEstimator;
     private Matrix<N3, N1> curStdDevs;
     private final EstimateConsumer estConsumer;
-
+    
     // // Simulation
     // private PhotonCameraSim cameraSim;
     // private VisionSystemSim visionSim;
 
     public VisionIOSystem(EstimateConsumer estConsumer){
-        frontCam = new PhotonCamera(Constants.frontCameraName);
+        intakeCamera = new PhotonCamera(Constants.intakeCameraName);
+        intakeCamera.setDriverMode(true);
+        CameraServer.startAutomaticCapture(Constants.intakeCameraName, "/dev/video0");
+        frontCamera = new PhotonCamera(Constants.frontCameraName);
         photonEstimator = new PhotonPoseEstimator(Constants.kTagLayout, Constants.robotToCamFront);
-        this.estConsumer = estConsumer;
-
-        // // ----- Simulation
-        // if (Robot.isSimulation()) {
-        //     // Create the vision system simulation which handles cameras and targets on the field.
-        //     visionSim = new VisionSystemSim("main");
-        //     // Add all the AprilTags inside the tag layout as visible targets to this simulated field.
-        //     visionSim.addAprilTags(kTagLayout);
-        //     // Create simulated camera properties. These can be set to mimic your actual camera.
-        //     var cameraProp = new SimCameraProperties();
-        //     cameraProp.setCalibration(960, 720, Rotation2d.fromDegrees(90));
-        //     cameraProp.setCalibError(0.35, 0.10);
-        //     cameraProp.setFPS(15);
-        //     cameraProp.setAvgLatencyMs(50);
-        //     cameraProp.setLatencyStdDevMs(15);
-        //     // Create a PhotonCameraSim which will update the linked PhotonCamera's values with visible
-        //     // targets.
-        //     cameraSim = new PhotonCameraSim(camera, cameraProp);
-        //     // Add the simulated camera to view the targets on this simulated field.
-        //     visionSim.addCamera(cameraSim, kRobotToCam);
-
-        //     cameraSim.enableDrawWireframe(true);
+        this.estConsumer = estConsumer; // Lamba that will accept a pose estimate and pass it to your desired {@link
+    }
+    
+    @Override
+    public void updateInputs(VisionIOInputs inputs) {
+        inputs.intakeCameraConected = intakeCamera.isConnected();
+        inputs.frontCameraConected = frontCamera.isConnected();
     }
 
     public void periodic() {
         Optional<EstimatedRobotPose> visionEst = Optional.empty();
-        for (var result : frontCam.getAllUnreadResults()) {
+        for (var result : frontCamera.getAllUnreadResults()) {
             visionEst = photonEstimator.estimateCoprocMultiTagPose(result);
             if (visionEst.isEmpty()) {
                 visionEst = photonEstimator.estimateLowestAmbiguityPose(result);
@@ -121,11 +110,13 @@ public class VisionIOSystem implements VisionIO{
                 // One or more tags visible, run the full heuristic.
                 avgDist /= numTags;
                 // Decrease std devs if multiple targets are visible
-                if (numTags > 1) estStdDevs = Constants.kMultiTagStdDevs;
+                if (numTags > 1)
+                    estStdDevs = Constants.kMultiTagStdDevs;
                 // Increase std devs based on (average) distance
                 if (numTags == 1 && avgDist > 4)
                     estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
-                else estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / 30));
+                else
+                    estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / 30));
                 curStdDevs = estStdDevs;
             }
         }

@@ -1,18 +1,11 @@
 package frc.robot.subsystems.Shooter;
 
-import java.security.spec.ECPublicKeySpec;
-
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.units.Units;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Vision.ShooterAngle;
 import frc.robot.subsystems.Vision.ShooterAngleCalculator;
@@ -22,8 +15,6 @@ import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.Shooter.Feeder.Feeder;
 import frc.robot.subsystems.Shooter.Feeder.FeederIO;
 import frc.robot.subsystems.Shooter.Feeder.FeederIOInputsAutoLogged;
-import frc.robot.subsystems.Shooter.Flywheel.Flywheel;
-import frc.robot.subsystems.Shooter.Feeder.FeederStates;
 import frc.robot.subsystems.Shooter.Flywheel.Flywheel;
 import frc.robot.subsystems.Shooter.Flywheel.FlywheelIO;
 import frc.robot.subsystems.Shooter.Flywheel.FlywheelIOInputsAutoLogged;
@@ -35,7 +26,6 @@ public class Shooter extends SubsystemBase{
     private ShooterAngle pastShooterAngle = new ShooterAngle(0, 0);
     
     ShooterStates currentShooterState = ShooterStates.HUB;//SAFE; //should be safe but useing hub for testing
-    private ShooterAngleCalculator AngleCalculator = new ShooterAngleCalculator();
     ShooterStates wantedShooterState = ShooterStates.HUB;
     private static Shooter instance = null;
     private final FeederIOInputsAutoLogged feederInputs = new FeederIOInputsAutoLogged();

@@ -7,8 +7,14 @@ import org.littletonrobotics.junction.Logger;
 import com.ctre.phoenix6.swerve.SwerveModule;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import frc.robot.Constants;
@@ -30,6 +36,8 @@ public class SwerveSubsystem extends SubsystemBase{
     public CommandJoystick driverRight;
     public double maxVelocity;
     public double maxAngularVelocity;
+    // The robot pose estimator for tracking swerve odometry and applying vision corrections.
+    private final SwerveDrivePoseEstimator poseEstimator;
 
     private final SwerveIOInputsAutoLogged inputs = new SwerveIOInputsAutoLogged();
 
@@ -42,6 +50,21 @@ public class SwerveSubsystem extends SubsystemBase{
         this.maxAngularVelocity = maxAngularVelocity;
         this.maxVelocity = maxVelocity;
 
+        var stateStdDevs = VecBuilder.fill(0.1, 0.1, 0.1);
+        var visionStdDevs = VecBuilder.fill(1, 1, 1);
+        poseEstimator =
+            new SwerveDrivePoseEstimator(
+                new SwerveDriveKinematics(
+                    Constants.swerveModuleOneOffset,
+                    Constants.swerveModuleTwoOffset,
+                    Constants.swerveModuleThreeOffset,
+                    Constants.swerveModuleFourOffset),
+                io.getGyroYaw(),
+                io.getModulePositions(),
+                new Pose2d(),
+                stateStdDevs,
+                visionStdDevs
+            );
     }
 
     public static SwerveSubsystem getInstance() {
@@ -123,5 +146,11 @@ public class SwerveSubsystem extends SubsystemBase{
         double angularVelocity = angularMagnitude * maxAngularVelocity * Constants.maxTelopAngularVelocity;
 
         return new ChassisSpeeds(xVelocity, yVelocity, angularVelocity);
+    }
+
+    /** See {@link SwerveDrivePoseEstimator#addVisionMeasurement(Pose2d, double, Matrix)}. */
+    public void addVisionMeasurement(
+            Pose2d visionMeasurement, double timestampSeconds, Matrix<N3, N1> stdDevs) {
+        poseEstimator.addVisionMeasurement(visionMeasurement, timestampSeconds, stdDevs);
     }
 }

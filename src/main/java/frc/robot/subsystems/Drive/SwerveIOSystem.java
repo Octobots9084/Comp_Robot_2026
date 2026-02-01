@@ -1,10 +1,10 @@
 package frc.robot.subsystems.drive;
-
-
 import java.util.function.Supplier;
 
 import com.ctre.phoenix6.Utils;
+import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
+import com.ctre.phoenix6.swerve.SwerveModule;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
@@ -19,7 +19,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -38,8 +37,9 @@ public class SwerveIOSystem extends TunerSwerveDrivetrain implements Subsystem, 
     private static final double kSimLoopPeriod = 0.005; // 5 ms
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
-    private SwerveIOSystem io;
     private Pose2d robotPose;
+
+            
 
     /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
     private static final Rotation2d kBlueAlliancePerspectiveRotation = Rotation2d.kZero;
@@ -70,8 +70,14 @@ public class SwerveIOSystem extends TunerSwerveDrivetrain implements Subsystem, 
         if (Utils.isSimulation()) {
             startSimThread();
         }
+
         configureAutoBuilder();
         robotPose = new Pose2d();
+    }
+
+    @Override
+    public SwerveModule[] getSwerveModules(){
+        return this.getModules();
     }
 
     @Override
@@ -215,7 +221,7 @@ public class SwerveIOSystem extends TunerSwerveDrivetrain implements Subsystem, 
 
     /** Get the chassis speeds of the robot (vx, vy, omega) from the swerve module states. */
     public ChassisSpeeds getChassisSpeeds() {
-        return new ChassisSpeeds();
+        return this.getState().Speeds;
     }
 
     /**
@@ -252,7 +258,7 @@ public class SwerveIOSystem extends TunerSwerveDrivetrain implements Subsystem, 
         super.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds), visionMeasurementStdDevs);
     }
 
-     @Override
+    @Override
     public void updateInputs(SwerveIOInputs inputs) {
             SwerveDriveState state = this.getState();
             inputs.robotPose = state.Pose;
@@ -280,21 +286,34 @@ public class SwerveIOSystem extends TunerSwerveDrivetrain implements Subsystem, 
 
      
 
-     public void registerTelemetryFunction(SwerveIOInputs inputs) {}
+    public void registerTelemetryFunction(SwerveIOInputs inputs) {}
 
-     public void setSwerveState(SwerveRequest request) {
+    public void setSwerveState(SwerveRequest request) {
         this.setControl(request);
      }
 
-     public double getAbsoluteEncoderPositiosn(int index) {
+    public double getAbsoluteEncoderPositiosn(int index) {
         return this.getModule(index).getEncoder().getAbsolutePosition().getValueAsDouble();
-     }
+     }   
 
-     public void resetRotation() {}
+    public void resetRotation() {}
 
-     public void resetToParamaterizedRotation(Rotation2d rotation2d) {}
+    public void resetToParamaterizedRotation(Rotation2d rotation2d) {}
 
-     public void updateSimState() {}
+    public void updateSimState() {}
 
-     public void resetRobotTranslation(Translation2d translation2d) {}
+    public void resetRobotTranslation(Translation2d translation2d) {}
+
+    public Rotation2d getGyroYaw() {
+        return this.getPigeon2().getRotation2d();
+    }
+
+    public SwerveModulePosition[] getModulePositions() {
+        return new SwerveModulePosition[] {
+            getModule(0).getPosition(false),//set refresh to false but not shure if i should -rui
+            getModule(1).getPosition(false),
+            getModule(2).getPosition(false),
+            getModule(3).getPosition(false)
+        };
+    }
 }

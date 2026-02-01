@@ -34,7 +34,7 @@ public class ShooterAngleCalculator {
             f = quarticFunction(T, vx, vy, pfx, pfy, pfz, s);
             T = T - f / quarticDerivative(T, vx, vy, pfx, pfy, pfz, s);
             newtonsMethodIterations = newtonsMethodIterations + 1;
-            if (newtonsMethodIterations < maxNewtonsMethodIterations){
+            if (newtonsMethodIterations > maxNewtonsMethodIterations){
                 return null;
             }  
         }
@@ -60,8 +60,8 @@ public class ShooterAngleCalculator {
                 
             return new ShooterAngle(phi, theta);
         }
-
-        else return null;
+        else
+            return null;
         
     }
 
@@ -84,7 +84,7 @@ public class ShooterAngleCalculator {
             f = quarticFunction(T, vx, vy, phx, phy, phz, s);
             T = T - f / quarticDerivative(T, vx, vy, phx, phy, phz, s);
             newtonsMethodIterations = newtonsMethodIterations + 1;
-            if (newtonsMethodIterations < maxNewtonsMethodIterations){
+            if (newtonsMethodIterations > maxNewtonsMethodIterations){
                 return null;
             }  
         }
@@ -111,9 +111,8 @@ public class ShooterAngleCalculator {
                 
             return new ShooterAngle(phi, theta);
         }
-
-        else return null;
-        
+        else
+            return null;
     }
 
     private static double quarticFunction(double t, double vx, double vy, double phx, double phy, double phz, double s){

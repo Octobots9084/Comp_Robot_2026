@@ -17,6 +17,7 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
@@ -32,6 +33,7 @@ import edu.wpi.first.wpilibj.Timer;
 public final class Constants {
   // vision
   public static final String frontCameraName = "FrontCamera";
+  public static final String intakeCameraName = "IntakeCamera";
   public static final AprilTagFieldLayout kTagLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
   private static final double camPitch = Units.degreesToRadians(30.0);
   public static final Transform3d robotToCamFront = new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0, -camPitch, 0));
@@ -45,6 +47,7 @@ public final class Constants {
   public static boolean isBlueAlliance = true;
   public static Timer timer = new Timer();
 
+
   public static final double maxTelopVelocity = 1;//TODO
     public static final double maxTelopAngularVelocity = 1;//TODO
     public static final double leftYDeadband = 0.1;//TODO
@@ -54,6 +57,11 @@ public final class Constants {
     // public static final enum currentMode = 1;//TODO
     public static final double maxVelocity = 2;//TODO
     public static Alliance allianceColor = DriverStation.getAlliance().orElse(Alliance.Blue);
+
+    public static Translation2d swerveModuleOneOffset = new Translation2d(1,1);
+    public static Translation2d swerveModuleTwoOffset = new Translation2d(1,-1);
+    public static Translation2d swerveModuleThreeOffset = new Translation2d(-1,1);
+    public static Translation2d swerveModuleFourOffset = new Translation2d(-1,-1);
 
   public static enum Mode {
     /** Running on a real robot. */

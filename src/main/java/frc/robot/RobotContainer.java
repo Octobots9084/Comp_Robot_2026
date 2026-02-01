@@ -53,7 +53,7 @@ public class RobotContainer {
     public RobotContainer() {
         // creates objects for the robot subsystems
         this.swerveSubsystem = SwerveSubsystem.setInstance(TunerConstants.createDrivetrain(), driverLeft, driverRight, Constants.maxAngularVelocity, Constants.maxVelocity);
-        vision = new Vision();
+        vision = new Vision(swerveSubsystem::addVisionMeasurement);
         shooter = new Shooter(
             new FeederIOTalonFX(), 
             new FlywheelIOTalonFX(), 

@@ -3,6 +3,7 @@ package frc.robot.subsystems.drive;
 import org.littletonrobotics.junction.AutoLog;
 
 import com.ctre.phoenix6.swerve.SwerveDrivetrain;
+import com.ctre.phoenix6.swerve.SwerveModule;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -13,6 +14,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 
 public interface SwerveIO {
+    
     @AutoLog
     class SwerveIOInputs {
         public ChassisSpeeds Speeds = new ChassisSpeeds();
@@ -49,7 +51,14 @@ public interface SwerveIO {
 
     default Pose2d getPose2d() {return new Pose2d();}
 
-   // @Override
+    default SwerveModule[] getSwerveModules(){return new SwerveModule[4];}
+
+    default Rotation2d getGyroYaw() {return new Rotation2d();}
+
+    default SwerveModulePosition[] getModulePositions() {
+        return new SwerveModulePosition[4];
+    }
+    //@Override
     //default void refreshData() {}
 
 }
