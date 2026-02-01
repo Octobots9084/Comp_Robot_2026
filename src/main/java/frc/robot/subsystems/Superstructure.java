@@ -5,13 +5,13 @@ import java.security.spec.ECPublicKeySpec;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.*; // WHY DID WE HAVE SO MANY IMPORTS FROM THIS THING JUST IMPORT IT ALL
 import frc.robot.subsystems.Climb.*; //I don't know why we need this
-import frc.robot.subsystems.Intake.*;//same here
+import frc.robot.subsystems.Intake.*;//same
 import frc.robot.subsystems.Shooter.*;//same here
 import frc.robot.subsystems.Shooter.Flywheel.*;
 
 public class Superstructure extends SubsystemBase{
-    public States currentState;
-    public States wantedState;
+    public States currentState = States.SAFE;
+    public States wantedState = States.SAFE;
     
     boolean climbDescending = true;
     public static Superstructure currentInstance = null;
