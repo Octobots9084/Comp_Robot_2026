@@ -264,6 +264,14 @@ public class SwerveIOSystem extends TunerSwerveDrivetrain implements Subsystem, 
             inputs.GyroRoll = this.getPigeon2().getRoll().getValueAsDouble();
             inputs.GyroPitch = this.getPigeon2().getPitch().getValueAsDouble();
             inputs.GyroYaw = this.getPigeon2().getYaw().getValueAsDouble();
+            inputs.steerCurrent0 = this.getModule(0).getSteerMotor().getStatorCurrent().getValueAsDouble();
+            inputs.steerCurrent1 = this.getModule(1).getSteerMotor().getStatorCurrent();
+            inputs.steerCurrent2 = this.getModule(2).getSteerMotor().getStatorCurrent();
+            inputs.steerCurrent3 = this.getModule(3).getSteerMotor().getStatorCurrent();
+            inputs.driveCurrent0 = this.getModule(0).getDriveMotor().getStatorCurrent();
+            inputs.driveCurrent1 = this.getModule(1).getDriveMotor().getStatorCurrent();
+            inputs.driveCurrent2 = this.getModule(2).getDriveMotor().getStatorCurrent();
+            inputs.driveCurrent3 = this.getModule(3).getDriveMotor().getStatorCurrent();
 
         //public Pose2d Pose = new Pose2d();
        // public ChassisSpeeds Speeds = new ChassisSpeeds();

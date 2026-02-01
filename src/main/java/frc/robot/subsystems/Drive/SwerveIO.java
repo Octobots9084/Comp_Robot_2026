@@ -3,6 +3,7 @@ package frc.robot.subsystems.Drive;
 
 import org.littletonrobotics.junction.AutoLog;
 
+import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.swerve.SwerveDrivetrain;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
@@ -14,6 +15,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.Current;
 import frc.robot.subsystems.Drive.MangoConstants.TunerSwerveDrivetrain;
 public interface SwerveIO {
     @AutoLog
@@ -32,6 +34,10 @@ public interface SwerveIO {
         public double GyroRoll;
         public double GyroPitch;
         public double GyroYaw;
+        public double steerCurrent0;
+        public double steerCurrent1;
+        public double steerCurrent2;
+        public double steerCurrent3;
     }
 
     default void updateInputs(SwerveIOInputs inputs) {}
