@@ -1,4 +1,4 @@
-package frc.robot.commands.auto;
+package frc.robot.commands.auto.NoPoseBump;
 
 import com.ctre.phoenix6.swerve.SwerveModule;
 import com.ctre.phoenix6.swerve.SwerveRequest;
@@ -16,12 +16,12 @@ import frc.robot.Constants;
 import frc.robot.subsystems.Drive.SwerveSubsystem;
 import org.littletonrobotics.junction.Logger;
 
-public class DriveOverBump extends Command {
+public class DriveOverBumpFromAlliance extends Command {
     SwerveSubsystem swerve;
     boolean onRamp;
     boolean hasBeenOnRamp;
 
-    public DriveOverBump () {
+    public DriveOverBumpFromAlliance () {
         swerve = SwerveSubsystem.getInstance();
         onRamp = false;
         hasBeenOnRamp = false;

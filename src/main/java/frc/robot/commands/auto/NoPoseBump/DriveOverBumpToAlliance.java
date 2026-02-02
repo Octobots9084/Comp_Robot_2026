@@ -1,4 +1,4 @@
-package frc.robot.commands.auto;
+package frc.robot.commands.auto.NoPoseBump;
 
 import com.ctre.phoenix6.swerve.SwerveModule;
 import com.ctre.phoenix6.swerve.SwerveRequest;
@@ -16,12 +16,12 @@ import frc.robot.Constants;
 import frc.robot.subsystems.Drive.SwerveSubsystem;
 import org.littletonrobotics.junction.Logger;
 
-public class DriveOverBump extends Command {
+public class DriveOverBumpToAlliance extends Command {
     SwerveSubsystem swerve;
     boolean onRamp;
     boolean hasBeenOnRamp;
 
-    public DriveOverBump () {
+    public DriveOverBumpToAlliance () {
         swerve = SwerveSubsystem.getInstance();
         onRamp = false;
         hasBeenOnRamp = false;
@@ -49,7 +49,7 @@ public class DriveOverBump extends Command {
     }
 
     public void move () {
-        if (Constants.allianceColor == Alliance.Blue) {
+        if (Constants.allianceColor != Alliance.Blue) {
             swerve.io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(0, -2, 0))
                 .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
         } else {

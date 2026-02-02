@@ -17,7 +17,7 @@ public class DriveForward extends Command {
     }
 
     @Override
-    public void execute() {        
+    public void execute() {   
         swerve.io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(1, 0, 0))
             .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));        
     }   

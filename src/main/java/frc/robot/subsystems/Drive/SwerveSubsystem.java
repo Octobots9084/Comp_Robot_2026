@@ -10,6 +10,7 @@ import com.ctre.phoenix6.swerve.SwerveModule;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
@@ -19,6 +20,9 @@ import frc.robot.FieldConstants;
 import frc.robot.commands.auto.DriveBack;
 import frc.robot.commands.auto.DriveForwardUntilLevel;
 import frc.robot.commands.auto.DriveOverBump;
+import frc.robot.commands.auto.NoPoseBump.DriveOverBumpFromAlliance;
+import frc.robot.commands.auto.NoPoseBump.DriveOverBumpToAlliance;
+import frc.robot.commands.auto.NoPoseBump.DriveOverBumpFromAlliance;
 
 public class SwerveSubsystem extends SubsystemBase{
     public enum SystemState {
@@ -94,7 +98,12 @@ public class SwerveSubsystem extends SubsystemBase{
 
     public void registerNamedCommands () {
       NamedCommands.registerCommand("DriveOverBump",
-                  new DriveOverBump().andThen(new DriveForwardUntilLevel()));
+                  new DriveOverBump());//.andThen(new DriveForwardUntilLevel()));
+      NamedCommands.registerCommand("DriveOverBumpFromAlliance",
+                  new DriveOverBumpFromAlliance());//.andThen(new DriveForwardUntilLevel()));
+      NamedCommands.registerCommand("DriveOverBumpToAlliance",
+                  new DriveOverBumpToAlliance());//.andThen(new DriveForwardUntilLevel()));
+      
       NamedCommands.registerCommand("DriveBack",
                   new DriveBack().withTimeout(3));
         SmartDashboard.putBoolean("FinishedDriveForwardUntilLevel", false);
@@ -149,8 +158,8 @@ public class SwerveSubsystem extends SubsystemBase{
         // double xMagnitude = -MathUtil.applyDeadband(driverLeft.getRawAxis(1), Constants.leftXDeadband);
         // double angularMagnitude = -MathUtil.applyDeadband(driverRight.getRawAxis(0), Constants.rightXDeadband);
         double yMagnitude = MathUtil.applyDeadband(driverController.getLeftY(), Constants.leftYDeadband);
-        double xMagnitude = -MathUtil.applyDeadband(driverController.getLeftX(), Constants.leftXDeadband);
-        double angularMagnitude = -MathUtil.applyDeadband(driverController.getRawAxis(2), Constants.rightXDeadband);
+        double xMagnitude = MathUtil.applyDeadband(driverController.getLeftX(), Constants.leftXDeadband);
+        double angularMagnitude = -MathUtil.applyDeadband(driverController.getRightX(), Constants.rightXDeadband);
         angularMagnitude = Math.copySign(angularMagnitude * angularMagnitude, angularMagnitude);
         double xVelocity = (FieldConstants.isBlueAlliance() ? -xMagnitude * maxVelocity : xMagnitude * maxVelocity)
                 * Constants.maxTelopVelocity;
@@ -159,7 +168,10 @@ public class SwerveSubsystem extends SubsystemBase{
 
         double angularVelocity = angularMagnitude * maxAngularVelocity * Constants.maxTelopAngularVelocity;
 
-        return new ChassisSpeeds(xVelocity, yVelocity, angularVelocity);
+        if (Constants.allianceColor == Alliance.Blue) {
+            return new ChassisSpeeds(xVelocity, yVelocity, angularVelocity);
+        }
+        return new ChassisSpeeds(-xVelocity, -yVelocity, angularVelocity);
     }
 
     public void driveFieldRelative(ChassisSpeeds fieldRelativeSpeeds) {
