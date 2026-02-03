@@ -1,8 +1,12 @@
-package frc.robot.subsystems.drive;
+package frc.robot.subsystems.Drive;
+
+
 import java.util.function.Supplier;
+import frc.robot.subsystems.Drive.SwerveSubsystem;
 
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.hardware.Pigeon2;
+import com.ctre.phoenix6.swerve.SwerveDrivetrain;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModule;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
@@ -13,21 +17,24 @@ import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.subsystems.drive.TunerConstants.TunerSwerveDrivetrain;
+import frc.robot.subsystems.Drive.BetaConstants.TunerSwerveDrivetrain;
 
 /**
  * Class that extends the Phoenix 6 SwerveDrivetrain class and implements
@@ -38,7 +45,6 @@ public class SwerveIOSystem extends TunerSwerveDrivetrain implements Subsystem, 
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
     private Pose2d robotPose;
-
             
 
     /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
@@ -142,8 +148,10 @@ public class SwerveIOSystem extends TunerSwerveDrivetrain implements Subsystem, 
         }
         configureAutoBuilder();
     }
+    
 
     private void configureAutoBuilder() {
+        // SwerveSubsystem.getInstance().registerNamedCommands();
         try {
             var config = RobotConfig.fromGUISettings();
             AutoBuilder.configure(
@@ -271,6 +279,18 @@ public class SwerveIOSystem extends TunerSwerveDrivetrain implements Subsystem, 
             inputs.OdometryPeriod = state.OdometryPeriod;
             inputs.SuccessfulDaqs = state.SuccessfulDaqs;
             inputs.FailedDaqs = state.FailedDaqs;
+            inputs.GyroRotation = this.getPigeon2().getRotation3d();
+            inputs.GyroRoll = this.getPigeon2().getRoll().getValueAsDouble();
+            inputs.GyroPitch = this.getPigeon2().getPitch().getValueAsDouble();
+            inputs.GyroYaw = this.getPigeon2().getYaw().getValueAsDouble();
+            inputs.steerCurrent0 = this.getModule(0).getSteerMotor().getStatorCurrent().getValueAsDouble();
+            inputs.steerCurrent1 = this.getModule(1).getSteerMotor().getStatorCurrent().getValueAsDouble();
+            inputs.steerCurrent2 = this.getModule(2).getSteerMotor().getStatorCurrent().getValueAsDouble();
+            inputs.steerCurrent3 = this.getModule(3).getSteerMotor().getStatorCurrent().getValueAsDouble();
+            inputs.driveCurrent0 = this.getModule(0).getDriveMotor().getStatorCurrent().getValueAsDouble();
+            inputs.driveCurrent1 = this.getModule(1).getDriveMotor().getStatorCurrent().getValueAsDouble();
+            inputs.driveCurrent2 = this.getModule(2).getDriveMotor().getStatorCurrent().getValueAsDouble();
+            inputs.driveCurrent3 = this.getModule(3).getDriveMotor().getStatorCurrent().getValueAsDouble();
 
         //public Pose2d Pose = new Pose2d();
        // public ChassisSpeeds Speeds = new ChassisSpeeds();
@@ -290,17 +310,18 @@ public class SwerveIOSystem extends TunerSwerveDrivetrain implements Subsystem, 
 
     public void setSwerveState(SwerveRequest request) {
         this.setControl(request);
-     }
+    }
 
-    public double getAbsoluteEncoderPositiosn(int index) {
+    public double getAbsoluteEncoderPositions(int index) {
         return this.getModule(index).getEncoder().getAbsolutePosition().getValueAsDouble();
-     }   
-
+    }   
     public void resetRotation() {}
 
     public void resetToParamaterizedRotation(Rotation2d rotation2d) {}
 
+
     public void updateSimState() {}
+
 
     public void resetRobotTranslation(Translation2d translation2d) {}
 
@@ -315,5 +336,30 @@ public class SwerveIOSystem extends TunerSwerveDrivetrain implements Subsystem, 
             getModule(2).getPosition(false),
             getModule(3).getPosition(false)
         };
+    }
+
+    private double wrapToPie(double angle) {
+        angle = (angle + Math.PI) % (2* Math.PI);
+        if (angle < 0) {
+            angle += 2 * Math.PI;
+        }
+
+        return angle - Math.PI;
+    }
+
+     public Rotation3d geRotation3d () {
+        return this.getRotation3d();
+     }
+
+     public void zeroGyro() {
+        this.getPigeon2().setYaw(0);
+     }
+
+     public ChassisSpeeds getSpeed() {
+        return this.getState().Speeds;
+     }
+     public void driveFieldRelative(ChassisSpeeds fieldRelativeSpeeds) {
+
+        // this.driveFieldOriented(fieldRelativeSpeeds);
     }
 }

@@ -2,19 +2,24 @@ package frc.robot.subsystems.Shooter;
 
 import org.littletonrobotics.junction.Logger;
 
+import com.ctre.phoenix6.hardware.CANrange;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.ButtonConfig;
+import frc.robot.Constants;
 import frc.robot.subsystems.Vision.ShooterAngle;
 import frc.robot.subsystems.Vision.ShooterAngleCalculator;
-import frc.robot.subsystems.drive.SwerveSubsystem;
-import frc.robot.Constants;
-import frc.robot.Constants.ShooterConstants;
+import frc.robot.subsystems.Drive.SwerveSubsystem;
+import frc.robot.subsystems.Lights.LightAnimations;
+import frc.robot.subsystems.Lights.Lights;
 import frc.robot.subsystems.Shooter.Feeder.Feeder;
 import frc.robot.subsystems.Shooter.Feeder.FeederIO;
 import frc.robot.subsystems.Shooter.Feeder.FeederIOInputsAutoLogged;
+import frc.robot.subsystems.Shooter.Feeder.FeederStates;
 import frc.robot.subsystems.Shooter.Flywheel.Flywheel;
 import frc.robot.subsystems.Shooter.Flywheel.FlywheelIO;
 import frc.robot.subsystems.Shooter.Flywheel.FlywheelIOInputsAutoLogged;
@@ -39,8 +44,10 @@ public class Shooter extends SubsystemBase{
     public Turret turret = new Turret();
     public Flywheel flywheel = new Flywheel();
     public final double prefire = 1;
-
+    public CANrange lemonDetector = new CANrange(Constants.lemonDetector,Constants.krakenBus);
+    public static boolean driverOverride = false;
     private String gameData;
+    private double lemonDetectionTimestamp;
     private ShooterAngle shooterAngle;
     private Pose2d hubPose = new Pose2d(10, 10, new Rotation2d());
 
@@ -83,6 +90,7 @@ public class Shooter extends SubsystemBase{
             case FERRY:
                 if(ferry()){
                     wantedShooterState = ShooterStates.BUMP;
+                    Lights.getLightInstance().lightsWantedState = LightAnimations.CANTSHOOT;
                 }
                 break;
             case HUB:
@@ -101,15 +109,19 @@ public class Shooter extends SubsystemBase{
                 
                 if(hub()){
                     wantedShooterState = ShooterStates.BUMP;
+                    Lights.getLightInstance().lightsWantedState = LightAnimations.CANTSHOOT;
                 }
                 break;
             case BUMP:
                 //dont shoot
-                if(true){//!tilted
+                if(swerve.onRamp(0,3)){//!tilted
                     if(true){ //in alliance zone
                         wantedShooterState = ShooterStates.HUB;
+                        Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTREADYCONTINIOUS;
                     }else{
                         wantedShooterState = ShooterStates.FERRY;
+                        Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTREADYCONTINIOUS;
+
                     }
                 }
                 break;
@@ -136,7 +148,7 @@ public class Shooter extends SubsystemBase{
                     break;
                 
                 case BUMP:
-                    //if we're on the bump (SHOCKING!!!) ha good one
+                    //if we're on the bump (SHOCKING!!!) 
                     if(true){ //robot is tilted
                         currentShooterState = ShooterStates.BUMP;
                     }
@@ -150,15 +162,20 @@ public class Shooter extends SubsystemBase{
                     break;
             };
     }
+    //automatically shoots a ball if it can score and allows zeo to override some factors
     public boolean hub(){
         // there is no feederrequest so this causes an error
         if(aim(true) && isHubActive()){
-            if(ShooterConstants.driverShoot){
-                // feeder.setFeederVelocity(FeederStates.SCORING);
+            if(driverOverride){
+                feeder.setFeederVelocity(FeederStates.SCORING);
+                // manual shooting
+                Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTREADYMANUAL;
             }else{
-                if(true){//in alliance zone
-                    if(true){ // if we have fuel(stop after 2s after no fuel)
-                        // feeder.setFeederVelocity(FeederStates.SCORING);
+                if(true && swerve.onRamp(0, 3)){//in alliance zone
+                    if(hasFuel()){ // if we have fuel(stop after 2s after no fuel)
+                        feeder.setFeederVelocity(FeederStates.SCORING);
+                        //automatic shooting
+                        Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTREADYCONTINIOUS;
                     }else{
                         // feeder.setFeederVelocity(FeederStates.OFF);
                     }
@@ -171,14 +188,28 @@ public class Shooter extends SubsystemBase{
         return false;
     }
 
+    public boolean inAllianceZone(){
+        return true; //TODO rui needs to make working pose...
+    }
+
+    public boolean hasFuel(){
+        if(lemonDetector.getDistance().getValueAsDouble()<7){
+            lemonDetectionTimestamp  = Constants.timer.get();
+        }
+        if(Constants.timer.get() - lemonDetectionTimestamp >= 1.5){
+            return false;
+        }
+        return true;
+    }
+
     public boolean ferry(){
         if(aim(false)){
-            if(ShooterConstants.driverShoot){
-                // feeder.setFeederVelocity(FeederStates.FERRYING);
+            if(driverOverride){
+                feeder.setFeederVelocity(FeederStates.FERRYING);
             }else{
-                if(true){//!in alliance zone
-                    if(true){ // if we have fuel(stop after 2s after no fuel)
-                        // feeder.setFeederVelocity(FeederStates.FERRYING);
+                if(inAllianceZone()){//!in alliance zone
+                    if(hasFuel()){ // if we have fuel(stoap after 2s after no fuel)
+                        feeder.setFeederVelocity(FeederStates.FERRYING);
                     }else{
                         // feeder.setFeederVelocity(FeederStates.OFF);
                     }

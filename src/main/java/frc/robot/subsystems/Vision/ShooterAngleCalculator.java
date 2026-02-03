@@ -64,7 +64,9 @@ public class ShooterAngleCalculator {
             return null;
         
     }
-
+// paramaters are vx is the x velocity of the robot vy is the y velocity of the robot 
+// phx is the x position of the hub in relation to the robot phy is the same for the y 
+// s is the speed of the flywheels
     public static ShooterAngle getShooterAngleToHub(double vx, double vy, double phx, double phy, double s){
         // needed height
         double phz = hubHeight - shooterHeight;
@@ -110,6 +112,8 @@ public class ShooterAngleCalculator {
             }
                 
             return new ShooterAngle(phi, theta);
+            //phi is the angle of the turrent with respect to the field
+            //theta is the angle of elevation of the hood
         }
         else
             return null;

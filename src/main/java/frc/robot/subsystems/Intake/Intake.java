@@ -3,11 +3,12 @@ package frc.robot.subsystems.Intake;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
+import frc.robot.subsystems.Lights.LightAnimations;
+import frc.robot.subsystems.Lights.Lights;
 public class Intake extends SubsystemBase{
     
-    IntakeStates currentState = IntakeStates.SAFE;
-    IntakeStates wantedState = IntakeStates.SAFE;
+    public IntakeStates currentState = IntakeStates.SAFE;
+    public IntakeStates wantedState = IntakeStates.SAFE;
     public IntakeIO io;
     public static Intake instance;
     public IntakeIOInputsAutoLogged inputs = new IntakeIOInputsAutoLogged();
@@ -17,7 +18,7 @@ public class Intake extends SubsystemBase{
         instance = this;
     }
 
-    public static Intake getIntake(){
+    public static Intake getInstance(){
         return instance;
     }
 
@@ -42,6 +43,7 @@ public class Intake extends SubsystemBase{
             case INTAKING:
                 //only works if not climbing
             currentState = IntakeStates.INTAKING;
+            Lights.getLightInstance().lightsWantedState = LightAnimations.INTAKING;
             break;
 
             case EXTENDED:
@@ -52,6 +54,8 @@ public class Intake extends SubsystemBase{
             case REVERSEINTAKING:
                 //only works if not climbing
             currentState = IntakeStates.REVERSEINTAKING;
+            Lights.getLightInstance().lightsWantedState = LightAnimations.REVERSEINTAKING;
+
             break;
 
             default:
@@ -68,41 +72,49 @@ public class Intake extends SubsystemBase{
         io.setIntakeState(currentState);
 
         //not currently being used jarett said to leave in case we use want it in the future
-        switch (currentState){
+        // switch (currentState){
 
-        case INTAKING:
-        //motors on intake out
-        break;
+        // case INTAKING:
+        // //motors on intake out
+        // break;
 
-        case EXTENDED:
-        //motors off intake out
-        break;
+        // case EXTENDED:
+        // //motors off intake out
+        // break;
 
-        case SAFE:
-        //motors off intake in
-        break;
+        // case SAFE:
+        // //motors off intake in
+        // break;
 
-        case REVERSEINTAKING:
-        //motors reverse intake out
-        break;
+        // case REVERSEINTAKING:
+        // //motors reverse intake out
+        // break;
 
-        default:
-        //safe
-        break;
+        // default:
+        // //safe
+        // break;
         
         }
-    }
 
+
+    
+    
+        
+    public void setCurrentState(IntakeStates state) {
+        this.currentState = state;
+    }
+    
+    public IntakeStates getCurrentState() {
+        return this.currentState;
+    }
 
     public void setWantedState(IntakeStates state) {
         this.wantedState = state;
-    }    
-
-    public IntakeStates getCurrentState() {
-        return this.currentState;
     }
 
     public IntakeStates getWantedState() {
         return this.wantedState;
     }
+
 }
+    

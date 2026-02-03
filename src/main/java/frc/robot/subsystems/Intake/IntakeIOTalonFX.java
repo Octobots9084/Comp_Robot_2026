@@ -5,21 +5,20 @@ import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.MathUtil;
-import frc.robot.Constants.GeneralConstants;
-import frc.robot.Constants.IntakeConstants;
+import frc.robot.Constants;
 
 public class IntakeIOTalonFX implements IntakeIO{
     public IntakeConfigurator config;
-    // public TalonFX roller;
-    // public TalonFX pivot;
+    public TalonFX roller;
+    public TalonFX pivot;
     private MotionMagicVelocityVoltage rollerRequest;
     private MotionMagicVoltage pivotRequest;
 
     public IntakeIOTalonFX () {
         config = new IntakeConfigurator();
 
-        // roller = new TalonFX(IntakeConstants.intakeRollerID, GeneralConstants.krakenBus);
-        // pivot = new TalonFX(IntakeConstants.intakePivotID, GeneralConstants.krakenBus);
+        roller = new TalonFX(Constants.intakeRollerID, Constants.krakenBus);
+        pivot = new TalonFX(Constants.intakePivotID, Constants.krakenBus);
     }
 
    public void updateInputs(IntakeIOInputs inputs) {

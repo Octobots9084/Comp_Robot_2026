@@ -1,6 +1,7 @@
-package frc.robot.subsystems.drive;
+package frc.robot.subsystems.Drive;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import org.littletonrobotics.junction.Logger;
 
@@ -15,10 +16,19 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
 import frc.robot.FieldConstants;
+import frc.robot.commands.auto.DriveBack;
+import frc.robot.commands.auto.DriveForwardUntilLevel;
+import frc.robot.commands.auto.DriveOverBump;
+import frc.robot.commands.auto.NoPoseBump.DriveOverBumpFromAlliance;
+import frc.robot.commands.auto.NoPoseBump.DriveOverBumpToAlliance;
 
 public class SwerveSubsystem extends SubsystemBase{
     public enum SystemState {
@@ -32,8 +42,7 @@ public class SwerveSubsystem extends SubsystemBase{
     public SystemState wantedState = SystemState.MANUAL;
     public SystemState systemState = SystemState.IDLE;
     public SwerveIO io;
-    public CommandJoystick driverLeft;
-    public CommandJoystick driverRight;
+    public CommandXboxController driverController;
     public double maxVelocity;
     public double maxAngularVelocity;
     // The robot pose estimator for tracking swerve odometry and applying vision corrections.
@@ -42,11 +51,10 @@ public class SwerveSubsystem extends SubsystemBase{
     private final SwerveIOInputsAutoLogged inputs = new SwerveIOInputsAutoLogged();
 
     public SwerveSubsystem(
-        SwerveIO io, CommandJoystick driverLeft, CommandJoystick driverRight, double maxAngularVelocity, double maxVelocity
+        SwerveIO io, CommandXboxController driverController, double maxAngularVelocity, double maxVelocity
     ){
         this.io = io;
-        this.driverLeft = driverLeft;
-        this.driverRight = driverRight;
+        this.driverController = driverController;
         this.maxAngularVelocity = maxAngularVelocity;
         this.maxVelocity = maxVelocity;
 
@@ -65,6 +73,8 @@ public class SwerveSubsystem extends SubsystemBase{
                 stateStdDevs,
                 visionStdDevs
             );
+        instance = this;
+        registerNamedCommands();
     }
 
     public static SwerveSubsystem getInstance() {
@@ -74,8 +84,10 @@ public class SwerveSubsystem extends SubsystemBase{
             return instance;
     }
 
-    public static SwerveSubsystem setInstance(SwerveIO io, CommandJoystick driverLeft, CommandJoystick driverRight, double maxAngularVelocity, double maxVelocity) {
-        return instance = new SwerveSubsystem(io,driverLeft,driverRight,maxAngularVelocity,maxVelocity);
+    public static SwerveSubsystem setInstance(SwerveIO io, CommandXboxController driverController, double maxAngularVelocity, double maxVelocity) {
+        SwerveSubsystem instance = new SwerveSubsystem(io,driverController,maxAngularVelocity,maxVelocity);
+        instance.registerNamedCommands();
+        return instance;
     }
 
     @Override
@@ -83,11 +95,41 @@ public class SwerveSubsystem extends SubsystemBase{
         this.io.updateInputs(inputs);
         Logger.processInputs("Swerve", inputs);
         systemState = handleStateTransition();
+        // Logger.recordOutput("Xrot", this.io.getRotation3d().getX());
+        // Logger.recordOutput("Yrot", this.io.getRotation3d().getY());
+        // Logger.recordOutput("Zrot", this.io.getRotation3d().getZ());
+        // Logger.recordOutput("Tilt", Math.acos(this.io.getRotation3d().toMatrix().get(2, 2)));
+        SmartDashboard.putBoolean("onRamp", onRamp(0, 3));
         applyStates();
-        Logger.recordOutput("front left absolute", io.getAbsoluteEncoderPositiosn(0));
-        Logger.recordOutput("front right absolute", io.getAbsoluteEncoderPositiosn(1));
-        Logger.recordOutput("back left absolute", io.getAbsoluteEncoderPositiosn(2));
-        Logger.recordOutput("back right absolute", io.getAbsoluteEncoderPositiosn(3));
+        Logger.recordOutput("front left absolute", io.getAbsoluteEncoderPositions(0));
+        Logger.recordOutput("front right absolute", io.getAbsoluteEncoderPositions(1));
+        Logger.recordOutput("back left absolute", io.getAbsoluteEncoderPositions(2));
+        Logger.recordOutput("back right absolute", io.getAbsoluteEncoderPositions(3));
+    }
+    
+    //TODO: move somewhere important
+    public boolean onRamp (double wanted, double tolerance) { /////////////////////
+      boolean inTolerance = true;
+      tolerance = Units.degreesToRadians(tolerance);
+      double tilt = Math.acos(this.io.getRotation3d().toMatrix().get(2, 2)) - 0.015;
+      SmartDashboard.putNumber("Tilt", Units.radiansToDegrees(tilt));
+      if (tilt <= (wanted + tolerance) && tilt >= (wanted - tolerance)) {
+        inTolerance = false;
+      }
+      return inTolerance;
+    }
+
+    public void registerNamedCommands () {
+      NamedCommands.registerCommand("DriveOverBump",
+                  new DriveOverBump());//.andThen(new DriveForwardUntilLevel()));
+      NamedCommands.registerCommand("DriveOverBumpFromAlliance",
+                  new DriveOverBumpFromAlliance());//.andThen(new DriveForwardUntilLevel()));
+      NamedCommands.registerCommand("DriveOverBumpToAlliance",
+                  new DriveOverBumpToAlliance());//.andThen(new DriveForwardUntilLevel()));
+      
+      NamedCommands.registerCommand("DriveBack",
+                  new DriveBack().withTimeout(3));
+        SmartDashboard.putBoolean("FinishedDriveForwardUntilLevel", false);
     }
 
     private SystemState handleStateTransition() {
@@ -133,10 +175,14 @@ public class SwerveSubsystem extends SubsystemBase{
 
         }
     }
+
     public ChassisSpeeds calculateSpeedsBasedOnJoystickInputs(){
-        double yMagnitude = MathUtil.applyDeadband(driverLeft.getRawAxis(1), Constants.leftYDeadband);
-        double xMagnitude = MathUtil.applyDeadband(driverLeft.getRawAxis(0), Constants.leftXDeadband);
-        double angularMagnitude = MathUtil.applyDeadband(driverRight.getRawAxis(0), Constants.rightXDeadband);
+        // double yMagnitude = MathUtil.applyDeadband(driverLeft.getRawAxis(0), Constants.leftYDeadband);
+        // double xMagnitude = -MathUtil.applyDeadband(driverLeft.getRawAxis(1), Constants.leftXDeadband);
+        // double angularMagnitude = -MathUtil.applyDeadband(driverRight.getRawAxis(0), Constants.rightXDeadband);
+        double yMagnitude = MathUtil.applyDeadband(driverController.getLeftY(), Constants.leftYDeadband);
+        double xMagnitude = MathUtil.applyDeadband(driverController.getLeftX(), Constants.leftXDeadband);
+        double angularMagnitude = -MathUtil.applyDeadband(driverController.getRightX(), Constants.rightXDeadband);
         angularMagnitude = Math.copySign(angularMagnitude * angularMagnitude, angularMagnitude);
         double xVelocity = (FieldConstants.isBlueAlliance() ? -xMagnitude * maxVelocity : xMagnitude * maxVelocity)
                 * Constants.maxTelopVelocity;
@@ -145,7 +191,14 @@ public class SwerveSubsystem extends SubsystemBase{
 
         double angularVelocity = angularMagnitude * maxAngularVelocity * Constants.maxTelopAngularVelocity;
 
-        return new ChassisSpeeds(xVelocity, yVelocity, angularVelocity);
+        if (Constants.allianceColor == Alliance.Blue) {
+            return new ChassisSpeeds(xVelocity, yVelocity, angularVelocity);
+        }
+        return new ChassisSpeeds(-xVelocity, -yVelocity, angularVelocity);
+    }
+
+    public void driveFieldRelative(ChassisSpeeds fieldRelativeSpeeds) {
+        this.io.driveFieldRelative(fieldRelativeSpeeds);
     }
 
     /** See {@link SwerveDrivePoseEstimator#addVisionMeasurement(Pose2d, double, Matrix)}. */

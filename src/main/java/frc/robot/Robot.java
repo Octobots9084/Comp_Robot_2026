@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.Drive.SwerveSubsystem;
+
 import java.util.Optional;
 
 import org.littletonrobotics.junction.LogFileUtil;
@@ -20,6 +22,8 @@ import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
+
+import choreo.trajectory.SwerveSample;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -59,13 +63,21 @@ public class Robot extends LoggedRobot {
     Logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA);
     Logger.recordMetadata("GitDate", BuildConstants.GIT_DATE);
     Logger.recordMetadata("GitBranch", BuildConstants.GIT_BRANCH);
-    Logger.recordMetadata(
-        "GitDirty",
-        switch (BuildConstants.DIRTY) {
-          case 0 -> "All changes committed";
-          case 1 -> "Uncommitted changes";
-          default -> "Unknown";
-        });
+    String gitDirty;
+    switch (BuildConstants.DIRTY) {
+      case 0:
+        gitDirty = "All changes committed";
+        break;
+      case 1:
+        gitDirty = "Uncommitted changes";
+        break;
+      default:
+        gitDirty = "Unknown";
+        break;
+    }
+
+    Logger.recordMetadata("GitDirty", gitDirty);
+
 
     // Start AdvantageKit logger
     Logger.start();
@@ -78,6 +90,16 @@ public class Robot extends LoggedRobot {
   /** This function is called periodically during all modes. */
   @Override
   public void robotPeriodic() {
+    // Optional<Alliance> ally = DriverStation.getAlliance();
+    //     if (ally.isPresent()) {
+    //         if (ally.get() == Alliance.Red) {
+    //             Constants.isBlueAlliance = false;
+    //         }
+    //         if (ally.get() == Alliance.Blue) {
+    //             Constants.isBlueAlliance = true;
+    //         }
+    //     }
+    //     SmartDashboard.putBoolean("IsBlueAlliance", Constants.isBlueAlliance);
     // Optionally switch the thread to high priority to improve loop
     // timing (see the template project documentation for details)
     // Threads.setCurrentThreadPriority(true, 99);
@@ -110,16 +132,19 @@ public class Robot extends LoggedRobot {
             }
         }
         SmartDashboard.putBoolean("IsBlueAlliance", Constants.isBlueAlliance);
+  
   }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
     autonomousCommand = robotContainer.getAutonomousCommand();
+    SwerveSubsystem.getInstance().io.zeroGyro();
 
+        Logger.recordOutput("EXECUTING!!!!", false);
     // schedule the autonomous command (example)
     if (autonomousCommand != null) {
-      CommandScheduler.getInstance().schedule(autonomousCommand);
+      CommandScheduler.getInstance().schedule(autonomousCommand);//TODO: not command
     }
   }
 
@@ -129,18 +154,16 @@ public class Robot extends LoggedRobot {
 
   /** This function is called once when teleop is enabled. */
   @Override
-  public void teleopInit() {
+  public void teleopInit(){
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
+    Logger.recordOutput("EXECUTING!!!!", false);
 
     if (autonomousCommand != null) {
-      autonomousCommand.cancel();
+      CommandScheduler.getInstance().cancel(autonomousCommand);
     }
-    Constants.timer.reset();
-    
-
   }
 
   /** This function is called periodically during operator control. */

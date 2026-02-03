@@ -1,53 +1,53 @@
 package frc.robot.subsystems.Shooter.Feeder;
 
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
+import com.ctre.phoenix6.hardware.TalonFX;
 
-import frc.robot.Constants.GeneralConstants;
-import frc.robot.Constants.ShooterConstants;
+import frc.robot.Constants;
 import frc.robot.subsystems.Shooter.ShooterConfigurator;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.units.Units;
 
 public class FeederIOTalonFX implements FeederIO{
-    //public TalonFX spindexerMotor;
-    //public TalonFX verticalFeederMotor;
+    public TalonFX spindexerMotor;
+    public TalonFX verticalFeederMotor;
     public ShooterConfigurator shooterConfigs;
     private MotionMagicVelocityVoltage spindexerRequest;
     private MotionMagicVelocityVoltage verticalFeederRequest;
 
     public FeederIOTalonFX(){
         shooterConfigs = new ShooterConfigurator();
-        // spindexerMotor = new TalonFX(ShooterConstants.spindexerID,GeneralConstants.krakenBus);
-        // verticalFeederMotor = new TalonFX(ShooterConstants.verticalFeederID,GeneralConstants.krakenBus);
+        spindexerMotor = new TalonFX(Constants.spindexerID,Constants.krakenBus);
+        verticalFeederMotor = new TalonFX(Constants.verticalFeederID,Constants.krakenBus);
 
         // spindexerMotor.getConfigurator().apply(shooterConfigs.spindexerConfig);
         // verticalFeederMotor.getConfigurator().apply(shooterConfigs.verticalFeederConfig);
     }
 
     public void updateInputs(FeederIOInputs inputs){
-        // inputs.spindexerRPS = spindexerMotor.getVelocity().getValueAsDouble();
-        // inputs.verticalFeederRPS = verticalFeederMotor.getVelocity().getValueAsDouble();
-        // inputs.spindexerMotorTemp = spindexerMotor.getDeviceTemp().getValueAsDouble();
-        // inputs.verticalFeederMotorTemp = verticalFeederMotor.getDeviceTemp().getValueAsDouble();
+        inputs.spindexerRPS = spindexerMotor.getVelocity().getValueAsDouble();
+        inputs.verticalFeederRPS = verticalFeederMotor.getVelocity().getValueAsDouble();
+        inputs.spindexerMotorTemp = spindexerMotor.getDeviceTemp().getValueAsDouble();
+        inputs.verticalFeederMotorTemp = verticalFeederMotor.getDeviceTemp().getValueAsDouble();
     }
 
     @Override
     public void setFeederVelocity(double spindexerRPS, double verticalFeederRPS){
         spindexerRequest.Velocity = spindexerRPS;
         verticalFeederRequest.Velocity = verticalFeederRPS;
-        // spindexerMotor.setControl(spindexerRequest);
-        // verticalFeederMotor.setControl(verticalFeederRequest);
+        spindexerMotor.setControl(spindexerRequest);
+        verticalFeederMotor.setControl(verticalFeederRequest);
     }
 
     @Override
     public double getSpindexerVelocity(){
-        return -1; //spindexerMotor.getVelocity().getValueAsDouble();
+        return spindexerMotor.getVelocity().getValueAsDouble();
     }
 
     @Override
     public double getVerticalFeederVelocity(){
-        return -1;// verticalFeederMotor.getVelocity().getValueAsDouble();
+        return verticalFeederMotor.getVelocity().getValueAsDouble();
     }
 
     @Override

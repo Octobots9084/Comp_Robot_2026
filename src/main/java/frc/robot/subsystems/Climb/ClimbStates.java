@@ -1,10 +1,13 @@
 package frc.robot.subsystems.Climb;
 
 public enum ClimbStates {
-    CLIMBING(0,0),
+    CLIMBEDL3(0,0),
+    CLIMBEDL1(0,0),
     IDLE(0,0),
-    GRABBING(0,0),
-    DEPLOYED(0,0); // 0, more than 0
+    ENGAGEDL3(0,0),
+    DEPLOYEDL3(0,0),
+    DEPLOYEDL1(0,0);
+    
 
     double climbPosition;
     double climbDeployPosition;

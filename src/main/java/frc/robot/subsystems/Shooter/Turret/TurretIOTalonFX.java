@@ -5,52 +5,51 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.units.Units;
-import frc.robot.Constants.GeneralConstants;
-import frc.robot.Constants.ShooterConstants;
+import frc.robot.Constants;
 import frc.robot.subsystems.Shooter.ShooterConfigurator;
 
 public class TurretIOTalonFX implements TurretIO{
-    //public TalonFX hoodMotor;
-    //public TalonFX turretMotor;
+    public TalonFX hoodMotor;
+    public TalonFX turretMotor;
     public ShooterConfigurator shooterConfigs;
     private MotionMagicVoltage hoodRequest;
     private MotionMagicVoltage turretRequest;
 
     public TurretIOTalonFX(){
         shooterConfigs = new ShooterConfigurator();
-        // hoodMotor = new TalonFX(ShooterConstants.hoodID, GeneralConstants.krakenBus);
-        // turretMotor = new TalonFX(ShooterConstants.turretID,GeneralConstants.krakenBus);
+        hoodMotor = new TalonFX(Constants.hoodID, Constants.krakenBus);
+        turretMotor = new TalonFX(Constants.turretID,Constants.krakenBus);
 
-  //      hoodMotor.getConfigurator().apply(shooterConfigs.hoodConfig);
-    //    turretMotor.getConfigurator().apply(shooterConfigs.turretConfig);
+        hoodMotor.getConfigurator().apply(shooterConfigs.hoodConfig);
+        turretMotor.getConfigurator().apply(shooterConfigs.turretConfig);
     }
 
     @Override
     public void updateInputs(TurretIOInputs inputs){
-      //  inputs.hoodMotorTemp = hoodMotor.getDeviceTemp().getValueAsDouble();
-       // inputs.turretMotorTemp = turretMotor.getDeviceTemp().getValueAsDouble();
+        inputs.hoodMotorTemp = hoodMotor.getDeviceTemp().getValueAsDouble();
+        inputs.turretMotorTemp = turretMotor.getDeviceTemp().getValueAsDouble();
     }
 
     @Override
     public void setTurretPosition(double turretAngle){
         turretRequest.Position = turretAngle;
-        //turretMotor.setControl(turretRequest);
+        turretMotor.setControl(turretRequest);
     }
 
     @Override
     public void setHoodPosition(double hoodAngle){
         hoodRequest.Position = hoodAngle;
-        //hoodMotor.setControl(hoodRequest);
+        hoodMotor.setControl(hoodRequest);
     }
 
     @Override
     public double getHoodPosition(){
-        return 0.0;//hoodMotor.getPosition().getValueAsDouble();
+        return hoodMotor.getPosition().getValueAsDouble();
     }
 
     @Override
     public double getTurretPosition(){
-       return 0.0;//turretMotor.getPosition().getValueAsDouble();
+       return turretMotor.getPosition().getValueAsDouble();
     }
     
     @Override
