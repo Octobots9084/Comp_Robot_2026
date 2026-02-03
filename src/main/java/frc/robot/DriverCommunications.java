@@ -38,6 +38,6 @@ public class DriverCommunications{
               SmartDashboard.putBoolean("Is Hub Active?", Shooter.getInstance().isHubActive());
               SmartDashboard.putBoolean("In Manual?", Superstructure.getInstance().getCurrentState() == States.MANUAL);
               SmartDashboard.putBoolean("Can Shoot", Shooter.getInstance().Shootable());
-            
+              SmartDashboard.putBoolean("Has Fuel?", Shooter.getInstance().hasFuel());
     }
 }
