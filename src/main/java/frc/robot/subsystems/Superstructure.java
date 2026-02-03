@@ -66,6 +66,7 @@ public class Superstructure extends SubsystemBase{
                 if(climb.getClimbState() != ClimbStates.CLIMBEDL1 || climb.getClimbState() != ClimbStates.CLIMBEDL3){
                     currentState = States.SHOOTER;
                 }
+            default: break; //do nothing
         }
     }
 
@@ -108,7 +109,7 @@ public class Superstructure extends SubsystemBase{
         if(climb.climbL3){
             climb.setClimbState(ClimbStates.DEPLOYEDL3);
             // TODO align to bar(use button before alignment)
-            climb.setClimbState(ClimbStates.ENGAGED);
+            climb.setClimbState(ClimbStates.ENGAGEDL3);
             //TODO align to vertical pole(button before alignment)
             climb.setClimbState(ClimbStates.CLIMBEDL3);
         }else{
