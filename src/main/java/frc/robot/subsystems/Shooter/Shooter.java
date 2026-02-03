@@ -143,6 +143,14 @@ public class Shooter extends SubsystemBase{
                     break;
             };
     }
+    public boolean Shootable(){
+        if(!swerve.onRamp(1,3) && ((Shooter.getInstance().inAllianceZone() && isHubActive()) || (!Shooter.getInstance().inAllianceZone()))){
+            return true;
+        }else{
+            return false;
+        }
+
+    }
     //automatically shoots a ball if it can score and allows zeo to override some factors
     public boolean hub(){
         if(aim(true) && isHubActive()){
@@ -187,7 +195,7 @@ public class Shooter extends SubsystemBase{
             if(driverOverride){
                 feeder.setFeederVelocity(FeederStates.FERRYING);
             }else{
-                if(inAllianceZone()){//!in alliance zone
+                if(!inAllianceZone()){//!in alliance zone
                     if(hasFuel()){ // if we have fuel(stoap after 2s after no fuel)
                         feeder.setFeederVelocity(FeederStates.FERRYING);
                     }else{
