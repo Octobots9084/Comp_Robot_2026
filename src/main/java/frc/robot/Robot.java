@@ -118,11 +118,7 @@ public class Robot extends LoggedRobot {
 
   /** This function is called once when the robot is disabled. */
   @Override
-  public void disabledInit() {}
-
-  /** This function is called periodically when disabled. */
-  @Override
-  public void disabledPeriodic() {
+  public void disabledInit() {
     Optional<Alliance> ally = DriverStation.getAlliance();
         if (ally.isPresent()) {
             if (ally.get() == Alliance.Red) {
@@ -136,11 +132,17 @@ public class Robot extends LoggedRobot {
   
   }
 
+  /** This function is called periodically when disabled. */
+  @Override
+  public void disabledPeriodic() {
+  }
+
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
     autonomousCommand = robotContainer.getAutonomousCommand();
-    SwerveSubsystem.getInstance().io.zeroGyro();
+    // SwerveSubsystem.getInstance().io.getPigeon2().setYaw(90);
+
 
         Logger.recordOutput("EXECUTING!!!!", false);
     // schedule the autonomous command (example)

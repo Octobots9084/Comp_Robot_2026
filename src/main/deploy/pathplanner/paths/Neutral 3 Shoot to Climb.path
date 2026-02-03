@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.47854216868054533,
-        "y": 5.903638554223644
+        "x": 3.254180722891566,
+        "y": 2.9
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.5973751783166898,
-        "y": 5.361212553495007
+        "x": 3.0039657631954344,
+        "y": 3.0063766048502147
       },
       "isLocked": false,
-      "linkedName": "Depot bottom (out)"
+      "linkedName": "Neutral 3 Shoot"
     },
     {
       "anchor": {
@@ -20,8 +20,8 @@
         "y": 3.7180028530670475
       },
       "prevControl": {
-        "x": 1.877815104902957,
-        "y": 5.0379442266754975
+        "x": 1.8653637660485023,
+        "y": 3.5756776034236823
       },
       "nextControl": null,
       "isLocked": false,
@@ -41,14 +41,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 8.0,
+    "velocity": 0,
     "rotation": 0.0
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
-    "velocity": 2.0,
-    "rotation": 88.49256424122504
+    "velocity": 4.0,
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }

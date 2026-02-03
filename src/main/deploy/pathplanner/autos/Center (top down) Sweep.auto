@@ -15,6 +15,18 @@
           "data": {
             "pathName": "Top Down Neutral Sweep"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Sweep Down Neutral 3 to Shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Neutral 3 Shoot to Climb"
+          }
         }
       ]
     }

@@ -98,11 +98,13 @@ public class SwerveSubsystem extends SubsystemBase{
 
     public void registerNamedCommands () {
       NamedCommands.registerCommand("DriveOverBump",
-                  new DriveOverBump());//.andThen(new DriveForwardUntilLevel()));
+                  new DriveOverBump());
+                  /////////////////////
       NamedCommands.registerCommand("DriveOverBumpFromAlliance",
-                  new DriveOverBumpFromAlliance());//.andThen(new DriveForwardUntilLevel()));
+                  new DriveOverBumpFromAlliance());
       NamedCommands.registerCommand("DriveOverBumpToAlliance",
-                  new DriveOverBumpToAlliance());//.andThen(new DriveForwardUntilLevel()));
+                  new DriveOverBumpToAlliance());
+                  //////////////////////////
       
       NamedCommands.registerCommand("DriveBack",
                   new DriveBack().withTimeout(3));
@@ -157,8 +159,8 @@ public class SwerveSubsystem extends SubsystemBase{
         // double yMagnitude = MathUtil.applyDeadband(driverLeft.getRawAxis(0), Constants.leftYDeadband);
         // double xMagnitude = -MathUtil.applyDeadband(driverLeft.getRawAxis(1), Constants.leftXDeadband);
         // double angularMagnitude = -MathUtil.applyDeadband(driverRight.getRawAxis(0), Constants.rightXDeadband);
-        double yMagnitude = MathUtil.applyDeadband(driverController.getLeftY(), Constants.leftYDeadband);
-        double xMagnitude = MathUtil.applyDeadband(driverController.getLeftX(), Constants.leftXDeadband);
+        double yMagnitude = -MathUtil.applyDeadband(driverController.getLeftX(), Constants.leftYDeadband);
+        double xMagnitude = MathUtil.applyDeadband(driverController.getLeftY(), Constants.leftXDeadband);
         double angularMagnitude = -MathUtil.applyDeadband(driverController.getRightX(), Constants.rightXDeadband);
         angularMagnitude = Math.copySign(angularMagnitude * angularMagnitude, angularMagnitude);
         double xVelocity = (FieldConstants.isBlueAlliance() ? -xMagnitude * maxVelocity : xMagnitude * maxVelocity)

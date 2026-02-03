@@ -5,18 +5,6 @@
     "data": {
       "commands": [
         {
-          "type": "path",
-          "data": {
-            "pathName": "Drive 1 robot"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "DriveOverBumpFromAlliance"
@@ -38,12 +26,6 @@
           "type": "wait",
           "data": {
             "waitTime": 1.0
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "DriveOverBumpToAlliance"
           }
         }
       ]

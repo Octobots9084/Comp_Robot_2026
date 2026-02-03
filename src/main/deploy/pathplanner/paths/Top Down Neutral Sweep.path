@@ -33,15 +33,15 @@
     {
       "anchor": {
         "x": 7.67,
-        "y": 2.87666265060241
+        "y": 3.2780884450784593
       },
       "prevControl": {
-        "x": 7.919999999999998,
-        "y": 2.87666265060241
+        "x": 7.92,
+        "y": 3.2780884450784593
       },
       "nextControl": {
         "x": 7.42,
-        "y": 2.87666265060241
+        "y": 3.2780884450784593
       },
       "isLocked": false,
       "linkedName": null
@@ -49,24 +49,24 @@
     {
       "anchor": {
         "x": 6.849397590361446,
-        "y": 2.87666265060241
+        "y": 3.1616405135520687
       },
       "prevControl": {
         "x": 7.100734939759036,
-        "y": 2.865734939759036
+        "y": 3.1507128027086946
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Center Sweep Down"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1.0434782608695408,
+      "waypointRelativePos": 1.2008329477093862,
       "rotationDegrees": 90.0
     },
     {
-      "waypointRelativePos": 1.9391304347825664,
+      "waypointRelativePos": 1.6617306802406393,
       "rotationDegrees": 90.0
     }
   ],
@@ -82,7 +82,7 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
+    "velocity": 4.0,
     "rotation": 0.0
   },
   "reversed": false,
