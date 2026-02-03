@@ -66,15 +66,15 @@ public class Climb extends SubsystemBase{
                     currentState = ClimbStates.CLIMBEDL1;
                 }
             case DEPLOYEDL3:
-                if(currentState == ClimbStates.IDLE || currentState == ClimbStates.ENGAGED){
+                if(currentState == ClimbStates.IDLE || currentState == ClimbStates.ENGAGEDL3){
                     currentState = ClimbStates.DEPLOYEDL3;
                 }
-            case ENGAGED:
+            case ENGAGEDL3:
                 if(currentState == ClimbStates.DEPLOYEDL3 || currentState == ClimbStates.CLIMBEDL3){
-                    currentState = ClimbStates.ENGAGED;
+                    currentState = ClimbStates.ENGAGEDL3;
                 }
             case CLIMBEDL3:
-                if(currentState == ClimbStates.ENGAGED){
+                if(currentState == ClimbStates.ENGAGEDL3){
                     currentState = ClimbStates.CLIMBEDL3;
                 }
         }
