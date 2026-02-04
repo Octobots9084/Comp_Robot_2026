@@ -34,11 +34,11 @@ public class IntakeIOTalonFX implements IntakeIO{
 
     @Override
    public void setIntakeState(IntakeStates states){
-      //   pivotRequest.Position = states.intakePosition;
+     //    pivotRequest.Position = states.intakePosition;
      //    rollerRequest.Velocity = states.rollerRPS;
      //    pivot.setControl(pivotRequest);
      //    roller.setControl(rollerRequest);
-          roller.setVoltage(states.rollerRPS/12);
+          roller.setVoltage(states.rollerRPS/6);
         SmartDashboard.putBoolean("ts runs",true);
    }
 
