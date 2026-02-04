@@ -61,4 +61,27 @@ public class TurretIOTalonFX implements TurretIO{
     public boolean turretInTolerance(double tolerance){
         return MathUtil.isNear(turretRequest.getPositionMeasure().in(Units.Revolution), this.getTurretPosition(), tolerance);
     }
+
+    /** loop this if it is being used */
+    
+    double startTime = -1000;
+    double duration = 1000;
+
+    public void startFiring() {
+        startTime = System.currentTimeMillis();
+    };
+
+    // public void turretloop() {
+    //     if (false /*turret is in incorrect state to fire*/) return;
+    //     if (false /*fuel detected*/) startFiring();
+
+    //     if (startTime + duration >= System.currentTimeMillis()) alignTurretToGoal();
+
+    //     //turret is within 0.1 rotations of target
+    //     if (!(getTurretPosition() + 0.05 > turretRequest.Position && getTurretPosition() - 0.05 < turretRequest.Position)) return;
+
+        
+    // }
+
+
 }
