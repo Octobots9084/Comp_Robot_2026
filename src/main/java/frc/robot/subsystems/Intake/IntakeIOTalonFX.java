@@ -10,17 +10,19 @@ import frc.robot.Constants;
 
 public class IntakeIOTalonFX implements IntakeIO{
     public IntakeConfigurator config;
-    public TalonFX roller = new TalonFX(19);
     public TalonFX pivot;
+    public TalonFX roller;
     private MotionMagicVelocityVoltage rollerRequest = new MotionMagicVelocityVoltage(0);
     private MotionMagicVoltage pivotRequest;
 
     public IntakeIOTalonFX () {
         config = new IntakeConfigurator();
-        roller.setNeutralMode(NeutralModeValue.Coast);
+     //    roller.setNeutralMode(NeutralModeValue.Coast);
 
-      //   roller = new TalonFX(Constants.intakeRollerID, Constants.krakenBus);
+        roller = new TalonFX(Constants.intakeRollerID, Constants.krakenBus);
         pivot = new TalonFX(Constants.intakePivotID, Constants.krakenBus);
+        roller.getConfigurator().apply(config.intakeRollerConfig);
+        pivot.getConfigurator().apply(config.intakePivotConfig);
     }
 
    public void updateInputs(IntakeIOInputs inputs) {
@@ -33,9 +35,10 @@ public class IntakeIOTalonFX implements IntakeIO{
     @Override
    public void setIntakeState(IntakeStates states){
       //   pivotRequest.Position = states.intakePosition;
-        rollerRequest.Velocity = states.rollerRPS;
+     //    rollerRequest.Velocity = states.rollerRPS;
      //    pivot.setControl(pivotRequest);
-        roller.setControl(rollerRequest);
+     //    roller.setControl(rollerRequest);
+          roller.setVoltage(states.rollerRPS/12);
         SmartDashboard.putBoolean("ts runs",true);
    }
 

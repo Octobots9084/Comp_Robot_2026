@@ -14,10 +14,10 @@ public class runIntake extends Command {
 
     @Override
     public void execute() {   
-        intake.setCurrentState(IntakeStates.INTAKING);
+        intake.setWantedState(IntakeStates.INTAKING);
     }
     @Override
     public void end(boolean interrupted){
-        intake.setCurrentState(IntakeStates.SAFE);
+        intake.setWantedState(IntakeStates.SAFE);
     }
 }
