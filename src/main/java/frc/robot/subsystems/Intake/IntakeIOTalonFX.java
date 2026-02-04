@@ -10,7 +10,7 @@ public class IntakeIOTalonFX implements IntakeIO{
     public IntakeConfigurator config;
     public TalonFX roller;
     public TalonFX pivot;
-    private MotionMagicVelocityVoltage rollerRequest;
+    private MotionMagicVelocityVoltage rollerRequest = new MotionMagicVelocityVoltage(0);
     private MotionMagicVoltage pivotRequest;
 
     public IntakeIOTalonFX () {
@@ -29,9 +29,9 @@ public class IntakeIOTalonFX implements IntakeIO{
 
     @Override
    public void setIntakeState(IntakeStates states){
-        pivotRequest.Position = states.intakePosition;
+     //    pivotRequest.Position = states.intakePosition;
         rollerRequest.Velocity = states.rollerRPS;
-        pivot.setControl(pivotRequest);
+     //    pivot.setControl(pivotRequest);
         roller.setControl(rollerRequest);
    }
 

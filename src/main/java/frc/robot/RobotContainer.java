@@ -73,7 +73,7 @@ public class RobotContainer {
         //     new FeederIOTalonFX(), 
         //     new FlywheelIOTalonFX(), 
         //     new TurretIOTalonFX());
-        // intake = new Intake(new IntakeIOTalonFX());
+        intake = new Intake(new IntakeIOTalonFX());
         // climb = new Climb(new ClimbIOTalonFX());
         // superstructure = new Superstructure();
         

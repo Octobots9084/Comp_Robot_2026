@@ -4,7 +4,7 @@ import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Lights.LightAnimations;
-import frc.robot.subsystems.Lights.Lights;
+// import frc.robot.subsystems.Lights;
 public class Intake extends SubsystemBase{
     
     public IntakeStates currentState = IntakeStates.SAFE;
@@ -25,10 +25,10 @@ public class Intake extends SubsystemBase{
     @Override
     public void periodic() {
         //This will handle changing between states at the user's request.
-        // handleStateTransitions();
+        handleStateTransitions();
 
         //this is where states actually take effect.
-        // applyStates();
+        applyStates();
         io.updateInputs(inputs);
         Logger.processInputs("Intake", inputs);
     }
@@ -43,7 +43,7 @@ public class Intake extends SubsystemBase{
             case INTAKING:
                 //only works if not climbing
             currentState = IntakeStates.INTAKING;
-            Lights.getLightInstance().lightsWantedState = LightAnimations.INTAKING;
+            // Lights.getLightInstance().lightsWantedState = LightAnimations.INTAKING;
             break;
 
             case EXTENDED:
@@ -54,7 +54,7 @@ public class Intake extends SubsystemBase{
             case REVERSEINTAKING:
                 //only works if not climbing
             currentState = IntakeStates.REVERSEINTAKING;
-            Lights.getLightInstance().lightsWantedState = LightAnimations.REVERSEINTAKING;
+            // Lights.getLightInstance().lightsWantedState = LightAnimations.REVERSEINTAKING;
 
             break;
 

@@ -48,13 +48,13 @@ public final class Constants {
     public static int lemonDetector = 0;
 
     public static int intakePivotID = 0;
-    public static int intakeRollerID = 0;
+    public static int intakeRollerID = 19;
 
     public static int climbRotateControlledID = 0;
     public static int climbRotateFollowerID = 0;
     public static int climbDeployID = 0;
 
-     public static RobotTypes robotType = RobotTypes.BETA;
+     public static RobotTypes robotType = RobotTypes.ALPHA;
     public static enum RobotTypes {
     // alpha
     ALPHA,
