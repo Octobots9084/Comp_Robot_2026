@@ -23,7 +23,7 @@ public class ButtonConfig {
     public static CommandXboxController sebController = new CommandXboxController(1);
     public void initTeleop(){
     SmartDashboard.putBoolean("A button", false);
-        driverController.rightTrigger().onTrue(new InstantCommand(
+        driverController.rightTrigger(0.5).onTrue(new InstantCommand(
             () -> Shooter.driverOverride = true))
             .onFalse(new InstantCommand(
             () -> Shooter.driverOverride = false
@@ -45,6 +45,4 @@ public class ButtonConfig {
         driverController.rightTrigger().onTrue(new SebRightTrigger())
             .onFalse(new InstantCommand(() -> {if (Superstructure.getInstance().currentState == States.MANUAL) {Shooter.driverOverride = false;}} ));
     }
-
-    // public Command runIntake(){}
 }

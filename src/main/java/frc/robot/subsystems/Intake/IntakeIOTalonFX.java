@@ -39,7 +39,6 @@ public class IntakeIOTalonFX implements IntakeIO{
      //    pivot.setControl(pivotRequest);
      //    roller.setControl(rollerRequest);
           roller.setVoltage(states.rollerRPS/6);
-        SmartDashboard.putBoolean("ts runs",true);
    }
 
    @Override
@@ -51,6 +50,4 @@ public class IntakeIOTalonFX implements IntakeIO{
    public double getIntakePosition() {
         return pivot.getPosition().getValueAsDouble(); 
    }
-
-
 }

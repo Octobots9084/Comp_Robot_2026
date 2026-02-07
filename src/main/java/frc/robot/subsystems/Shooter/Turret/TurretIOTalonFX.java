@@ -5,15 +5,21 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.units.Units;
+import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Constants;
 import frc.robot.subsystems.Shooter.ShooterConfigurator;
 
 public class TurretIOTalonFX implements TurretIO{
     public TalonFX hoodMotor;
-    public TalonFX turretMotor;
-    public ShooterConfigurator shooterConfigs;
-    private MotionMagicVoltage hoodRequest;
+    public TalonFX turretMotor;       
+    public double zeroTurret;
     private MotionMagicVoltage turretRequest;
+    private MotionMagicVoltage hoodRequest;
+    public DigitalInput turretLimitSwitch = new DigitalInput(0);
+    public double deadZoneTolerance = 0.1;
+    public double wrapPoint = 0;
+    
+    public ShooterConfigurator shooterConfigs = new ShooterConfigurator();
 
     public TurretIOTalonFX(){
         shooterConfigs = new ShooterConfigurator();
@@ -69,19 +75,20 @@ public class TurretIOTalonFX implements TurretIO{
 
     public void startFiring() {
         startTime = System.currentTimeMillis();
-    };
+    }
 
-    // public void turretloop() {
-    //     if (false /*turret is in incorrect state to fire*/) return;
-    //     if (false /*fuel detected*/) startFiring();
+    public boolean turretZeroed(){
+        if(turretLimitSwitch.get()){
+            turretMotor.setVoltage(0);
+            zeroTurret = turretMotor.getPosition().getValueAsDouble();            
+            return true;
+        }else{
+            turretMotor.setVoltage(1);//TODO set this to real value Santi!
+            return false;
+        }
+    }
 
-    //     if (startTime + duration >= System.currentTimeMillis()) alignTurretToGoal();
-
-    //     //turret is within 0.1 rotations of target
-    //     if (!(getTurretPosition() + 0.05 > turretRequest.Position && getTurretPosition() - 0.05 < turretRequest.Position)) return;
-
-        
-    // }
-
-
+    public boolean canMoveTurret(double target){
+        return !MathUtil.isNear(wrapPoint, target, deadZoneTolerance);
+    }
 }

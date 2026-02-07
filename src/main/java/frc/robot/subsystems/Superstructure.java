@@ -12,6 +12,7 @@ import frc.robot.subsystems.Shooter.Flywheel.*;
 public class Superstructure extends SubsystemBase{
     public States currentState = States.SAFE;
     public States wantedState = States.SAFE;
+    public IntakeStates userRequestedIntakeState = IntakeStates.SAFE;
     
     boolean climbDescending = true;
     public static Superstructure currentInstance = null;
@@ -121,19 +122,9 @@ public class Superstructure extends SubsystemBase{
     }
 
     private void stateSHOOTER(){
-        //probably won't use, the transitions are run in the shooter
-        // Shooter.getInstance().flywheel.setFlywheelVelocity(FlywheelStates.HUB); //TODO need to change this for variable speed
-        
-        // if (Shooter.getInstance().flywheel.getLeftMotorVelocity() >= 0.0){ //TODO set this to a speed
-        //     // if (false /*manual override*/ || (true /*driver is asking to fire shooter*/ && ((Shooter.getInstance().inAllianceZone() && Shooter.getInstance().isHubActive()) || false /*ferrying*/))) {
-        //     //     // scorePoints(PointsStates.A_LOT);
-        //     // }
-        //     if (Shooter.getInstance().inAllianceZone()) {
-        //         Shooter.getInstance().hub();
-        //     } else {
-        //         //Shooter.getInstance().ferry();
-        //     }
-        // }
+        if(userRequestedIntakeState != Intake.getInstance().currentState){
+            Intake.getInstance().wantedState = userRequestedIntakeState;
+        }
     }
 }
 
