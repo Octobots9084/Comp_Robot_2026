@@ -109,6 +109,8 @@ public class Shooter extends SubsystemBase{
             case SPIT:
             //idk someone else code ts pls
                 break;
+            case ZERO:
+                break;
             default:
                 break;
         }
@@ -141,7 +143,9 @@ public class Shooter extends SubsystemBase{
                 case SAFE:
                     //driver input (presumably)
                     break;
-
+                case ZERO:
+                    currentShooterState = ShooterStates.ZERO;
+                    break;
                 default:
                     break;
             };

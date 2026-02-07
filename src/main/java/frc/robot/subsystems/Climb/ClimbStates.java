@@ -6,8 +6,8 @@ public enum ClimbStates {
     IDLE(0,0),
     ENGAGEDL3(0,0),
     DEPLOYEDL3(0,0),
-    DEPLOYEDL1(0,0);
-    
+    DEPLOYEDL1(0,0),
+    ZERO(0,0);
 
     double climbPosition;
     double climbDeployPosition;

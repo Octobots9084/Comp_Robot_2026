@@ -67,6 +67,9 @@ public class Superstructure extends SubsystemBase{
                 if(climb.getClimbState() != ClimbStates.CLIMBEDL1 || climb.getClimbState() != ClimbStates.CLIMBEDL3){
                     currentState = States.SHOOTER;
                 }
+            case ZERO:
+                currentState=States.ZERO;
+                break;
             default: break; //do nothing
         }
     }
@@ -84,6 +87,9 @@ public class Superstructure extends SubsystemBase{
                 break;
             case SHOOTER:
                 stateSHOOTER();
+                break;
+            case ZERO:
+                //todo
                 break;
             default:
                 //throw an exception

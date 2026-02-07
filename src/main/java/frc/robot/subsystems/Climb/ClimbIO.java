@@ -27,4 +27,10 @@ public interface ClimbIO {
     public default boolean climbInTolerance(double climbTolerance){
         return false;
     }
+    public default void setRotateVoltage(double voltage){
+        
+    }
+    public default boolean isZeroingSwitchPressed(){
+        return false;
+    }
 }

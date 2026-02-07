@@ -37,27 +37,29 @@ public class Intake extends SubsystemBase{
     
         switch(wantedState) {
             case SAFE:
-            currentState = IntakeStates.SAFE;
+                currentState = IntakeStates.SAFE;
             break;
 
             case INTAKING:
                 //only works if not climbing
-            currentState = IntakeStates.INTAKING;
-            // Lights.getLightInstance().lightsWantedState = LightAnimations.INTAKING;
-            break;
+                currentState = IntakeStates.INTAKING;
+                // Lights.getLightInstance().lightsWantedState = LightAnimations.INTAKING;
+                break;
 
             case EXTENDED:
                 //only works if not climbing
-            currentState = IntakeStates.EXTENDED;
-            break;
+                currentState = IntakeStates.EXTENDED;
+                break;
 
             case REVERSEINTAKING:
                 //only works if not climbing
-            currentState = IntakeStates.REVERSEINTAKING;
+                currentState = IntakeStates.REVERSEINTAKING;
             // Lights.getLightInstance().lightsWantedState = LightAnimations.REVERSEINTAKING;
 
-            break;
-
+                break;
+            case ZERO:
+                currentState = IntakeStates.ZERO;
+                break;
             default:
             currentState = IntakeStates.SAFE;
             break;
@@ -71,30 +73,31 @@ public class Intake extends SubsystemBase{
     
         io.setIntakeState(currentState);
 
-        //not currently being used jarett said to leave in case we use want it in the future
-        // switch (currentState){
+        switch (currentState){
 
-        // case INTAKING:
-        // //motors on intake out
-        // break;
+        case INTAKING:
+            //motors on intake out
+            break;
 
-        // case EXTENDED:
-        // //motors off intake out
-        // break;
+        case EXTENDED:
+            //motors off intake out
+            break;
 
-        // case SAFE:
-        // //motors off intake in
-        // break;
+        case SAFE:
+            //motors off intake in
+            break;
 
-        // case REVERSEINTAKING:
-        // //motors reverse intake out
-        // break;
-
-        // default:
-        // //safe
-        // break;
-        
+        case REVERSEINTAKING:
+            //motors reverse intake out
+            break;
+        case ZERO:
+             //todo
+             break;
+        default:
+            //safe
+            break;
         }
+    }
 
 
     
