@@ -6,22 +6,23 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import frc.robot.Constants;
+
 public class ClimbConfigurator {
     //2 motors spin the climb
     public TalonFXConfiguration climbRotateControlledConfig;
     public TalonFXConfiguration climbDeployConfig;
-    public double rotateGearRatio = 1; //TODO set gear ratio
-    public double deployGearRatio = 1;
+    
 
     //1 deploy the climb
 
     public ClimbConfigurator() {
         climbRotateControlledConfig = new TalonFXConfiguration()
                         .withFeedback(new FeedbackConfigs().
-                        withSensorToMechanismRatio(rotateGearRatio));
+                        withSensorToMechanismRatio(Constants.rotateGearRatio));
         climbDeployConfig = new TalonFXConfiguration()
                         .withFeedback(new FeedbackConfigs().
-                        withSensorToMechanismRatio(deployGearRatio));
+                        withSensorToMechanismRatio(Constants.deployGearRatio));
 
 
 

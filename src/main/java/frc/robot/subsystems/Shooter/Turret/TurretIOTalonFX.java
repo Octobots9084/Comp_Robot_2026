@@ -87,8 +87,4 @@ public class TurretIOTalonFX implements TurretIO{
             return false;
         }
     }
-
-    public boolean canMoveTurret(double target){
-        return !MathUtil.isNear(wrapPoint, target, deadZoneTolerance);
-    }
 }

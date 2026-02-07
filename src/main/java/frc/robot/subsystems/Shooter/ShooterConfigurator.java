@@ -1,8 +1,11 @@
 package frc.robot.subsystems.Shooter;
 
+import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+
+import frc.robot.Constants;
 
 public class ShooterConfigurator {
     public TalonFXConfiguration flyWheelRightConfig;
@@ -13,8 +16,10 @@ public class ShooterConfigurator {
     public TalonFXConfiguration topRollerConfig;
     public ShooterConfigurator(){
         flyWheelRightConfig = new TalonFXConfiguration();
-        turretConfig = new TalonFXConfiguration();
-        hoodConfig = new TalonFXConfiguration();
+        turretConfig = new TalonFXConfiguration().withFeedback(new FeedbackConfigs().
+                        withSensorToMechanismRatio(Constants.turretGearRatio));
+        hoodConfig = new TalonFXConfiguration().withFeedback(new FeedbackConfigs().
+                        withSensorToMechanismRatio(Constants.hoodGearRatio));
         spindexerConfig = new TalonFXConfiguration();
         verticalFeederConfig = new TalonFXConfiguration();
         topRollerConfig = new TalonFXConfiguration();

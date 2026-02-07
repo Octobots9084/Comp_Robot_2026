@@ -6,8 +6,8 @@ import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.ShooterStates;
 
-public class SebRightTrigger extends InstantCommand{
-    public SebRightTrigger () {
+public class Spit extends InstantCommand{
+    public Spit () {
         if (Superstructure.getInstance().currentState == States.MANUAL) {Shooter.driverOverride = true;}
             else {Shooter.getInstance().wantedShooterState = ShooterStates.SPIT;}
     }

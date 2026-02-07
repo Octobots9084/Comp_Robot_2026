@@ -1,15 +1,19 @@
 package frc.robot.subsystems.Intake;
 
+import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+
+import frc.robot.Constants;
 
 public class IntakeConfigurator {
     public TalonFXConfiguration intakeRollerConfig;
     public TalonFXConfiguration intakePivotConfig;
     public IntakeConfigurator(){
         intakeRollerConfig = new TalonFXConfiguration();
-        intakePivotConfig = new TalonFXConfiguration();
+        intakePivotConfig = new TalonFXConfiguration().withFeedback(new FeedbackConfigs().
+                        withSensorToMechanismRatio(Constants.intakePivotGearRatio));
 
         //intake roller config
         intakeRollerConfig.CurrentLimits.SupplyCurrentLimit = 20;
@@ -41,6 +45,7 @@ public class IntakeConfigurator {
         intakePivotConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
         intakePivotConfig.CurrentLimits.StatorCurrentLimit = 40;
         intakePivotConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+
 
         // set break mode and inversion
         intakePivotConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
