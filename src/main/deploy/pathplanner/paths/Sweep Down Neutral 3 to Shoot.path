@@ -9,7 +9,7 @@
       "prevControl": null,
       "nextControl": {
         "x": 5.9927960057061345,
-        "y": 3.019315263908702
+        "y": 3.0193152639087018
       },
       "isLocked": false,
       "linkedName": "Center Sweep Down"
@@ -62,7 +62,7 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 8.0,
+    "velocity": 0.0,
     "rotation": 0.0
   },
   "reversed": false,

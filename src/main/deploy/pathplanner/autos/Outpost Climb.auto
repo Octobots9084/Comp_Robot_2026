@@ -7,19 +7,37 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Bump 1 BL"
+            "pathName": "Outpost"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Top Down Neutral Sweep"
+            "pathName": "Outpost to Shoot"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Sweep Down Neutral 3 to Shoot"
+            "pathName": "Outpost Shoot to Bump"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "M Ramp 2 BL to Neutral 4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Neutral 4 to Neutral 3(aura)"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Neutral 3 to Shoot"
           }
         },
         {
