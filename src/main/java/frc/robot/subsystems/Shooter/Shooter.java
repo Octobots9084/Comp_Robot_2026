@@ -27,7 +27,7 @@ import frc.robot.subsystems.Shooter.Turret.TurretIOInputsAutoLogged;
 import frc.robot.subsystems.Drive.SwerveSubsystem;
 
 public class Shooter extends SubsystemBase{
-    ShooterStates currentShooterState;
+    public ShooterStates currentShooterState;
     public ShooterStates wantedShooterState;
     private static Shooter instance = null;
     private final FeederIOInputsAutoLogged feederInputs = new FeederIOInputsAutoLogged();
@@ -45,6 +45,11 @@ public class Shooter extends SubsystemBase{
     private String gameData;
     private SwerveSubsystem swerve = SwerveSubsystem.getInstance();
     private double lemonDetectionTimestamp;
+    
+    public double wantedHoodPosition = 0;
+    public double maximumHoodPosition = 0;
+    public double wantedTurretPosition = 0;
+    public double maximumTurretPosition = 0;
 
     public Shooter(FeederIO fIO,FlywheelIO fwIO, TurretIO tIO){
         this.fIO = fIO;
@@ -105,9 +110,8 @@ public class Shooter extends SubsystemBase{
 
                     }
                 }
-                break;
             case SPIT:
-            //idk someone else code ts pls
+                feeder.setFeederVelocity(FeederStates.SPITTING);
                 break;
             default:
                 break;
@@ -146,6 +150,23 @@ public class Shooter extends SubsystemBase{
                     break;
             };
     }
+
+    public boolean hoodProtection(){
+        if(wantedHoodPosition<=0 || wantedHoodPosition >= maximumHoodPosition){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    public boolean turretProtection(){
+        if(wantedTurretPosition <= 0 || wantedTurretPosition >= maximumTurretPosition){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
     public boolean Shootable(){
         if(!swerve.onRamp(1,3) && ((Shooter.getInstance().inAllianceZone() && isHubActive()) || (!Shooter.getInstance().inAllianceZone()))){
             return true;
