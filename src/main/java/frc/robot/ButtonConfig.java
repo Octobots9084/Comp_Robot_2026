@@ -13,7 +13,7 @@ public class ButtonConfig {
     public static CommandXboxController driverController = new CommandXboxController(0);
     public void initTeleop(){
     SmartDashboard.putBoolean("A button", false);
-        driverController.rightTrigger().onTrue(new InstantCommand(
+        driverController.rightTrigger(0.5).onTrue(new InstantCommand(
             () -> Shooter.driverOverride = true))
             .onFalse(new InstantCommand(
             () -> Shooter.driverOverride = false
@@ -21,9 +21,7 @@ public class ButtonConfig {
         //driverRight.button(1).onTrue(new InstantCommand(() -> SwerveSubsystem.getInstance().io.zeroGyro()));
         driverController.a().onTrue(new InstantCommand(() -> {SwerveSubsystem.getInstance().io.zeroGyro(); SmartDashboard.putBoolean("A button", true);})).onFalse(new InstantCommand(() -> SmartDashboard.putBoolean("A button", false)));
         // driverController.b().onTrue(new InstantCommand(() -> {Intake.getInstance().wantedState = IntakeStates.INTAKING; SmartDashboard.putBoolean("B button", true);})).onFalse(new InstantCommand(() -> SmartDashboard.putBoolean("B button", false)));
-        driverController.leftBumper().whileTrue(new InstantCommand(()->{Intake.getInstance().wantedState = IntakeStates.REVERSEINTAKING;})).onFalse(new InstantCommand(()->{Intake.getInstance().wantedState = IntakeStates.SAFE;}));
-        driverController.leftTrigger(0.5).whileTrue(new InstantCommand(()->{Intake.getInstance().wantedState = IntakeStates.INTAKING;})).onFalse(new InstantCommand(()->{Intake.getInstance().wantedState = IntakeStates.SAFE;}));
+        driverController.leftBumper().onTrue(new InstantCommand(()->{Intake.getInstance().wantedState = IntakeStates.REVERSEINTAKING;})).onFalse(new InstantCommand(()->{Intake.getInstance().wantedState = IntakeStates.SAFE;}));
+        driverController.leftTrigger(0.5).onTrue(new InstantCommand(()->{Intake.getInstance().wantedState = IntakeStates.INTAKING;})).onFalse(new InstantCommand(()->{Intake.getInstance().wantedState = IntakeStates.SAFE;}));
     }
-
-    // public Command runIntake(){}
 }

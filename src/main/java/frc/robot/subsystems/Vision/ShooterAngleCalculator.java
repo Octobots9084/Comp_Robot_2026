@@ -109,7 +109,7 @@ public class ShooterAngleCalculator {
             } else {
                 phi = Math.atan(phyAim / phxAim)+Math.PI;
             }
-                
+            //TODO needs be concerted to turret and hood relative values   
             return new ShooterAngle(phi, theta);
             //phi is the angle of the turrent with respect to the field
             //theta is the angle of elevation of the hood
