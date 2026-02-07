@@ -138,7 +138,7 @@ public class SwerveIOSystem extends TunerSwerveDrivetrain implements Subsystem, 
     
 
     private void configureAutoBuilder() {
-        // SwerveSubsystem.getInstance().registerNamedCommands();
+        //SwerveSubsystem.getInstance().registerNamedCommands();
         try {
             var config = RobotConfig.fromGUISettings();
             AutoBuilder.configure(

@@ -28,7 +28,7 @@ import frc.robot.subsystems.Drive.SwerveSubsystem;
 
 public class Shooter extends SubsystemBase{
     ShooterStates currentShooterState;
-    ShooterStates wantedShooterState;
+    public ShooterStates wantedShooterState;
     private static Shooter instance = null;
     private final FeederIOInputsAutoLogged feederInputs = new FeederIOInputsAutoLogged();
     private final FlywheelIOInputsAutoLogged flywheelInputs = new FlywheelIOInputsAutoLogged();
@@ -105,6 +105,9 @@ public class Shooter extends SubsystemBase{
 
                     }
                 }
+                break;
+            case SPIT:
+            //idk someone else code ts pls
                 break;
             default:
                 break;
