@@ -66,6 +66,7 @@ public interface SwerveIO {
 
     public default void driveFieldRelative(ChassisSpeeds fieldRelativeSpeeds) {}
 
+    default void setAllianceColor () {}
    // @Override
     //default void refreshData() {}
 }

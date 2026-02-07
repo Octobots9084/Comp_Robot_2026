@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.7,
+        "x": 6.0,
         "y": 5.1800713266761775
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.7,
+        "x": 7.0,
         "y": 5.1800713266761775
       },
       "isLocked": false,
-      "linkedName": "Hump 1 BR"
+      "linkedName": null
     },
     {
       "anchor": {
@@ -41,13 +41,13 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 4.0,
+    "velocity": 0.25,
     "rotation": 180.0
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
-    "velocity": 8.0,
+    "velocity": 2.0,
     "rotation": 180.0
   },
   "useDefaultConstraints": true

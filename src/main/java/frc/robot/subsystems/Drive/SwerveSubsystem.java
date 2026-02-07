@@ -86,14 +86,14 @@ public class SwerveSubsystem extends SubsystemBase{
     
     //TODO: move somewhere important
     public boolean onRamp (double wanted, double tolerance) { /////////////////////
-      boolean inTolerance = true;
+      boolean inTolerance = false;
       tolerance = Units.degreesToRadians(tolerance);
       double tilt = Math.acos(this.io.getRotation3d().toMatrix().get(2, 2)) - 0.015;
       SmartDashboard.putNumber("Tilt", Units.radiansToDegrees(tilt));
       if (tilt <= (wanted + tolerance) && tilt >= (wanted - tolerance)) {
-        inTolerance = false;
+        inTolerance = true;
       }
-      return inTolerance;
+      return !inTolerance;
     }
 
     public void registerNamedCommands () {
@@ -159,8 +159,8 @@ public class SwerveSubsystem extends SubsystemBase{
         // double yMagnitude = MathUtil.applyDeadband(driverLeft.getRawAxis(0), Constants.leftYDeadband);
         // double xMagnitude = -MathUtil.applyDeadband(driverLeft.getRawAxis(1), Constants.leftXDeadband);
         // double angularMagnitude = -MathUtil.applyDeadband(driverRight.getRawAxis(0), Constants.rightXDeadband);
-        double yMagnitude = -MathUtil.applyDeadband(driverController.getLeftX(), Constants.leftYDeadband);
-        double xMagnitude = MathUtil.applyDeadband(driverController.getLeftY(), Constants.leftXDeadband);
+        double yMagnitude = MathUtil.applyDeadband(driverController.getLeftX(), Constants.leftYDeadband);
+        double xMagnitude = -MathUtil.applyDeadband(driverController.getLeftY(), Constants.leftXDeadband);
         double angularMagnitude = -MathUtil.applyDeadband(driverController.getRightX(), Constants.rightXDeadband);
         angularMagnitude = Math.copySign(angularMagnitude * angularMagnitude, angularMagnitude);
         double xVelocity = (FieldConstants.isBlueAlliance() ? -xMagnitude * maxVelocity : xMagnitude * maxVelocity)

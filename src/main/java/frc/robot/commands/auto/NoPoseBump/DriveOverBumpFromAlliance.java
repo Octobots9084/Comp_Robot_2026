@@ -25,16 +25,18 @@ public class DriveOverBumpFromAlliance extends Command {
         swerve = SwerveSubsystem.getInstance();
         onRamp = false;
         hasBeenOnRamp = false;
+        SmartDashboard.putBoolean("test 1", hasBeenOnRamp);
     }
     
     @Override
     public void execute() {
-        onRamp = swerve.onRamp(0, 0.1);
+        onRamp = swerve.onRamp(0, 0.3);
         move();
         if (onRamp && !hasBeenOnRamp) {
             hasBeenOnRamp = true;
         }
-    }
+        SmartDashboard.putBoolean("test 1", hasBeenOnRamp);
+    }// it is as expected. the is finished is returning early.
 
     @Override
     public boolean isFinished () {
@@ -50,10 +52,10 @@ public class DriveOverBumpFromAlliance extends Command {
 
     public void move () {
         if (Constants.allianceColor == Alliance.Blue) {
-            swerve.io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(3, 0, 0))
+            swerve.io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(.5, 0, 0))
                 .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
         } else {
-            swerve.io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(-3, 0, 0))
+            swerve.io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(-.5, 0, 0))
                 .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
         }
     }
