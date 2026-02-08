@@ -64,7 +64,7 @@ public final class Constants {
     public static int climbRotateFollowerID = 0;
     public static int climbDeployID = 0;
 
-     public static RobotTypes robotType = RobotTypes.BETA;
+     public static RobotTypes robotType = RobotTypes.ALPHA;
     //set to ALPHA later
     public static enum RobotTypes {
     // alpha

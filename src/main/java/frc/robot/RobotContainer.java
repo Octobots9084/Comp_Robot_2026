@@ -28,8 +28,8 @@ import frc.robot.subsystems.Drive.SwerveIOSystem;
 import frc.robot.subsystems.Drive.SwerveSubsystem;
 
 import frc.robot.Constants.RobotTypes;
+import frc.robot.subsystems.Drive.AlphaConstants;
 import frc.robot.subsystems.Drive.BetaConstants;
-import frc.robot.subsystems.Drive.MangoConstants;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -58,26 +58,26 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     //TODO change the buttons from driverleft and right to the xbox controller
-    if (Constants.robotType == RobotTypes.ALPHA) {
-            this.swerve = SwerveSubsystem.setInstance(MangoConstants.createDrivetrain(), ButtonConfig.driverController, Constants.maxAngularVelocity, Constants.maxVelocity);
-        } else {
+    if (Constants.robotType == RobotTypes.BETA) {
             this.swerve = SwerveSubsystem.setInstance(BetaConstants.createDrivetrain(), ButtonConfig.driverController, Constants.maxAngularVelocity, Constants.maxVelocity);
+        } else {
+            this.swerve = SwerveSubsystem.setInstance(AlphaConstants.createDrivetrain(), ButtonConfig.driverController, Constants.maxAngularVelocity, Constants.maxVelocity);
         }
     switch (Constants.currentMode) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
         // ModuleIOTalonFX is intended for modules with TalonFX drive, TalonFX turn, and
         // a CANcoder
-
-        shooter = new Shooter(
-            new FeederIOTalonFX(), 
-            new FlywheelIOTalonFX(), 
-            new TurretIOTalonFX(),
-            ButtonConfig.coDriverController);
-        intake = new Intake(new IntakeIOTalonFX());
-        climb = new Climb(new ClimbIOTalonFX());
-        superstructure = new Superstructure();
-        
+        if (Constants.robotType != RobotTypes.ALPHA){
+          shooter = new Shooter(
+              new FeederIOTalonFX(), 
+              new FlywheelIOTalonFX(), 
+              new TurretIOTalonFX(),
+              ButtonConfig.coDriverController);
+          intake = new Intake(new IntakeIOTalonFX());
+          climb = new Climb(new ClimbIOTalonFX());
+          superstructure = new Superstructure();
+      }
 
 
         // The ModuleIOTalonFXS implementation provides an example implementation for
@@ -110,14 +110,12 @@ public class RobotContainer {
       default:
         // Replayed robot, disable IO implementations
     }
-
         autoChooser = AutoBuilder.buildAutoChooser();
         //NAMED COMMANDS IN SWERVE
        SmartDashboard.putData("Auto", autoChooser);
         // VisionSubsystem.getInstance();
         ButtonConfig buttons = new ButtonConfig();
         buttons.initTeleop();
-        
     }
 
     public SwerveSubsystem getSwerveSubsystem () {

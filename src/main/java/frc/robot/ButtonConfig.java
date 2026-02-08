@@ -5,6 +5,7 @@ import java.lang.Thread.State;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Constants.RobotTypes;
 import frc.robot.commands.auto.runIntake;
 import frc.robot.commands.auto.ControllerInputs.Spit;
 import frc.robot.commands.auto.StateChange.*;
@@ -29,12 +30,12 @@ public class ButtonConfig {
             () -> Shooter.driverOverride = false
             ));
         //driverRight.button(1).onTrue(new InstantCommand(() -> SwerveSubsystem.getInstance().io.zeroGyro()));
-        driverController.a().onTrue(new SetStateClimb());
-        driverController.b().onTrue(new SetStateUnclimb());
-        
-       
+
         driverController.y().onTrue(new InstantCommand(() -> {SwerveSubsystem.getInstance().io.zeroGyro(); SmartDashboard.putBoolean("A button", true);})).onFalse(new InstantCommand(() -> SmartDashboard.putBoolean("A button", false)));
         
+        if (Constants.robotType != RobotTypes.ALPHA){
+        driverController.a().onTrue(new SetStateClimb());
+        driverController.b().onTrue(new SetStateUnclimb());
         driverController.leftBumper().whileTrue(new SetIntakeStateIntaking()).onFalse(new SetIntakeStateSafe());
         driverController.leftTrigger(0.5).whileTrue(new SetIntakeStateIntaking()).onFalse(new SetIntakeStateSafe());
         //driverController.rightTrigger(0.5).whileTrue();
@@ -44,7 +45,7 @@ public class ButtonConfig {
         coDriverController.leftBumper().onTrue(new SetStateSafe()); //yo twin, make ts cancel instead of safe state -Oliver (trust)
         coDriverController.rightTrigger().onTrue(new Spit())
             .onFalse(new InstantCommand(() -> {if (Superstructure.getInstance().currentState == States.MANUAL) {Shooter.driverOverride = false;}} ));
-        
+        }
         //add in manual mode for turret and hood
     }
 }
