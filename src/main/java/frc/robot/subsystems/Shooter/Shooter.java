@@ -21,9 +21,11 @@ import frc.robot.subsystems.Shooter.Feeder.FeederStates;
 import frc.robot.subsystems.Shooter.Flywheel.Flywheel;
 import frc.robot.subsystems.Shooter.Flywheel.FlywheelIO;
 import frc.robot.subsystems.Shooter.Flywheel.FlywheelIOInputsAutoLogged;
+import frc.robot.subsystems.Shooter.Flywheel.FlywheelStates;
 import frc.robot.subsystems.Shooter.Turret.Turret;
 import frc.robot.subsystems.Shooter.Turret.TurretIO;
 import frc.robot.subsystems.Shooter.Turret.TurretIOInputsAutoLogged;
+import frc.robot.subsystems.Shooter.Turret.TurretStates;
 import frc.robot.subsystems.Drive.SwerveSubsystem;
 
 public class Shooter extends SubsystemBase{
@@ -111,6 +113,8 @@ public class Shooter extends SubsystemBase{
                 }
             case SPIT:
                 feeder.setFeederVelocity(FeederStates.SPITTING);
+                flywheel.setFlywheelVelocity(FlywheelStates.SPIT);
+                turret.setTurretPosition(turret.spitTurrentHood);
                 break;
             default:
                 break;
