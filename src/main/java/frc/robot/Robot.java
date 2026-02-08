@@ -91,6 +91,7 @@ public class Robot extends LoggedRobot {
   /** This function is called periodically during all modes. */
   @Override
   public void robotPeriodic() {
+    DriverCommunications.pushToElastic();
     // Optional<Alliance> ally = DriverStation.getAlliance();
     //     if (ally.isPresent()) {
     //         if (ally.get() == Alliance.Red) {
@@ -119,6 +120,7 @@ public class Robot extends LoggedRobot {
   /** This function is called once when the robot is disabled. */
   @Override
   public void disabledInit() {
+    DriverCommunications.initDriverCommunitcations();
     Optional<Alliance> ally = DriverStation.getAlliance();
         if (ally.isPresent()) {
             if (ally.get() == Alliance.Red) {

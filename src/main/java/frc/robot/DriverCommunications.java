@@ -1,5 +1,8 @@
 package frc.robot;
 
+import com.fasterxml.jackson.databind.ser.std.StdKeySerializers.Default;
+
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -9,45 +12,60 @@ import frc.robot.subsystems.States;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Vision.ShooterAngle;
+import frc.robot.subsystems.Vision.ShooterAngleCalculator;
 
 public class DriverCommunications{
+
+    public static void initDriverCommunitcations () {
+        Double[] values = {0.0, 0.0, 0.0, 0.0, 0.0};
+        SmartDashboard.putNumberArray("ShooterAngleToHub", values);
+    }
     
    
-    static boolean CurrentHubState = Shooter.getInstance().isHubActive();
+    // static boolean CurrentHubState = Shooter.getInstance().isHubActive();// shoooter null in sim; handle it
 
     public static void setShooterAngleToHubElastic (double vx, double vy, double pfx, double pfy, double s){
-        Double[] values = {vx, vy, pfx, pfy, s};
-        SmartDashboard.getNumberArray("ShooterAngleToHub", values);
+        // SmartDashboard.putData("test", SendableChooser<Double>);
+        ShooterAngleCalculator calc = new ShooterAngleCalculator(); //(calc is short for calculator)
+        Double[] defaultValues = {0.0, 0.0, 0.0, 0.0, 0.0};
+        Double[] values = SmartDashboard.getNumberArray("ShooterAngleToHub", defaultValues);
+        ShooterAngle shooterAngle = calc.getShooterAngleToHub(values[0], values[1], values[2], values[3], values[4]);
+        if (shooterAngle != null) {
+            SmartDashboard.putNumberArray("ShooterAngleToHubOutput", new Double[]{shooterAngle.turretRotation, shooterAngle.hoodRotation});
+        } else {
+            SmartDashboard.putNumberArray("ShooterAngleToHubOutput", new Double[]{-1.0, -1.0});
+        }//probably theta, prably phi
     }
        public static void pushToElastic(){
             
-                  double PhaseTime = 0;
-                  Timer PhaseCountdown = new Timer();
-                  //If the hub state changes, reset the phase shift timer and change currentHUbSTate
-                   if(!Shooter.getInstance().isHubActive() == CurrentHubState){ 
-                    CurrentHubState = Shooter.getInstance().isHubActive();
-                    PhaseCountdown.restart();
-                }
+            //       double PhaseTime = 0;
+            //       Timer PhaseCountdown = new Timer();
+            //       //If the hub state changes, reset the phase shift timer and change currentHUbSTate
+            //        if(!Shooter.getInstance().isHubActive() == CurrentHubState){ 
+            //         CurrentHubState = Shooter.getInstance().isHubActive();
+            //         PhaseCountdown.restart();
+            //     }
 
-                //Detect when we're in a new based on game timer and set the appropriate time limit
-                if(Constants.timer.get() <= 10){
-                    PhaseTime = 10;
-                }else if((Constants.timer.get() > 10)||(Constants.timer.get() <= 115)){
-                    PhaseTime = 25;
+            //     //Detect when we're in a new based on game timer and set the appropriate time limit
+            //     if(Constants.timer.get() <= 10){
+            //         PhaseTime = 10;
+            //     }else if((Constants.timer.get() > 10)||(Constants.timer.get() <= 115)){
+            //         PhaseTime = 25;
 
-                }else if((Constants.timer.get() >= 116)){
-                    PhaseTime = 30;
+            //     }else if((Constants.timer.get() >= 116)){
+            //         PhaseTime = 30;
 
-                }
+            //     }
 
-                //set PhaseClock as the time before phase shift by subtracting timer from max shift time
-                double PhaseClock = (PhaseTime - PhaseCountdown.get());
+            //     //set PhaseClock as the time before phase shift by subtracting timer from max shift time
+            //     double PhaseClock = (PhaseTime - PhaseCountdown.get());
          
-              SmartDashboard.putNumber("Phase Shift Countdown", PhaseClock);
-              SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime());
-              SmartDashboard.putBoolean("Is Hub Active?", Shooter.getInstance().isHubActive());
-              SmartDashboard.putBoolean("In Manual?", Superstructure.getInstance().getCurrentState() == States.MANUAL);
-              SmartDashboard.putBoolean("Can Shoot", Shooter.getInstance().Shootable());
+            //   SmartDashboard.putNumber("Phase Shift Countdown", PhaseClock);
+            //   SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime());
+            //   SmartDashboard.putBoolean("Is Hub Active?", Shooter.getInstance().isHubActive());
+            //   SmartDashboard.putBoolean("In Manual?", Superstructure.getInstance().getCurrentState() == States.MANUAL);
+            //   SmartDashboard.putBoolean("Can Shoot", Shooter.getInstance().Shootable());
+            //fix when sim case for shooter
                 setShooterAngleToHubElastic(0, 0, 0, 0, 0);
     }
 }

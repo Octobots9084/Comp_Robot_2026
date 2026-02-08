@@ -14,7 +14,7 @@ import static edu.wpi.first.units.Units.Revolutions;
 import com.ctre.phoenix6.controls.Follower;
 
 public class ClimbIOTalonFX implements ClimbIO{
-    public DigitalInput zeroingSwitch = new DigitalInput(8);//todo hehe Hello Oliver
+    // public DigitalInput zeroingSwitch = new DigitalInput(8);//todo hehe Hello Oliver
     //controlls the climb motor rotate (follower is influenced by extreiror varible)
     public TalonFX climbRotateMotorControlled;
     public TalonFX climbRotateMotorFollower;
@@ -83,6 +83,7 @@ public class ClimbIOTalonFX implements ClimbIO{
         this.climbRotateMotorFollower.setVoltage(-voltage);
     }
     public boolean isZeroingSwitchPressed(){
-        return zeroingSwitch.get();
+        // return zeroingSwitch.get();
+        return false;
     }
 }

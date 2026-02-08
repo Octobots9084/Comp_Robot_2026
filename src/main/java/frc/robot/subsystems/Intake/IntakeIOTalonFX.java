@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 
 public class IntakeIOTalonFX implements IntakeIO{
-    public DigitalInput zeroingSwitch = new DigitalInput(9);
+   //  public DigitalInput zeroingSwitch = new DigitalInput(9);
     public IntakeConfigurator config;
     public TalonFX pivot;
     public TalonFX roller;
@@ -56,6 +56,8 @@ public class IntakeIOTalonFX implements IntakeIO{
         this.pivot.setVoltage(voltage);
     }
    public boolean isZeroingSwitchPressed(){//GAS_D
-         return zeroingSwitch.get();
+         // return zeroingSwitch.get();
+        return false;
+
    }
 }
