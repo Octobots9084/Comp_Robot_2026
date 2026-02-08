@@ -44,8 +44,8 @@ public final class Constants {
     public static int spindexerID = 18;
     public static int verticalFeederID = 15;
 
-    public double maximumHoodPosition = 0.1157;
-    public double maximumTurretPosition = 0;
+    public static double maximumHoodPosition = 0.1157;
+    public static double maximumTurretPosition = 0; //TODO set this to an actual value so sinjin doesnt cry
 
     public static double turretGearRatio = (3/1)*(256/222);
     public static double hoodGearRatio = (23/20)*(18/0.9);
