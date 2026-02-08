@@ -1,8 +1,11 @@
 package frc.robot.subsystems.Shooter;
 
+import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+
+import frc.robot.Constants;
 
 public class ShooterConfigurator {
     public TalonFXConfiguration flyWheelRightConfig;
@@ -13,8 +16,10 @@ public class ShooterConfigurator {
     public TalonFXConfiguration topRollerConfig;
     public ShooterConfigurator(){
         flyWheelRightConfig = new TalonFXConfiguration();
-        turretConfig = new TalonFXConfiguration();
-        hoodConfig = new TalonFXConfiguration();
+        turretConfig = new TalonFXConfiguration().withFeedback(new FeedbackConfigs().
+                        withSensorToMechanismRatio(Constants.turretGearRatio));
+        hoodConfig = new TalonFXConfiguration().withFeedback(new FeedbackConfigs().
+                        withSensorToMechanismRatio(Constants.hoodGearRatio));
         spindexerConfig = new TalonFXConfiguration();
         verticalFeederConfig = new TalonFXConfiguration();
         topRollerConfig = new TalonFXConfiguration();
@@ -75,7 +80,7 @@ public class ShooterConfigurator {
         turretConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 
         // set break mode and inversion
-        turretConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        turretConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
         turretConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
         // create PID gains
         turretConfig.Slot0.kP = 0.0;

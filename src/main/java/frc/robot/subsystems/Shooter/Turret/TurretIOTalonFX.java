@@ -15,7 +15,7 @@ public class TurretIOTalonFX implements TurretIO{
     public double zeroTurret;
     private MotionMagicVoltage turretRequest;
     private MotionMagicVoltage hoodRequest;
-    public DigitalInput turretLimitSwitch = new DigitalInput(0);
+    // public DigitalInput turretLimitSwitch = new DigitalInput(0);
     public double deadZoneTolerance = 0.1;
     public double wrapPoint = 0;
     
@@ -34,16 +34,24 @@ public class TurretIOTalonFX implements TurretIO{
     public void updateInputs(TurretIOInputs inputs){
         inputs.hoodMotorTemp = hoodMotor.getDeviceTemp().getValueAsDouble();
         inputs.turretMotorTemp = turretMotor.getDeviceTemp().getValueAsDouble();
+        inputs.hoodPosition = this.getHoodPosition();
+        inputs.turretPosition = this.getTurretPosition();
+        inputs.hoodRequest = hoodRequest.Position;
+        inputs.turretRequest = turretRequest.Position;
     }
 
     @Override
     public void setTurretPosition(double turretAngle){
+        turretAngle = Math.max(turretAngle, 0);
+        turretAngle = Math.min(turretAngle, Constants.maximumTurretPosition);
         turretRequest.Position = turretAngle;
         turretMotor.setControl(turretRequest);
     }
 
     @Override
     public void setHoodPosition(double hoodAngle){
+        hoodAngle = Math.max(hoodAngle, 0);
+        hoodAngle = Math.min(hoodAngle, Constants.maximumHoodPosition);
         hoodRequest.Position = hoodAngle;
         hoodMotor.setControl(hoodRequest);
     }
@@ -77,18 +85,14 @@ public class TurretIOTalonFX implements TurretIO{
         startTime = System.currentTimeMillis();
     }
 
-    public boolean turretZeroed(){
-        if(turretLimitSwitch.get()){
-            turretMotor.setVoltage(0);
-            zeroTurret = turretMotor.getPosition().getValueAsDouble();            
-            return true;
-        }else{
-            turretMotor.setVoltage(1);//TODO set this to real value Santi!
-            return false;
-        }
-    }
-
-    public boolean canMoveTurret(double target){
-        return !MathUtil.isNear(wrapPoint, target, deadZoneTolerance);
-    }
+    // public boolean turretZeroed(){
+    //     if(turretLimitSwitch.get()){
+    //         turretMotor.setVoltage(0);
+    //         zeroTurret = turretMotor.getPosition().getValueAsDouble();            
+    //         return true;
+    //     }else{
+    //         turretMotor.setVoltage(1);//TODO set this to real value Santi!
+    //         return false;
+    //     }
+    // }
 }

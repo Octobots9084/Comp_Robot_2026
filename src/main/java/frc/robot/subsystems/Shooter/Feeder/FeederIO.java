@@ -12,7 +12,7 @@ public interface FeederIO{
     }
   public default void updateInputs(FeederIOInputs inputs){}
 
-  public default void setFeederVelocity(double mulitFeederRPS, double singleFeederRPS){}
+  public default void setFeederVelocity(FeederStates state){}
 
   public default double getSpindexerVelocity(){
     return 0;
