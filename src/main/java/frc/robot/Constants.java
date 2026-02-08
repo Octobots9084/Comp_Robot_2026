@@ -44,13 +44,16 @@ public final class Constants {
     public static int spindexerID = 18;
     public static int verticalFeederID = 15;
 
-    public static double turretGearRatio = (1/3)*(22/256);
-    public static double hoodGearRatio = (20/23)*(0.9/18);
+    public double maximumHoodPosition = 0.1157;
+    public double maximumTurretPosition = 0;
 
-    public static double rotateGearRatio = (1/125)*(1/3);//TODO fix this gear ratio
+    public static double turretGearRatio = (3/1)*(256/222);
+    public static double hoodGearRatio = (23/20)*(18/0.9);
+
+    public static double rotateGearRatio = 125;//TODO fix this gear ratio
     public static double deployGearRatio = 1;
 
-    public static double intakePivotGearRatio = (1/5) *(29/34);
+    public static double intakePivotGearRatio = (5) *(34/29);
    
     public static int lemonDetector = 0;
 

@@ -27,8 +27,8 @@ import frc.robot.subsystems.Shooter.Turret.TurretIOInputsAutoLogged;
 import frc.robot.subsystems.Drive.SwerveSubsystem;
 
 public class Shooter extends SubsystemBase{
-    public ShooterStates currentShooterState;
-    public ShooterStates wantedShooterState;
+    public ShooterStates currentShooterState = ShooterStates.SAFE;
+    public ShooterStates wantedShooterState = ShooterStates.SAFE;
     private static Shooter instance = null;
     private final FeederIOInputsAutoLogged feederInputs = new FeederIOInputsAutoLogged();
     private final FlywheelIOInputsAutoLogged flywheelInputs = new FlywheelIOInputsAutoLogged();
@@ -47,14 +47,13 @@ public class Shooter extends SubsystemBase{
     private double lemonDetectionTimestamp;
     
     public double wantedHoodPosition = 0;
-    public double maximumHoodPosition = 0;
     public double wantedTurretPosition = 0;
-    public double maximumTurretPosition = 0;
 
     public Shooter(FeederIO fIO,FlywheelIO fwIO, TurretIO tIO){
         this.fIO = fIO;
         this.fwIO = fwIO;
         this.tIO = tIO;
+        instance = this;
     }
 
     public static Shooter setInstance(FeederIO fIO,FlywheelIO fwIO, TurretIO tIO){
@@ -152,7 +151,7 @@ public class Shooter extends SubsystemBase{
     }
 
     public boolean hoodProtection(){
-        if(wantedHoodPosition<=0 || wantedHoodPosition >= maximumHoodPosition){
+        if(wantedHoodPosition<=0 || wantedHoodPosition >= Constants.maximumHoodPosition){
             return false;
         }else{
             return true;
@@ -160,7 +159,7 @@ public class Shooter extends SubsystemBase{
     }
 
     public boolean turretProtection(){
-        if(wantedTurretPosition <= 0 || wantedTurretPosition >= maximumTurretPosition){
+        if(wantedTurretPosition <= 0 || wantedTurretPosition >= Constants.maximumTurretPosition){
             return false;
         }else{
             return true;

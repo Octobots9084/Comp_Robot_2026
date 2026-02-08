@@ -80,7 +80,7 @@ public class ShooterConfigurator {
         turretConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 
         // set break mode and inversion
-        turretConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        turretConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
         turretConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
         // create PID gains
         turretConfig.Slot0.kP = 0.0;
