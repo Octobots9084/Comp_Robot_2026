@@ -2,13 +2,23 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.auto.StateChange.SetStateShooter;
 import frc.robot.subsystems.States;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Shooter.Shooter;
+import frc.robot.subsystems.Vision.ShooterAngle;
 
 public class DriverCommunications{
-   static boolean CurrentHubState = Shooter.getInstance().isHubActive();
+    
+   
+    static boolean CurrentHubState = Shooter.getInstance().isHubActive();
+
+    public static void setShooterAngleToHubElastic (double vx, double vy, double pfx, double pfy, double s){
+        Double[] values = {vx, vy, pfx, pfy, s};
+        SmartDashboard.getNumberArray("ShooterAngleToHub", values);
+    }
        public static void pushToElastic(){
             
                   double PhaseTime = 0;
@@ -38,6 +48,6 @@ public class DriverCommunications{
               SmartDashboard.putBoolean("Is Hub Active?", Shooter.getInstance().isHubActive());
               SmartDashboard.putBoolean("In Manual?", Superstructure.getInstance().getCurrentState() == States.MANUAL);
               SmartDashboard.putBoolean("Can Shoot", Shooter.getInstance().Shootable());
-            
+                setShooterAngleToHubElastic(0, 0, 0, 0, 0);
     }
 }
