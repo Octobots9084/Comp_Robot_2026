@@ -19,7 +19,7 @@ public class Feeder extends SubsystemBase{
     }
 
     public void setFeederVelocity(FeederStates currentState){
-        io.setFeederVelocity(currentState.multiFeederRPS,currentState.singleFeederRPS);
+        io.setFeederVelocity(currentState);
     }
 
     public double[] getFeederVelocity(){

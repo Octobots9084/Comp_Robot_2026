@@ -37,13 +37,12 @@ public final class Constants {
     public static final double maxVelocity = 2;//TODO
 
 
-     public static int flyWheelRightID = 0;
-    public static int flyWheelLeftID = 0;
-    public static int hoodID = 0;
-    public static int turretID = 0;
-    public static int spindexerID = 0;
-    public static int verticalFeederID = 0;
-    public static int topRollerID = 0;
+     public static int flyWheelRightID = 21;
+    public static int flyWheelLeftID = 16;
+    public static int hoodID = 13;
+    public static int turretID = 17;
+    public static int spindexerID = 18;
+    public static int verticalFeederID = 15;
 
     public static double turretGearRatio = (1/3)*(22/256);
     public static double hoodGearRatio = (20/23)*(0.9/18);
@@ -55,10 +54,10 @@ public final class Constants {
    
     public static int lemonDetector = 0;
 
-    public static int intakePivotID = 0;
+    public static int intakePivotID = 20;
     public static int intakeRollerID = 19;
 
-    public static int climbRotateControlledID = 0;
+    public static int climbRotateControlledID = 14;
     public static int climbRotateFollowerID = 0;
     public static int climbDeployID = 0;
 

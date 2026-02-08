@@ -83,7 +83,7 @@ public class TurretIOTalonFX implements TurretIO{
             zeroTurret = turretMotor.getPosition().getValueAsDouble();            
             return true;
         }else{
-            turretMotor.setVoltage(1);//TODO set this to real value Santi!
+            turretMotor.setVoltage(1);//TODO set this to real value
             return false;
         }
     }
