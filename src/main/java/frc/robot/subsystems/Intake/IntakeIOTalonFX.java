@@ -5,10 +5,12 @@ import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 
 public class IntakeIOTalonFX implements IntakeIO{
+    public DigitalInput zeroingSwitch = new DigitalInput(9);
     public IntakeConfigurator config;
     public TalonFX pivot;
     public TalonFX roller;
@@ -49,5 +51,11 @@ public class IntakeIOTalonFX implements IntakeIO{
    @Override
    public double getIntakePosition() {
         return pivot.getPosition().getValueAsDouble(); 
+   }
+   public void setRotateVoltage(double voltage){
+        this.pivot.setVoltage(voltage);
+    }
+   public boolean isZeroingSwitchPressed(){//GAS_D
+         return zeroingSwitch.get();
    }
 }

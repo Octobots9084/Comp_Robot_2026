@@ -6,4 +6,5 @@ public enum States {
     CLIMB,
     UNCLIMB,
     SHOOTER,
+    ZERO,
 }

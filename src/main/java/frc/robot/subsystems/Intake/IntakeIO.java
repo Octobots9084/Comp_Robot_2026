@@ -23,6 +23,8 @@ public default double getRollerRPS(){
 public default double getIntakePosition(){
     return 0;
 }
-
+public default boolean isZeroingSwitchPressed(){//GAS_D
+         return false;
+   }
 }
 
