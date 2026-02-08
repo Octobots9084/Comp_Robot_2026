@@ -11,6 +11,7 @@ public class Intake extends SubsystemBase{
     public IntakeStates wantedState = IntakeStates.SAFE;
     public IntakeIO io;
     public static Intake instance;
+    public IntakeIOTalonFX intakeFX = new IntakeIOTalonFX();
     public IntakeIOInputsAutoLogged inputs = new IntakeIOInputsAutoLogged();
 
     public Intake(IntakeIO io){
@@ -118,6 +119,19 @@ public class Intake extends SubsystemBase{
     public IntakeStates getWantedState() {
         return this.wantedState;
     }
+
+    public boolean zeroIntake(){
+        boolean pressed = io.isZeroingSwitchPressed();
+        if(pressed){
+            intakeFX.setRotateVoltage(3);
+        } else{
+            intakeFX.setRotateVoltage(-3);
+        }
+        return pressed;
+
+
+    }
+
 
 }
     
