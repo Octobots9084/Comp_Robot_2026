@@ -89,10 +89,8 @@ public class Shooter extends SubsystemBase{
                 break;
             case MANUAL:
             //joystick controlls turret
-            if (tIO.getTurretPosition() < Constants.maximumTurretPosition) {
-            tIO.setTurretPosition(getTurretPosFromJoystick()); }
-            if (tIO.getHoodPosition() < Constants.maximumHoodPosition) {
-            tIO.setHoodPosition(getHoodPosFromJoystick());}
+            tIO.setTurretPosition(getTurretPosFromJoystick()); 
+            tIO.setHoodPosition(getHoodPosFromJoystick());
                 break;
             case FERRY:
                 if(ferry()){
