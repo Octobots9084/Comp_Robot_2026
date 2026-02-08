@@ -8,7 +8,12 @@ import frc.robot.subsystems.Shooter.ShooterStates;
 
 public class Spit extends InstantCommand{
     public Spit () {
-        if (Superstructure.getInstance().currentState == States.MANUAL) {Shooter.driverOverride = true;}
-            else {Shooter.getInstance().wantedShooterState = ShooterStates.SPIT;}
+        if (Superstructure.getInstance().currentState == States.MANUAL) {
+            Shooter.driverOverride = true;
+        }else if(Superstructure.getInstance().currentState != States.MANUAL){
+            Shooter.driverOverride = false;
+        }else{
+            Shooter.getInstance().wantedShooterState = ShooterStates.SPIT;
+        }
     }
 }

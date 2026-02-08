@@ -44,5 +44,7 @@ public class ButtonConfig {
         coDriverController.leftBumper().onTrue(new SetStateSafe()); //yo twin, make ts cancel instead of safe state -Oliver (trust)
         coDriverController.rightTrigger().onTrue(new Spit())
             .onFalse(new InstantCommand(() -> {if (Superstructure.getInstance().currentState == States.MANUAL) {Shooter.driverOverride = false;}} ));
+        
+        //add in manual mode for turret and hood
     }
 }

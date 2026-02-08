@@ -50,7 +50,7 @@ public class RobotContainer {
   private SwerveSubsystem swerve;
   private Superstructure superstructure;
   // Controller
-  private final CommandXboxController controller = new CommandXboxController(0);
+  private CommandXboxController controller;
 
   // Dashboard inputs
   private final SendableChooser<Command> autoChooser;
@@ -69,13 +69,14 @@ public class RobotContainer {
         // ModuleIOTalonFX is intended for modules with TalonFX drive, TalonFX turn, and
         // a CANcoder
 
-        // shooter = new Shooter(
-        //     new FeederIOTalonFX(), 
-        //     new FlywheelIOTalonFX(), 
-        //     new TurretIOTalonFX());
+        shooter = new Shooter(
+            new FeederIOTalonFX(), 
+            new FlywheelIOTalonFX(), 
+            new TurretIOTalonFX(),
+            ButtonConfig.coDriverController);
         intake = new Intake(new IntakeIOTalonFX());
-        // climb = new Climb(new ClimbIOTalonFX());
-        // superstructure = new Superstructure();
+        climb = new Climb(new ClimbIOTalonFX());
+        superstructure = new Superstructure();
         
 
 
@@ -100,7 +101,7 @@ public class RobotContainer {
 
       case SIM:
 
-        shooter = new Shooter(new FeederIOTalonFX(), new FlywheelIOTalonFX(), new TurretIOTalonFX());
+        shooter = new Shooter(new FeederIOTalonFX(), new FlywheelIOTalonFX(), new TurretIOTalonFX(), ButtonConfig.coDriverController);
         intake = new Intake(new IntakeIOTalonFX());
         climb = new Climb(new ClimbIOTalonFX());
         superstructure = new Superstructure();

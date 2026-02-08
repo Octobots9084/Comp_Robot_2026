@@ -37,28 +37,30 @@ public final class Constants {
     public static final double maxVelocity = 2;//TODO
 
 
-     public static int flyWheelRightID = 0;
-    public static int flyWheelLeftID = 0;
-    public static int hoodID = 0;
-    public static int turretID = 0;
-    public static int spindexerID = 0;
-    public static int verticalFeederID = 0;
-    public static int topRollerID = 0;
+     public static int flyWheelRightID = 21;
+    public static int flyWheelLeftID = 16;
+    public static int hoodID = 13;
+    public static int turretID = 17;
+    public static int spindexerID = 18;
+    public static int verticalFeederID = 15;
 
-    public static double turretGearRatio = (1/3)*(22/256);
-    public static double hoodGearRatio = (20/23)*(0.9/18);
+    public static double maximumHoodPosition = 0.1157;
+    public static double maximumTurretPosition = 0.8; //TODO set this to an actual value so sinjin doesnt cry
 
-    public static double rotateGearRatio = (1/125)*(1/3);//TODO fix this gear ratio
+    public static double turretGearRatio = (3/1)*(256/222);
+    public static double hoodGearRatio = (23/20)*(18/0.9);
+
+    public static double rotateGearRatio = 125;//TODO fix this gear ratio
     public static double deployGearRatio = 1;
 
-    public static double intakePivotGearRatio = (1/5) *(29/34);
+    public static double intakePivotGearRatio = (5) *(34/29);
    
     public static int lemonDetector = 0;
 
-    public static int intakePivotID = 0;
+    public static int intakePivotID = 20;
     public static int intakeRollerID = 19;
 
-    public static int climbRotateControlledID = 0;
+    public static int climbRotateControlledID = 14;
     public static int climbRotateFollowerID = 0;
     public static int climbDeployID = 0;
 
