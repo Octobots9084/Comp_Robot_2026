@@ -47,7 +47,7 @@ public class DriveOverBumpFromAlliance extends Command {
         if (tilt > 1 && !hasBeenTilted) {
             hasBeenTilted = true;
         }
-        SmartDashboard.putBoolean("has been tilted", hasBeenTilted);
+        SmartDashboard.putBoolean("has been tilted", hasBeenTilted);//log th4 new tilt tis so close
 
 
     }// it is as expected. the is finished is returning early.
