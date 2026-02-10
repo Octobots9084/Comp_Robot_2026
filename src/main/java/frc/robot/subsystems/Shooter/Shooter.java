@@ -88,6 +88,7 @@ public class Shooter extends SubsystemBase{
         switch(currentShooterState){
             case SAFE:
                 //stop the flywheel
+                Turret.getInstance().setTurretPosition(0);
                 break;
             case MANUAL:
             //joystick controlls turret
