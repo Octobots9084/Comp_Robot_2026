@@ -32,12 +32,12 @@ public class TurretIOTalonFX implements TurretIO{
 
     @Override
     public void updateInputs(TurretIOInputs inputs){
-        inputs.hoodMotorTemp = hoodMotor.getDeviceTemp().getValueAsDouble();
-        inputs.turretMotorTemp = turretMotor.getDeviceTemp().getValueAsDouble();
-        inputs.hoodPosition = this.getHoodPosition();
-        inputs.turretPosition = this.getTurretPosition();
-        inputs.hoodRequest = hoodRequest.Position;
-        inputs.turretRequest = turretRequest.Position;
+        // inputs.hoodMotorTemp = hoodMotor.getDeviceTemp().getValueAsDouble();
+        // inputs.turretMotorTemp = turretMotor.getDeviceTemp().getValueAsDouble();
+        // inputs.hoodPosition = this.getHoodPosition();
+        // inputs.turretPosition = this.getTurretPosition();
+        // inputs.hoodRequest = hoodRequest.Position;
+        // inputs.turretRequest = turretRequest.Position;
     }
 
     @Override

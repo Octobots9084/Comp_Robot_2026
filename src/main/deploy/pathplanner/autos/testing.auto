@@ -11,6 +11,12 @@
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 67.0
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "M Ramp 1 BR to Neutral 2"
