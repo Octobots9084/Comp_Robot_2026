@@ -12,7 +12,8 @@ import frc.robot.subsystems.Shooter.ShooterConfigurator;
 public class TurretIOTalonFX implements TurretIO{
     public TalonFX hoodMotor;
     public TalonFX turretMotor;       
-    public double zeroTurret;
+    public double zeroTurretMin;
+    public double zeroTurretMax;
     private MotionMagicVoltage turretRequest;
     private MotionMagicVoltage hoodRequest;
     // public DigitalInput turretLimitSwitch = new DigitalInput(0);
@@ -85,14 +86,25 @@ public class TurretIOTalonFX implements TurretIO{
         startTime = System.currentTimeMillis();
     }
 
-    // public boolean turretZeroed(){
-    //     if(turretLimitSwitch.get()){
-    //         turretMotor.setVoltage(0);
-    //         zeroTurret = turretMotor.getPosition().getValueAsDouble();            
-    //         return true;
-    //     }else{
-    //         turretMotor.setVoltage(1);//TODO set this to real value Santi!
-    //         return false;
-    //     }
-    // }
+    public boolean turretMinZeroed(){
+        if(turretLimitSwitch.get()){
+            turretMotor.setVoltage(0);
+            zeroTurretMin = turretMotor.getPosition().getValueAsDouble();            
+            return true;
+        }else{
+            turretMotor.setVoltage(1);//TODO set this to real value Santi!
+            return false;
+        }
+    }
+
+    public boolean turretMaxZeroed(){
+        if(turretLimitSwitch.get()){
+            turretMotor.setVoltage(0);
+            zeroTurretMax = turretMotor.getPosition().getValueAsDouble();            
+            return true;
+        }else{
+            turretMotor.setVoltage(-1);//TODO set this to real value Santi!
+            return false;
+        }
+    }
 }
