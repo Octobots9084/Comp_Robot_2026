@@ -1,5 +1,5 @@
 
-package frc.robot.subsystems.Drive;
+package frc.robot.subsystems.drive;
 
 import org.littletonrobotics.junction.AutoLog;
 
@@ -16,7 +16,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Current;
-import frc.robot.subsystems.Drive.BetaConstants.TunerSwerveDrivetrain;
+import frc.robot.subsystems.drive.BetaConstants.TunerSwerveDrivetrain;
 public interface SwerveIO {
     @AutoLog
     class SwerveIOInputs {

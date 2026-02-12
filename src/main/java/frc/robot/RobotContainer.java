@@ -10,10 +10,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.subsystems.Intake.Intake;
 import frc.robot.subsystems.Intake.IntakeIOTalonFX;
+import frc.robot.subsystems.States;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Climb.Climb;
 import frc.robot.subsystems.Climb.ClimbIOTalonFX;
@@ -23,13 +25,13 @@ import frc.robot.subsystems.Shooter.Feeder.FeederIOTalonFX;
 import frc.robot.subsystems.Shooter.Flywheel.Flywheel;
 import frc.robot.subsystems.Shooter.Flywheel.FlywheelIOTalonFX;
 import frc.robot.subsystems.Shooter.Turret.TurretIOTalonFX;
-import frc.robot.subsystems.Drive.SwerveIO;
-import frc.robot.subsystems.Drive.SwerveIOSystem;
-import frc.robot.subsystems.Drive.SwerveSubsystem;
+import frc.robot.subsystems.drive.SwerveIO;
+import frc.robot.subsystems.drive.SwerveIOSystem;
+import frc.robot.subsystems.drive.SwerveSubsystem;
 
 import frc.robot.Constants.RobotTypes;
-import frc.robot.subsystems.Drive.AlphaConstants;
-import frc.robot.subsystems.Drive.BetaConstants;
+import frc.robot.subsystems.drive.AlphaConstants;
+import frc.robot.subsystems.drive.BetaConstants;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -50,7 +52,7 @@ public class RobotContainer {
   private SwerveSubsystem swerve;
   private Superstructure superstructure;
   // Controller
-  private CommandXboxController controller;
+  private CommandXboxController controller = new CommandXboxController(0);
 
   // Dashboard inputs
   private final SendableChooser<Command> autoChooser;
@@ -77,7 +79,7 @@ public class RobotContainer {
           intake = new Intake(new IntakeIOTalonFX());
           climb = new Climb(new ClimbIOTalonFX());
           superstructure = new Superstructure();
-          superstructure.setInstance(new Superstructure());
+          // superstructure.setInstance(new Superstructure());
       }
 
 

@@ -30,7 +30,7 @@ import frc.robot.subsystems.Shooter.Turret.Turret;
 import frc.robot.subsystems.Shooter.Turret.TurretIO;
 import frc.robot.subsystems.Shooter.Turret.TurretIOInputsAutoLogged;
 import frc.robot.subsystems.Shooter.Turret.TurretStates;
-import frc.robot.subsystems.Drive.SwerveSubsystem;
+import frc.robot.subsystems.drive.SwerveSubsystem;
 
 public class Shooter extends SubsystemBase{
     ShooterStates currentShooterState;
