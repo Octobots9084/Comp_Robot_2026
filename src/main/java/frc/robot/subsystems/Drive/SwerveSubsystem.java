@@ -105,12 +105,14 @@ public class SwerveSubsystem extends SubsystemBase{
       NamedCommands.registerCommand("DriveOverBumpToAlliance",
                   new DriveOverBumpToAlliance());
                   //////////////////////////
-      
       NamedCommands.registerCommand("DriveBack",
                   new DriveBack().withTimeout(3));
         SmartDashboard.putBoolean("FinishedDriveForwardUntilLevel", false);
 
         SmartDashboard.putNumber("tilt", Math.acos(this.io.getRotation3d().toMatrix().get(2, 2)) - 0.015);
+        SmartDashboard.putBoolean("hasBeenTilted", false);
+        SmartDashboard.putBoolean("done w/ auto", false);
+        SmartDashboard.putBoolean("precon", false);
 
     }
 

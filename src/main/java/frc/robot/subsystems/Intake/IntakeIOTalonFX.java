@@ -56,7 +56,6 @@ public class IntakeIOTalonFX implements IntakeIO{
         this.pivot.setVoltage(voltage);
     }
    public boolean isZeroingSwitchPressed(){//GAS_D
-     //     return zeroingSwitch.get();
-     return true;
+         return true;//zeroingSwitch.get();
    }
 }

@@ -83,7 +83,6 @@ public class ClimbIOTalonFX implements ClimbIO{
         this.climbRotateMotorFollower.setVoltage(-voltage);
     }
     public boolean isZeroingSwitchPressed(){
-        // return zeroingSwitch.get();
-        return true;
+        return true;//zeroingSwitch.get();
     }
 }
