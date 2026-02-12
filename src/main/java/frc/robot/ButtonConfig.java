@@ -24,10 +24,15 @@ public class ButtonConfig {
     public static CommandXboxController coDriverController = new CommandXboxController(1);
     public void initTeleop(){
     SmartDashboard.putBoolean("A button", false);
+        // driverController.rightTrigger(0.5).onTrue(new InstantCommand(
+        //     () -> Shooter.driverOverride = true))
+        //     .onFalse(new InstantCommand(
+        //     () -> Shooter.driverOverride = false
+        //     ));
         driverController.rightTrigger(0.5).onTrue(new InstantCommand(
-            () -> Shooter.driverOverride = true))
+            () -> Superstructure.getInstance().setWantedState(States.SHOOTER)))
             .onFalse(new InstantCommand(
-            () -> Shooter.driverOverride = false
+            () -> Superstructure.getInstance().setWantedState(States.SAFE)
             ));
         //driverRight.button(1).onTrue(new InstantCommand(() -> SwerveSubsystem.getInstance().io.zeroGyro()));
 

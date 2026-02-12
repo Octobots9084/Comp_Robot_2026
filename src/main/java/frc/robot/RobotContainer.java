@@ -77,6 +77,7 @@ public class RobotContainer {
           intake = new Intake(new IntakeIOTalonFX());
           climb = new Climb(new ClimbIOTalonFX());
           superstructure = new Superstructure();
+          superstructure.setInstance(new Superstructure());
       }
 
 

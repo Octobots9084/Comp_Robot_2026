@@ -58,6 +58,7 @@ public class Shooter extends SubsystemBase{
         this.fwIO = fwIO;
         this.tIO = tIO;
         this.coDriverController = coDriverController;
+        instance = this;
     }
 
     public static Shooter setInstance(FeederIO fIO,FlywheelIO fwIO, TurretIO tIO, CommandXboxController coDriverController){
@@ -123,7 +124,7 @@ public class Shooter extends SubsystemBase{
             case SPIT:
                 feeder.setFeederVelocity(FeederStates.SPITTING);
                 flywheel.setFlywheelVelocity(FlywheelStates.SPIT);
-                turret.setTurretPosition(turret.spitTurrentHood);
+                // turret.setTurretPosition(turret.spitTurrentHood);
                 break;
             case ZERO:
                 break;
