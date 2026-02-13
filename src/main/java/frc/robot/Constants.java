@@ -56,7 +56,6 @@ public final class Constants {
     public static double intakePivotGearRatio = (5) *(34/29);
    
     public static int lemonDetector = 0;
-
     public static int intakePivotID = 20;
     public static int intakeRollerID = 19;
 
@@ -64,14 +63,14 @@ public final class Constants {
     public static int climbRotateFollowerID = 0;
     public static int climbDeployID = 0;
 
-     public static RobotTypes robotType = RobotTypes.ALPHA;
+     public static RobotTypes robotType = RobotTypes.BETA;
     //set to ALPHA later
     public static enum RobotTypes {
     // alpha
-    ALPHA,
+    ALPHA, //swerve bot
 
     // beta
-    BETA,
+    BETA, //turret bot
 
     //swervebot
     SWERVE

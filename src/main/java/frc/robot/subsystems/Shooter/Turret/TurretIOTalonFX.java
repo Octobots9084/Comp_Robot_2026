@@ -13,8 +13,8 @@ public class TurretIOTalonFX implements TurretIO{
     public TalonFX hoodMotor;
     public TalonFX turretMotor;       
     public double zeroTurret;
-    private MotionMagicVoltage turretRequest;
-    private MotionMagicVoltage hoodRequest;
+    private MotionMagicVoltage turretRequest = new MotionMagicVoltage(0);
+    private MotionMagicVoltage hoodRequest = new MotionMagicVoltage(0);
     // public DigitalInput turretLimitSwitch = new DigitalInput(0);
     public double deadZoneTolerance = 0.1;
     public double wrapPoint = 0;
@@ -32,12 +32,12 @@ public class TurretIOTalonFX implements TurretIO{
 
     @Override
     public void updateInputs(TurretIOInputs inputs){
-        inputs.hoodMotorTemp = hoodMotor.getDeviceTemp().getValueAsDouble();
-        inputs.turretMotorTemp = turretMotor.getDeviceTemp().getValueAsDouble();
-        inputs.hoodPosition = this.getHoodPosition();
-        inputs.turretPosition = this.getTurretPosition();
-        inputs.hoodRequest = hoodRequest.Position;
-        inputs.turretRequest = turretRequest.Position;
+        // inputs.hoodaMotorTemp = hoodMotor.getDeviceTemp().getValueAsDouble();
+        // inputs.turretMotorTemp = turretMotor.getDeviceTemp().getValueAsDouble();
+        // inputs.hoodPosition = this.getHoodPosition();
+        // inputs.turretPosition = this.getTurretPosition();
+        // inputs.hoodRequest = hoodRequest.Position;
+        // inputs.turretRequest = turretRequest.Position;
     }
 
     @Override

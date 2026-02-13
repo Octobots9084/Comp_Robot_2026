@@ -30,11 +30,11 @@ import frc.robot.subsystems.Shooter.Turret.Turret;
 import frc.robot.subsystems.Shooter.Turret.TurretIO;
 import frc.robot.subsystems.Shooter.Turret.TurretIOInputsAutoLogged;
 import frc.robot.subsystems.Shooter.Turret.TurretStates;
-import frc.robot.subsystems.drive.SwerveSubsystem;
+import frc.robot.subsystems.Drive.SwerveSubsystem;
 
 public class Shooter extends SubsystemBase{
-    ShooterStates currentShooterState;
-    public ShooterStates wantedShooterState;
+    private ShooterStates currentShooterState = ShooterStates.SAFE;
+    public ShooterStates wantedShooterState = ShooterStates.SAFE;
     private static Shooter instance = null;
     private final FeederIOInputsAutoLogged feederInputs = new FeederIOInputsAutoLogged();
     private final FlywheelIOInputsAutoLogged flywheelInputs = new FlywheelIOInputsAutoLogged();
@@ -74,8 +74,8 @@ public class Shooter extends SubsystemBase{
     
     @Override
     public void periodic(){
-        // ApplyStates();
-        // handleStateTransitions();
+        ApplyStates();
+        handleStateTransitions();
         fIO.updateInputs(feederInputs);
         Logger.processInputs("Shooter/Feeder",feederInputs);
         fwIO.updateInputs(flywheelInputs);
@@ -89,34 +89,33 @@ public class Shooter extends SubsystemBase{
         switch(currentShooterState){
             case SAFE:
                 //stop the flywheel
-                Turret.getInstance().setTurretPosition(0);
-                break;
+                // Turret.getInstance().setTurretPosition(0);
+                feeder.setFeederVelocity(FeederStates.OFF);
             case MANUAL:
             //joystick controlls turret
             tIO.setTurretPosition(getTurretPosFromJoystick()); 
             tIO.setHoodPosition(getHoodPosFromJoystick());
-                break;
             case FERRY:
-                if(ferry()){
-                    wantedShooterState = ShooterStates.BUMP;
-                    Lights.getLightInstance().lightsWantedState = LightAnimations.CANTSHOOT;
-                }
+                // if(ferry()){
+                //     wantedShooterState = ShooterStates.BUMP;
+                       // Lights.getLightInstance().lightsWantedState = LightAnimations.CANTSHOOT;
+                // }
                 break;
             case HUB:
-                if(hub()){
-                    wantedShooterState = ShooterStates.BUMP;
-                    Lights.getLightInstance().lightsWantedState = LightAnimations.CANTSHOOT;
-                }
+                // if(hub()){
+                //     wantedShooterState = ShooterStates.BUMP;
+                    // Lights.getLightInstance().lightsWantedState = LightAnimations.CANTSHOOT;
+                // }
                 break;
             case BUMP:
                 //dont shoot
                 if(swerve.onRamp(0,3)){//!tilted
                     if(true){ //in alliance zone
                         wantedShooterState = ShooterStates.HUB;
-                        Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTREADYCONTINIOUS;
+                        // Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTREADYCONTINIOUS;
                     }else{
                         wantedShooterState = ShooterStates.FERRY;
-                        Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTREADYCONTINIOUS;
+                        // Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTREADYCONTINIOUS;
 
                     }
                 }
@@ -125,7 +124,6 @@ public class Shooter extends SubsystemBase{
                 feeder.setFeederVelocity(FeederStates.SPITTING);
                 flywheel.setFlywheelVelocity(FlywheelStates.SPIT);
                 // turret.setTurretPosition(turret.spitTurrentHood);
-                break;
             case ZERO:
                 break;
             default:
@@ -161,10 +159,13 @@ public class Shooter extends SubsystemBase{
                 
                 case SAFE:
                     //driver input (presumably)
+                    currentShooterState = ShooterStates.SAFE;
                     break;
                 case ZERO:
                     currentShooterState = ShooterStates.ZERO;
                     break;
+                case SPIT:
+                    currentShooterState = ShooterStates.SPIT;
                 default:
                     break;
             };
@@ -183,13 +184,13 @@ public class Shooter extends SubsystemBase{
             if(driverOverride){
                 feeder.setFeederVelocity(FeederStates.SCORING);
                 // manual shooting
-                Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTREADYMANUAL;
+                // Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTREADYMANUAL;
             }else{
                 if(true && swerve.onRamp(0, 3)){//in alliance zone
                     if(hasFuel()){ // if we have fuel(stop after 2s after no fuel)
                         feeder.setFeederVelocity(FeederStates.SCORING);
                         //automatic shooting
-                        Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTREADYCONTINIOUS;
+                        // Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTREADYCONTINIOUS;
                     }else{
                         feeder.setFeederVelocity(FeederStates.OFF);
                     }

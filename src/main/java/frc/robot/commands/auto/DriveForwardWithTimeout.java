@@ -9,8 +9,8 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.drive.SwerveIO;
-import frc.robot.subsystems.drive.SwerveSubsystem;
+import frc.robot.subsystems.Drive.SwerveIO;
+import frc.robot.subsystems.Drive.SwerveSubsystem;
     
 public class DriveForwardWithTimeout extends Command {
     SwerveSubsystem swerve;

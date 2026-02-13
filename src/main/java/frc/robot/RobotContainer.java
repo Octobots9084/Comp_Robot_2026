@@ -25,13 +25,13 @@ import frc.robot.subsystems.Shooter.Feeder.FeederIOTalonFX;
 import frc.robot.subsystems.Shooter.Flywheel.Flywheel;
 import frc.robot.subsystems.Shooter.Flywheel.FlywheelIOTalonFX;
 import frc.robot.subsystems.Shooter.Turret.TurretIOTalonFX;
-import frc.robot.subsystems.drive.SwerveIO;
-import frc.robot.subsystems.drive.SwerveIOSystem;
-import frc.robot.subsystems.drive.SwerveSubsystem;
+import frc.robot.subsystems.Drive.SwerveIO;
+import frc.robot.subsystems.Drive.SwerveIOSystem;
+import frc.robot.subsystems.Drive.SwerveSubsystem;
 
 import frc.robot.Constants.RobotTypes;
-import frc.robot.subsystems.drive.AlphaConstants;
-import frc.robot.subsystems.drive.BetaConstants;
+import frc.robot.subsystems.Drive.AlphaConstants;
+import frc.robot.subsystems.Drive.BetaConstants;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -51,6 +51,7 @@ public class RobotContainer {
   private Climb climb;
   private SwerveSubsystem swerve;
   private Superstructure superstructure;
+  private ButtonConfig buttons;
   // Controller
   private CommandXboxController controller = new CommandXboxController(0);
 
@@ -79,6 +80,9 @@ public class RobotContainer {
           intake = new Intake(new IntakeIOTalonFX());
           climb = new Climb(new ClimbIOTalonFX());
           superstructure = new Superstructure();
+          buttons = new ButtonConfig();
+          // SmartDashboard.putBoolean("rightrigger",true);
+          buttons.initTeleop();
           // superstructure.setInstance(new Superstructure());
       }
 
@@ -103,22 +107,19 @@ public class RobotContainer {
         break;
 
       case SIM:
-
+        superstructure = new Superstructure();
         shooter = new Shooter(new FeederIOTalonFX(), new FlywheelIOTalonFX(), new TurretIOTalonFX(), ButtonConfig.coDriverController);
         intake = new Intake(new IntakeIOTalonFX());
         climb = new Climb(new ClimbIOTalonFX());
-        superstructure = new Superstructure();
         break;
 
       default:
         // Replayed robot, disable IO implementations
-    }
+      }
         autoChooser = AutoBuilder.buildAutoChooser();
         //NAMED COMMANDS IN SWERVE
        SmartDashboard.putData("Auto", autoChooser);
         // VisionSubsystem.getInstance();
-        ButtonConfig buttons = new ButtonConfig();
-        buttons.initTeleop();
     }
 
     public SwerveSubsystem getSwerveSubsystem () {

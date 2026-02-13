@@ -22,32 +22,6 @@ public class ShooterConfigurator {
                         withSensorToMechanismRatio(Constants.hoodGearRatio));
         spindexerConfig = new TalonFXConfiguration();
         verticalFeederConfig = new TalonFXConfiguration();
-        topRollerConfig = new TalonFXConfiguration();
-
-        //fly wheel right config
-        topRollerConfig.CurrentLimits.SupplyCurrentLimit = 20;
-        topRollerConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-        topRollerConfig.CurrentLimits.StatorCurrentLimit = 40;
-        topRollerConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-
-        // set break mode and inversion
-        topRollerConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-        topRollerConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-
-        // create PID gains
-        topRollerConfig.Slot0.kP = 0.0;
-        topRollerConfig.Slot0.kI = 0.0;
-        topRollerConfig.Slot0.kD = 0.0;
-        topRollerConfig.Slot0.kA = 0.0;
-        topRollerConfig.Slot0.kV = 0.0;
-        topRollerConfig.Slot0.kS = 0.0;
-        topRollerConfig.Slot0.kG = 0.0;
-
-        topRollerConfig.MotionMagic.MotionMagicAcceleration = 0;
-        topRollerConfig.MotionMagic.MotionMagicJerk = 0;
-        topRollerConfig.MotionMagic.MotionMagicCruiseVelocity = 0;
-
-
         //fly wheel right config
         flyWheelRightConfig.CurrentLimits.SupplyCurrentLimit = 20;
         flyWheelRightConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
@@ -67,10 +41,7 @@ public class ShooterConfigurator {
         flyWheelRightConfig.Slot0.kS = 0.0;
         flyWheelRightConfig.Slot0.kG = 0.0;
 
-        flyWheelRightConfig.MotionMagic.MotionMagicAcceleration = 0;
-        flyWheelRightConfig.MotionMagic.MotionMagicJerk = 0;
-        flyWheelRightConfig.MotionMagic.MotionMagicCruiseVelocity = 0;
-
+        flyWheelRightConfig.MotionMagic.MotionMagicAcceleration = 100;
         
 
         //turret config
@@ -153,7 +124,6 @@ public class ShooterConfigurator {
         verticalFeederConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
         // create PID gains
         verticalFeederConfig.Slot0.kP = 1;
-
         verticalFeederConfig.Slot0.kI = 0.0;
         verticalFeederConfig.Slot0.kD = 0.0;
         verticalFeederConfig.Slot0.kA = 0.0;
