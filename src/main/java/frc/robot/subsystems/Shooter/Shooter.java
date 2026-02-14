@@ -52,6 +52,7 @@ public class Shooter extends SubsystemBase{
     private String gameData;
     private SwerveSubsystem swerve = SwerveSubsystem.getInstance();
     private double lemonDetectionTimestamp;
+    public double turretAim = -0.1;
 
     public Shooter(FeederIO fIO,FlywheelIO fwIO, TurretIO tIO, CommandXboxController coDriverController){
         this.fIO = fIO;
@@ -91,6 +92,10 @@ public class Shooter extends SubsystemBase{
                 //stop the flywheel
                 // Turret.getInstance().setTurretPosition(0);
                 feeder.setFeederVelocity(FeederStates.OFF);
+                flywheel.setFlywheelVelocity(FlywheelStates.SAFE);
+                turret.setHoodPosition(0);
+                turret.setTurretPosition(0);
+                break;
             case MANUAL:
             //joystick controlls turret
             tIO.setTurretPosition(getTurretPosFromJoystick()); 
@@ -123,7 +128,8 @@ public class Shooter extends SubsystemBase{
             case SPIT:
                 feeder.setFeederVelocity(FeederStates.SPITTING);
                 flywheel.setFlywheelVelocity(FlywheelStates.SPIT);
-                // turret.setTurretPosition(turret.spitTurrentHood);
+                turret.setHoodPosition(turret.spitTurrentHood);
+                turret.setTurretPosition(turretAim);
             case ZERO:
                 break;
             default:

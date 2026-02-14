@@ -62,9 +62,9 @@ public class ShooterConfigurator {
         turretConfig.Slot0.kS = 0.5;
         turretConfig.Slot0.kG = 0.0;
 
-        turretConfig.MotionMagic.MotionMagicAcceleration = 0;
-        turretConfig.MotionMagic.MotionMagicJerk = 0;
-        turretConfig.MotionMagic.MotionMagicCruiseVelocity = 0;
+        turretConfig.MotionMagic.MotionMagicAcceleration = 10;
+        turretConfig.MotionMagic.MotionMagicJerk = 100;
+        turretConfig.MotionMagic.MotionMagicCruiseVelocity = 0.2;
 
 
 
@@ -76,7 +76,7 @@ public class ShooterConfigurator {
 
         // set break mode and inversion
         hoodConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-        hoodConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+        // hoodConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
         // create PID gains
         hoodConfig.Slot0.kP = 100;
         hoodConfig.Slot0.kI = 0.0;
@@ -86,9 +86,9 @@ public class ShooterConfigurator {
         hoodConfig.Slot0.kS = 0.0;
         hoodConfig.Slot0.kG = 0.0;
 
-        hoodConfig.MotionMagic.MotionMagicAcceleration = 0;
-        hoodConfig.MotionMagic.MotionMagicJerk = 0;
-        hoodConfig.MotionMagic.MotionMagicCruiseVelocity = 0;
+        hoodConfig.MotionMagic.MotionMagicAcceleration = 10;
+        hoodConfig.MotionMagic.MotionMagicJerk = 100;
+        hoodConfig.MotionMagic.MotionMagicCruiseVelocity = 0.2;
 
 
         //spindexer config(four lane highway)
@@ -117,7 +117,7 @@ public class ShooterConfigurator {
         //vertical Feeder config(rural road)
         verticalFeederConfig.CurrentLimits.SupplyCurrentLimit = 20;
         verticalFeederConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-        verticalFeederConfig.CurrentLimits.StatorCurrentLimit = 40;
+        verticalFeederConfig.CurrentLimits.StatorCurrentLimit = 60;
         verticalFeederConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 
         // set break mode and inversion

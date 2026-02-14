@@ -12,7 +12,7 @@ public interface FlywheelIO{
     public double FlywheelRightMotorTemp = 0.0;
   }
   public default void updateInputs(FlywheelIOInputs inputs){}
-  public default void setFlywheelVelocity(double FlywheelRPS){}
+  public default void setFlywheelVelocity(FlywheelStates state){}
   public default double[] getFlywheelVelocity(){
     double[] defaultOut = new double[2];
     return defaultOut;

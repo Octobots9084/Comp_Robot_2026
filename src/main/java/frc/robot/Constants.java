@@ -47,8 +47,8 @@ public final class Constants {
     public static double maximumHoodPosition = 0.1157;
     public static double maximumTurretPosition = 0.8; //TODO set this to an actual value so sinjin doesnt cry
 
-    public static double turretGearRatio = (3/1)*(256/222);
-    public static double hoodGearRatio = (23/20)*(18/0.9);
+    public static double turretGearRatio = (3/1)*(256/22);
+    public static double hoodGearRatio = 20;//(23/20)*(18/0.9);
 
     public static double rotateGearRatio = 125;//TODO fix this gear ratio
     public static double deployGearRatio = 1;

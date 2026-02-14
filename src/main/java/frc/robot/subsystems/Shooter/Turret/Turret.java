@@ -7,10 +7,9 @@ public class Turret extends SubsystemBase{
 
     public final double spitTurrentAnge = 0.25;
     
-    public final double spitTurrentHood = 0.67;//hehe change this to real or it'll be 67
+    public final double spitTurrentHood = 0.1;//hehe change this to real or it'll be 67
 
     public final double spitTurrentOutAnge = 0.55;//todo
-
     public TurretIO io = new TurretIOTalonFX();
 
     public Turret(){

@@ -36,6 +36,13 @@ public class ButtonConfig {
             .onFalse(new InstantCommand(
             () -> {Shooter.getInstance().wantedShooterState = ShooterStates.SAFE; /*superstructure.setWantedState(States.SAFE);*/ SmartDashboard.putBoolean("rightrigger",false);}
             ));
+
+        driverController.rightBumper().onTrue(new InstantCommand( () -> {
+            Shooter.getInstance().turretAim = 0;
+        }));
+        driverController.leftBumper().onTrue(new InstantCommand(() -> {
+            Shooter.getInstance().turretAim = -0.29;
+        }));
         //driverRight.button(1).onTrue(new InstantCommand(() -> SwerveSubsystem.getInstance().io.zeroGyro()));
 
         driverController.y().onTrue(new InstantCommand(() -> {SwerveSubsystem.getInstance().io.zeroGyro(); SmartDashboard.putBoolean("A button", true);})).onFalse(new InstantCommand(() -> SmartDashboard.putBoolean("A button", false)));
@@ -43,7 +50,7 @@ public class ButtonConfig {
         if (Constants.robotType != RobotTypes.ALPHA){
         driverController.a().onTrue(new SetStateClimb());
         driverController.b().onTrue(new SetStateUnclimb());
-        driverController.leftBumper().whileTrue(new SetIntakeStateIntaking()).onFalse(new SetIntakeStateSafe());
+        // driverController.leftBumper().whileTrue(new SetIntakeStateIntaking()).onFalse(new SetIntakeStateSafe());
         driverController.leftTrigger(0.5).whileTrue(new SetIntakeStateIntaking()).onFalse(new SetIntakeStateSafe());
         //driverController.rightTrigger(0.5).whileTrue();
 
