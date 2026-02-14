@@ -16,4 +16,4 @@ if __name__ == "__main__":
     script_dir = os.path.dirname(os.path.abspath(__file__))
     
     total = count_java_lines(script_dir)
-    print(f"Total lines of Java code in '{script_dir}' (including subfolders): {total}")
+    print(f"Total lines of Java code in '{script_dir}' \n(including subfolders): {total}")
