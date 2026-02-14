@@ -36,8 +36,8 @@ import frc.robot.subsystems.Shooter.Turret.TurretStates;
 public class Shooter extends SubsystemBase{
     private ShooterAngle pastShooterAngle = new ShooterAngle(0, 0);
     
-    ShooterStates currentShooterState = ShooterStates.HUB;//SAFE; //should be safe but useing hub for testing
-    ShooterStates wantedShooterState = ShooterStates.HUB;
+    public ShooterStates currentShooterState = ShooterStates.HUB;//SAFE; //should be safe but useing hub for testing
+    public ShooterStates wantedShooterState = ShooterStates.HUB;
     private static Shooter instance = null;
     private final FeederIOInputsAutoLogged feederInputs = new FeederIOInputsAutoLogged();
     private final FlywheelIOInputsAutoLogged flywheelInputs = new FlywheelIOInputsAutoLogged();

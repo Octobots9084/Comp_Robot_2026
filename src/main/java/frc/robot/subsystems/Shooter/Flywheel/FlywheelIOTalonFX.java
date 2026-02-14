@@ -46,7 +46,8 @@ public class FlywheelIOTalonFX implements FlywheelIO{
     }
 
     public double[] getFlywheelVelocity(){
-        double[] FlywheelVelocity = {this.getRightMotorVelocity()};
+        double[] FlywheelVelocity = {this.getRightMotorVelocity(),this.getLeftMotorVelocity()};
+        
         return FlywheelVelocity;
     }
 
