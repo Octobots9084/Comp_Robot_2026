@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 3.5,
+        "x": 5.721084165477888,
         "y": 5.9
       },
       "prevControl": {
-        "x": 5.151317460477098,
+        "x": 7.372401625954986,
         "y": 5.882095419941956
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Hump 1 TL"
+      "linkedName": "Ramp 1 TR"
     }
   ],
   "rotationTargets": [],
@@ -41,13 +41,13 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 8.0,
+    "velocity": 0.25,
     "rotation": 0.0
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
-    "velocity": 4.0,
+    "velocity": 0.25,
     "rotation": -0.09819468749840701
   },
   "useDefaultConstraints": true

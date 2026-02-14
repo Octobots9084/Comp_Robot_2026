@@ -29,7 +29,7 @@ public class DriveOverBumpToAlliance extends Command {
     
     @Override
     public void execute() {
-        onRamp = swerve.onRamp(0, 0.1);
+        onRamp = swerve.onRamp(0, 0.3);
         move();
         if (onRamp && !hasBeenOnRamp) {
             hasBeenOnRamp = true;
@@ -49,11 +49,11 @@ public class DriveOverBumpToAlliance extends Command {
     }
 
     public void move () {
-        if (Constants.allianceColor != Alliance.Blue) {
-            swerve.io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(0, -2, 0))
+        if (Constants.allianceColor == Alliance.Blue) {
+            swerve.io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(-6, 0, 0))
                 .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
         } else {
-            swerve.io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(0, 2, 0))
+            swerve.io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(6, 0, 0))
                 .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
         }
     }

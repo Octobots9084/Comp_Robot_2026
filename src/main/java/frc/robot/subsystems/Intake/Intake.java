@@ -4,13 +4,14 @@ import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Lights.LightAnimations;
-import frc.robot.subsystems.Lights.Lights;
+// import frc.robot.subsystems.Lights;
 public class Intake extends SubsystemBase{
     
     public IntakeStates currentState = IntakeStates.SAFE;
     public IntakeStates wantedState = IntakeStates.SAFE;
     public IntakeIO io;
     public static Intake instance;
+    public IntakeIOTalonFX intakeFX = new IntakeIOTalonFX();
     public IntakeIOInputsAutoLogged inputs = new IntakeIOInputsAutoLogged();
 
     public Intake(IntakeIO io){
@@ -25,10 +26,10 @@ public class Intake extends SubsystemBase{
     @Override
     public void periodic() {
         //This will handle changing between states at the user's request.
-        // handleStateTransitions();
+        handleStateTransitions();
 
         //this is where states actually take effect.
-        // applyStates();
+        applyStates();
         io.updateInputs(inputs);
         Logger.processInputs("Intake", inputs);
     }
@@ -37,27 +38,29 @@ public class Intake extends SubsystemBase{
     
         switch(wantedState) {
             case SAFE:
-            currentState = IntakeStates.SAFE;
+                currentState = IntakeStates.SAFE;
             break;
 
             case INTAKING:
                 //only works if not climbing
-            currentState = IntakeStates.INTAKING;
-            Lights.getLightInstance().lightsWantedState = LightAnimations.INTAKING;
-            break;
+                currentState = IntakeStates.INTAKING;
+                // Lights.getLightInstance().lightsWantedState = LightAnimations.INTAKING;
+                break;
 
             case EXTENDED:
                 //only works if not climbing
-            currentState = IntakeStates.EXTENDED;
-            break;
+                currentState = IntakeStates.EXTENDED;
+                break;
 
             case REVERSEINTAKING:
                 //only works if not climbing
-            currentState = IntakeStates.REVERSEINTAKING;
-            Lights.getLightInstance().lightsWantedState = LightAnimations.REVERSEINTAKING;
+                currentState = IntakeStates.REVERSEINTAKING;
+            // Lights.getLightInstance().lightsWantedState = LightAnimations.REVERSEINTAKING;
 
-            break;
-
+                break;
+            case ZERO:
+                currentState = IntakeStates.ZERO;
+                break;
             default:
             currentState = IntakeStates.SAFE;
             break;
@@ -71,30 +74,31 @@ public class Intake extends SubsystemBase{
     
         io.setIntakeState(currentState);
 
-        //not currently being used jarett said to leave in case we use want it in the future
-        // switch (currentState){
+        switch (currentState){
 
-        // case INTAKING:
-        // //motors on intake out
-        // break;
+        case INTAKING:
+            //motors on intake out
+            break;
 
-        // case EXTENDED:
-        // //motors off intake out
-        // break;
+        case EXTENDED:
+            //motors off intake out
+            break;
 
-        // case SAFE:
-        // //motors off intake in
-        // break;
+        case SAFE:
+            //motors off intake in
+            break;
 
-        // case REVERSEINTAKING:
-        // //motors reverse intake out
-        // break;
-
-        // default:
-        // //safe
-        // break;
-        
+        case REVERSEINTAKING:
+            //motors reverse intake out
+            break;
+        case ZERO:
+             //todo
+             break;
+        default:
+            //safe
+            break;
         }
+    }
 
 
     
@@ -115,6 +119,19 @@ public class Intake extends SubsystemBase{
     public IntakeStates getWantedState() {
         return this.wantedState;
     }
+
+    public boolean zeroIntake(){
+        boolean pressed = io.isZeroingSwitchPressed();
+        if(pressed){
+            intakeFX.setRotateVoltage(3);
+        } else{
+            intakeFX.setRotateVoltage(-3);
+        }
+        return pressed;
+
+
+    }
+
 
 }
     

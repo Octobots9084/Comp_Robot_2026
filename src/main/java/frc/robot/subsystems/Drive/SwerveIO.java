@@ -16,7 +16,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Current;
-import frc.robot.subsystems.Drive.MangoConstants.TunerSwerveDrivetrain;
+import frc.robot.subsystems.Drive.BetaConstants.TunerSwerveDrivetrain;
 public interface SwerveIO {
     
     @AutoLog
@@ -76,4 +76,6 @@ public interface SwerveIO {
     default void zeroGyro() {}
 
     public default void driveFieldRelative(ChassisSpeeds fieldRelativeSpeeds) {}
+
+    default void setAllianceColor () {}
 }

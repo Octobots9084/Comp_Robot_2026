@@ -50,10 +50,10 @@ public class DriveOverBump extends Command {
 
     public void move () {
         if (Constants.allianceColor == Alliance.Blue) {
-            swerve.io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(0, -2, 0))
+            swerve.io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(2, 0, 0))
                 .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
         } else {
-            swerve.io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(0, 2, 0))
+            swerve.io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(-2, 0, 0))
                 .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
         }
     }

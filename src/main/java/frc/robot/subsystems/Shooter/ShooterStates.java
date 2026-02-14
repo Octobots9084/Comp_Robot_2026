@@ -6,5 +6,8 @@ public enum ShooterStates{
     FERRY,
     BUMP,
     HUB,
+    SPIT,
+    ZERO,
+    MANUAL,
 }
 

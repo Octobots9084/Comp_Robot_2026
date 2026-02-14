@@ -4,11 +4,15 @@ import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.hardware.CANrange;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.ButtonConfig;
 import frc.robot.Constants;
 import frc.robot.subsystems.Vision.ShooterAngle;
@@ -23,9 +27,11 @@ import frc.robot.subsystems.Shooter.Feeder.FeederStates;
 import frc.robot.subsystems.Shooter.Flywheel.Flywheel;
 import frc.robot.subsystems.Shooter.Flywheel.FlywheelIO;
 import frc.robot.subsystems.Shooter.Flywheel.FlywheelIOInputsAutoLogged;
+import frc.robot.subsystems.Shooter.Flywheel.FlywheelStates;
 import frc.robot.subsystems.Shooter.Turret.Turret;
 import frc.robot.subsystems.Shooter.Turret.TurretIO;
 import frc.robot.subsystems.Shooter.Turret.TurretIOInputsAutoLogged;
+import frc.robot.subsystems.Shooter.Turret.TurretStates;
 
 public class Shooter extends SubsystemBase{
     private ShooterAngle pastShooterAngle = new ShooterAngle(0, 0);
@@ -40,6 +46,7 @@ public class Shooter extends SubsystemBase{
     public final FlywheelIO fwIO;
     public final TurretIO tIO;
     public SwerveSubsystem swerve = SwerveSubsystem.getInstance();
+    public final CommandXboxController coDriverController;
     public Feeder feeder = new Feeder();
     public Turret turret = new Turret();
     public Flywheel flywheel = new Flywheel();
@@ -51,14 +58,15 @@ public class Shooter extends SubsystemBase{
     private ShooterAngle shooterAngle;
     private Pose2d hubPose = new Pose2d(10, 10, new Rotation2d());
 
-    public Shooter(FeederIO fIO,FlywheelIO fwIO, TurretIO tIO){
+    public Shooter(FeederIO fIO,FlywheelIO fwIO, TurretIO tIO, CommandXboxController coDriverController){
         this.fIO = fIO;
         this.fwIO = fwIO;
         this.tIO = tIO;
+        this.coDriverController = coDriverController;
     }
 
-    public static Shooter setInstance(FeederIO fIO,FlywheelIO fwIO, TurretIO tIO){
-        instance = new Shooter(fIO,fwIO,tIO);
+    public static Shooter setInstance(FeederIO fIO,FlywheelIO fwIO, TurretIO tIO, CommandXboxController coDriverController){
+        instance = new Shooter(fIO,fwIO,tIO, coDriverController);
         return instance;
     }
     public static Shooter getInstance(){
@@ -86,6 +94,12 @@ public class Shooter extends SubsystemBase{
         switch(currentShooterState){
             case SAFE:
                 //stop the flywheel
+                Turret.getInstance().setTurretPosition(0);
+                break;
+            case MANUAL:
+            //joystick controlls turret
+            tIO.setTurretPosition(getTurretPosFromJoystick()); 
+            tIO.setHoodPosition(getHoodPosFromJoystick());
                 break;
             case FERRY:
                 if(ferry()){
@@ -125,12 +139,21 @@ public class Shooter extends SubsystemBase{
                     }
                 }
                 break;
+            case SPIT:
+                feeder.setFeederVelocity(FeederStates.SPITTING);
+                flywheel.setFlywheelVelocity(FlywheelStates.SPIT);
+                turret.setTurretPosition(turret.spitTurrentHood);
+                break;
+            case ZERO:
+                break;
             default:
                 break;
         }
 
     }
 
+
+    //state transitions for spit and manual needed
  public void handleStateTransitions(){
         switch (wantedShooterState) {
                 case HUB:
@@ -157,10 +180,20 @@ public class Shooter extends SubsystemBase{
                 case SAFE:
                     //driver input (presumably)
                     break;
-
+                case ZERO:
+                    currentShooterState = ShooterStates.ZERO;
+                    break;
                 default:
                     break;
             };
+    }
+    public boolean Shootable(){
+        if(!swerve.onRamp(1,3) && ((Shooter.getInstance().inAllianceZone() && isHubActive()) || (!Shooter.getInstance().inAllianceZone()))){
+            return true;
+        }else{
+            return false;
+        }
+
     }
     //automatically shoots a ball if it can score and allows zeo to override some factors
     public boolean hub(){
@@ -207,7 +240,7 @@ public class Shooter extends SubsystemBase{
             if(driverOverride){
                 feeder.setFeederVelocity(FeederStates.FERRYING);
             }else{
-                if(inAllianceZone()){//!in alliance zone
+                if(!inAllianceZone()){//!in alliance zone
                     if(hasFuel()){ // if we have fuel(stoap after 2s after no fuel)
                         feeder.setFeederVelocity(FeederStates.FERRYING);
                     }else{
@@ -226,6 +259,14 @@ public class Shooter extends SubsystemBase{
         return true;
     }
 
+    public double getTurretPosFromJoystick(){
+        return tIO.getTurretPosition() + 0.05 * MathUtil.applyDeadband(coDriverController.getLeftX(), Constants.leftYDeadband);
+    }
+
+    public double getHoodPosFromJoystick(){
+        return tIO.getHoodPosition() + 0.05 * -MathUtil.applyDeadband(coDriverController.getLeftY(), Constants.leftXDeadband);
+    }
+    
 
     public boolean isHubActive(){
         double timer = Constants.timer.get();

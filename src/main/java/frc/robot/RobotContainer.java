@@ -21,12 +21,14 @@ import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Climb.Climb;
 import frc.robot.subsystems.Climb.ClimbIOTalonFX;
 import frc.robot.subsystems.Drive.BetaConstants;
-import frc.robot.subsystems.Drive.MangoConstants;
 import frc.robot.subsystems.Drive.SwerveSubsystem;
 import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.Feeder.FeederIOTalonFX;
 import frc.robot.subsystems.Shooter.Flywheel.FlywheelIOTalonFX;
 import frc.robot.subsystems.Shooter.Turret.TurretIOTalonFX;
+import frc.robot.subsystems.Drive.SwerveIO;
+import frc.robot.subsystems.Drive.SwerveIOSystem;
+import frc.robot.subsystems.Drive.AlphaConstants;
 import frc.robot.subsystems.Vision.Vision;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
@@ -48,50 +50,66 @@ public class RobotContainer {
   private SwerveSubsystem swerve;
   private Superstructure superstructure;
   // Controller
-  private final CommandXboxController controller = new CommandXboxController(0);
+  private CommandXboxController controller;
 
   // Dashboard inputs
   private final SendableChooser<Command> autoChooser;
-    
-  // private final SendableChooser<Command> autoChooser;
-  static CommandJoystick driverLeft = ControlMap.DRIVER_LEFT;
-  static CommandJoystick driverRight = ControlMap.DRIVER_RIGHT;
-  static CommandJoystick driverButtons = ControlMap.DRIVER_BUTTONS;
-  static CommandJoystick coDriverLeft = ControlMap.CO_DRIVER_LEFT;
-  static CommandJoystick coDriverRight = ControlMap.CO_DRIVER_RIGHT;
-  static CommandJoystick coDriverButtons = ControlMap.CO_DRIVER_BUTTONS;
-  // The robot's subsystems and commands are defined here...
 
-    /**
-     * The container for the robot. Contains subsystems, OI devices, and commands.
-     */
-    public RobotContainer() {
-        switch (Constants.currentMode) {
-            case REAL:
-              //TODO change the buttons from driverleft and right to the xbox controller
-              if (Constants.robotType == RobotTypes.ALPHA) {
-                this.swerve = SwerveSubsystem.setInstance(MangoConstants.createDrivetrain(), ButtonConfig.driverController, Constants.maxAngularVelocity, Constants.maxVelocity);
-              } else {
-                this.swerve = SwerveSubsystem.setInstance(BetaConstants.createDrivetrain(), ButtonConfig.driverController, Constants.maxAngularVelocity, Constants.maxVelocity);
-              }
-              shooter = new Shooter(
-                new FeederIOTalonFX(), 
-                new FlywheelIOTalonFX(), 
-                new TurretIOTalonFX());
-              intake = new Intake(new IntakeIOTalonFX());
-              climb = new Climb(new ClimbIOTalonFX());
-                break;
-            case SIM:
-              break;
-            default:
-              if (Constants.robotType == RobotTypes.ALPHA) {
-                this.swerve = SwerveSubsystem.setInstance(MangoConstants.createDrivetrain(), ButtonConfig.driverController, Constants.maxAngularVelocity, Constants.maxVelocity);
-              } else {
-                this.swerve = SwerveSubsystem.setInstance(BetaConstants.createDrivetrain(), ButtonConfig.driverController, Constants.maxAngularVelocity, Constants.maxVelocity);
-              }
-              break;
+  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  public RobotContainer() {
+    //TODO change the buttons from driverleft and right to the xbox controller
+    if (Constants.robotType == RobotTypes.BETA) {
+            this.swerve = SwerveSubsystem.setInstance(BetaConstants.createDrivetrain(), ButtonConfig.driverController, Constants.maxAngularVelocity, Constants.maxVelocity);
+        } else {
+            this.swerve = SwerveSubsystem.setInstance(AlphaConstants.createDrivetrain(), ButtonConfig.driverController, Constants.maxAngularVelocity, Constants.maxVelocity);
         }
+    switch (Constants.currentMode) {
+      case REAL:
+        // Real robot, instantiate hardware IO implementations
+        // ModuleIOTalonFX is intended for modules with TalonFX drive, TalonFX turn, and
+        // a CANcoder
+        if (Constants.robotType != RobotTypes.ALPHA){
+          shooter = new Shooter(
+              new FeederIOTalonFX(), 
+              new FlywheelIOTalonFX(), 
+              new TurretIOTalonFX(),
+              ButtonConfig.coDriverController);
+          intake = new Intake(new IntakeIOTalonFX());
+          climb = new Climb(new ClimbIOTalonFX());
+          superstructure = new Superstructure();
+      }
 
+
+        // The ModuleIOTalonFXS implementation provides an example implementation for
+        // TalonFXS controller connected to a CANdi with a PWM encoder. The
+        // implementations
+        // of ModuleIOTalonFX, ModuleIOTalonFXS, and ModuleIOSpark (from the Spark
+        // swerve
+        // template) can be freely intermixed to support alternative hardware
+        // arrangements.
+        // Please see the AdvantageKit template documentation for more information:
+        // https://docs.advantagekit.org/getting-started/template-projects/talonfx-swerve-template#custom-module-implementations
+        //
+        // drive =
+        // new Drive(
+        // new GyroIOPigeon2(),
+        // new ModuleIOTalonFXS(TunerConstants.FrontLeft),
+        // new ModuleIOTalonFXS(TunerConstants.FrontRight),
+        // new ModuleIOTalonFXS(TunerConstants.BackLeft),
+        // new ModuleIOTalonFXS(TunerConstants.BackRight));
+        break;
+
+      case SIM:
+
+        shooter = new Shooter(new FeederIOTalonFX(), new FlywheelIOTalonFX(), new TurretIOTalonFX(), ButtonConfig.coDriverController);
+        intake = new Intake(new IntakeIOTalonFX());
+        climb = new Climb(new ClimbIOTalonFX());
+        superstructure = new Superstructure();
+        break;
+
+      default:
+        // Replayed robot, disable IO implementations
+    }
         autoChooser = AutoBuilder.buildAutoChooser();
         //NAMED COMMANDS IN SWERVE
        SmartDashboard.putData("Auto", autoChooser);

@@ -34,7 +34,7 @@ import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.subsystems.Drive.BetaConstants.TunerSwerveDrivetrain;
+import frc.robot.subsystems.Drive.AlphaConstants.TunerSwerveDrivetrain;
 
 /**
  * Class that extends the Phoenix 6 SwerveDrivetrain class and implements
@@ -151,7 +151,7 @@ public class SwerveIOSystem extends TunerSwerveDrivetrain implements Subsystem, 
     
 
     private void configureAutoBuilder() {
-        // SwerveSubsystem.getInstance().registerNamedCommands();
+        //SwerveSubsystem.getInstance().registerNamedCommands();
         try {
             var config = RobotConfig.fromGUISettings();
             AutoBuilder.configure(
@@ -200,16 +200,7 @@ public class SwerveIOSystem extends TunerSwerveDrivetrain implements Subsystem, 
          * Otherwise, only check and apply the operator perspective if the DS is disabled.
          * This ensures driving behavior doesn't change until an explicit disable event occurs during testing.
          */
-        if (!m_hasAppliedOperatorPerspective || DriverStation.isDisabled()) {
-            DriverStation.getAlliance().ifPresent(allianceColor -> {
-                setOperatorPerspectiveForward(
-                    allianceColor == Alliance.Red
-                        ? kRedAlliancePerspectiveRotation
-                        : kBlueAlliancePerspectiveRotation
-                );
-                m_hasAppliedOperatorPerspective = true;
-            });
-        }
+        
     }
 
     private void startSimThread() {
@@ -361,5 +352,18 @@ public class SwerveIOSystem extends TunerSwerveDrivetrain implements Subsystem, 
      public void driveFieldRelative(ChassisSpeeds fieldRelativeSpeeds) {
 
         // this.driveFieldOriented(fieldRelativeSpeeds);
+    }
+
+    public void setAllianceColor () {
+         if (!m_hasAppliedOperatorPerspective || DriverStation.isDisabled()) {
+            DriverStation.getAlliance().ifPresent(allianceColor -> {
+                setOperatorPerspectiveForward(
+                    allianceColor == Alliance.Red
+                        ? kRedAlliancePerspectiveRotation
+                        : kBlueAlliancePerspectiveRotation
+                );
+                m_hasAppliedOperatorPerspective = true;
+            });
+        }
     }
 }

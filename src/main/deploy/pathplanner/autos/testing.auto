@@ -5,39 +5,33 @@
     "data": {
       "commands": [
         {
-          "type": "path",
-          "data": {
-            "pathName": "Drive 1 robot"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "DriveOverBumpFromAlliance"
           }
         },
         {
-          "type": "wait",
+          "type": "path",
           "data": {
-            "waitTime": 1.0
+            "pathName": "M Ramp 1 BR to Neutral 2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Drive Around"
+            "pathName": "I Neutral 2 to Neutral 1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "M Neutral 1 to Ramp 1 TL"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 0.5
           }
         },
         {

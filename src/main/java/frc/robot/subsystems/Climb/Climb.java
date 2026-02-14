@@ -15,7 +15,7 @@ public class Climb extends SubsystemBase{
     public static Climb instance;
     public ClimbIOInputsAutoLogged inputs = new ClimbIOInputsAutoLogged();
     public boolean climbL3 = false;
-
+    
     public Climb(ClimbIO io){
         this.io = io;
         instance = this;
@@ -57,31 +57,61 @@ public class Climb extends SubsystemBase{
                 if(currentState == ClimbStates.DEPLOYEDL1 || currentState == ClimbStates.DEPLOYEDL3){
                     currentState = ClimbStates.IDLE;
                 }
+                break;
             case DEPLOYEDL1:
                 if(currentState == ClimbStates.IDLE || currentState == ClimbStates.CLIMBEDL1){
                     currentState = ClimbStates.DEPLOYEDL1;
                 }
+                break;
             case CLIMBEDL1:
                 if(currentState == ClimbStates.DEPLOYEDL1){
                     currentState = ClimbStates.CLIMBEDL1;
                 }
+                break;
             case DEPLOYEDL3:
                 if(currentState == ClimbStates.IDLE || currentState == ClimbStates.ENGAGEDL3){
                     currentState = ClimbStates.DEPLOYEDL3;
                 }
+                break;
             case ENGAGEDL3:
                 if(currentState == ClimbStates.DEPLOYEDL3 || currentState == ClimbStates.CLIMBEDL3){
                     currentState = ClimbStates.ENGAGEDL3;
                 }
+                break;
             case CLIMBEDL3:
                 if(currentState == ClimbStates.ENGAGEDL3){
                     currentState = ClimbStates.CLIMBEDL3;
                 }
+                break;
+            case ZERO:
+                if(currentState != ClimbStates.CLIMBEDL3 && currentState != ClimbStates.CLIMBEDL1){
+                    currentState = ClimbStates.ZERO;
+                }
+                break;
+
+            
         }
 
     }
 
-    public void applyStates()  {
-        setClimbState(currentState);
+    public void applyStates(){
+        switch(currentState){
+            case ZERO:
+                zeroClimb();
+                break;
+            default:
+                setClimbState(currentState);
+                break;
+
+        }
+    }
+    public boolean zeroClimb(){
+        boolean ifPressed = io.isZeroingSwitchPressed();
+        if(ifPressed){
+            io.setRotateVoltage(0);
+        } else{
+            io.setRotateVoltage(-3);
+        }
+        return ifPressed;
     }
 }

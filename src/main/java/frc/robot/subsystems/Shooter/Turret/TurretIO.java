@@ -9,6 +9,9 @@ public interface TurretIO {
         public double turretPosition;
         public double hoodMotorTemp;
         public double turretMotorTemp;
+        public double turretRequest;
+        public double hoodRequest;
+
     }
 
     public default void updateInputs(TurretIOInputs inputs){}

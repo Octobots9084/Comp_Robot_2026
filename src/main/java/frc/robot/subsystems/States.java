@@ -4,5 +4,7 @@ public enum States {
     SAFE,
     MANUAL,
     CLIMB,
+    UNCLIMB,
     SHOOTER,
+    ZERO,
 }

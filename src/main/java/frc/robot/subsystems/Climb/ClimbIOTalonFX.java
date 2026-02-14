@@ -6,6 +6,7 @@ import com.ctre.phoenix6.signals.MotorAlignmentValue;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.units.Unit;
+import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Constants;
 
 import static edu.wpi.first.units.Units.Revolutions;
@@ -13,6 +14,7 @@ import static edu.wpi.first.units.Units.Revolutions;
 import com.ctre.phoenix6.controls.Follower;
 
 public class ClimbIOTalonFX implements ClimbIO{
+    public DigitalInput zeroingSwitch = new DigitalInput(8);//todo hehe Hello Oliver
     //controlls the climb motor rotate (follower is influenced by extreiror varible)
     public TalonFX climbRotateMotorControlled;
     public TalonFX climbRotateMotorFollower;
@@ -74,5 +76,13 @@ public class ClimbIOTalonFX implements ClimbIO{
     @Override
     public boolean climbInTolerance(double climbTolerance){
         return MathUtil.isNear(climbMotionControlledRequest.getPositionMeasure().in(Revolutions), this.getClimbPosition(), climbTolerance);
+    }
+    @Override
+    public void setRotateVoltage(double voltage){
+        this.climbRotateMotorControlled.setVoltage(voltage);
+        this.climbRotateMotorFollower.setVoltage(-voltage);
+    }
+    public boolean isZeroingSwitchPressed(){
+        return zeroingSwitch.get();
     }
 }

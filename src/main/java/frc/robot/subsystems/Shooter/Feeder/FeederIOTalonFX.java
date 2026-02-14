@@ -4,6 +4,7 @@ import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import frc.robot.Constants;
+import frc.robot.subsystems.States;
 import frc.robot.subsystems.Shooter.ShooterConfigurator;
 
 import edu.wpi.first.math.MathUtil;
@@ -33,9 +34,9 @@ public class FeederIOTalonFX implements FeederIO{
     }
 
     @Override
-    public void setFeederVelocity(double spindexerRPS, double verticalFeederRPS){
-        spindexerRequest.Velocity = spindexerRPS;
-        verticalFeederRequest.Velocity = verticalFeederRPS;
+    public void setFeederVelocity(FeederStates state){
+        spindexerRequest.Velocity = state.spindexerRPS;
+        verticalFeederRequest.Velocity = state.feederRPS;
         spindexerMotor.setControl(spindexerRequest);
         verticalFeederMotor.setControl(verticalFeederRequest);
     }
