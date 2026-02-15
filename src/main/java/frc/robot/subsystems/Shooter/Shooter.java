@@ -90,7 +90,6 @@ public class Shooter extends SubsystemBase{
         switch(currentShooterState){
             case SAFE:
                 //stop the flywheel
-                // Turret.getInstance().setTurretPosition(0);
                 feeder.setFeederVelocity(FeederStates.OFF);
                 flywheel.setFlywheelVelocity(FlywheelStates.SAFE);
                 turret.setHoodPosition(0);

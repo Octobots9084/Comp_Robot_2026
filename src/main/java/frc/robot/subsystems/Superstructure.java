@@ -102,7 +102,7 @@ public class Superstructure extends SubsystemBase{
     private void stateSAFE() {
         Climb.getInstance().setClimbState(ClimbStates.IDLE);
         //set shooter into safe state
-        Intake.getInstance().setWantedState(IntakeStates.SAFE);
+        // Intake.getInstance().setWantedState(IntakeStates.SAFE)
 
     }
 
