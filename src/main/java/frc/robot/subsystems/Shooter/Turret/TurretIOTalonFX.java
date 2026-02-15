@@ -43,8 +43,8 @@ public class TurretIOTalonFX implements TurretIO{
 
     @Override
     public void setTurretPosition(double turretAngle){
-        turretAngle = Math.max(turretAngle, -0.30);
-        turretAngle = Math.min(turretAngle, Constants.maximumTurretPosition);
+        turretAngle = Math.max(turretAngle, -0.57);
+        turretAngle = Math.min(turretAngle, 0);
         turretMotor.setControl(turretRequest.withPosition(turretAngle));
     }
 

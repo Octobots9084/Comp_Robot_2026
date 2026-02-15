@@ -169,6 +169,9 @@ public class Shooter extends SubsystemBase{
                 case ZERO:
                     currentShooterState = ShooterStates.ZERO;
                     break;
+                case MANUAL:
+                    currentShooterState = ShooterStates.MANUAL;
+                    break;
                 case SPIT:
                     currentShooterState = ShooterStates.SPIT;
                 default:

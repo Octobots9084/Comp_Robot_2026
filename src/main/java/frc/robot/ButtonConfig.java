@@ -41,7 +41,7 @@ public class ButtonConfig {
             Shooter.getInstance().turretAim = 0;
         }));
         driverController.leftBumper().onTrue(new InstantCommand(() -> {
-            Shooter.getInstance().turretAim = -0.29;
+            Shooter.getInstance().turretAim = -0.57;
         }));
         // driverRight.button(1).onTrue(new InstantCommand(() -> SwerveSubsystem.getInstance().io.zeroGyro()));
 
