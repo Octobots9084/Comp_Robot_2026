@@ -13,8 +13,8 @@ public class TurretIOTalonFX implements TurretIO{
     public TalonFX hoodMotor;
     public TalonFX turretMotor;       
     public double zeroTurret;
-    private MotionMagicVoltage turretRequest;
-    private MotionMagicVoltage hoodRequest;
+    private MotionMagicVoltage turretRequest = new MotionMagicVoltage(0);
+    private MotionMagicVoltage hoodRequest = new MotionMagicVoltage(0);
     // public DigitalInput turretLimitSwitch = new DigitalInput(0);
     public double deadZoneTolerance = 0.1;
     public double wrapPoint = 0;
@@ -24,43 +24,42 @@ public class TurretIOTalonFX implements TurretIO{
     public TurretIOTalonFX(){
         shooterConfigs = new ShooterConfigurator();
         hoodMotor = new TalonFX(Constants.hoodID, Constants.krakenBus);
+        hoodMotor.setPosition(0);
         turretMotor = new TalonFX(Constants.turretID,Constants.krakenBus);
-
+        turretMotor.setPosition(0);
         hoodMotor.getConfigurator().apply(shooterConfigs.hoodConfig);
         turretMotor.getConfigurator().apply(shooterConfigs.turretConfig);
     }
 
     @Override
     public void updateInputs(TurretIOInputs inputs){
-        inputs.hoodMotorTemp = hoodMotor.getDeviceTemp().getValueAsDouble();
-        inputs.turretMotorTemp = turretMotor.getDeviceTemp().getValueAsDouble();
-        inputs.hoodPosition = this.getHoodPosition();
-        inputs.turretPosition = this.getTurretPosition();
-        inputs.hoodRequest = hoodRequest.Position;
-        inputs.turretRequest = turretRequest.Position;
+        // inputs.hoodaMotorTemp = hoodMotor.getDeviceTemp().getValueAsDouble();
+        // inputs.turretMotorTemp = turretMotor.getDeviceTemp().getValueAsDouble();
+        // inputs.hoodPosition = this.getHoodPosition();
+        // inputs.turretPosition = this.getTurretPosition();
+        // inputs.hoodRequest = hoodRequest.Position;
+        // inputs.turretRequest = turretRequest.Position;
     }
 
     @Override
     public void setTurretPosition(double turretAngle){
-        turretAngle = Math.max(turretAngle, 0);
+        turretAngle = Math.max(turretAngle, -0.30);
         turretAngle = Math.min(turretAngle, Constants.maximumTurretPosition);
-        turretRequest.Position = turretAngle;
-        turretMotor.setControl(turretRequest);
+        turretMotor.setControl(turretRequest.withPosition(turretAngle));
     }
+
 
     @Override
     public void setHoodPosition(double hoodAngle){
         hoodAngle = Math.max(hoodAngle, 0);
         hoodAngle = Math.min(hoodAngle, Constants.maximumHoodPosition);
-        hoodRequest.Position = hoodAngle;
-        hoodMotor.setControl(hoodRequest);
+        hoodMotor.setControl(hoodRequest.withPosition(hoodAngle));
     }
 
     @Override
     public double getHoodPosition(){
         return hoodMotor.getPosition().getValueAsDouble();
     }
-
     @Override
     public double getTurretPosition(){
        return turretMotor.getPosition().getValueAsDouble();
@@ -88,7 +87,7 @@ public class TurretIOTalonFX implements TurretIO{
     // public boolean turretZeroed(){
     //     if(turretLimitSwitch.get()){
     //         turretMotor.setVoltage(0);
-    //         zeroTurret = turretMotor.getPosition().getValueAsDouble();            
+    //          turretMotor.setPosition(0);
     //         return true;
     //     }else{
     //         turretMotor.setVoltage(1);//TODO set this to real value Santi!

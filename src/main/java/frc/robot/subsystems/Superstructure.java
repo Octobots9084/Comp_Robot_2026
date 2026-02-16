@@ -7,6 +7,7 @@ import frc.robot.subsystems.*; // WHY DID WE HAVE SO MANY IMPORTS FROM THIS THIN
 import frc.robot.subsystems.Climb.*; //I don't know why we need this
 import frc.robot.subsystems.Intake.*;//same
 import frc.robot.subsystems.Shooter.*;//same here
+import frc.robot.subsystems.Shooter.Feeder.Feeder;
 import frc.robot.subsystems.Shooter.Flywheel.*;
 
 public class Superstructure extends SubsystemBase{
@@ -15,7 +16,7 @@ public class Superstructure extends SubsystemBase{
     public IntakeStates userRequestedIntakeState = IntakeStates.SAFE;
     
     boolean climbDescending = true;
-    public static Superstructure currentInstance = null;
+    public static Superstructure currentInstance;
     public Climb climb = Climb.getInstance();
 
 
@@ -35,9 +36,9 @@ public class Superstructure extends SubsystemBase{
     }
 
     public static Superstructure getInstance(){
-        if(currentInstance == null){
-            throw new IllegalStateException("Superstructure Instance not set");
-        }
+        // if(currentInstance == null){
+        //     throw new IllegalStateException("Superstructure Instance not set");
+        // }
         return currentInstance;
     }
     public States getCurrentState(){
@@ -86,7 +87,8 @@ public class Superstructure extends SubsystemBase{
                 stateCLIMB();
                 break;
             case SHOOTER:
-                stateSHOOTER();
+                // stateSHOOTER();
+                Shooter.getInstance().wantedShooterState = ShooterStates.SPIT;
                 break;
             case ZERO:
                 //todo

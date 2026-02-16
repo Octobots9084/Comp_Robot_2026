@@ -88,7 +88,7 @@ public class SwerveIOSystem extends TunerSwerveDrivetrain implements Subsystem, 
 
     @Override
     public Pose2d getPose2d(){
-        return robotPose;
+        return this.getState().Pose;
     }
 
     /**

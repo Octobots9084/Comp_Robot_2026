@@ -32,11 +32,11 @@ public class ClimbIOTalonFX implements ClimbIO{
         
         climbRotateMotorControlled = new TalonFX(Constants.climbRotateControlledID, Constants.krakenBus);
         climbRotateMotorFollower = new TalonFX(Constants.climbRotateFollowerID, Constants.krakenBus);
-        climbDeploymentMotor = new TalonFX(Constants.climbDeployID, Constants.krakenBus);
+        // climbDeploymentMotor = new TalonFX(Constants.climbDeployID, Constants.krakenBus);
 
         climbRotateMotorControlled.getConfigurator().apply(climbConfig.climbRotateControlledConfig);
         climbRotateMotorFollower.getConfigurator().apply(climbConfig.climbDeployConfig);
-        climbDeploymentMotor.getConfigurator().apply(climbConfig.climbDeployConfig);
+        // climbDeploymentMotor.getConfigurator().apply(climbConfig.climbDeployConfig);
     
         climbMotionControlledRequest = new MotionMagicVoltage(0.0);
         climbDeployRequest = new MotionMagicVoltage(0.0);
@@ -46,7 +46,7 @@ public class ClimbIOTalonFX implements ClimbIO{
     public void updateInputs(ClimbIOInputs inputs){
         inputs.climbMotorControlledTemperature = climbRotateMotorControlled.getDeviceTemp().getValueAsDouble();
         inputs.climbMotorFollowerTemperature = climbRotateMotorFollower.getDeviceTemp().getValueAsDouble();
-        inputs.deployMotorTemperature = climbDeploymentMotor.getDeviceTemp().getValueAsDouble();
+        // inputs.deployMotorTemperature = climbDeploymentMotor.getDeviceTemp().getValueAsDouble();
         inputs.climbPosition = climbRotateMotorControlled.getPosition().getValueAsDouble();
         inputs.deployPosition = climbRotateMotorControlled.getPosition().getValueAsDouble();
         
@@ -61,7 +61,7 @@ public class ClimbIOTalonFX implements ClimbIO{
     
         
         climbDeployRequest.Position = state.climbPosition;
-        climbDeploymentMotor.setControl(climbDeployRequest);
+        // climbDeploymentMotor.setControl(climbDeployRequest);
     
     }
     @Override
@@ -71,7 +71,8 @@ public class ClimbIOTalonFX implements ClimbIO{
 
     @Override
     public double getDeployPosition(){
-        return climbDeploymentMotor.getPosition().getValueAsDouble();
+        // return climbDeploymentMotor.getPosition().getValueAsDouble();
+        return 0.0;
     }
     @Override
     public boolean climbInTolerance(double climbTolerance){

@@ -35,10 +35,12 @@ public class FeederIOTalonFX implements FeederIO{
 
     @Override
     public void setFeederVelocity(FeederStates state){
-        spindexerRequest.Velocity = state.spindexerRPS;
-        verticalFeederRequest.Velocity = state.feederRPS;
-        spindexerMotor.setControl(spindexerRequest);
-        verticalFeederMotor.setControl(verticalFeederRequest);
+        // spindexerRequest.Velocity = state.spindexerRPS;
+        // verticalFeederRequest.Velocity = state.feederRPS;
+        // spindexerMotor.setControl(spindexerRequest);
+        // verticalFeederMotor.setControl(verticalFeederRequest);
+        spindexerMotor.setVoltage(state.spindexerRPS);
+        verticalFeederMotor.setVoltage(state.feederRPS);
     }
 
     @Override

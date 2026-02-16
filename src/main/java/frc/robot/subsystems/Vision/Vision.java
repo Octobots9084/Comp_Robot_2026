@@ -3,6 +3,7 @@ package frc.robot.subsystems.Vision;
 import org.photonvision.PhotonCamera;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.subsystems.Vision.VisionIOSystem.EstimateConsumer;
 
@@ -22,10 +23,30 @@ public class Vision {
 
     public Vision(EstimateConsumer estConsumer){
         io = new VisionIOSystem(estConsumer);
-        
+        SmartDashboard.putNumber("testerVx", 0);
+        SmartDashboard.putNumber("testerVy", 0);
+        SmartDashboard.putNumber("testerPfx", 3);
+        SmartDashboard.putNumber("testerPfy", 4);
+        SmartDashboard.putNumber("testerflywheelSpeed", 10);
     }
 
     public void periodic(){
+        
+
+        // double vx = SmartDashboard.getNumber("testerVx", 0);
+        // double vy = SmartDashboard.getNumber("testerVy", 0);
+        // double pfx = SmartDashboard.getNumber("testerPfx", 3);
+        // double pfy = SmartDashboard.getNumber("testerPfy", 4);
+        // double s = SmartDashboard.getNumber("testerflywheelSpeed", 10);
+
+        // ShooterAngle testShooterAngle = ShooterAngleCalculator.getShooterAngleToHub(vx, vy, pfx, pfy, s);
+
+        // if (testShooterAngle != null){
+        //     SmartDashboard.putNumber("testerHoodAngle", testShooterAngle.hoodRotation);
+        //     SmartDashboard.putNumber("testerTurretAngle", testShooterAngle.turretRotation);
+        // }
+        
+
         ApplyStates();
         handleStateTransitions();
     }

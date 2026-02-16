@@ -1,5 +1,7 @@
 package frc.robot.subsystems.Vision;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class ShooterAngleCalculator {
     
     //contants
@@ -82,13 +84,26 @@ public class ShooterAngleCalculator {
         // Newton's method
         double f = Integer.MAX_VALUE;
         int newtonsMethodIterations = 0;
+        double[] newtons_method_results= new double[maxNewtonsMethodIterations];
+        double[] newtons_method_derivative_results= new double[maxNewtonsMethodIterations];
         while (Math.abs(f) > 1e-6){
             f = quarticFunction(T, vx, vy, phx, phy, phz, s);
-            T = T - f / quarticDerivative(T, vx, vy, phx, phy, phz, s);
+            double qd = quarticDerivative(T, vx, vy, phx, phy, phz, s);
+            if (qd != 0)
+                T = T - f / qd;
             newtonsMethodIterations = newtonsMethodIterations + 1;
-            if (newtonsMethodIterations > maxNewtonsMethodIterations){
+            if (newtonsMethodIterations >= maxNewtonsMethodIterations){
+                double phxAim = phx - vx * T;
+                double phyAim = phy - vy * T;
+                
+                R = Math.sqrt((phxAim * phxAim) + (phyAim * phyAim));
+
+                theta = Math.atan(((s*s) + Math.sqrt((s*s*s*s) - (g*g) * (R*R) - 2 * phz * g * (s*s))) / (g * R));
+
                 return null;
-            }  
+            }
+            newtons_method_results[newtonsMethodIterations] = f;
+            newtons_method_derivative_results[newtonsMethodIterations] = qd;
         }
 
         //larger problums in our math than i thought (here we assume newtons method found the right angle)
@@ -96,12 +111,17 @@ public class ShooterAngleCalculator {
         double phyAim = phy - vy * T;
 
         R = Math.sqrt((phxAim*phxAim) + (phyAim*phyAim));
+
         theta = Math.atan(((s*s) + Math.sqrt((s*s*s*s) - (g*g) * (R*R) - 2 * phz * g * (s*s))) / (g * R));
-        
+
+        // SmartDashboard.putString("ShooterAngleCalkDebug", "final val:" + f+" theta:"+theta);
+
         //time when in front of the hub
         double th = (R-hubRadius)/(s * Math.cos(theta));
         //height when in front of the hub
-        double ht = shooterHeight + th * s * Math.sin(theta) - 0.5 * T*T * g;
+        double ht = shooterHeight + th * s * Math.sin(theta) - 0.5 * th*th * g;
+
+        SmartDashboard.putString("ShooterAngleCalkDebug", "ht" + ht +" theta:"+theta);
 
         if (ht > hubHeight){
                 double phi;
@@ -120,7 +140,7 @@ public class ShooterAngleCalculator {
     }
 
     private static double quarticFunction(double t, double vx, double vy, double phx, double phy, double phz, double s){
-        return (1/4) * (g*g) * (t*t*t*t) + ((vx*vx) + (vy*vy) + g*phz - (s*s)) * (t*t) - 2 * (phx*vx + phy*vy) * t + (phx*phx) + (phy*phy) + (phz*phz);
+        return (0.25) * (g*g) * (t*t*t*t) + ((vx*vx) + (vy*vy) + g*phz - (s*s)) * (t*t) - 2 * (phx*vx + phy*vy) * t + (phx*phx) + (phy*phy) + (phz*phz);
     }
 
     private static double quarticDerivative(double t, double vx, double vy, double phx, double phy, double phz, double s){
