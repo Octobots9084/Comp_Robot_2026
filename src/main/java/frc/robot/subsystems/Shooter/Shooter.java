@@ -115,11 +115,13 @@ public class Shooter extends SubsystemBase{
                 
             double gyro = SwerveSubsystem.getInstance().io.getGyro();
 
-            gyro = ((gyro % 360) + 360) % 360;
-            double offset = 0;
-            gyro = 405 - gyro + offset;
+            gyro = gyro % 360;
+            gyro = 360 - gyro;
 
-            double turretAngle = -(gyro / 360.0) + 0.5;
+            double offset = 80;
+            gyro += offset;
+            gyro = gyro % 360;
+            double turretAngle = -((gyro) / 360.0);
 
             turret.setTurretPosition(turretAngle);
 
