@@ -4,7 +4,7 @@ public enum FlywheelStates {
     SAFE(0),
     FERRY(0),
     BUMP(0),
-    SPIT(35
+    SPIT(44
     ),//todo: find out what this should be
     HUB(0);
 

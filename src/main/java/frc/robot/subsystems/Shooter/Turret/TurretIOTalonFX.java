@@ -87,10 +87,11 @@ public class TurretIOTalonFX implements TurretIO{
     public boolean turretZeroed(){
         if(!turretLimitSwitch.get()){
             turretMotor.setVoltage(0);
-            turretMotor.setPosition(0);
+            turretMotor.setPosition(0.013);
+            this.setTurretPosition(0);
             return true;
         }else{
-            turretMotor.setVoltage(3);//TODO set this to real value Santi!
+            turretMotor.setVoltage(1.5);
             return false;
         }
     }

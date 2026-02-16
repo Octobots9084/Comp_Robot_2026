@@ -115,11 +115,9 @@ public class Shooter extends SubsystemBase{
                 
             double gyro = SwerveSubsystem.getInstance().io.getGyro();
 
-            // Wrap properly
             gyro = ((gyro % 360) + 360) % 360;
-
-            // Invert gyro direction BEFORE scaling
-            gyro = 360 - gyro;
+            double offset = 0;
+            gyro = 405 - gyro + offset;
 
             double turretAngle = -(gyro / 360.0) + 0.5;
 
@@ -154,8 +152,8 @@ public class Shooter extends SubsystemBase{
             case ZERO:
 
             if(turret.io.turretZeroed()){
-                    currentShooterState = ShooterStates.SAFE;
-                }
+                currentShooterState = ShooterStates.SAFE;
+            }
                 break;
             default:
                 break;
