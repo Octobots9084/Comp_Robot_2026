@@ -111,6 +111,26 @@ public class Shooter extends SubsystemBase{
                 //     wantedShooterState = ShooterStates.BUMP;
                     // Lights.getLightInstance().lightsWantedState = LightAnimations.CANTSHOOT;
                 // }
+                // 
+                
+            double gyro = SwerveSubsystem.getInstance().io.getGyro();
+
+            // Wrap properly
+            gyro = ((gyro % 360) + 360) % 360;
+
+            // Invert gyro direction BEFORE scaling
+            gyro = 360 - gyro;
+
+            double turretAngle = -(gyro / 360.0) + 0.5;
+
+            turret.setTurretPosition(turretAngle);
+
+            feeder.setFeederVelocity(FeederStates.SPITTING);
+            flywheel.setFlywheelVelocity(FlywheelStates.SPIT);
+            turret.setHoodPosition(turret.spitTurrentHood);
+
+
+
                 break;
             case BUMP:
                 //dont shoot

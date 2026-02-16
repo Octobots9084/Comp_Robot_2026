@@ -32,7 +32,7 @@ public class ButtonConfig {
         //     ));
         // SmartDashboard.putBoolean("rightrigger",true);
         driverController.rightTrigger(0.5).onTrue(new InstantCommand(
-            () -> {Shooter.getInstance().wantedShooterState = ShooterStates.SPIT; SmartDashboard.putBoolean("rightrigger",true);}))
+            () -> {Shooter.getInstance().wantedShooterState = ShooterStates.HUB; SmartDashboard.putBoolean("rightrigger",true);}))
             .onFalse(new InstantCommand(
             () -> {Shooter.getInstance().wantedShooterState = ShooterStates.SAFE; /*superstructure.setWantedState(States.SAFE);*/ SmartDashboard.putBoolean("rightrigger",false);}
             ));

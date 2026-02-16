@@ -311,6 +311,11 @@ public class SwerveIOSystem extends TunerSwerveDrivetrain implements Subsystem, 
         this.getPigeon2().setYaw(0);
      }
 
+     @Override 
+     public double getGyro(){
+        return this.getPigeon2().getYaw().getValueAsDouble();
+     }
+
      public ChassisSpeeds getSpeed() {
         return this.getState().Speeds;
      }
