@@ -45,7 +45,7 @@ public class Shooter extends SubsystemBase{
     public SwerveSubsystem swerve = SwerveSubsystem.getInstance();
     public final CommandXboxController coDriverController;
     public Feeder feeder = new Feeder();
-    public Turret turret = new Turret();
+    public Turret turret;
     public Flywheel flywheel = new Flywheel();
     public final double prefire = 1;
     public CANrange lemonDetector = new CANrange(Constants.lemonDetector,Constants.krakenBus);
@@ -63,6 +63,7 @@ public class Shooter extends SubsystemBase{
         this.sIO = sIO;
         this.coDriverController = coDriverController;
         instance = this;
+        turret  = new Turret(tIO);
     }
 
     public static Shooter setInstance(FeederIO fIO,FlywheelIO fwIO, TurretIO tIO,ShooterIO sIO, CommandXboxController coDriverController){
@@ -79,8 +80,6 @@ public class Shooter extends SubsystemBase{
     
     @Override
     public void periodic(){
-        ApplyStates();
-        handleStateTransitions();
         ApplyStates();
         handleStateTransitions();
         fIO.updateInputs(feederInputs);
@@ -128,10 +127,27 @@ public class Shooter extends SubsystemBase{
                 SmartDashboard.putNumber("shooterHoodAngle",pastShooterAngle.hoodRotation);
                 SmartDashboard.putNumber("shooterAngle",pastShooterAngle.turretRotation);
                 
-                if(hub()){
-                    wantedShooterState = ShooterStates.BUMP;
-                    Lights.getLightInstance().lightsWantedState = LightAnimations.CANTSHOOT;
-                }
+                // if(hub()){
+                //     wantedShooterState = ShooterStates.BUMP;
+                    // Lights.getLightInstance().lightsWantedState = LightAnimations.CANTSHOOT;
+                // }
+                // 
+                
+            double gyro = SwerveSubsystem.getInstance().io.getGyro();
+
+            // Wrap properly
+            gyro = ((gyro % 360) + 360) % 360;
+
+            // Invert gyro direction BEFORE scaling
+            gyro = 360 - gyro;
+
+            double turretAngle = -(gyro / 360.0) + 0.5;
+
+            turret.setTurretPosition(turretAngle);
+
+            feeder.setFeederVelocity(FeederStates.SPITTING);
+            flywheel.setFlywheelVelocity(FlywheelStates.SPIT);
+            turret.setHoodPosition(turret.spitTurrentHood);
                 break;
             case BUMP:
                 //dont shoot
@@ -151,7 +167,12 @@ public class Shooter extends SubsystemBase{
                 flywheel.setFlywheelVelocity(FlywheelStates.SPIT);
                 turret.setHoodPosition(turret.spitTurrentHood);
                 turret.setTurretPosition(turretAim);
+                break;
             case ZERO:
+
+            if(turret.io.turretZeroed()){
+                    currentShooterState = ShooterStates.SAFE;
+                }
                 break;
             default:
                 break;
@@ -190,6 +211,9 @@ public class Shooter extends SubsystemBase{
                     break;
                 case ZERO:
                     currentShooterState = ShooterStates.ZERO;
+                    break;
+                case MANUAL:
+                    currentShooterState = ShooterStates.MANUAL;
                     break;
                 case SPIT:
                     currentShooterState = ShooterStates.SPIT;

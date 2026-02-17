@@ -75,6 +75,8 @@ public interface SwerveIO {
 
     default void zeroGyro() {}
 
+    public default double getGyro() {return 0;}
+
     public default void driveFieldRelative(ChassisSpeeds fieldRelativeSpeeds) {}
 
     default void setAllianceColor () {}

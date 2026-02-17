@@ -27,4 +27,6 @@ public interface TurretIO {
     public default boolean hoodInTolerance(double tolerance){ return false;}
 
     public default boolean turretInTolerance(double tolerance){ return false;}
+
+    public default boolean turretZeroed(){return false;}
 }

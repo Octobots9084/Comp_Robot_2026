@@ -15,7 +15,7 @@ public class TurretIOTalonFX implements TurretIO{
     public double zeroTurret;
     private MotionMagicVoltage turretRequest = new MotionMagicVoltage(0);
     private MotionMagicVoltage hoodRequest = new MotionMagicVoltage(0);
-    // public DigitalInput turretLimitSwitch = new DigitalInput(0);
+    public DigitalInput turretLimitSwitch = new DigitalInput(1);
     public double deadZoneTolerance = 0.1;
     public double wrapPoint = 0;
     
@@ -43,8 +43,8 @@ public class TurretIOTalonFX implements TurretIO{
 
     @Override
     public void setTurretPosition(double turretAngle){
-        turretAngle = Math.max(turretAngle, -0.30);
-        turretAngle = Math.min(turretAngle, Constants.maximumTurretPosition);
+        turretAngle = Math.max(turretAngle, -0.57);
+        turretAngle = Math.min(turretAngle, 0);
         turretMotor.setControl(turretRequest.withPosition(turretAngle));
     }
 
@@ -83,15 +83,15 @@ public class TurretIOTalonFX implements TurretIO{
     public void startFiring() {
         startTime = System.currentTimeMillis();
     }
-
-    // public boolean turretZeroed(){
-    //     if(turretLimitSwitch.get()){
-    //         turretMotor.setVoltage(0);
-    //          turretMotor.setPosition(0);
-    //         return true;
-    //     }else{
-    //         turretMotor.setVoltage(1);//TODO set this to real value Santi!
-    //         return false;
-    //     }
-    // }
+    @Override
+    public boolean turretZeroed(){
+        if(!turretLimitSwitch.get()){
+            turretMotor.setVoltage(0);
+            turretMotor.setPosition(0);
+            return true;
+        }else{
+            turretMotor.setVoltage(3);//TODO set this to real value Santi!
+            return false;
+        }
+    }
 }
