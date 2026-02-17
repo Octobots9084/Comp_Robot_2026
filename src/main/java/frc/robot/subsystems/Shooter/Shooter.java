@@ -122,7 +122,7 @@ public class Shooter extends SubsystemBase{
                     // Lights.getLightInstance().lightsWantedState = LightAnimations.CANTSHOOT;
                 // }
 
-            if(!Constants.isBlueAlliance){
+            if(Constants.isBlueAlliance){
                 shooterAngle = ShooterAngleCalculator.getShooterAngleToHub(
                     swerve.io.getChassisSpeeds().vxMetersPerSecond,
                     swerve.io.getChassisSpeeds().vxMetersPerSecond,
