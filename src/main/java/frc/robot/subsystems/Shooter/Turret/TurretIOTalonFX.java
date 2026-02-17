@@ -43,7 +43,7 @@ public class TurretIOTalonFX implements TurretIO{
 
     @Override
     public void setTurretPosition(double turretAngle){
-        turretAngle = Math.max(turretAngle, -0.57);
+        turretAngle = Math.max(turretAngle, -0.434);
         turretAngle = Math.min(turretAngle, 0);
         turretMotor.setControl(turretRequest.withPosition(turretAngle));
     }
@@ -87,7 +87,8 @@ public class TurretIOTalonFX implements TurretIO{
     public boolean turretZeroed(){
         if(!turretLimitSwitch.get()){
             turretMotor.setVoltage(0);
-            turretMotor.setPosition(0);
+            turretMotor.setPosition(0.013);
+            this.setTurretPosition(0);
             return true;
         }else{
             turretMotor.setVoltage(3);//TODO set this to real value Santi!

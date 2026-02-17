@@ -341,7 +341,7 @@ public class SwerveIOSystem extends TunerSwerveDrivetrain implements Subsystem, 
      public Rotation3d geRotation3d () {
         return this.getRotation3d();
      }
-
+     @Override
      public void zeroGyro() {
         this.getPigeon2().setYaw(0);
      }

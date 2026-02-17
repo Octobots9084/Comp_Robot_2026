@@ -73,6 +73,9 @@ public class ShooterAngleCalculator {
         // needed height
         double phz = hubHeight - shooterHeight;
 
+        SmartDashboard.putNumber("relativePositionToHubX",phx);
+        SmartDashboard.putNumber("relativePositionToHubY",phy);
+
         // estimate t and theta for inital guess
         // first estimate theta
         double R = Math.sqrt(phx * phx + phy * phy);
@@ -125,7 +128,7 @@ public class ShooterAngleCalculator {
 
         if (ht > hubHeight){
                 double phi;
-            if (phyAim > 0){
+            if (phxAim > 0){
                 phi = Math.atan(phyAim / phxAim);
             } else {
                 phi = Math.atan(phyAim / phxAim)+Math.PI;
