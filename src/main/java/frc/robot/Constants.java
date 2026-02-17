@@ -34,6 +34,7 @@ import edu.wpi.first.wpilibj.Timer;
  */
 public final class Constants {
   // vision
+  public static final double TurretDistFromCenter = 0.03592102448;
   public static final String frontCameraName = "FrontCamera";
   public static final String intakeCameraName = "IntakeCamera";
   public static final AprilTagFieldLayout kTagLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
