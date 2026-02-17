@@ -128,7 +128,7 @@ public class Shooter extends SubsystemBase{
                     swerve.io.getChassisSpeeds().vxMetersPerSecond,
                     hubPoseBlue.getX() - swerve.io.getPose2d().getX(),
                     hubPoseBlue.getY() - swerve.io.getPose2d().getY(),
-                    20// (Flywheel.getInstance().getFlywheelVelocity()[1]*2*Math.Pi * Flywheel.flywheelRadius + Flywheel.getInstance().getFlywheelVelocity()[0]*2*Math.Pi * Flywheel.flywheelRadius)/2.0
+                    8// (Flywheel.getInstance().getFlywheelVelocity()[1]*2*Math.Pi * Flywheel.flywheelRadius + Flywheel.getInstance().getFlywheelVelocity()[0]*2*Math.Pi * Flywheel.flywheelRadius)/2.0
                 );
             }
             else{
@@ -137,7 +137,7 @@ public class Shooter extends SubsystemBase{
                     swerve.io.getChassisSpeeds().vxMetersPerSecond,
                     hubPoseRed.getX() - swerve.io.getPose2d().getX() + Constants.TurretDistFromCenter*Math.cos((Math.PI*(swerve.io.getGyro()/180))+(Math.PI*3)/4),
                     hubPoseRed.getY() - swerve.io.getPose2d().getY() + Constants.TurretDistFromCenter*Math.sin((Math.PI*(swerve.io.getGyro()/180))+(Math.PI*3)/4),
-                    20// (Flywheel.getInstance().getFlywheelVelocity()[1]*2*Math.Pi * Flywheel.flywheelRadius + Flywheel.getInstance().getFlywheelVelocity()[0]*2*Math.Pi * Flywheel.flywheelRadius)/2.0
+                    8// (Flywheel.getInstance().getFlywheelVelocity()[1]*2*Math.Pi * Flywheel.flywheelRadius + Flywheel.getInstance().getFlywheelVelocity()[0]*2*Math.Pi * Flywheel.flywheelRadius)/2.0
                 );
             }
 
@@ -160,9 +160,12 @@ public class Shooter extends SubsystemBase{
 
             turret.setTurretPosition(turretAngle);
 
+            double hoodInverted = 85 - (pastShooterAngle.hoodRotation*180)/Math.PI;
+            double hoodRelative = hoodInverted/360;
+            turret.setHoodPosition(hoodRelative);
+
             // feeder.setFeederVelocity(FeederStates.SPITTING);
             // flywheel.setFlywheelVelocity(FlywheelStates.SPIT);
-            // turret.setHoodPosition(turret.spitTurrentHood);
                 break;
             case BUMP:
                 //dont shoot
