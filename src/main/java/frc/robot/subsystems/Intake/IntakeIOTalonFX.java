@@ -16,7 +16,7 @@ public class IntakeIOTalonFX implements IntakeIO{
     public TalonFX roller;
     private MotionMagicVelocityVoltage rollerRequest = new MotionMagicVelocityVoltage(0);
     private MotionMagicVoltage pivotRequest;
-    public double rollerCurrent = roller.getStatorCurrent().getValueAsDouble();
+
     public IntakeIOTalonFX () {
         config = new IntakeConfigurator();
      //    roller.setNeutralMode(NeutralModeValue.Coast);
@@ -33,6 +33,7 @@ public class IntakeIOTalonFX implements IntakeIO{
      //    inputs.rollerTemp = roller.getDeviceTemp().getValueAsDouble();
         inputs.pivotTemp = pivot.getDeviceTemp().getValueAsDouble();
         inputs.rollerCurrent = roller.getStatorCurrent().getValueAsDouble();
+        inputs.pivotCurrent = pivot.getStatorCurrent().getValueAsDouble();
    }
 
     @Override

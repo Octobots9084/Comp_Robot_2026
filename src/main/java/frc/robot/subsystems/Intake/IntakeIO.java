@@ -12,6 +12,7 @@ public static class IntakeIOInputs {
     public double rollerTemp = 0.0;
     public double pivotTemp = 0.0;
     public double rollerCurrent = 0.0;
+    public double pivotCurrent = 0.0;
 }
 public default void updateInputs(IntakeIOInputs inputs){}
 

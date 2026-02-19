@@ -18,11 +18,6 @@ public class FeederIOTalonFX implements FeederIO{
     public ShooterConfigurator shooterConfigs;
     private MotionMagicVelocityVoltage spindexerRequest;
     private MotionMagicVelocityVoltage verticalFeederRequest;
-
-    public double SpindexerCurrent = spindexerMotor.getStatorCurrent().getValueAsDouble();
-    public double VerticalFeederMotorCurrent = verticalFeederMotor.getStatorCurrent().getValueAsDouble();
-
-
   
     public FeederIOTalonFX(){
         shooterConfigs = new ShooterConfigurator();
