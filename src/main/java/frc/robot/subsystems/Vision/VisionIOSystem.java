@@ -8,12 +8,15 @@ import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
+import com.ctre.phoenix6.Utils;
+
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 
 public class VisionIOSystem implements VisionIO{
@@ -51,6 +54,7 @@ public class VisionIOSystem implements VisionIO{
                 visionEst = photonEstimator.estimateLowestAmbiguityPose(result);
             }
             updateEstimationStdDevs(visionEst, result.getTargets());
+            
 
             // if (Robot.isSimulation()) {
             //     visionEst.ifPresentOrElse(
@@ -67,7 +71,10 @@ public class VisionIOSystem implements VisionIO{
                     est -> {
                         // Change our trust in the measurement based on the tags we can see
                         var estStdDevs = getEstimationStdDevs();
-
+                        SmartDashboard.putNumber("VisionEstimatedPose_X", est.estimatedPose.toPose2d().getX());
+                        SmartDashboard.putNumber("VisionEstimatedPose_Y", est.estimatedPose.toPose2d().getY());
+                        SmartDashboard.putNumber("VisionEstimatedTimeStampSeconds", Utils.fpgaToCurrentTime(est.timestampSeconds));
+                        
                         estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
                     });
         }

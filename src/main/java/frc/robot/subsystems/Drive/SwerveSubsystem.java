@@ -10,7 +10,6 @@ import com.ctre.phoenix6.swerve.SwerveModule;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -45,8 +44,6 @@ public class SwerveSubsystem extends SubsystemBase{
     public CommandXboxController driverController;
     public double maxVelocity;
     public double maxAngularVelocity;
-    // The robot pose estimator for tracking swerve odometry and applying vision corrections.
-    private final SwerveDrivePoseEstimator poseEstimator;
 
     private final SwerveIOInputsAutoLogged inputs = new SwerveIOInputsAutoLogged();
 
@@ -58,21 +55,21 @@ public class SwerveSubsystem extends SubsystemBase{
         this.maxAngularVelocity = maxAngularVelocity;
         this.maxVelocity = maxVelocity;
 
-        var stateStdDevs = VecBuilder.fill(0.1, 0.1, 0.1);
-        var visionStdDevs = VecBuilder.fill(1, 1, 1);
-        poseEstimator =
-            new SwerveDrivePoseEstimator(
-                new SwerveDriveKinematics(
-                    Constants.swerveModuleOneOffset,
-                    Constants.swerveModuleTwoOffset,
-                    Constants.swerveModuleThreeOffset,
-                    Constants.swerveModuleFourOffset),
-                io.getGyroYaw(),
-                io.getModulePositions(),
-                new Pose2d(),
-                stateStdDevs,
-                visionStdDevs
-            );
+        // var stateStdDevs = VecBuilder.fill(0.1, 0.1, 0.1);
+        // var visionStdDevs = VecBuilder.fill(1, 1, 1);
+        // poseEstimator =
+        //     new SwerveDrivePoseEstimator(
+        //         new SwerveDriveKinematics(
+        //             Constants.swerveModuleOneOffset,
+        //             Constants.swerveModuleTwoOffset,
+        //             Constants.swerveModuleThreeOffset,
+        //             Constants.swerveModuleFourOffset),
+        //         io.getGyroYaw(),
+        //         io.getModulePositions(),
+        //         new Pose2d(),
+        //         stateStdDevs,
+        //         visionStdDevs
+        //     );
         instance = this;
         registerNamedCommands();
     }
@@ -210,6 +207,8 @@ public class SwerveSubsystem extends SubsystemBase{
     public void addVisionMeasurement(
             Pose2d visionMeasurement, double timestampSeconds, Matrix<N3, N1> stdDevs) {
         SmartDashboard.putNumberArray("Vision_STDEVS",stdDevs.getData());
-        poseEstimator.addVisionMeasurement(visionMeasurement, timestampSeconds, stdDevs);
+        // poseEstimator.resetPose(visionMeasurement);
+
+        io.addVisionMeasurement(visionMeasurement, timestampSeconds, stdDevs);
     }
 }

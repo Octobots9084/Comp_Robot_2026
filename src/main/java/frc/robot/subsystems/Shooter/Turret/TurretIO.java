@@ -5,6 +5,7 @@ import org.littletonrobotics.junction.AutoLog;
 public interface TurretIO {
     @AutoLog
     public static class TurretIOInputs{
+        public boolean turretLimitSwitch;
         public double hoodPosition;
         public double turretPosition;
         public double hoodMotorTemp;
