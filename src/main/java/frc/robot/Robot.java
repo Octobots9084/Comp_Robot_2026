@@ -12,7 +12,13 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.Climb.Climb;
+import frc.robot.subsystems.Climb.ClimbStates;
 import frc.robot.subsystems.Drive.SwerveSubsystem;
+import frc.robot.subsystems.Intake.Intake;
+import frc.robot.subsystems.Intake.IntakeStates;
+import frc.robot.subsystems.Shooter.Shooter;
+import frc.robot.subsystems.Shooter.ShooterStates;
 
 import java.util.Optional;
 
@@ -141,6 +147,9 @@ public class Robot extends LoggedRobot {
   public void autonomousInit() {
     setAllianceColor();
     autonomousCommand = robotContainer.getAutonomousCommand();
+    Shooter.getInstance().wantedShooterState = ShooterStates.ZERO;
+    Climb.getInstance().wantedState = ClimbStates.ZERO;
+    Intake.getInstance().wantedState = IntakeStates.ZERO;
     // SwerveSubsystem.getInstance().io.getPigeon2().setYaw(90);
 
 
@@ -159,6 +168,9 @@ public class Robot extends LoggedRobot {
   @Override
   public void teleopInit(){
     setAllianceColor();
+    Shooter.getInstance().wantedShooterState = ShooterStates.ZERO;
+    Climb.getInstance().wantedState = ClimbStates.ZERO;
+    Intake.getInstance().wantedState = IntakeStates.ZERO;
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
@@ -178,6 +190,9 @@ public class Robot extends LoggedRobot {
   @Override
   public void testInit() {
     // Cancels all running commands at the start of test mode.
+    Shooter.getInstance().wantedShooterState = ShooterStates.ZERO;
+    Climb.getInstance().wantedState = ClimbStates.ZERO;
+    Intake.getInstance().wantedState = IntakeStates.ZERO;
     CommandScheduler.getInstance().cancelAll();
   }
 

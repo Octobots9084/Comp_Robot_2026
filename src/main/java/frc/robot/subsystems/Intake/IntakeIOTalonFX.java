@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 
 public class IntakeIOTalonFX implements IntakeIO{
-//     public DigitalInput zeroingSwitch = new DigitalInput(9);
+    public DigitalInput zeroingSwitch = new DigitalInput(9);
     public IntakeConfigurator config;
     public TalonFX pivot;
     public TalonFX roller;
@@ -28,10 +28,10 @@ public class IntakeIOTalonFX implements IntakeIO{
     }
 
    public void updateInputs(IntakeIOInputs inputs) {
-     //    inputs.intakePosition = pivot.getPosition().getValueAsDouble();
-        inputs.rollerRPS = roller.getVelocity().getValueAsDouble();
-     //    inputs.rollerTemp = roller.getDeviceTemp().getValueAsDouble();
-        inputs.pivotTemp = pivot.getDeviceTemp().getValueAsDouble();
+          inputs.intakePosition = pivot.getPosition().getValueAsDouble();
+          inputs.rollerRPS = roller.getVelocity().getValueAsDouble();
+          inputs.rollerTemp = roller.getDeviceTemp().getValueAsDouble();
+          inputs.pivotTemp = pivot.getDeviceTemp().getValueAsDouble();
         inputs.rollerCurrent = roller.getStatorCurrent().getValueAsDouble();
         inputs.pivotCurrent = pivot.getStatorCurrent().getValueAsDouble();
    }
@@ -57,7 +57,7 @@ public class IntakeIOTalonFX implements IntakeIO{
    public void setRotateVoltage(double voltage){
         this.pivot.setVoltage(voltage);
     }
-//    public boolean isZeroingSwitchPressed(){//GAS_D
-//          return zeroingSwitch.get();
-//    }
+   public boolean isZeroingSwitchPressed(){//GAS_D
+         return zeroingSwitch.get();
+   }
 }

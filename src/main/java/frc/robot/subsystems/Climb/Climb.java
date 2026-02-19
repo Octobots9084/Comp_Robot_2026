@@ -10,9 +10,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Climb extends SubsystemBase{
     ClimbStates currentState = ClimbStates.IDLE;
-    ClimbStates wantedState = ClimbStates.IDLE;
+    public ClimbStates wantedState = ClimbStates.IDLE;
     public ClimbIO io;
     public static Climb instance;
+    public boolean alreadyZeroed = false;
     public ClimbIOInputsAutoLogged inputs = new ClimbIOInputsAutoLogged();
     public boolean climbL3 = false;
     
@@ -84,7 +85,7 @@ public class Climb extends SubsystemBase{
                 }
                 break;
             case ZERO:
-                if(currentState != ClimbStates.CLIMBEDL3 && currentState != ClimbStates.CLIMBEDL1){
+                if(currentState != ClimbStates.CLIMBEDL3 && currentState != ClimbStates.CLIMBEDL1 && !alreadyZeroed){
                     currentState = ClimbStates.ZERO;
                 }
                 break;
@@ -97,7 +98,10 @@ public class Climb extends SubsystemBase{
     public void applyStates(){
         switch(currentState){
             case ZERO:
-                zeroClimb();
+                if(zeroClimb()){
+                    alreadyZeroed = true;
+                    wantedState = ClimbStates.IDLE;
+                }
                 break;
             default:
                 setClimbState(currentState);

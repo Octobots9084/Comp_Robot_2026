@@ -45,6 +45,7 @@ public class Shooter extends SubsystemBase{
     public final CommandXboxController coDriverController;
     public Feeder feeder = new Feeder();
     public Turret turret;
+    public boolean alreadyZeroed = false;
     public Flywheel flywheel = new Flywheel();
     public final double prefire = 1;
     public CANrange lemonDetector = new CANrange(Constants.lemonDetector,Constants.krakenBus);
@@ -151,10 +152,11 @@ public class Shooter extends SubsystemBase{
                 turret.setHoodPosition(turret.spitTurrentHood);
                 turret.setTurretPosition(turretAim);
                 break;
-            case ZERO:
 
+            case ZERO:
             if(turret.io.turretZeroed()){
-                currentShooterState = ShooterStates.SAFE;
+                wantedShooterState = ShooterStates.SAFE;
+                alreadyZeroed = true;
             }
                 break;
             default:
@@ -193,7 +195,9 @@ public class Shooter extends SubsystemBase{
                     currentShooterState = ShooterStates.SAFE;
                     break;
                 case ZERO:
-                    currentShooterState = ShooterStates.ZERO;
+                    if(!alreadyZeroed){
+                        currentShooterState = ShooterStates.ZERO;
+                    }
                     break;
                 case MANUAL:
                     currentShooterState = ShooterStates.MANUAL;

@@ -11,6 +11,7 @@ public class Intake extends SubsystemBase{
     public IntakeStates wantedState = IntakeStates.SAFE;
     public IntakeIO io;
     public static Intake instance;
+    public boolean alreadyZeroed = false;
     public IntakeIOTalonFX intakeFX = new IntakeIOTalonFX();
     public IntakeIOInputsAutoLogged inputs = new IntakeIOInputsAutoLogged();
 
@@ -59,7 +60,9 @@ public class Intake extends SubsystemBase{
 
                 break;
             case ZERO:
+            if(!alreadyZeroed){
                 currentState = IntakeStates.ZERO;
+            }
                 break;
             default:
             currentState = IntakeStates.SAFE;
@@ -70,11 +73,8 @@ public class Intake extends SubsystemBase{
     }
 
     public void applyStates() {
-        
-    
-        io.setIntakeState(currentState);
 
-        // switch (currentState){
+        switch (currentState){
 
         // case INTAKING:
         //     //motors on intake out
@@ -91,13 +91,17 @@ public class Intake extends SubsystemBase{
         // case REVERSEINTAKING:
         //     //motors reverse intake out
         //     break;
-        // case ZERO:
-        //      //todo
-        //      break;
-        // default:
-        //     //safe
-        //     break;
-        // }
+        case ZERO:
+            if(zeroIntake()){
+                alreadyZeroed = true;
+                wantedState = IntakeStates.SAFE;
+            }
+            break;
+
+        default:
+        io.setIntakeState(currentState);    
+            break;
+        }
     }
 
 
