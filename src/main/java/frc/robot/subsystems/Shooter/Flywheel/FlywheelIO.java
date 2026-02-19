@@ -10,6 +10,9 @@ public interface FlywheelIO{
     public double FlywheelLeftMotorTemp = 0.0;
     public double FlywheelRightRPS = 0.0;
     public double FlywheelRightMotorTemp = 0.0;
+    public double FlywheelLeftCurrent = 0.0;
+    public double FlywheelRightCurrent = 0.0;
+
   }
   public default void updateInputs(FlywheelIOInputs inputs){}
   public default void setFlywheelVelocity(FlywheelStates state){}

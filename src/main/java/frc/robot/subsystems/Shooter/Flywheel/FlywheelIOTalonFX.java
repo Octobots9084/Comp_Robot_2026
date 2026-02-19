@@ -15,10 +15,13 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.AngularAcceleration;
 
 public class FlywheelIOTalonFX implements FlywheelIO{
-    public TalonFX FlywheelLeftMotor;
-    public TalonFX FlywheelRightMotor;
+    public static TalonFX FlywheelLeftMotor;
+    public static TalonFX FlywheelRightMotor;
     public ShooterConfigurator shooterConfigs;
     private MotionMagicVelocityVoltage FlywheelRightMotorRequest = new MotionMagicVelocityVoltage(0).withAcceleration(100).withSlot(0);
+    public double FlywheelLeftCurrent = FlywheelLeftMotor.getStatorCurrent().getValueAsDouble();
+    public double FlywheeRightCurrent = FlywheelRightMotor.getStatorCurrent().getValueAsDouble();
+
     private Follower follow =
       new Follower(Constants.flyWheelRightID, MotorAlignmentValue.Opposed);
     public FlywheelIOTalonFX() {
@@ -35,6 +38,8 @@ public class FlywheelIOTalonFX implements FlywheelIO{
         inputs.FlywheelRightRPS = FlywheelRightMotor.getVelocity().getValueAsDouble();
         inputs.FlywheelLeftMotorTemp = FlywheelLeftMotor.getDeviceTemp().getValueAsDouble();
         inputs.FlywheelRightMotorTemp = FlywheelRightMotor.getDeviceTemp().getValueAsDouble();
+        inputs.FlywheelLeftCurrent = FlywheelLeftMotor.getStatorCurrent().getValueAsDouble();
+        inputs.FlywheelRightCurrent = FlywheelRightMotor.getStatorCurrent().getValueAsDouble();
     }
     @Override
     public void setFlywheelVelocity(FlywheelStates state){

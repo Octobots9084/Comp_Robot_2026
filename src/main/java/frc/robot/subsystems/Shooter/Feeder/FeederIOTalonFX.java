@@ -5,6 +5,7 @@ import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import frc.robot.Constants;
 import frc.robot.subsystems.States;
 import frc.robot.subsystems.Shooter.ShooterConfigurator;
+import frc.robot.subsystems.Shooter.Flywheel.FlywheelIOTalonFX;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 
@@ -18,6 +19,11 @@ public class FeederIOTalonFX implements FeederIO{
     private MotionMagicVelocityVoltage spindexerRequest;
     private MotionMagicVelocityVoltage verticalFeederRequest;
 
+    public double SpindexerCurrent = spindexerMotor.getStatorCurrent().getValueAsDouble();
+    public double VerticalFeederMotorCurrent = verticalFeederMotor.getStatorCurrent().getValueAsDouble();
+
+
+  
     public FeederIOTalonFX(){
         shooterConfigs = new ShooterConfigurator();
         spindexerMotor = new TalonFX(Constants.spindexerID,Constants.krakenBus);
@@ -32,6 +38,9 @@ public class FeederIOTalonFX implements FeederIO{
         inputs.verticalFeederRPS = verticalFeederMotor.getVelocity().getValueAsDouble();
         inputs.spindexerMotorTemp = spindexerMotor.getDeviceTemp().getValueAsDouble();
         inputs.verticalFeederMotorTemp = verticalFeederMotor.getDeviceTemp().getValueAsDouble();
+        inputs.SpindexerCurrent = spindexerMotor.getStatorCurrent().getValueAsDouble();
+        inputs.verticalFeederCurrent = verticalFeederMotor.getStatorCurrent().getValueAsDouble();
+
     }
 
     @Override
