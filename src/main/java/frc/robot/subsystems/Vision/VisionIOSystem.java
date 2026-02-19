@@ -42,6 +42,7 @@ public class VisionIOSystem implements VisionIO{
         inputs.frontCameraConected = frontCamera.isConnected();
     }
 
+    @Override
     public void periodic() {
         Optional<EstimatedRobotPose> visionEst = Optional.empty();
         for (var result : frontCamera.getAllUnreadResults()) {

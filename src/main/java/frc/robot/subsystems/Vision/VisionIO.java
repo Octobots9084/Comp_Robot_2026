@@ -18,4 +18,5 @@ public interface VisionIO {
     public default void addVisionReading(String cameraName, EstimatedRobotPose pose, Matrix<N3, N1> visionMeasurementStdDevs){}
 
     public default void addGyroReading(){}
+    public default void periodic() {}
 }

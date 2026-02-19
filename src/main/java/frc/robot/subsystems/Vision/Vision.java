@@ -31,7 +31,7 @@ public class Vision {
     }
 
     public void periodic(){
-        
+        io.periodic();
 
         // double vx = SmartDashboard.getNumber("testerVx", 0);
         // double vy = SmartDashboard.getNumber("testerVy", 0);

@@ -37,7 +37,7 @@ public final class Constants {
   public static final double TurretDistFromCenter = 0.03592102448;
   public static final String frontCameraName = "FrontCamera";
   public static final String intakeCameraName = "IntakeCamera";
-  public static final AprilTagFieldLayout kTagLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
+  public static final AprilTagFieldLayout kTagLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded);
   private static final double camPitch = Units.degreesToRadians(30.0);
   public static final Transform3d robotToCamFront = new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0, -camPitch, 0));
   // The standard deviations of our vision estimated poses, which affect correction rate

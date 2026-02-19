@@ -209,6 +209,7 @@ public class SwerveSubsystem extends SubsystemBase{
     /** See {@link SwerveDrivePoseEstimator#addVisionMeasurement(Pose2d, double, Matrix)}. */
     public void addVisionMeasurement(
             Pose2d visionMeasurement, double timestampSeconds, Matrix<N3, N1> stdDevs) {
+        SmartDashboard.putNumberArray("Vision_STDEVS",stdDevs.getData());
         poseEstimator.addVisionMeasurement(visionMeasurement, timestampSeconds, stdDevs);
     }
 }
