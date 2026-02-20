@@ -7,6 +7,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
@@ -187,12 +188,73 @@ public class Robot extends LoggedRobot {
   public void testPeriodic() {}
 
   /** This function is called once when the robot is first started up. */
+    SwerveSubsystem swerve;
+    boolean onRamp;
+    boolean hasBeenOnRamp;
+    boolean hasBeenTilted;
+    boolean precon;
+    double tilt;
   @Override
-  public void simulationInit() {}
+  public void simulationInit() {
+        onRamp = false;
+        hasBeenOnRamp = false;
+        precon = false;
+        tilt = 0;
+        hasBeenTilted = false;
+        SmartDashboard.putBoolean("autotest/onRamp", onRamp);
+        SmartDashboard.putBoolean("autotest/precon", precon);
+        SmartDashboard.putNumber("autotest/tilt", tilt);
+        SmartDashboard.putBoolean("autotest/hasBeenOnRamp", hasBeenOnRamp);
+        SmartDashboard.putBoolean("autotest/hasBeenTilted", hasBeenTilted);
+        SmartDashboard.putBoolean("autotest/Reset Test", false);
+        SmartDashboard.putNumber("autotest/TILT INPUT", 0);
+        SmartDashboard.putBoolean("autotest/done w auto", false);
+  }
 
   /** This function is called periodically whilst in simulation. */
   @Override
-  public void simulationPeriodic() {}
+  public void simulationPeriodic() {
+
+
+        onRamp = onRamp(0, 3);
+        tilt = SmartDashboard.getNumber("autotest/TILT INPUT", 0);
+        if (onRamp && !hasBeenOnRamp) {
+            hasBeenOnRamp = true;
+        }
+        if (!onRamp && hasBeenOnRamp) {
+            precon = true;
+        }
+        if (precon && (tilt > 1)) {
+            hasBeenTilted = true;
+        }
+
+        SmartDashboard.putBoolean("autotest/onRamp", onRamp);
+        SmartDashboard.putBoolean("autotest/precon", precon);
+        SmartDashboard.putNumber("autotest/tilt", tilt);
+        SmartDashboard.putBoolean("autotest/hasBeenOnRamp", hasBeenOnRamp);
+        SmartDashboard.putBoolean("autotest/hasBeenTilted", hasBeenTilted);
+        SmartDashboard.putBoolean("autotest/done w auto", (!onRamp && hasBeenOnRamp && hasBeenTilted && tilt < 1));
+
+        if (SmartDashboard.getBoolean("autotest/Reset Test", false)) {
+          onRamp = false;
+          precon = false;
+          hasBeenOnRamp = false;
+          hasBeenTilted = false;
+          tilt = 0;
+        SmartDashboard.putBoolean("autotest/Reset Test", false);
+        }
+
+  }
+
+  boolean onRamp (double wanted, double tolerance) { /////////////////////
+      boolean inTolerance = false;
+      tolerance = Units.degreesToRadians(tolerance);
+      double tilt = SmartDashboard.getNumber("autotest/TILT INPUT", tolerance);
+      if (tilt <= (wanted + tolerance) && tilt >= (wanted - tolerance)) {
+        inTolerance = true;
+      }
+      return !inTolerance;
+    }
 
 
   public void setAllianceColor () {

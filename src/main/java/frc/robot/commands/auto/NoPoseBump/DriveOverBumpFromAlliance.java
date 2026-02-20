@@ -24,7 +24,6 @@ public class DriveOverBumpFromAlliance extends Command {
     boolean hasBeenTilted;
     boolean precon;
     double tilt;
-    boolean hasBeenTilted;
 
     public DriveOverBumpFromAlliance () {
         swerve = SwerveSubsystem.getInstance();
@@ -40,6 +39,23 @@ public class DriveOverBumpFromAlliance extends Command {
     
     @Override
     public void execute() {
+
+        /*
+        if (tilt > 8) {
+            hasBeenOnRamp = true;
+        }
+
+        if (hasBeenOnRamp && tilt < 3) {
+            precon = true;
+        }
+
+        if (precon && tilt > 8) {
+            hasBeenTilted = true;
+        }
+
+
+potential logic change
+         */
         onRamp = swerve.onRamp(0, 0.5);
         tilt = Units.radiansToDegrees(Math.acos(swerve.io.getRotation3d().toMatrix().get(2, 2)) - 0.015);
         move();
