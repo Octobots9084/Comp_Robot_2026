@@ -92,7 +92,7 @@ public class TurretIOTalonFX implements TurretIO{
             this.setTurretPosition(0);
             return true;
         }else{
-            turretMotor.setVoltage(3);//TODO set this to real value Santi!
+            turretMotor.setVoltage(1);//was 3v
             return false;
         }
     }
