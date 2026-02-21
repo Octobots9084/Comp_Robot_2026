@@ -1,13 +1,12 @@
 package frc.robot.subsystems.Shooter.Feeder;
 
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
+import com.ctre.phoenix6.hardware.TalonFX;
 
 import frc.robot.Constants;
 import frc.robot.subsystems.States;
 import frc.robot.subsystems.Shooter.ShooterConfigurator;
 import frc.robot.subsystems.Shooter.Flywheel.FlywheelIOTalonFX;
-
-import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.units.Units;
@@ -24,8 +23,8 @@ public class FeederIOTalonFX implements FeederIO{
         spindexerMotor = new TalonFX(Constants.spindexerID,Constants.krakenBus);
         verticalFeederMotor = new TalonFX(Constants.verticalFeederID,Constants.krakenBus);
 
-        spindexerMotor.getConfigurator().apply(shooterConfigs.spindexerConfig);
-        verticalFeederMotor.getConfigurator().apply(shooterConfigs.verticalFeederConfig);
+        // spindexerMotor.getConfigurator().apply(shooterConfigs.spindexerConfig);
+        // verticalFeederMotor.getConfigurator().apply(shooterConfigs.verticalFeederConfig);
     }
 
     public void updateInputs(FeederIOInputs inputs){

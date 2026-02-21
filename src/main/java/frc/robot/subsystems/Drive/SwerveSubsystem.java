@@ -8,7 +8,14 @@ import org.littletonrobotics.junction.Logger;
 import com.ctre.phoenix6.swerve.SwerveModule;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -22,7 +29,6 @@ import frc.robot.commands.auto.DriveForwardUntilLevel;
 import frc.robot.commands.auto.DriveOverBump;
 import frc.robot.commands.auto.NoPoseBump.DriveOverBumpFromAlliance;
 import frc.robot.commands.auto.NoPoseBump.DriveOverBumpToAlliance;
-import frc.robot.commands.auto.NoPoseBump.DriveOverBumpFromAlliance;
 
 public class SwerveSubsystem extends SubsystemBase{
     public enum SystemState {
@@ -39,6 +45,8 @@ public class SwerveSubsystem extends SubsystemBase{
     public CommandXboxController driverController;
     public double maxVelocity;
     public double maxAngularVelocity;
+    // The robot pose estimator for tracking swerve odometry and applying vision corrections.
+    private final SwerveDrivePoseEstimator poseEstimator;
 
     private final SwerveIOInputsAutoLogged inputs = new SwerveIOInputsAutoLogged();
 
@@ -50,6 +58,21 @@ public class SwerveSubsystem extends SubsystemBase{
         this.maxAngularVelocity = maxAngularVelocity;
         this.maxVelocity = maxVelocity;
 
+        var stateStdDevs = VecBuilder.fill(0.1, 0.1, 0.1);
+        var visionStdDevs = VecBuilder.fill(1, 1, 1);
+        poseEstimator =
+            new SwerveDrivePoseEstimator(
+                new SwerveDriveKinematics(
+                    Constants.swerveModuleOneOffset,
+                    Constants.swerveModuleTwoOffset,
+                    Constants.swerveModuleThreeOffset,
+                    Constants.swerveModuleFourOffset),
+                io.getGyroYaw(),
+                io.getModulePositions(),
+                new Pose2d(),
+                stateStdDevs,
+                visionStdDevs
+            );
         instance = this;
         registerNamedCommands();
     }
@@ -181,5 +204,11 @@ public class SwerveSubsystem extends SubsystemBase{
 
     public void driveFieldRelative(ChassisSpeeds fieldRelativeSpeeds) {
         this.io.driveFieldRelative(fieldRelativeSpeeds);
+    }
+
+    /** See {@link SwerveDrivePoseEstimator#addVisionMeasurement(Pose2d, double, Matrix)}. */
+    public void addVisionMeasurement(
+            Pose2d visionMeasurement, double timestampSeconds, Matrix<N3, N1> stdDevs) {
+        poseEstimator.addVisionMeasurement(visionMeasurement, timestampSeconds, stdDevs);
     }
 }

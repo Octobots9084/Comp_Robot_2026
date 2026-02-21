@@ -1,6 +1,5 @@
 package frc.robot.subsystems.Shooter.Flywheel;
 
-
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 
@@ -28,7 +27,6 @@ public class FlywheelIOTalonFX implements FlywheelIO{
         FlywheelRightMotor = new TalonFX(Constants.flyWheelRightID,Constants.krakenBus);
 
         FlywheelRightMotor.getConfigurator().apply(shooterConfigs.flyWheelRightConfig);
-
     }
     @Override
       public void updateInputs(FlywheelIOInputs inputs){
@@ -45,12 +43,14 @@ public class FlywheelIOTalonFX implements FlywheelIO{
         FlywheelRightMotor.setControl(FlywheelRightMotorRequest.withVelocity(state.FlywheelRightRPS));
         FlywheelLeftMotor.setControl(follow);
     }
-      public double getRightMotorVelocity(){
+    public double getRightMotorVelocity(){
         return FlywheelRightMotor.getVelocity().getValueAsDouble();
     }
 
-    public boolean FlywheelInTolerance(double flywheelTolerance){
-        return MathUtil.isNear(FlywheelRightMotorRequest.getVelocityMeasure().in(Units.RadiansPerSecond), this.getRightMotorVelocity(), flywheelTolerance);
+    public double[] getFlywheelVelocity(){
+        double[] FlywheelVelocity = {this.getRightMotorVelocity(),this.getLeftMotorVelocity()};
+        
+        return FlywheelVelocity;
     }
 
 

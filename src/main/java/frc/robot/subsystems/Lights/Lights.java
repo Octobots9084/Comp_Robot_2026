@@ -11,6 +11,9 @@ public class Lights {
         currentLightInstance = this;
     }
     public static Lights getLightInstance() {
+        if (currentLightInstance == null){
+            setLightInstance(new Lights());
+        }
         return currentLightInstance;
     }
     public static void setLightInstance(Lights instance){

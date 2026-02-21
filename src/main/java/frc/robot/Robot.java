@@ -8,7 +8,6 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -87,7 +86,7 @@ public class Robot extends LoggedRobot {
 
     // Start AdvantageKit logger
     Logger.start();
-
+    
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our autonomous chooser on the dashboard.
     robotContainer = new RobotContainer();
@@ -175,7 +174,7 @@ public class Robot extends LoggedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-        Logger.recordOutput("EXECUTING!!!!", false);
+    Logger.recordOutput("EXECUTING!!!!", false);
 
     if (autonomousCommand != null) {
       CommandScheduler.getInstance().cancel(autonomousCommand);
@@ -184,7 +183,11 @@ public class Robot extends LoggedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    // runs the vision periodic
+    robotContainer.vision.periodic();
+    robotContainer.shooter.periodic();
+  }
 
   /** This function is called once when test mode is enabled. */
   @Override
@@ -206,7 +209,10 @@ public class Robot extends LoggedRobot {
 
   /** This function is called periodically whilst in simulation. */
   @Override
-  public void simulationPeriodic() {}
+  public void simulationPeriodic() {
+    robotContainer.vision.periodic();
+    robotContainer.shooter.periodic();
+  }
 
 
   public void setAllianceColor () {

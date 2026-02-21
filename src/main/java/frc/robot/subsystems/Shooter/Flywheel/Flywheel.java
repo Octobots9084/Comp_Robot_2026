@@ -4,7 +4,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Shooter.Flywheel.Flywheel;
 
 public class Flywheel extends SubsystemBase{
-     public static Flywheel currentFlywheelInstance = null;
+     public static final double flywheelRadius = 0.1; // in Meters
+    public static Flywheel currentFlywheelInstance = null;
 
     public FlywheelIO io = new FlywheelIOTalonFX();
     
