@@ -15,8 +15,7 @@ public class Climb extends SubsystemBase{
     public static Climb instance;
     public boolean alreadyZeroed = false;
     public ClimbIOInputsAutoLogged inputs = new ClimbIOInputsAutoLogged();
-    public boolean climbL3 = false;
-    
+
     public Climb(ClimbIO io){
         this.io = io;
         instance = this;

@@ -99,7 +99,7 @@ public class Intake extends SubsystemBase{
             break;
 
         default:
-        io.setIntakeState(currentState);    
+            io.setIntakeState(currentState);    
             break;
         }
     }

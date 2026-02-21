@@ -69,6 +69,7 @@ public class ClimbIOTalonFX implements ClimbIO{
         return climbRotateMotorControlled.getPosition().getValueAsDouble();
     }
 
+
     @Override
     public double getDeployPosition(){
         // return climbDeploymentMotor.getPosition().getValueAsDouble();
