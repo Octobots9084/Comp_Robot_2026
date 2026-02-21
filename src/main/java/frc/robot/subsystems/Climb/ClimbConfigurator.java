@@ -9,25 +9,19 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import frc.robot.Constants;
 
 public class ClimbConfigurator {
-    //2 motors spin the climb
+    // 2 motors spin the climb
     public TalonFXConfiguration climbRotateControlledConfig;
     public TalonFXConfiguration climbDeployConfig;
-    
 
-    //1 deploy the climb
+    // 1 deploy the climb
 
     public ClimbConfigurator() {
         climbRotateControlledConfig = new TalonFXConfiguration()
-                        .withFeedback(new FeedbackConfigs().
-                        withSensorToMechanismRatio(Constants.rotateGearRatio));
+                .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(Constants.rotateGearRatio));
         climbDeployConfig = new TalonFXConfiguration()
-                        .withFeedback(new FeedbackConfigs().
-                        withSensorToMechanismRatio(Constants.deployGearRatio));
+                .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(Constants.deployGearRatio));
 
-
-
-
-        //fly wheel right config
+        // fly wheel right config
         climbRotateControlledConfig.CurrentLimits.SupplyCurrentLimit = 20;
         climbRotateControlledConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
         climbRotateControlledConfig.CurrentLimits.StatorCurrentLimit = 40;
@@ -50,9 +44,9 @@ public class ClimbConfigurator {
         climbRotateControlledConfig.MotionMagic.MotionMagicJerk = 0;
         climbRotateControlledConfig.MotionMagic.MotionMagicCruiseVelocity = 0;
 
-        //-----------------------------------------------------------------//
+        // -----------------------------------------------------------------//
 
-         //fly wheel right config
+        // fly wheel right config
         climbDeployConfig.CurrentLimits.SupplyCurrentLimit = 20;
         climbDeployConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
         climbDeployConfig.CurrentLimits.StatorCurrentLimit = 40;

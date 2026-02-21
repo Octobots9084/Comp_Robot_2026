@@ -6,7 +6,7 @@ import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Intake.Intake;
 import frc.robot.subsystems.Intake.IntakeStates;
 
-public class SetIntakeStateSafe extends InstantCommand{
+public class SetIntakeStateSafe extends InstantCommand {
     public SetIntakeStateSafe() {
         Intake.getInstance().wantedState = IntakeStates.SAFE;
     }

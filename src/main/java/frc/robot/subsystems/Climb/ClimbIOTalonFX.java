@@ -13,78 +13,87 @@ import static edu.wpi.first.units.Units.Revolutions;
 
 import com.ctre.phoenix6.controls.Follower;
 
-public class ClimbIOTalonFX implements ClimbIO{
-    public DigitalInput zeroingSwitch = new DigitalInput(8);//todo hehe Hello Oliver
-    //controlls the climb motor rotate (follower is influenced by extreiror varible)
+public class ClimbIOTalonFX implements ClimbIO {
+    public DigitalInput zeroingSwitch = new DigitalInput(8);// todo hehe Hello Oliver
+    // controlls the climb motor rotate (follower is influenced by extreiror
+    // varible)
     public TalonFX climbRotateMotorControlled;
     public TalonFX climbRotateMotorFollower;
-    //the deployment varible for deployment motor
+    // the deployment varible for deployment motor
     public TalonFX climbDeploymentMotor;
 
-    public ClimbConfigurator climbConfig; 
+    public ClimbConfigurator climbConfig;
 
-    //create two MotionMagicVoltage variables for each of the controlled motors, the followed 
+    // create two MotionMagicVoltage variables for each of the controlled motors,
+    // the followed
     private MotionMagicVoltage climbMotionControlledRequest;
     private MotionMagicVoltage climbDeployRequest;
 
     public ClimbIOTalonFX() {
         climbConfig = new ClimbConfigurator();
-        
+
         climbRotateMotorControlled = new TalonFX(Constants.climbRotateControlledID, Constants.krakenBus);
         climbRotateMotorFollower = new TalonFX(Constants.climbRotateFollowerID, Constants.krakenBus);
-        // climbDeploymentMotor = new TalonFX(Constants.climbDeployID, Constants.krakenBus);
+        // climbDeploymentMotor = new TalonFX(Constants.climbDeployID,
+        // Constants.krakenBus);
 
         climbRotateMotorControlled.getConfigurator().apply(climbConfig.climbRotateControlledConfig);
         climbRotateMotorFollower.getConfigurator().apply(climbConfig.climbDeployConfig);
         // climbDeploymentMotor.getConfigurator().apply(climbConfig.climbDeployConfig);
-    
+
         climbMotionControlledRequest = new MotionMagicVoltage(0.0);
         climbDeployRequest = new MotionMagicVoltage(0.0);
-    
+
     }
+
     @Override
-    public void updateInputs(ClimbIOInputs inputs){
+    public void updateInputs(ClimbIOInputs inputs) {
         inputs.climbMotorControlledTemperature = climbRotateMotorControlled.getDeviceTemp().getValueAsDouble();
         inputs.climbMotorFollowerTemperature = climbRotateMotorFollower.getDeviceTemp().getValueAsDouble();
-        // inputs.deployMotorTemperature = climbDeploymentMotor.getDeviceTemp().getValueAsDouble();
+        // inputs.deployMotorTemperature =
+        // climbDeploymentMotor.getDeviceTemp().getValueAsDouble();
         inputs.climbPosition = climbRotateMotorControlled.getPosition().getValueAsDouble();
         inputs.deployPosition = climbRotateMotorControlled.getPosition().getValueAsDouble();
-        
-        
+
     }
 
     @Override
     public void setClimbState(ClimbStates state) {
         climbMotionControlledRequest.Position = state.climbPosition;
         climbRotateMotorControlled.setControl(climbMotionControlledRequest);
-        climbRotateMotorFollower.setControl(new Follower(Constants.climbRotateControlledID, MotorAlignmentValue.Opposed));
-    
-        
+        climbRotateMotorFollower
+                .setControl(new Follower(Constants.climbRotateControlledID, MotorAlignmentValue.Opposed));
+
         climbDeployRequest.Position = state.climbPosition;
         // climbDeploymentMotor.setControl(climbDeployRequest);
-    
+
     }
+
     @Override
-    public double getClimbPosition(){
+    public double getClimbPosition() {
         return climbRotateMotorControlled.getPosition().getValueAsDouble();
     }
 
 
     @Override
-    public double getDeployPosition(){
+    public double getDeployPosition() {
         // return climbDeploymentMotor.getPosition().getValueAsDouble();
         return 0.0;
     }
+
     @Override
-    public boolean climbInTolerance(double climbTolerance){
-        return MathUtil.isNear(climbMotionControlledRequest.getPositionMeasure().in(Revolutions), this.getClimbPosition(), climbTolerance);
+    public boolean climbInTolerance(double climbTolerance) {
+        return MathUtil.isNear(climbMotionControlledRequest.getPositionMeasure().in(Revolutions),
+                this.getClimbPosition(), climbTolerance);
     }
+
     @Override
-    public void setRotateVoltage(double voltage){
+    public void setRotateVoltage(double voltage) {
         this.climbRotateMotorControlled.setVoltage(voltage);
         this.climbRotateMotorFollower.setVoltage(-voltage);
     }
-    public boolean isZeroingSwitchPressed(){
+
+    public boolean isZeroingSwitchPressed() {
         return zeroingSwitch.get();
     }
 }

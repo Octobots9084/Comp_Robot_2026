@@ -31,9 +31,12 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import choreo.trajectory.SwerveSample;
 
 /**
- * The VM is configured to automatically run this class, and to call the functions corresponding to
- * each mode, as described in the TimedRobot documentation. If you change the name of this class or
- * the package after creating this project, you must also update the build.gradle file in the
+ * The VM is configured to automatically run this class, and to call the
+ * functions corresponding to
+ * each mode, as described in the TimedRobot documentation. If you change the
+ * name of this class or
+ * the package after creating this project, you must also update the
+ * build.gradle file in the
  * project.
  */
 public class Robot extends LoggedRobot {
@@ -62,7 +65,7 @@ public class Robot extends LoggedRobot {
         Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim")));
         break;
     }
-        // Record metadata
+    // Record metadata
     Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
     Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
     Logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA);
@@ -83,10 +86,9 @@ public class Robot extends LoggedRobot {
 
     Logger.recordMetadata("GitDirty", gitDirty);
 
-
     // Start AdvantageKit logger
     Logger.start();
-    
+
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our autonomous chooser on the dashboard.
     robotContainer = new RobotContainer();
@@ -95,16 +97,17 @@ public class Robot extends LoggedRobot {
   /** This function is called periodically during all modes. */
   @Override
   public void robotPeriodic() {
+    robotContainer.vision.periodic();
     // Optional<Alliance> ally = DriverStation.getAlliance();
-    //     if (ally.isPresent()) {
-    //         if (ally.get() == Alliance.Red) {
-    //             Constants.isBlueAlliance = false;
-    //         }
-    //         if (ally.get() == Alliance.Blue) {
-    //             Constants.isBlueAlliance = true;
-    //         }
-    //     }
-    //     SmartDashboard.putBoolean("IsBlueAlliance", Constants.isBlueAlliance);
+    // if (ally.isPresent()) {
+    // if (ally.get() == Alliance.Red) {
+    // Constants.isBlueAlliance = false;
+    // }
+    // if (ally.get() == Alliance.Blue) {
+    // Constants.isBlueAlliance = true;
+    // }
+    // }
+    // SmartDashboard.putBoolean("IsBlueAlliance", Constants.isBlueAlliance);
     // Optionally switch the thread to high priority to improve loop
     // timing (see the template project documentation for details)
     // Threads.setCurrentThreadPriority(true, 99);
@@ -124,16 +127,16 @@ public class Robot extends LoggedRobot {
   @Override
   public void disabledInit() {
     Optional<Alliance> ally = DriverStation.getAlliance();
-        if (ally.isPresent()) {
-            if (ally.get() == Alliance.Red) {
-                Constants.isBlueAlliance = false;
-            }
-            if (ally.get() == Alliance.Blue) {
-                Constants.isBlueAlliance = true;
-            }
-        }
-        SmartDashboard.putBoolean("IsBlueAlliance", Constants.isBlueAlliance);
-  
+    if (ally.isPresent()) {
+      if (ally.get() == Alliance.Red) {
+        Constants.isBlueAlliance = false;
+      }
+      if (ally.get() == Alliance.Blue) {
+        Constants.isBlueAlliance = true;
+      }
+    }
+    SmartDashboard.putBoolean("IsBlueAlliance", Constants.isBlueAlliance);
+
   }
 
   /** This function is called periodically when disabled. */
@@ -141,7 +144,10 @@ public class Robot extends LoggedRobot {
   public void disabledPeriodic() {
   }
 
-  /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
+  /**
+   * This autonomous runs the autonomous command selected by your
+   * {@link RobotContainer} class.
+   */
   @Override
   public void autonomousInit() {
     setAllianceColor();
@@ -151,21 +157,21 @@ public class Robot extends LoggedRobot {
     Intake.getInstance().wantedState = IntakeStates.ZERO;
     // SwerveSubsystem.getInstance().io.getPigeon2().setYaw(90);
 
-
-        Logger.recordOutput("EXECUTING!!!!", false);
+    Logger.recordOutput("EXECUTING!!!!", false);
     // schedule the autonomous command (example)
     if (autonomousCommand != null) {
-      CommandScheduler.getInstance().schedule(autonomousCommand);//TODO: not command
+      CommandScheduler.getInstance().schedule(autonomousCommand);// TODO: not command
     }
   }
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+  }
 
   /** This function is called once when teleop is enabled. */
   @Override
-  public void teleopInit(){
+  public void teleopInit() {
     setAllianceColor();
     Shooter.getInstance().wantedShooterState = ShooterStates.ZERO;
     Climb.getInstance().wantedState = ClimbStates.ZERO;
@@ -201,11 +207,13 @@ public class Robot extends LoggedRobot {
 
   /** This function is called periodically during test mode. */
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+  }
 
   /** This function is called once when the robot is first started up. */
   @Override
-  public void simulationInit() {}
+  public void simulationInit() {
+  }
 
   /** This function is called periodically whilst in simulation. */
   @Override
@@ -214,8 +222,7 @@ public class Robot extends LoggedRobot {
     robotContainer.shooter.periodic();
   }
 
-
-  public void setAllianceColor () {
+  public void setAllianceColor() {
     SwerveSubsystem.getInstance().io.setAllianceColor();
   }
 }

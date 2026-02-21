@@ -11,23 +11,23 @@ import frc.robot.subsystems.Shooter.Flywheel.FlywheelIOTalonFX;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.units.Units;
 
-public class FeederIOTalonFX implements FeederIO{
+public class FeederIOTalonFX implements FeederIO {
     public TalonFX spindexerMotor;
     public TalonFX verticalFeederMotor;
     public ShooterConfigurator shooterConfigs;
     private MotionMagicVelocityVoltage spindexerRequest;
     private MotionMagicVelocityVoltage verticalFeederRequest;
-  
-    public FeederIOTalonFX(){
+
+    public FeederIOTalonFX() {
         shooterConfigs = new ShooterConfigurator();
-        spindexerMotor = new TalonFX(Constants.spindexerID,Constants.krakenBus);
-        verticalFeederMotor = new TalonFX(Constants.verticalFeederID,Constants.krakenBus);
+        spindexerMotor = new TalonFX(Constants.spindexerID, Constants.krakenBus);
+        verticalFeederMotor = new TalonFX(Constants.verticalFeederID, Constants.krakenBus);
 
         // spindexerMotor.getConfigurator().apply(shooterConfigs.spindexerConfig);
         // verticalFeederMotor.getConfigurator().apply(shooterConfigs.verticalFeederConfig);
     }
 
-    public void updateInputs(FeederIOInputs inputs){
+    public void updateInputs(FeederIOInputs inputs) {
         inputs.spindexerRPS = spindexerMotor.getVelocity().getValueAsDouble();
         inputs.verticalFeederRPS = verticalFeederMotor.getVelocity().getValueAsDouble();
         inputs.spindexerMotorTemp = spindexerMotor.getDeviceTemp().getValueAsDouble();
@@ -38,7 +38,7 @@ public class FeederIOTalonFX implements FeederIO{
     }
 
     @Override
-    public void setFeederVelocity(FeederStates state){
+    public void setFeederVelocity(FeederStates state) {
         // spindexerRequest.Velocity = state.spindexerRPS;
         // verticalFeederRequest.Velocity = state.feederRPS;
         // spindexerMotor.setControl(spindexerRequest);
@@ -48,30 +48,31 @@ public class FeederIOTalonFX implements FeederIO{
     }
 
     @Override
-    public double getSpindexerVelocity(){
+    public double getSpindexerVelocity() {
         return spindexerMotor.getVelocity().getValueAsDouble();
     }
 
     @Override
-    public double getVerticalFeederVelocity(){
+    public double getVerticalFeederVelocity() {
         return verticalFeederMotor.getVelocity().getValueAsDouble();
     }
 
     @Override
-    public double[] getFeederVelocity(){
-        double[] feederVelocity = {this.getSpindexerVelocity(),this.getVerticalFeederVelocity()};
+    public double[] getFeederVelocity() {
+        double[] feederVelocity = { this.getSpindexerVelocity(), this.getVerticalFeederVelocity() };
         return feederVelocity;
     }
 
     @Override
-    public boolean spindexerInTolerance(double tolerance){
-        return MathUtil.isNear(spindexerRequest.getVelocityMeasure().in(Units.RadiansPerSecond), this.getSpindexerVelocity(), tolerance);
+    public boolean spindexerInTolerance(double tolerance) {
+        return MathUtil.isNear(spindexerRequest.getVelocityMeasure().in(Units.RadiansPerSecond),
+                this.getSpindexerVelocity(), tolerance);
     }
 
     @Override
-    public boolean verticalFeederInTolerance(double tolerance){
-        return MathUtil.isNear(verticalFeederRequest.getVelocityMeasure().in(Units.RadiansPerSecond), this.getVerticalFeederVelocity(), tolerance);
+    public boolean verticalFeederInTolerance(double tolerance) {
+        return MathUtil.isNear(verticalFeederRequest.getVelocityMeasure().in(Units.RadiansPerSecond),
+                this.getVerticalFeederVelocity(), tolerance);
     }
-
 
 }

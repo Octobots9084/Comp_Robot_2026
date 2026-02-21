@@ -10,5 +10,6 @@ public class ControlMap {
   public static final CommandJoystick CO_DRIVER_RIGHT = new CommandJoystick(4);
   public static final CommandJoystick CO_DRIVER_BUTTONS = new CommandJoystick(5);
 
-  private ControlMap() {}
+  private ControlMap() {
+  }
 }

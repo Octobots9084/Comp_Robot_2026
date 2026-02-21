@@ -13,9 +13,16 @@ public interface VisionIO {
         public boolean frontCameraConected = false;
     }
 
-    public default void updateInputs(VisionIOInputs inputs) {}
+    public default void updateInputs(VisionIOInputs inputs) {
+    }
 
-    public default void addVisionReading(String cameraName, EstimatedRobotPose pose, Matrix<N3, N1> visionMeasurementStdDevs){}
+    public default void addVisionReading(String cameraName, EstimatedRobotPose pose,
+            Matrix<N3, N1> visionMeasurementStdDevs) {
+    }
 
-    public default void addGyroReading(){}
+    public default void addGyroReading() {
+    }
+
+    public default void periodic() {
+    }
 }

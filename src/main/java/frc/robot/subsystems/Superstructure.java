@@ -11,16 +11,15 @@ import frc.robot.subsystems.Shooter.*;//same here
 import frc.robot.subsystems.Shooter.Feeder.Feeder;
 import frc.robot.subsystems.Shooter.Flywheel.*;
 
-public class Superstructure extends SubsystemBase{
+public class Superstructure extends SubsystemBase {
     public States currentState = States.SAFE;
     public States wantedState = States.SAFE;
     public IntakeStates userRequestedIntakeState = IntakeStates.SAFE;
-    
+
     boolean climbDescending = true;
     boolean climbAligned = false;
     public static Superstructure currentInstance;
     public Climb climb = Climb.getInstance();
-
 
     @Override
     public void periodic() {
@@ -28,40 +27,41 @@ public class Superstructure extends SubsystemBase{
         applyStates();
     }
 
-
-    public Superstructure(){
+    public Superstructure() {
         currentInstance = this;
     }
 
-    public static void setInstance(Superstructure instance){
+    public static void setInstance(Superstructure instance) {
         currentInstance = instance;
     }
 
-    public static Superstructure getInstance(){
+    public static Superstructure getInstance() {
         // if(currentInstance == null){
-        //     throw new IllegalStateException("Superstructure Instance not set");
+        // throw new IllegalStateException("Superstructure Instance not set");
         // }
         return currentInstance;
     }
-    public States getCurrentState(){
+
+    public States getCurrentState() {
         return currentState;
     }
 
-    public States getWantedState(){
+    public States getWantedState() {
         return wantedState;
     }
 
-    public void setCurrentState(States state){
+    public void setCurrentState(States state) {
         currentState = state;
     }
 
-    public void setWantedState(States state){
+    public void setWantedState(States state) {
         wantedState = state;
     }
+
     public void handleStateTransitions() {
-        switch(wantedState){
+        switch (wantedState) {
             case SAFE:
-                if(climb.getClimbState() != ClimbStates.CLIMBEDL1 || climb.getClimbState() != ClimbStates.CLIMBEDL3){
+                if (climb.getClimbState() != ClimbStates.CLIMBEDL1 || climb.getClimbState() != ClimbStates.CLIMBEDL3) {
                     currentState = States.SAFE;
                 }
             case CLIMB_L3:
@@ -70,13 +70,14 @@ public class Superstructure extends SubsystemBase{
                 currentState = States.CLIMB_L1;
 
             case SHOOTER:
-                if(climb.getClimbState() != ClimbStates.CLIMBEDL1 || climb.getClimbState() != ClimbStates.CLIMBEDL3){
+                if (climb.getClimbState() != ClimbStates.CLIMBEDL1 || climb.getClimbState() != ClimbStates.CLIMBEDL3) {
                     currentState = States.SHOOTER;
                 }
             case ZERO:
-                currentState=States.ZERO;
+                currentState = States.ZERO;
                 break;
-            default: break; //do nothing
+            default:
+                break; // do nothing
         }
     }
 
@@ -99,17 +100,17 @@ public class Superstructure extends SubsystemBase{
                 Shooter.getInstance().wantedShooterState = ShooterStates.SPIT;
                 break;
             case ZERO:
-                //todo
+                // todo
                 break;
             default:
-                //throw an exception
+                // throw an exception
                 break;
         }
     }
 
     private void stateSAFE() {
         Climb.getInstance().setClimbState(ClimbStates.IDLE);
-        //set shooter into safe state
+        // set shooter into safe state
         // Intake.getInstance().setWantedState(IntakeStates.SAFE)
 
     }
@@ -127,9 +128,9 @@ public class Superstructure extends SubsystemBase{
     
     }
     private void stateMANUAL() {
-        //TODO map buttons to direct inputs
-        //turn off intake when starting
-        //turn off shooter when starting
+        // TODO map buttons to direct inputs
+        // turn off intake when starting
+        // turn off shooter when starting
     }
     private void stateCLIMBL3() {
         stowForClimb();
@@ -149,8 +150,8 @@ public class Superstructure extends SubsystemBase{
     }
    
 
-    private void stateSHOOTER(){
-        if(userRequestedIntakeState != Intake.getInstance().currentState){
+    private void stateSHOOTER() {
+        if (userRequestedIntakeState != Intake.getInstance().currentState) {
             Intake.getInstance().wantedState = userRequestedIntakeState;
         }
     }

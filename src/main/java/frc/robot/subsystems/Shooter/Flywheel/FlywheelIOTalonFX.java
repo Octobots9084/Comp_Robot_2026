@@ -13,23 +13,25 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.AngularAcceleration;
 
-public class FlywheelIOTalonFX implements FlywheelIO{
+public class FlywheelIOTalonFX implements FlywheelIO {
     public static TalonFX FlywheelLeftMotor;
     public static TalonFX FlywheelRightMotor;
     public ShooterConfigurator shooterConfigs;
-    private MotionMagicVelocityVoltage FlywheelRightMotorRequest = new MotionMagicVelocityVoltage(0).withAcceleration(100).withSlot(0);
+    private MotionMagicVelocityVoltage FlywheelRightMotorRequest = new MotionMagicVelocityVoltage(0)
+            .withAcceleration(100).withSlot(0);
 
-    private Follower follow =
-      new Follower(Constants.flyWheelRightID, MotorAlignmentValue.Opposed);
+    private Follower follow = new Follower(Constants.flyWheelRightID, MotorAlignmentValue.Opposed);
+
     public FlywheelIOTalonFX() {
-         shooterConfigs = new ShooterConfigurator();
-        FlywheelLeftMotor = new TalonFX(Constants.flyWheelLeftID,Constants.krakenBus);
-        FlywheelRightMotor = new TalonFX(Constants.flyWheelRightID,Constants.krakenBus);
+        shooterConfigs = new ShooterConfigurator();
+        FlywheelLeftMotor = new TalonFX(Constants.flyWheelLeftID, Constants.krakenBus);
+        FlywheelRightMotor = new TalonFX(Constants.flyWheelRightID, Constants.krakenBus);
 
         FlywheelRightMotor.getConfigurator().apply(shooterConfigs.flyWheelRightConfig);
     }
+
     @Override
-      public void updateInputs(FlywheelIOInputs inputs){
+    public void updateInputs(FlywheelIOInputs inputs) {
         inputs.FlywheelLeftRPS = FlywheelLeftMotor.getVelocity().getValueAsDouble();
         inputs.FlywheelRightRPS = FlywheelRightMotor.getVelocity().getValueAsDouble();
         inputs.FlywheelLeftMotorTemp = FlywheelLeftMotor.getDeviceTemp().getValueAsDouble();
@@ -37,22 +39,22 @@ public class FlywheelIOTalonFX implements FlywheelIO{
         inputs.FlywheelLeftCurrent = FlywheelLeftMotor.getStatorCurrent().getValueAsDouble();
         inputs.FlywheelRightCurrent = FlywheelRightMotor.getStatorCurrent().getValueAsDouble();
     }
+
     @Override
-    public void setFlywheelVelocity(FlywheelStates state){
+    public void setFlywheelVelocity(FlywheelStates state) {
         // FlywheelRightMotorRequest.Velocity = state.FlywheelRightRPS;
         FlywheelRightMotor.setControl(FlywheelRightMotorRequest.withVelocity(state.FlywheelRightRPS));
         FlywheelLeftMotor.setControl(follow);
     }
-    public double getRightMotorVelocity(){
+
+    public double getRightMotorVelocity() {
         return FlywheelRightMotor.getVelocity().getValueAsDouble();
     }
 
-    public double[] getFlywheelVelocity(){
-        double[] FlywheelVelocity = {this.getRightMotorVelocity(),this.getLeftMotorVelocity()};
-        
+    public double[] getFlywheelVelocity() {
+        double[] FlywheelVelocity = { this.getRightMotorVelocity(), this.getLeftMotorVelocity() };
+
         return FlywheelVelocity;
     }
-
-
 
 }

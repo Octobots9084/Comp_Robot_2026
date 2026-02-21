@@ -14,15 +14,16 @@ public class ShooterConfigurator {
     public TalonFXConfiguration spindexerConfig;
     public TalonFXConfiguration verticalFeederConfig;
     public TalonFXConfiguration topRollerConfig;
-    public ShooterConfigurator(){
+
+    public ShooterConfigurator() {
         flyWheelRightConfig = new TalonFXConfiguration();
-        turretConfig = new TalonFXConfiguration().withFeedback(new FeedbackConfigs().
-                        withSensorToMechanismRatio(Constants.turretGearRatio));
-        hoodConfig = new TalonFXConfiguration().withFeedback(new FeedbackConfigs().
-                        withSensorToMechanismRatio(Constants.hoodGearRatio));
+        turretConfig = new TalonFXConfiguration()
+                .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(Constants.turretGearRatio));
+        hoodConfig = new TalonFXConfiguration()
+                .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(Constants.hoodGearRatio));
         spindexerConfig = new TalonFXConfiguration();
         verticalFeederConfig = new TalonFXConfiguration();
-        //fly wheel right config
+        // fly wheel right config
         flyWheelRightConfig.CurrentLimits.SupplyCurrentLimit = 20;
         flyWheelRightConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
         flyWheelRightConfig.CurrentLimits.StatorCurrentLimit = 40;
@@ -42,9 +43,8 @@ public class ShooterConfigurator {
         flyWheelRightConfig.Slot0.kG = 0.0;
 
         flyWheelRightConfig.MotionMagic.MotionMagicAcceleration = 100;
-        
 
-        //turret config
+        // turret config
         turretConfig.CurrentLimits.SupplyCurrentLimit = 20;
         turretConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
         turretConfig.CurrentLimits.StatorCurrentLimit = 40;
@@ -66,9 +66,7 @@ public class ShooterConfigurator {
         turretConfig.MotionMagic.MotionMagicJerk = 100;
         turretConfig.MotionMagic.MotionMagicCruiseVelocity = 1.4;
 
-
-
-        //hood config
+        // hood config
         hoodConfig.CurrentLimits.SupplyCurrentLimit = 20;
         hoodConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
         hoodConfig.CurrentLimits.StatorCurrentLimit = 40;
@@ -90,8 +88,7 @@ public class ShooterConfigurator {
         hoodConfig.MotionMagic.MotionMagicJerk = 100;
         hoodConfig.MotionMagic.MotionMagicCruiseVelocity = 0.2;
 
-
-        //spindexer config(four lane highway)
+        // spindexer config(four lane highway)
         spindexerConfig.CurrentLimits.SupplyCurrentLimit = 20;
         spindexerConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
         spindexerConfig.CurrentLimits.StatorCurrentLimit = 40;
@@ -112,9 +109,7 @@ public class ShooterConfigurator {
         spindexerConfig.MotionMagic.MotionMagicJerk = 0;
         spindexerConfig.MotionMagic.MotionMagicCruiseVelocity = 0;
 
-
-
-        //vertical Feeder config(rural road)
+        // vertical Feeder config(rural road)
         verticalFeederConfig.CurrentLimits.SupplyCurrentLimit = 20;
         verticalFeederConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
         verticalFeederConfig.CurrentLimits.StatorCurrentLimit = 60;

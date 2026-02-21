@@ -34,6 +34,7 @@ import frc.robot.subsystems.Drive.AlphaConstants;
 import frc.robot.subsystems.Vision.Vision;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
+
 /**
  * This class is where the bulk of the robot should be declared. Since
  * Command-based is a
@@ -58,26 +59,30 @@ public class RobotContainer {
   // Dashboard inputs
   private final SendableChooser<Command> autoChooser;
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  /**
+   * The container for the robot. Contains subsystems, OI devices, and commands.
+   */
   public RobotContainer() {
-    //TODO change the buttons from driverleft and right to the xbox controller
+    // TODO change the buttons from driverleft and right to the xbox controller
     if (Constants.robotType == RobotTypes.BETA) {
-            this.swerve = SwerveSubsystem.setInstance(BetaConstants.createDrivetrain(), ButtonConfig.driverController, Constants.maxAngularVelocity, Constants.maxVelocity);
-        } else {
-            this.swerve = SwerveSubsystem.setInstance(AlphaConstants.createDrivetrain(), ButtonConfig.driverController, Constants.maxAngularVelocity, Constants.maxVelocity);
-        }
-    
-        vision = new Vision(swerve::addVisionMeasurement);
+      this.swerve = SwerveSubsystem.setInstance(BetaConstants.createDrivetrain(), ButtonConfig.driverController,
+          Constants.maxAngularVelocity, Constants.maxVelocity);
+    } else {
+      this.swerve = SwerveSubsystem.setInstance(AlphaConstants.createDrivetrain(), ButtonConfig.driverController,
+          Constants.maxAngularVelocity, Constants.maxVelocity);
+    }
+
+    vision = new Vision(swerve::addVisionMeasurement);
 
     switch (Constants.currentMode) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
         // ModuleIOTalonFX is intended for modules with TalonFX drive, TalonFX turn, and
         // a CANcoder
-        if (Constants.robotType != RobotTypes.ALPHA){
+        if (Constants.robotType != RobotTypes.ALPHA) {
           shooter = new Shooter(
-              new FeederIOTalonFX(), 
-              new FlywheelIOTalonFX(), 
+              new FeederIOTalonFX(),
+              new FlywheelIOTalonFX(),
               new TurretIOTalonFX(),
               new ShooterIOSystem(shooter),
               ButtonConfig.coDriverController);
@@ -88,8 +93,7 @@ public class RobotContainer {
           // SmartDashboard.putBoolean("rightrigger",true);
           buttons.initTeleop();
           // superstructure.setInstance(new Superstructure());
-      }
-
+        }
 
         // The ModuleIOTalonFXS implementation provides an example implementation for
         // TalonFXS controller connected to a CANdi with a PWM encoder. The
@@ -112,33 +116,34 @@ public class RobotContainer {
 
       case SIM:
         superstructure = new Superstructure();
-        shooter = new Shooter(new FeederIOTalonFX(), new FlywheelIOTalonFX(), new TurretIOTalonFX(),new ShooterIOSystem(shooter), ButtonConfig.coDriverController);
+        shooter = new Shooter(new FeederIOTalonFX(), new FlywheelIOTalonFX(), new TurretIOTalonFX(),
+            new ShooterIOSystem(shooter), ButtonConfig.coDriverController);
         intake = new Intake(new IntakeIOTalonFX());
         climb = new Climb(new ClimbIOTalonFX());
         break;
 
       default:
         // Replayed robot, disable IO implementations
-      }
-        autoChooser = AutoBuilder.buildAutoChooser();
-        //NAMED COMMANDS IN SWERVE
-       SmartDashboard.putData("Auto", autoChooser);
-        ButtonConfig buttons = new ButtonConfig();
-        buttons.initTeleop();
-    
     }
+    autoChooser = AutoBuilder.buildAutoChooser();
+    // NAMED COMMANDS IN SWERVE
+    SmartDashboard.putData("Auto", autoChooser);
+    ButtonConfig buttons = new ButtonConfig();
+    buttons.initTeleop();
 
-    public SwerveSubsystem getSwerveSubsystem () {
-      return swerve;
-    }
+  }
 
-    /**
-     * Use this to pass the autonomous command to the main {@link Robot} class.
-     *
-     * @return the command to run in autonomous
-     */
-    public Command getAutonomousCommand() {
-        return autoChooser.getSelected();
-        // return new InstantCommand();
-    }
+  public SwerveSubsystem getSwerveSubsystem() {
+    return swerve;
+  }
+
+  /**
+   * Use this to pass the autonomous command to the main {@link Robot} class.
+   *
+   * @return the command to run in autonomous
+   */
+  public Command getAutonomousCommand() {
+    return autoChooser.getSelected();
+    // return new InstantCommand();
+  }
 }

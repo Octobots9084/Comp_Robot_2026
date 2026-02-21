@@ -1,7 +1,6 @@
 package frc.robot.subsystems.Shooter;
- 
 
-public enum ShooterStates{
+public enum ShooterStates {
     SAFE,
     FERRY,
     BUMP,
@@ -10,4 +9,3 @@ public enum ShooterStates{
     ZERO,
     MANUAL,
 }
-

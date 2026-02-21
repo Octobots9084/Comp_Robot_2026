@@ -12,9 +12,11 @@ public interface ClimbIO {
         public double climbMotorFollowerTemperature = 0.0;
     }
 
-    public default void updateInputs(ClimbIOInputs inputs){}
+    public default void updateInputs(ClimbIOInputs inputs) {
+    }
 
-    public default void setClimbState(ClimbStates states){}
+    public default void setClimbState(ClimbStates states) {
+    }
 
     public default double getClimbPosition() {
         return 0;
@@ -24,13 +26,15 @@ public interface ClimbIO {
         return 0;
     }
 
-    public default boolean climbInTolerance(double climbTolerance){
+    public default boolean climbInTolerance(double climbTolerance) {
         return false;
     }
-    public default void setRotateVoltage(double voltage){
-        
+
+    public default void setRotateVoltage(double voltage) {
+
     }
-    public default boolean isZeroingSwitchPressed(){
+
+    public default boolean isZeroingSwitchPressed() {
         return false;
     }
 }
