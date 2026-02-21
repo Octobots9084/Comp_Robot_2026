@@ -19,4 +19,13 @@ public enum LightAnimations{
         this.time = time;
     }
 }
-    
+class coolFunctions{
+    public void discoMode(){
+        for(int i =0;i<255;i++){
+            for(int i2=0;i<255;i2++){
+                for(int i3=0;i<255;i3++){
+                        
+                }
+            }
+        }
+}  
