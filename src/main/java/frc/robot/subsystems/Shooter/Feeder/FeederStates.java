@@ -4,6 +4,7 @@ public enum FeederStates {
     SCORING(8, -7),
     FERRYING(0, 0),
     OFF(0, 0),
+    AGITATION(2,0),
     SPITTING(5, -3);
 
     public double spindexerRPS;

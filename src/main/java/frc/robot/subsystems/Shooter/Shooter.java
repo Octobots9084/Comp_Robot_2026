@@ -188,9 +188,7 @@ public class Shooter extends SubsystemBase {
                 currentShooterState = ShooterStates.SAFE;
                 break;
             case ZERO:
-                if (!alreadyZeroed) {
                     currentShooterState = ShooterStates.ZERO;
-                }
                 break;
             case MANUAL:
                 currentShooterState = ShooterStates.MANUAL;
@@ -229,28 +227,19 @@ public class Shooter extends SubsystemBase {
     }
 
     public boolean hub() {
-        if (aimHub() /* && isHubActive() */) {
+        if (aimHub() && isHubActive()) {
             // TODO ACTIVELY NEEDS TO BE FIXED
-            if (driverOverride) {
-                flywheel.setFlywheelVelocity(FlywheelStates.HUB);
-                if (flywheel.FlywheelInTolerance(0.5)) {
-                    feeder.setFeederVelocity(FeederStates.SCORING);
-                }
-            } else {
-                if (swerve.isInAllianceZone() && !swerve.onRamp(0, 0.3)) {// in alliance zone
-                    if (hasFuel()) { // if we have fuel(stop after 2s after no fuel)
-                        // Lights.getLightInstance().lightsWantedState =
-                        // LightAnimations.SHOOTREADYCONTINIOUS;
-                        if (flywheel.FlywheelInTolerance(0.5)) {
-                            feeder.setFeederVelocity(FeederStates.SCORING);
-                        }
-                    } else {
-                        feeder.setFeederVelocity(FeederStates.OFF);
+            if(swerve.isInAllianceZone() && !swerve.onRamp(0, 0.3)){
+                if (driverOverride) {
+                    flywheel.setFlywheelVelocity(FlywheelStates.HUB);
+                    if (flywheel.FlywheelInTolerance(0.5)) {
+                        feeder.setFeederVelocity(FeederStates.SCORING);
                     }
                 } else {
-                    feeder.setFeederVelocity(FeederStates.OFF);
-                    return true;
+                    feeder.setFeederVelocity(FeederStates.AGITATION);
                 }
+            }else{
+                return true;
             }
         }
         return false;
@@ -311,40 +300,8 @@ public class Shooter extends SubsystemBase {
         return false;
     }
 
-    public boolean hasFuel() {
-        if (lemonDetector.getDistance().getValueAsDouble() < 7) {
-            lemonDetectionTimestamp = Constants.timer.get();
-        }
-        if (Constants.timer.get() - lemonDetectionTimestamp >= 1.5) {
-            return false;
-        }
-        return true;
-    }
-
     public boolean ferry() {
-        if (aim(false)) {
-            if (driverOverride) {
-                feeder.setFeederVelocity(FeederStates.FERRYING);
-            } else {
-                if (swerve.isInAllianceZone() && swerve.onRamp(0, 0.3)) {// !in alliance zone
-                    if (hasFuel()) { // if we have fuel(stoap after 2s after no fuel)
-                        if (flywheel.FlywheelInTolerance(0.5)) {
-                            feeder.setFeederVelocity(FeederStates.FERRYING);
-                        }
-                    } else {
-                        feeder.setFeederVelocity(FeederStates.OFF);
-                    }
-                } else {
-                    feeder.setFeederVelocity(FeederStates.OFF);
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
 
-    public boolean aim(boolean atHub) {
-        return true;
     }
 
     public double getTurretPosFromJoystick() {

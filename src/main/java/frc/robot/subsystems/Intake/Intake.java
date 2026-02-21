@@ -62,9 +62,7 @@ public class Intake extends SubsystemBase {
 
                 break;
             case ZERO:
-                if (!alreadyZeroed) {
                     currentState = IntakeStates.ZERO;
-                }
                 break;
             default:
                 currentState = IntakeStates.SAFE;

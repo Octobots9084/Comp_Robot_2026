@@ -42,6 +42,9 @@ import choreo.trajectory.SwerveSample;
 public class Robot extends LoggedRobot {
   private Command autonomousCommand;
   private RobotContainer robotContainer;
+  public Shooter shooter;
+  public Climb climb;
+  public Intake intake;
 
   public Robot() {
     // Set up data receivers & replay source
@@ -92,6 +95,9 @@ public class Robot extends LoggedRobot {
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our autonomous chooser on the dashboard.
     robotContainer = new RobotContainer();
+    shooter = Shooter.getInstance();
+    climb = Climb.getInstance();
+    intake = Intake.getInstance();
   }
 
   /** This function is called periodically during all modes. */
@@ -152,9 +158,9 @@ public class Robot extends LoggedRobot {
   public void autonomousInit() {
     setAllianceColor();
     autonomousCommand = robotContainer.getAutonomousCommand();
-    Shooter.getInstance().wantedShooterState = ShooterStates.ZERO;
-    Climb.getInstance().wantedState = ClimbStates.ZERO;
-    Intake.getInstance().wantedState = IntakeStates.ZERO;
+    shooter.wantedShooterState = ShooterStates.ZERO;
+    climb.wantedState = ClimbStates.ZERO;
+    intake.wantedState = IntakeStates.ZERO;
     // SwerveSubsystem.getInstance().io.getPigeon2().setYaw(90);
 
     Logger.recordOutput("EXECUTING!!!!", false);
@@ -173,9 +179,16 @@ public class Robot extends LoggedRobot {
   @Override
   public void teleopInit() {
     setAllianceColor();
-    Shooter.getInstance().wantedShooterState = ShooterStates.ZERO;
-    Climb.getInstance().wantedState = ClimbStates.ZERO;
-    Intake.getInstance().wantedState = IntakeStates.ZERO;
+    //only automaticly zeros if we havent already zeroed while still allowing a zero button
+    if(!shooter.alreadyZeroed){
+      shooter.wantedShooterState = ShooterStates.ZERO;
+    }
+    if(!climb.alreadyZeroed){
+    climb.wantedState = ClimbStates.ZERO;
+    }
+    if(!intake.alreadyZeroed){
+    intake.wantedState = IntakeStates.ZERO;
+    }
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove

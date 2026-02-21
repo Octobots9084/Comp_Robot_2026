@@ -86,7 +86,7 @@ public class Climb extends SubsystemBase {
                 }
                 break;
             case ZERO:
-                if (currentState != ClimbStates.CLIMBEDL3 && currentState != ClimbStates.CLIMBEDL1 && !alreadyZeroed) {
+                if (currentState != ClimbStates.CLIMBEDL3 && currentState != ClimbStates.CLIMBEDL1) {
                     currentState = ClimbStates.ZERO;
                 }
                 break;
