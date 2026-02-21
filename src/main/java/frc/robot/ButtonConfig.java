@@ -71,7 +71,7 @@ public class ButtonConfig {
         })).onFalse(new InstantCommand(() -> SmartDashboard.putBoolean("A button", false)));
 
         if (Constants.robotType != RobotTypes.ALPHA) {
-            driverController.a().onTrue(new SetStateClimb());
+            driverController.a().onTrue(new SetStateClimbL3());
             driverController.b().onTrue(new SetStateUnclimb());
             // driverController.leftBumper().whileTrue(new
             // SetIntakeStateIntaking()).onFalse(new SetIntakeStateSafe());
