@@ -294,7 +294,6 @@ public class SwerveIOSystem extends TunerSwerveDrivetrain implements Subsystem, 
         //public int SuccessfulDaqs;
        // public int FailedDaqs;
     }
-
      
 
     public void registerTelemetryFunction(SwerveIOInputs inputs) {}

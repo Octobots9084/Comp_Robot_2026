@@ -10,6 +10,7 @@ import com.ctre.phoenix6.swerve.SwerveModule;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -28,14 +29,16 @@ import frc.robot.commands.auto.DriveForwardUntilLevel;
 import frc.robot.commands.auto.DriveOverBump;
 import frc.robot.commands.auto.NoPoseBump.DriveOverBumpFromAlliance;
 import frc.robot.commands.auto.NoPoseBump.DriveOverBumpToAlliance;
+import frc.robot.subsystems.Vision.Vision;
 
 public class SwerveSubsystem extends SubsystemBase{
     public enum SystemState {
         MANUAL,
         IDLE,
         ROTATION_LOCK,
+        CLIMBALLIGN,
         REVERSE,
-        ALIGN
+        ALIGNCLIMB
     }
     private static SwerveSubsystem instance;
     public SystemState wantedState = SystemState.MANUAL;
@@ -44,6 +47,8 @@ public class SwerveSubsystem extends SubsystemBase{
     public CommandXboxController driverController;
     public double maxVelocity;
     public double maxAngularVelocity;
+
+    public int climbAllignStage = -1;
 
     private final SwerveIOInputsAutoLogged inputs = new SwerveIOInputsAutoLogged();
 
@@ -144,8 +149,12 @@ public class SwerveSubsystem extends SubsystemBase{
                 return SystemState.ROTATION_LOCK;
             case REVERSE:
                 return SystemState.REVERSE;
-            case ALIGN:
-                return SystemState.ALIGN;
+            case ALIGNCLIMB:
+                return SystemState.ALIGNCLIMB;
+            case CLIMBALLIGN:
+                if (systemState != SystemState.CLIMBALLIGN)
+                climbAllignStage = -1;
+                return SystemState.CLIMBALLIGN;
             default:
                 return this.systemState;
 
@@ -165,11 +174,15 @@ public class SwerveSubsystem extends SubsystemBase{
             case ROTATION_LOCK:
                 
                 break;
+            case CLIMBALLIGN:
+                io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(Vision.getInstance().io.allignClimb(io.getPose2d(), climbAllignStage))
+                .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
+                break;
             case REVERSE:
                 io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(-0.3, 0, 0))
                 .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
                 break;
-            case ALIGN:
+            case ALIGNCLIMB:
                 
                 break;
             default:

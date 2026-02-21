@@ -7,6 +7,8 @@ import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.targeting.PhotonTrackedTarget;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.Velocity;
 
 import com.ctre.phoenix6.Utils;
 
@@ -14,6 +16,8 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -128,6 +132,123 @@ public class VisionIOSystem implements VisionIO{
                 curStdDevs = estStdDevs;
             }
         }
+    }
+
+    @Override
+    public ChassisSpeeds allignClimb(Pose2d pose, int stage){ //stage -1 is the first interation of this function stage 0 is climbOptionalPreStartPosition stage 1 is climbPrePosition stage 2 is climbEngagedPosition
+        Translation2d climbOptionalPreStartPosition;
+        Translation2d climbPrePosition;
+        Translation2d climbEngagedPosition;
+        double TargetRotationRadians;
+        boolean willGoToOptionalPosition = false;
+
+        Translation2d targetPosition;
+
+        double xVelocity;
+        double YVelocity;
+        double RotVelocity;
+        
+        if(Constants.isBlueAlliance){
+            if(pose.getY() > Constants.fieldCenterY){
+                TargetRotationRadians = Constants.climbStartRotationBluePosY;
+                climbOptionalPreStartPosition = Constants.climbOptionalPreStartPositionBluePosY;
+                climbPrePosition = Constants.climbStartPositionBluePosY;
+                climbEngagedPosition = Constants.climbEngagedPositionBluePosY;
+                if(pose.getX() < Constants.climbNeedsToGoToOptionalPrePositionXBlue){
+                    willGoToOptionalPosition = true;
+                }
+            } else {
+                TargetRotationRadians = Constants.climbStartRotationBlueNegY;
+                climbOptionalPreStartPosition = Constants.climbOptionalPreStartPositionBlueNegY;
+                climbPrePosition = Constants.climbStartPositionBlueNegY;
+                climbEngagedPosition = Constants.climbEngagedPositionBlueNegY;
+                if(pose.getX() < Constants.climbNeedsToGoToOptionalPrePositionXBlue){
+                    willGoToOptionalPosition = true;
+                }
+            }
+        } else {
+            if(pose.getY() > Constants.fieldCenterY){
+                TargetRotationRadians = Constants.climbStartRotationRedPosY;
+                climbOptionalPreStartPosition = Constants.climbOptionalPreStartPositionRedPosY;
+                climbPrePosition = Constants.climbStartPositionRedPosY;
+                climbEngagedPosition = Constants.climbEngagedPositionRedPosY;
+                if(pose.getX() < Constants.climbNeedsToGoToOptionalPrePositionXRed){
+                    willGoToOptionalPosition = true;
+                }
+            } else {
+                TargetRotationRadians = Constants.climbStartRotationRedNegY;
+                climbOptionalPreStartPosition = Constants.climbOptionalPreStartPositionRedNegY;
+                climbPrePosition = Constants.climbStartPositionRedNegY;
+                climbEngagedPosition = Constants.climbEngagedPositionRedNegY;
+                if(pose.getX() < Constants.climbNeedsToGoToOptionalPrePositionXRed){
+                    willGoToOptionalPosition = true;
+                }
+            }
+        }
+        
+        double disToFinalWantedPose = Math.sqrt((pose.getY() - climbPrePosition.getY()) * (pose.getY() - climbPrePosition.getY()) + (pose.getX() - climbPrePosition.getX()) * (pose.getY() - climbPrePosition.getY()));
+
+        double approatchspeed = Constants.VisionAllignspeed;
+        if (disToFinalWantedPose < Constants.VisionAllignTollerance){ //TODO test these tolerances
+            approatchspeed = Constants.VisionAllignspeed / (disToFinalWantedPose * 50);
+        }
+        else{
+            approatchspeed = Constants.VisionAllignspeed;
+        }
+        
+        if (Math.abs(pose.getRotation().getRadians() - TargetRotationRadians) < 0.25){
+            RotVelocity = (pose.getRotation().getRadians() - TargetRotationRadians) * 10;
+        } else {
+            RotVelocity = Constants.VisionAllignRotspeed;
+        }
+
+        double disToWantedPose;
+        
+        //getting x/y velocitys
+        if (stage == -1){
+            if (willGoToOptionalPosition == true){
+                stage = 0;
+            } else {
+                stage = 1;
+            }
+        }
+
+        if (stage == 0){
+            disToWantedPose = Math.sqrt((pose.getY() - climbOptionalPreStartPosition.getY())*(pose.getY() - climbOptionalPreStartPosition.getY()) + (pose.getX() - climbOptionalPreStartPosition.getX())*(pose.getX() - climbOptionalPreStartPosition.getX()));
+            if(disToWantedPose < Constants.VisionSubStatesAllignTollerance){
+                stage = 1;
+                targetPosition = climbPrePosition;
+            } else {
+                targetPosition = climbOptionalPreStartPosition;
+            }
+        } else if (stage == 1){
+            disToWantedPose = Math.sqrt((pose.getY() - climbPrePosition.getY())*(pose.getY() - climbPrePosition.getY()) + (pose.getX() - climbPrePosition.getX())*(pose.getX() - climbPrePosition.getX()));
+            if(disToWantedPose < Constants.VisionSubStatesAllignTollerance && Math.abs(pose.getRotation().getRadians() - TargetRotationRadians) <Constants.VisionAllignRotationTollerance){
+                stage = 1;
+                targetPosition = climbPrePosition;
+            } else {
+                targetPosition = climbEngagedPosition;
+            }
+            targetPosition = climbPrePosition;
+        } else if (stage == 2){
+            disToWantedPose = Math.sqrt((pose.getY() - climbEngagedPosition.getY())*(pose.getY() - climbEngagedPosition.getY()) + (pose.getX() - climbEngagedPosition.getX())*(pose.getX() - climbEngagedPosition.getX()));
+            if(disToWantedPose < Constants.VisionAllignTollerance){
+                return new ChassisSpeeds(0,0,RotVelocity);
+            } else {
+                targetPosition = climbEngagedPosition;
+            }
+        }
+        else {
+            throw new ArithmeticException("climb allign stage:"+stage+" invalid");
+        }
+            
+        
+
+
+        xVelocity = approatchspeed * ((pose.getX() - targetPosition.getX()) / disToWantedPose);
+        YVelocity = approatchspeed * ((pose.getY() - targetPosition.getY()) / disToWantedPose);
+        
+        return new ChassisSpeeds(xVelocity,YVelocity,RotVelocity);
     }
     
     public Matrix<N3, N1> getEstimationStdDevs() {

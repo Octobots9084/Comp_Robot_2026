@@ -17,9 +17,14 @@ public class Vision {
         FERRYING
     }
 
-    private final VisionIO io;
+    private static Vision instance; 
+    public final VisionIO io;
     private VisionStates visionState = VisionStates.SHOOTINGINHUB;
     private VisionStates visionWantedState = VisionStates.SHOOTINGINHUB;
+
+    public static Vision getInstance(){
+        return instance;
+    }
 
     public Vision(EstimateConsumer estConsumer){
         io = new VisionIOSystem(estConsumer);
@@ -28,6 +33,8 @@ public class Vision {
         SmartDashboard.putNumber("testerPfx", 3);
         SmartDashboard.putNumber("testerPfy", 4);
         SmartDashboard.putNumber("testerflywheelSpeed", 10);
+
+        instance = this;
     }
 
     public void periodic(){

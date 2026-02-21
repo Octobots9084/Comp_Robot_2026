@@ -17,6 +17,7 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -34,6 +35,11 @@ import edu.wpi.first.wpilibj.Timer;
  */
 public final class Constants {
   // vision
+  public static final double VisionSubStatesAllignTollerance = 0.3;
+  public static final double VisionAllignTollerance = 0.05;
+  public static final double VisionAllignRotationTollerance = 0.05;
+  public static final double VisionAllignspeed = 4;
+  public static final double VisionAllignRotspeed = 0.5;
   public static final double TurretDistFromCenter = 0.03592102448;
   public static final String frontCameraName = "FrontCamera";
   public static final String intakeCameraName = "IntakeCamera";
@@ -65,6 +71,33 @@ public final class Constants {
     public static Translation2d swerveModuleTwoOffset = new Translation2d(1,-1);
     public static Translation2d swerveModuleThreeOffset = new Translation2d(-1,1);
     public static Translation2d swerveModuleFourOffset = new Translation2d(-1,-1);
+
+    //climb positions Red
+    public static Translation2d climbOptionalPreStartPositionRedPosY = new Translation2d(0,0); //TODO get a real value
+    public static Translation2d climbStartPositionRedPosY = new Translation2d(0,0); //TODO get a real value
+    public static Translation2d climbEngagedPositionRedPosY = new Translation2d(0,0); //TODO get a real value
+    public static double climbStartRotationRedPosY = 0; //TODO get a real value
+
+    public static Translation2d climbOptionalPreStartPositionRedNegY = new Translation2d(0,0); //TODO get a real value
+    public static Translation2d climbStartPositionRedNegY = new Translation2d(0,0); //TODO get a real value
+    public static Translation2d climbEngagedPositionRedNegY = new Translation2d(0,0); //TODO get a real value
+    public static double climbStartRotationRedNegY = 0; //TODO get a real value
+
+    public static double climbNeedsToGoToOptionalPrePositionXRed = 0; //TODO get a real value
+    //climb positions Blue
+    public static Translation2d climbOptionalPreStartPositionBluePosY = new Translation2d(0,0); //TODO get a real value
+    public static Translation2d climbStartPositionBluePosY = new Translation2d(0,0); //TODO get a real value
+    public static Translation2d climbEngagedPositionBluePosY = new Translation2d(0,0); //TODO get a real value
+    public static double climbStartRotationBluePosY = 0; //TODO get a real value
+
+    public static Translation2d climbOptionalPreStartPositionBlueNegY = new Translation2d(0,0); //TODO get a real value
+    public static Translation2d climbStartPositionBlueNegY = new Translation2d(0,0); //TODO get a real value
+    public static Translation2d climbEngagedPositionBlueNegY = new Translation2d(0,0); //TODO get a real value
+    public static double climbStartRotationBlueNegY = 0; //TODO get a real value
+
+    public static double climbNeedsToGoToOptionalPrePositionXBlue = 0; //TODO get a real value
+
+    public static double fieldCenterY = 4.02082;
 
   public static enum Mode {
     /** Running on a real robot. */
