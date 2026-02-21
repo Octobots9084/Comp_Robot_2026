@@ -25,18 +25,19 @@ public class ButtonConfig {
     public static Superstructure superstructure = Superstructure.getInstance();
     public void initTeleop(){
     SmartDashboard.putBoolean("A button", false);
-        // driverController.rightTrigger(0.5).onTrue(new InstantCommand(
-        //     () -> Shooter.driverOverride = true))
-        //     .onFalse(new InstantCommand(
-        //     () -> Shooter.driverOverride = false
-        //     ));
-        // SmartDashboard.putBoolean("rightrigger",true);
         driverController.rightTrigger(0.5).onTrue(new InstantCommand(
-            () -> {Shooter.getInstance().wantedShooterState = ShooterStates.HUB; SmartDashboard.putBoolean("rightrigger",true);}))
+            () -> Shooter.driverOverride = true))
             .onFalse(new InstantCommand(
-            () -> {Shooter.getInstance().wantedShooterState = ShooterStates.SAFE; /*superstructure.setWantedState(States.SAFE);*/ SmartDashboard.putBoolean("rightrigger",false);}
+            () -> Shooter.driverOverride = false
             ));
+        // SmartDashboard.putBoolean("rightrigger",true);
+        // driverController.rightTrigger(0.5).onTrue(new InstantCommand(
+        //     () -> {Shooter.getInstance().wantedShooterState = ShooterStates.HUB; SmartDashboard.putBoolean("rightrigger",true);}))
+        //     .onFalse(new InstantCommand(
+        //     () -> {Shooter.getInstance().wantedShooterState = ShooterStates.SAFE; /*superstructure.setWantedState(States.SAFE);*/ SmartDashboard.putBoolean("rightrigger",false);}
+        //     ));
 
+        
         // driverController.rightBumper().onTrue(new InstantCommand( () -> {
         //     Shooter.getInstance().turretAim = 0;
         // }));
@@ -51,7 +52,7 @@ public class ButtonConfig {
         driverController.leftBumper().onTrue(new InstantCommand(
             () -> {Shooter.getInstance().wantedShooterState = ShooterStates.ZERO; SmartDashboard.putBoolean("rightrigger",true);}))
             .onFalse(new InstantCommand(
-            () -> {Shooter.getInstance().wantedShooterState = ShooterStates.SAFE; /*superstructure.setWantedState(States.SAFE);*/ SmartDashboard.putBoolean("rightrigger",false);}
+            () -> {Shooter.getInstance().wantedShooterState = ShooterStates.HUB; /*superstructure.setWantedState(States.SAFE);*/ SmartDashboard.putBoolean("rightrigger",false);}
             ));
         // driverRight.button(1).onTrue(new InstantCommand(() -> SwerveSubsystem.getInstance().io.zeroGyro()));
 
