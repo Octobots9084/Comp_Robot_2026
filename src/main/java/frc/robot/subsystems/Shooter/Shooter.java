@@ -32,7 +32,7 @@ import frc.robot.subsystems.Shooter.Turret.TurretIOInputsAutoLogged;
 public class Shooter extends SubsystemBase{
     private ShooterAngle pastShooterAngle = new ShooterAngle(0, 0);
     public ShooterStates currentShooterState = ShooterStates.SAFE;//SAFE; //should be safe but useing hub for testing
-    public ShooterStates wantedShooterState = ShooterStates.SAFE;
+    public ShooterStates wantedShooterState = ShooterStates.HUB;
     private static Shooter instance = null;
     private final FeederIOInputsAutoLogged feederInputs = new FeederIOInputsAutoLogged();
     private final FlywheelIOInputsAutoLogged flywheelInputs = new FlywheelIOInputsAutoLogged();
@@ -116,56 +116,11 @@ public class Shooter extends SubsystemBase{
                 // }
                 break;
             case HUB:
-                
                 // if(hub()){
-                //     wantedShooterState = ShooterStates.BUMP;
+                    // wantedShooterState = ShooterStates.BUMP;
                     // Lights.getLightInstance().lightsWantedState = LightAnimations.CANTSHOOT;
                 // }
-
-            if(Constants.isBlueAlliance){
-                shooterAngle = ShooterAngleCalculator.getShooterAngleToHub(
-                    swerve.io.getChassisSpeeds().vxMetersPerSecond,
-                    swerve.io.getChassisSpeeds().vxMetersPerSecond,
-                    hubPoseBlue.getX() - swerve.io.getPose2d().getX(),
-                    hubPoseBlue.getY() - swerve.io.getPose2d().getY(),
-                    8// (Flywheel.getInstance().getFlywheelVelocity()[1]*2*Math.Pi * Flywheel.flywheelRadius + Flywheel.getInstance().getFlywheelVelocity()[0]*2*Math.Pi * Flywheel.flywheelRadius)/2.0
-                );
-            }
-            else{
-                shooterAngle = ShooterAngleCalculator.getShooterAngleToHub(
-                    swerve.io.getChassisSpeeds().vxMetersPerSecond,
-                    swerve.io.getChassisSpeeds().vxMetersPerSecond,
-                    hubPoseRed.getX() - swerve.io.getPose2d().getX() + Constants.TurretDistFromCenter*Math.cos((Math.PI*(swerve.io.getGyro()/180))+(Math.PI*3)/4),
-                    hubPoseRed.getY() - swerve.io.getPose2d().getY() + Constants.TurretDistFromCenter*Math.sin((Math.PI*(swerve.io.getGyro()/180))+(Math.PI*3)/4),
-                    8// (Flywheel.getInstance().getFlywheelVelocity()[1]*2*Math.Pi * Flywheel.flywheelRadius + Flywheel.getInstance().getFlywheelVelocity()[0]*2*Math.Pi * Flywheel.flywheelRadius)/2.0
-                );
-            }
-
-            if (shooterAngle != null){
-                pastShooterAngle = shooterAngle;
-            }
-            SmartDashboard.putNumber("shooterHoodAngle",pastShooterAngle.hoodRotation);
-            SmartDashboard.putNumber("shooterAngle",pastShooterAngle.turretRotation);
-
-            double gyro = SwerveSubsystem.getInstance().io.getGyro();
-            gyro = gyro % 360;
-            gyro = 360-gyro;
-
-            // Invert gyro direction BEFORE scaling
-            double offset = pastShooterAngle.turretRotation *(180.0/Math.PI);
-            gyro += offset + 80;
-            gyro = gyro % 360;
-
-            double turretAngle = -(gyro / 360.0);
-
-            turret.setTurretPosition(turretAngle);
-
-            double hoodInverted = 85 - (pastShooterAngle.hoodRotation*180)/Math.PI;
-            double hoodRelative = hoodInverted/360;
-            turret.setHoodPosition(hoodRelative);
-
-            // feeder.setFeederVelocity(FeederStates.SPITTING);
-            // flywheel.setFlywheelVelocity(FlywheelStates.SPIT);
+                hub();
                 break;
             case BUMP:
                 //dont shoot
@@ -250,27 +205,81 @@ public class Shooter extends SubsystemBase{
     //automatically shoots a ball if it can score and allows zeo to override some factors
     public boolean hub(){
         // there is no feederrequest so this causes an error
-        if(aim(true) && isHubActive()){
+        if(aimHub() /*&& isHubActive()*/){
             if(driverOverride){
-                feeder.setFeederVelocity(FeederStates.SCORING);
+                flywheel.setFlywheelVelocity(FlywheelStates.HUB);
+                // if(flywheel.FlywheelInTolerance(0.5)){
+                    feeder.setFeederVelocity(FeederStates.SCORING);
+                // }
+            }else{
+                feeder.setFeederVelocity(FeederStates.OFF);
+            }
                 // manual shooting
                 // Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTREADYMANUAL;
-            }else{
-                if(true && swerve.onRamp(0, 3)){//in alliance zone
-                    if(hasFuel()){ // if we have fuel(stop after 2s after no fuel)
-                        feeder.setFeederVelocity(FeederStates.SCORING);
+            // else{
+                // if(true && swerve.onRamp(0, 3)){//in alliance zone
+                    // if(hasFuel()){ // if we have fuel(stop after 2s after no fuel)
                         //automatic shooting
                         // Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTREADYCONTINIOUS;
-                    }else{
+                    // }else{
                         // feeder.setFeederVelocity(FeederStates.OFF);
-                    }
-                }else{
+                    // }
+                // }else{
                     // feeder.setFeederVelocity(FeederStates.OFF);
-                    return true;
+                    // return true;
                 }
-            }
-        }
+            // }
+        // }
         return false;
+    }
+
+    public boolean aimHub(){
+        if(Constants.isBlueAlliance){
+                shooterAngle = ShooterAngleCalculator.getShooterAngleToHub(
+                    swerve.io.getChassisSpeeds().vxMetersPerSecond,
+                    swerve.io.getChassisSpeeds().vxMetersPerSecond,
+                    hubPoseBlue.getX() - swerve.io.getPose2d().getX(),
+                    hubPoseBlue.getY() - swerve.io.getPose2d().getY(),
+                    6.7//0.5 * Constants.FlywheelDiamiter * Math.PI * (Flywheel.getInstance().getFlywheelVelocity()[1]*2*Math.PI * Flywheel.flywheelRadius + Flywheel.getInstance().getFlywheelVelocity()[0]*2*Math.PI * Flywheel.flywheelRadius)/2.0
+                );
+            }
+            else{
+                shooterAngle = ShooterAngleCalculator.getShooterAngleToHub(
+                    swerve.io.getChassisSpeeds().vxMetersPerSecond,
+                    swerve.io.getChassisSpeeds().vxMetersPerSecond,
+                    hubPoseRed.getX() - swerve.io.getPose2d().getX() + Constants.TurretDistFromCenter*Math.cos((Math.PI*(swerve.io.getGyro()/180))+(Math.PI*3)/4),
+                    hubPoseRed.getY() - swerve.io.getPose2d().getY() + Constants.TurretDistFromCenter*Math.sin((Math.PI*(swerve.io.getGyro()/180))+(Math.PI*3)/4),
+                    6.7
+                );
+            }
+
+            if (shooterAngle != null){
+                pastShooterAngle = shooterAngle;
+            }
+            SmartDashboard.putNumber("shooterHoodAngle",pastShooterAngle.hoodRotation);
+            SmartDashboard.putNumber("shooterAngle",pastShooterAngle.turretRotation);
+
+            double gyro = SwerveSubsystem.getInstance().io.getGyro();
+            gyro = gyro % 360;
+            gyro = 360-gyro;
+
+            // Invert gyro direction BEFORE scaling
+            double offset = pastShooterAngle.turretRotation *(180.0/Math.PI);
+            gyro += offset + 80;
+            gyro = gyro % 360;
+
+            double turretAngle = -(gyro / 360.0);
+
+            turret.setTurretPosition(turretAngle);
+
+            double hoodInverted = 85 - (pastShooterAngle.hoodRotation*180)/Math.PI;
+            double hoodRelative = hoodInverted/360;
+            turret.setHoodPosition(hoodRelative);
+
+            if(turret.hoodInTolerance(.002778)&&turret.turretInTolerance(0.002778)){
+                return true;
+            }
+            return false;
     }
 
     public boolean inAllianceZone(){

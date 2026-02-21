@@ -1,10 +1,10 @@
 package frc.robot.subsystems.Shooter.Feeder;
 
 public enum FeederStates {
-    SCORING(0,0),
+    SCORING(8,-7),
     FERRYING(0,0),
     OFF(0,0),
-    SPITTING(10,-7);
+    SPITTING(5,-3);
 
     public double spindexerRPS;
     public double feederRPS;

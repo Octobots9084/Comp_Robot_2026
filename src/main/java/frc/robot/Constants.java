@@ -27,6 +27,7 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
+import frc.robot.Constants.RobotTypes;
 
 /**
  * This class defines the runtime mode used by AdvantageKit. The mode is always "real" when running
@@ -35,6 +36,7 @@ import edu.wpi.first.wpilibj.Timer;
  */
 public final class Constants {
   // vision
+  public static final double FlywheelDiamiter = 0.1016;
   public static final double VisionSubStatesAllignTollerance = 0.3;
   public static final double VisionAllignTollerance = 0.05;
   public static final double VisionAllignRotationTollerance = 0.05;
@@ -45,7 +47,7 @@ public final class Constants {
   public static final String intakeCameraName = "IntakeCamera";
   public static final AprilTagFieldLayout kTagLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded);
   private static final double camPitch = Units.degreesToRadians(30.0);
-  public static final Transform3d robotToCamFront = new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0, -camPitch, 0));
+  public static final Transform3d robotToCamFront = new Transform3d(new Translation3d(0.3302, -0.1016, 0.2286), new Rotation3d(0, -camPitch, 0));
   // The standard deviations of our vision estimated poses, which affect correction rate
   // (Fake values. Experiment and determine estimation noise on an actual robot.)
   public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
