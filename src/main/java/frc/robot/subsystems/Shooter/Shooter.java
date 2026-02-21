@@ -324,9 +324,6 @@ public class Shooter extends SubsystemBase{
         return tIO.getHoodPosition() + 0.05 * -MathUtil.applyDeadband(coDriverController.getLeftY(), Constants.leftXDeadband);
     }
     
-    public void setShooterWantedState(ShooterStates state) {
-        this.wantedShooterState = state;
-    }
     public boolean isHubActive(){
         double timer = Constants.timer.get();
         gameData = DriverStation.getGameSpecificMessage();
