@@ -120,7 +120,7 @@ public class Shooter extends SubsystemBase {
                 // }
                 break;
             case HUB:
-                if(hub()) {
+                if(shootHub()) {
                     wantedShooterState = ShooterStates.BUMP;
                     // Lights.getLightInstance().lightsWantedState = LightAnimations.CANTSHOOT;
                 }
@@ -226,7 +226,7 @@ public class Shooter extends SubsystemBase {
         return false;
     }
 
-    public boolean hub() {
+    public boolean shootHub() {
         if (aimHub() && isHubActive()) {
             // TODO ACTIVELY NEEDS TO BE FIXED
             if(swerve.isInAllianceZone() && !swerve.onRamp(0, 0.3)){
@@ -300,9 +300,11 @@ public class Shooter extends SubsystemBase {
         return false;
     }
 
-    public boolean ferry() {
+    // public boolean shootFerry() {
+        
+    // }
 
-    }
+    // public boolean aimFerry(){}
 
     public double getTurretPosFromJoystick() {
         return tIO.getTurretPosition()
