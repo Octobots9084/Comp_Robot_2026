@@ -56,5 +56,9 @@ public class FlywheelIOTalonFX implements FlywheelIO {
 
         return FlywheelVelocity;
     }
+    @Override
+    public boolean FlywheelInTolerance(double tolerance){
+        return MathUtil.isNear(FlywheelRightMotorRequest.getVelocityMeasure().in(Units.RevolutionsPerSecond), FlywheelRightMotor.getVelocity().getValueAsDouble(),tolerance);
+    }
 
 }

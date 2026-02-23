@@ -11,6 +11,8 @@ public interface VisionIO {
     public static class VisionIOInputs {
         public boolean intakeCameraConected = false;
         public boolean frontCameraConected = false;
+        public boolean rightCameraConected = false;
+        public boolean leftCameraConected = false;
     }
 
     public default void updateInputs(VisionIOInputs inputs) {

@@ -38,13 +38,19 @@ import frc.robot.Constants.RobotTypes;
 public final class Constants {
   // vision
   public static final double FlywheelDiamiter = 0.1016;
-  public static final double TurretDistFromCenter = 0.03592102448;
-  public static final String frontCameraName = "FrontCamera";
+  public static final double TurretDistFromCenter = 0.2051;
+  public static final String frontCameraName = "RightCamera";
+  public static final String rightCameraName = "FrontCamera";
+  public static final String leftCameraName = "LeftCamera";
   public static final String intakeCameraName = "IntakeCamera";
   public static final AprilTagFieldLayout kTagLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded);
-  private static final double camPitch = Units.degreesToRadians(30.0);
-  public static final Transform3d robotToCamFront = new Transform3d(new Translation3d(0.3302, -0.1016, 0.2286),
-      new Rotation3d(0, -camPitch, 0));
+  private static final double camPitch = Units.degreesToRadians(23.0);
+  public static final Transform3d robotToCamFront = new Transform3d(new Translation3d(-0.3302, 0.1016, 0.2286),
+      new Rotation3d(0, -camPitch, Math.PI));
+  public static final Transform3d robotToCamRight = new Transform3d(new Translation3d(-0.0889, -0.3048, 0.1778),
+      new Rotation3d(0, -camPitch, Math.PI*0.5));
+  public static final Transform3d robotToCamLeft = new Transform3d(new Translation3d(-0.1397,-0.3175, 0.1524),
+      new Rotation3d(0, -camPitch, Math.PI*1.5));
   // The standard deviations of our vision estimated poses, which affect
   // correction rate
   // (Fake values. Experiment and determine estimation noise on an actual robot.)
@@ -65,7 +71,7 @@ public final class Constants {
   public static final double rightXDeadband = 0.15;// TODO
   public static final double maxAngularVelocity = 2;// TODO
   // public static final enum currentMode = 1;//TODO
-  public static final double maxVelocity = 2;// TODO
+  public static final double maxVelocity = 3.75;// TODO
 
   public static Translation2d swerveModuleOneOffset = new Translation2d(1, 1);
   public static Translation2d swerveModuleTwoOffset = new Translation2d(1, -1);

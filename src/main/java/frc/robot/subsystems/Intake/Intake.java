@@ -13,12 +13,12 @@ public class Intake extends SubsystemBase {
     public IntakeIO io;
     public static Intake instance;
     public boolean alreadyZeroed = false;
-    public IntakeIOTalonFX intakeFX = new IntakeIOTalonFX();
     public IntakeIOInputsAutoLogged inputs = new IntakeIOInputsAutoLogged();
 
     public Intake(IntakeIO io) {
         this.io = io;
         instance = this;
+
     }
 
     public static Intake getInstance() {
@@ -122,9 +122,9 @@ public class Intake extends SubsystemBase {
     public boolean zeroIntake() {
         boolean pressed = io.isZeroingSwitchPressed();
         if (pressed) {
-            intakeFX.setRotateVoltage(3);
+            io.setRotateVoltage(3);
         } else {
-            intakeFX.setRotateVoltage(-3);
+            io.setRotateVoltage(-3);
         }
         return pressed;
 

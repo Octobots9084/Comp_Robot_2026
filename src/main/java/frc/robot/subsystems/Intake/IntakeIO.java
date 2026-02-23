@@ -28,6 +28,8 @@ public interface IntakeIO {
     public default double getIntakePosition() {
         return 0;
     }
+    
+    public default void setRotateVoltage(double volts){}
 
     public default boolean isZeroingSwitchPressed() {// GAS_D
         return false;

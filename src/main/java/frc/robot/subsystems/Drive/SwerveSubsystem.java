@@ -211,10 +211,10 @@ public class SwerveSubsystem extends SubsystemBase {
         // double angularMagnitude = -MathUtil.applyDeadband(driverRight.getRawAxis(0),
         // Constants.rightXDeadband);
         double yMagnitude = MathUtil.applyDeadband(driverController.getLeftX(), Constants.leftYDeadband);
-        double xMagnitude = -MathUtil.applyDeadband(driverController.getLeftY(), Constants.leftXDeadband);
+        double xMagnitude = MathUtil.applyDeadband(driverController.getLeftY(), Constants.leftXDeadband);
         double angularMagnitude = -MathUtil.applyDeadband(driverController.getRightX(), Constants.rightXDeadband);
         angularMagnitude = Math.copySign(angularMagnitude * angularMagnitude, angularMagnitude);
-        double xVelocity = (FieldConstants.isBlueAlliance() ? -xMagnitude * maxVelocity : xMagnitude * maxVelocity)
+        double xVelocity = (FieldConstants.isBlueAlliance() ? xMagnitude * maxVelocity : -xMagnitude * maxVelocity)
                 * Constants.maxTelopVelocity;
         double yVelocity = (FieldConstants.isBlueAlliance() ? yMagnitude * maxVelocity : -yMagnitude * maxVelocity)
                 * Constants.maxTelopVelocity;

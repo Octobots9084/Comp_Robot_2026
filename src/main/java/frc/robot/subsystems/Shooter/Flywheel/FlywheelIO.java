@@ -33,7 +33,7 @@ public interface FlywheelIO {
     return 0;
   }
 
-  public default boolean FlywheelInTolerance(double flywheelTolerance) {
+  public default boolean FlywheelInTolerance(double tolerance) {
     return false;
   }
 }

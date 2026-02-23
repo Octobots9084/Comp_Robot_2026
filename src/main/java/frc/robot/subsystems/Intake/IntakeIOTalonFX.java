@@ -11,7 +11,7 @@ import edu.wpi.first.math.MathUtil;
 import frc.robot.Constants;
 
 public class IntakeIOTalonFX implements IntakeIO {
-     public DigitalInput zeroingSwitch = new DigitalInput(9);
+     public DigitalInput zeroingSwitch = new DigitalInput(0);
      public IntakeConfigurator config;
      // public TalonFX pivot;
      // public TalonFX roller;
@@ -53,7 +53,7 @@ public class IntakeIOTalonFX implements IntakeIO {
      public double getIntakePosition() {
           return -1; // pivot.getPosition().getValueAsDouble();
      }
-
+     @Override
      public void setRotateVoltage(double voltage) {
           // this.pivot.setVoltage(voltage);
      }

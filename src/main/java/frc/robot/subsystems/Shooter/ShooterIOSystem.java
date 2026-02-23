@@ -11,6 +11,8 @@ public class ShooterIOSystem implements ShooterIO {
 
     public void updateInputs(ShooterIOInputs inputs) {
         inputs.ShooterCurrentState = Shooter.getInstance().currentShooterState;
+        inputs.ShooterWantedState = Shooter.getInstance().wantedShooterState;
+        inputs.isAimedAtHub = Shooter.getInstance().isAimedAtHub;
     }
 
 }
