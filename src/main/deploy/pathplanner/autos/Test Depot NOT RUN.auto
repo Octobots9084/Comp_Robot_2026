@@ -7,19 +7,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Bump 1 BL"
+            "pathName": "M Start 1 to Depot top"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Top Down Neutral Sweep"
+            "pathName": "M Depot top to Depot bottom (out)"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Sweep Down Neutral 3 to Shoot"
+            "pathName": "M Depot bottom (out) to Ramp 1 BL"
           }
         }
       ]
