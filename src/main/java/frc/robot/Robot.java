@@ -8,6 +8,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -45,6 +46,7 @@ public class Robot extends LoggedRobot {
   public Shooter shooter;
   public Climb climb;
   public Intake intake;
+  private boolean lastHubPeriod = false;
 
   public Robot() {
     // Set up data receivers & replay source
@@ -173,11 +175,14 @@ public class Robot extends LoggedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
+    Shooter.getInstance().wantedShooterState = ShooterStates.HUB;
+    Intake.getInstance().wantedState = IntakeStates.INTAKING;
   }
 
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
+    
     setAllianceColor();
     //only automaticly zeros if we havent already zeroed while still allowing a zero button
     if(!shooter.alreadyZeroed){
@@ -203,6 +208,11 @@ public class Robot extends LoggedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
+    if (lastHubPeriod != Shooter.getInstance().isHubActive()) {
+      ButtonConfig.driverController.setRumble(RumbleType.kBothRumble, 1);
+      ButtonConfig.coDriverController.setRumble(RumbleType.kBothRumble, 1);
+    }
+    lastHubPeriod = Shooter.getInstance().isHubActive();
     // runs the vision periodic
     robotContainer.vision.periodic();
     robotContainer.shooter.periodic();
