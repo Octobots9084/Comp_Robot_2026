@@ -58,6 +58,10 @@ public class Shooter extends SubsystemBase {
     private ShooterAngle shooterAngle;
     private Pose2d hubPoseBlue = new Pose2d(4.6228, 4.02082, new Rotation2d());
     private Pose2d hubPoseRed = new Pose2d(11.88974, 4.02082, new Rotation2d());
+    private Pose2d blueFerryOutpost = new Pose2d(0,0,new Rotation2d());
+    private Pose2d redFerryOutpost = new Pose2d(0,0,new Rotation2d());
+    private Pose2d blueFerryDepot = new Pose2d(0,0,new Rotation2d());
+    private Pose2d redFerryDepot = new Pose2d(0,0, new Rotation2d());
     public boolean isAimedAtHub;
 
     public Shooter(FeederIO fIO, FlywheelIO fwIO, TurretIO tIO, ShooterIO sIO,
@@ -353,9 +357,69 @@ public class Shooter extends SubsystemBase {
         return false;
     }
 
-    // public boolean shootFerry() {
-        
-    // }
+
+
+    public boolean aimFerry() {
+        Pose2d target;
+        if(Constants.isBlueAlliance){
+            double redFerryDepotDistance = Math.sqrt(Math.pow(redFerryDepot.getX() - swerve.io.getPose2d().getX(),2)+Math.pow((redFerryDepot.getY() - swerve.io.getPose2d().getY()),2));
+            double redFerryOutpostDistance = Math.sqrt(Math.pow(redFerryOutpost.getX() - swerve.io.getPose2d().getX(),2)+Math.pow((redFerryOutpost.getY() - swerve.io.getPose2d().getY()),2));
+            if(redFerryDepotDistance <= redFerryOutpostDistance){
+                target = redFerryDepot;
+            }else{
+                target = redFerryOutpost;
+            }
+        }else{
+            double blueFerryDepotDistance = Math.sqrt(Math.pow(blueFerryDepot.getX() - swerve.io.getPose2d().getX(),2)+Math.pow((blueFerryDepot.getY() - swerve.io.getPose2d().getY()),2));
+            double blueFerryOutpostDistance = Math.sqrt(Math.pow(blueFerryOutpost.getX() - swerve.io.getPose2d().getX(),2)+Math.pow((blueFerryOutpost.getY() - swerve.io.getPose2d().getY()),2));
+            if(blueFerryDepotDistance <= blueFerryOutpostDistance){
+                target = blueFerryDepot;
+            }else{
+                target = blueFerryOutpost;
+            }
+        }
+        shooterAngle = ShooterAngleCalculator.getShooterAngleToFerry(
+                    swerve.io.getChassisSpeeds().vxMetersPerSecond,
+                    swerve.io.getChassisSpeeds().vxMetersPerSecond,
+                    target.getX() - swerve.io.getPose2d().getX()
+                            + Constants.TurretDistFromCenter
+                                    * Math.cos((Math.PI * (swerve.io.getGyro() / 180)) + (Math.PI * 3) / 4),
+                    target.getY() - swerve.io.getPose2d().getY()
+                            + Constants.TurretDistFromCenter
+                                    * Math.sin((Math.PI * (swerve.io.getGyro() / 180)) + (Math.PI * 3) / 4),
+                    7.77);
+
+        if (shooterAngle != null) {
+            pastShooterAngle = shooterAngle;
+        }
+        SmartDashboard.putNumber("shooterHoodAngle", pastShooterAngle.hoodRotation);
+        SmartDashboard.putNumber("shooterAngle", pastShooterAngle.turretRotation);
+
+        double rotation = SwerveSubsystem.getInstance().getRobotPose().getRotation().getDegrees();
+        rotation = rotation % 360;
+        rotation = 360 - rotation;
+
+        // Invert gyro direction BEFORE scaling
+        // double offset = 190;//pastShooterAngle.turretRotation * (180.0 / Math.PI);
+        double alphabotJankboticsOffset = 6;
+        double offset = pastShooterAngle.turretRotation * (180.0 / Math.PI) + alphabotJankboticsOffset;
+        rotation += offset + 255; //maybe 255
+        rotation = rotation % 360;
+
+        double turretAngle = -(rotation / 360.0);
+
+        turret.setTurretPosition(turretAngle);
+
+        double hoodInverted = 85 - (pastShooterAngle.hoodRotation * 180) / Math.PI;
+        // double hoodInverted = 40;
+        double hoodRelative = hoodInverted / 360;
+        turret.setHoodPosition(hoodRelative);
+
+        if (turret.hoodInTolerance(.05) && turret.turretInTolerance(0.05)) {
+            return true;
+        }
+        return false;
+    }
 
     // public boolean aimFerry(){}
 
