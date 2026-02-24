@@ -174,6 +174,8 @@ public class Robot extends LoggedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
+    Shooter.getInstance().wantedShooterState = ShooterStates.HUB;
+    Intake.getInstance().wantedState = IntakeStates.INTAKING;
   }
 
   /** This function is called once when teleop is enabled. */

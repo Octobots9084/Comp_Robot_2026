@@ -21,6 +21,12 @@
           "data": {
             "pathName": "Sweep Down Neutral 3 to Shoot"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Outpost Climb"
+          }
         }
       ]
     }

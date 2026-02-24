@@ -171,62 +171,62 @@ public class DriveOverBumpFromAlliance extends Command {
 
 
 potential logic change
-         */
-        onRamp = swerve.onRamp(0, 0.5);
-        tilt = Units.radiansToDegrees(Math.acos(swerve.io.getRotation3d().toMatrix().get(2, 2)) - 0.015);
-        move();
-        if (onRamp && !hasBeenOnRamp) {
-            hasBeenOnRamp = true;
-        }
-        if (!onRamp && hasBeenOnRamp) {
-            precon = true;
-        }
-        if (precon && (tilt > 1)) {
-            hasBeenTilted = true;
-        }
-        SmartDashboard.putBoolean("precon", precon);
-        SmartDashboard.putBoolean("hasBeenTilted", hasBeenTilted);
-        SmartDashboard.putBoolean("test 1", hasBeenOnRamp);
-        tilt = Units.radiansToDegrees(Math.acos(swerve.io.getRotation3d().toMatrix().get(2, 2)) - 0.015);
-        SmartDashboard.putNumber("tilt", tilt);
-        if (tilt > 1 && !hasBeenTilted) {
-            hasBeenTilted = true;
-        }
-        SmartDashboard.putBoolean("has been tilted", hasBeenTilted);//log th4 new tilt tis so close
+    //      */
+    //     onRamp = swerve.onRamp(0, 0.5);
+    //     tilt = Units.radiansToDegrees(Math.acos(swerve.io.getRotation3d().toMatrix().get(2, 2)) - 0.015);
+    //     move();
+    //     if (onRamp && !hasBeenOnRamp) {
+    //         hasBeenOnRamp = true;
+    //     }
+    //     if (!onRamp && hasBeenOnRamp) {
+    //         precon = true;
+    //     }
+    //     if (precon && (tilt > 1)) {
+    //         hasBeenTilted = true;
+    //     }
+    //     SmartDashboard.putBoolean("precon", precon);
+    //     SmartDashboard.putBoolean("hasBeenTilted", hasBeenTilted);
+    //     SmartDashboard.putBoolean("test 1", hasBeenOnRamp);
+    //     tilt = Units.radiansToDegrees(Math.acos(swerve.io.getRotation3d().toMatrix().get(2, 2)) - 0.015);
+    //     SmartDashboard.putNumber("tilt", tilt);
+    //     if (tilt > 1 && !hasBeenTilted) {
+    //         hasBeenTilted = true;
+    //     }
+    //     SmartDashboard.putBoolean("has been tilted", hasBeenTilted);//log th4 new tilt tis so close
 
 
-    }// it is as expected. the is finished is returning early.
-    //fix =? make a directional (when flat on peak of ramp, its !onRamp) -> TODO: fix -/+ for direction (advantageKit check which way is +)
-    // 0 -> 1 -> 14 -> 15 -> 14 -> 12 -> 0 -> -1 -> -10 -> -15 -> -12 -> -3 -> 0 //TILT
+    // }// it is as expected. the is finished is returning early.
+    // //fix =? make a directional (when flat on peak of ramp, its !onRamp) -> TODO: fix -/+ for direction (advantageKit check which way is +)
+    // // 0 -> 1 -> 14 -> 15 -> 14 -> 12 -> 0 -> -1 -> -10 -> -15 -> -12 -> -3 -> 0 //TILT
 
-    @Override
-    public boolean isFinished () {
-        SmartDashboard.putBoolean("done w/ auto", (!onRamp && hasBeenOnRamp && hasBeenTilted && tilt < 1));
-        return (!onRamp && hasBeenOnRamp && hasBeenTilted && tilt < 1);//TODO: here from other todo (-1 or 1)
-        // return false;
-    }
+    // @Override
+    // public boolean isFinished () {
+    //     SmartDashboard.putBoolean("done w/ auto", (!onRamp && hasBeenOnRamp && hasBeenTilted && tilt < 1));
+    //     return (!onRamp && hasBeenOnRamp && hasBeenTilted && tilt < 1);//TODO: here from other todo (-1 or 1)
+    //     // return false;
+    // }
     
-    @Override
-    public void end(boolean interrupted) {
-        onRamp = false;
-        precon = false;
-        hasBeenOnRamp = false;
-        hasBeenTilted = false;
-        tilt = 0;
-        hasBeenTilted = false;
-    }
+    // @Override
+    // public void end(boolean interrupted) {
+    //     onRamp = false;
+    //     precon = false;
+    //     hasBeenOnRamp = false;
+    //     hasBeenTilted = false;
+    //     tilt = 0;
+    //     hasBeenTilted = false;
+    // }
 
-    public void move () {
-        if (Constants.allianceColor == Alliance.Blue) {
-            swerve.io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(2, 0, 0))
-                .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
-        } else {
-            swerve.io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(-2, 0, 0))
-                .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
-        }
-    }
+    // public void move () {
+    //     if (Constants.allianceColor == Alliance.Blue) {
+    //         swerve.io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(2, 0, 0))
+    //             .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
+    //     } else {
+    //         swerve.io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(-2, 0, 0))
+    //             .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
+    //     }
+    // }
 
-}
+// }
 
 
 /*
