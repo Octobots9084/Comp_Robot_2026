@@ -21,6 +21,18 @@
           "data": {
             "pathName": "Bottom Up Sweep"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Finish Up Sweep"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Sweep Up Bump & to Shoot"
+          }
         }
       ]
     }
