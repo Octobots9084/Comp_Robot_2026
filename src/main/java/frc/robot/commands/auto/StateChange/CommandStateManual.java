@@ -6,8 +6,8 @@ import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.ShooterStates;
 
-public class SetStateManual extends InstantCommand {
-    public SetStateManual() {
+public class CommandStateManual extends InstantCommand {
+    public CommandStateManual() {
         // Superstructure.getInstance().wantedState = States.MANUAL;
         Shooter.getInstance().wantedShooterState = ShooterStates.MANUAL;
     }

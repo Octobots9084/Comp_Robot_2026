@@ -3,7 +3,6 @@ package frc.robot.subsystems;
 import java.security.spec.ECPublicKeySpec;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.commands.auto.StateChange.SetIntakeStateSafe;
 import frc.robot.subsystems.*; // WHY DID WE HAVE SO MANY IMPORTS FROM THIS THING JUST IMPORT IT ALL
 import frc.robot.subsystems.Climb.*; //I don't know why we need this
 import frc.robot.subsystems.Intake.*;//same

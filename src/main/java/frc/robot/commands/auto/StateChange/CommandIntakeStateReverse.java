@@ -6,8 +6,8 @@ import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Intake.Intake;
 import frc.robot.subsystems.Intake.IntakeStates;
 
-public class SetIntakeStateIntaking extends InstantCommand {
-    public SetIntakeStateIntaking() {
-        Intake.getInstance().wantedState = IntakeStates.INTAKING;
+public class CommandIntakeStateReverse extends InstantCommand {
+    public CommandIntakeStateReverse() {
+        Intake.getInstance().wantedState = IntakeStates.REVERSEINTAKING;
     }
 }
