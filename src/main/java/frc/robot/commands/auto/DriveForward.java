@@ -10,15 +10,15 @@ import frc.robot.subsystems.Drive.SwerveSubsystem;
 
 public class DriveForward extends Command {
     SwerveSubsystem swerve;
-    
+
     @Override
-    public void initialize () {
+    public void initialize() {
         swerve = SwerveSubsystem.getInstance();
     }
 
     @Override
-    public void execute() {   
+    public void execute() {
         swerve.io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(1, 0, 0))
-            .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));        
-    }   
+                .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
+    }
 }

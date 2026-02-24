@@ -10,12 +10,13 @@ import frc.robot.Constants;
 public class IntakeConfigurator {
     public TalonFXConfiguration intakeRollerConfig;
     public TalonFXConfiguration intakePivotConfig;
-    public IntakeConfigurator(){
-        intakeRollerConfig = new TalonFXConfiguration();
-        intakePivotConfig = new TalonFXConfiguration().withFeedback(new FeedbackConfigs().
-                        withSensorToMechanismRatio(Constants.intakePivotGearRatio));
 
-        //intake roller config
+    public IntakeConfigurator() {
+        intakeRollerConfig = new TalonFXConfiguration();
+        intakePivotConfig = new TalonFXConfiguration()
+                .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(Constants.intakePivotGearRatio));
+
+        // intake roller config
         intakeRollerConfig.CurrentLimits.SupplyCurrentLimit = 20;
         intakeRollerConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
         intakeRollerConfig.CurrentLimits.StatorCurrentLimit = 40;
@@ -38,14 +39,11 @@ public class IntakeConfigurator {
         intakeRollerConfig.MotionMagic.MotionMagicJerk = 0;
         intakeRollerConfig.MotionMagic.MotionMagicCruiseVelocity = 0;
 
-
-
-        //intake pivot right config
+        // intake pivot right config
         intakePivotConfig.CurrentLimits.SupplyCurrentLimit = 20;
         intakePivotConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
         intakePivotConfig.CurrentLimits.StatorCurrentLimit = 40;
         intakePivotConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-
 
         // set break mode and inversion
         intakePivotConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;

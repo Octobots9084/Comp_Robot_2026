@@ -6,18 +6,19 @@ import frc.robot.subsystems.Intake.IntakeStates;
 
 public class runIntake extends Command {
     Intake intake;
-    
+
     @Override
-    public void initialize () {
+    public void initialize() {
         intake = Intake.getInstance();
     }
 
     @Override
-    public void execute() {   
+    public void execute() {
         intake.setWantedState(IntakeStates.INTAKING);
     }
+
     @Override
-    public void end(boolean interrupted){
+    public void end(boolean interrupted) {
         intake.setWantedState(IntakeStates.SAFE);
     }
 }

@@ -4,20 +4,28 @@ public class Lights {
     public LightAnimations lightsCurrentState = LightAnimations.DEFAULT;
     public LightAnimations lightsWantedState = LightAnimations.DEFAULT;
     public static Lights currentLightInstance;
+
     public void periodic() {
         lightStateTransitions();
-      }
-    public Lights(){
+    }
+
+    public Lights() {
         currentLightInstance = this;
     }
+
     public static Lights getLightInstance() {
+        if (currentLightInstance == null) {
+            setLightInstance(new Lights());
+        }
         return currentLightInstance;
     }
-    public static void setLightInstance(Lights instance){
+
+    public static void setLightInstance(Lights instance) {
         currentLightInstance = instance;
     }
+
     public void lightStateTransitions() {
-        switch(lightsWantedState){
+        switch (lightsWantedState) {
             case DEFAULT:
                 lightsCurrentState = LightAnimations.DEFAULT;
                 break;
@@ -37,8 +45,9 @@ public class Lights {
                 lightsCurrentState = LightAnimations.SHOOTREADYMANUAL;
                 break;
         }
-     }
-       public LightAnimations getWantedLightState() {
+    }
+
+    public LightAnimations getWantedLightState() {
         return this.lightsWantedState;
     }
 

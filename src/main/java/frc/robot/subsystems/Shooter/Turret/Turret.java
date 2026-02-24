@@ -2,49 +2,50 @@ package frc.robot.subsystems.Shooter.Turret;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Turret extends SubsystemBase{
+public class Turret extends SubsystemBase {
     public static Turret currentInstance = null;
 
     public final double spitTurrentAnge = 0.25;
-    
-    public final double spitTurrentHood = 0.67;//hehe change this to real or it'll be 67
 
-    public final double spitTurrentOutAnge = 0.55;//todo
+    public final double spitTurrentHood = 0.1;// hehe change this to real or it'll be 67
 
-    public TurretIO io = new TurretIOTalonFX();
+    public final double spitTurrentOutAnge = 0.55;// todo
+    public TurretIO io;
 
-    public Turret(){
+    public Turret(TurretIO tIO) {
         currentInstance = this;
+        io = tIO;
     }
 
-    public static Turret getInstance(){
+    public static Turret getInstance() {
         return currentInstance;
     }
 
-    public static void setInstance(Turret instance){
+    public static void setInstance(Turret instance) {
         currentInstance = instance;
     }
 
-    public void setTurretPosition(double turretAngle){
+    public void setTurretPosition(double turretAngle) {
         io.setTurretPosition(turretAngle);
     }
 
-    public void setHoodPosition(double hoodAngle){
+    public void setHoodPosition(double hoodAngle) {
         io.setHoodPosition(hoodAngle);
     }
 
-    public double getHoodPosition(){
+    public double getHoodPosition() {
         return io.getHoodPosition();
     }
-    public double getTurretPosition(){
+
+    public double getTurretPosition() {
         return io.getTurretPosition();
     }
 
-    public boolean hoodInTolerance(double tolerance){
+    public boolean hoodInTolerance(double tolerance) {
         return io.hoodInTolerance(tolerance);
     }
 
-    public boolean turretInTolerance(double tolerance){
+    public boolean turretInTolerance(double tolerance) {
         return io.turretInTolerance(tolerance);
     }
 }
