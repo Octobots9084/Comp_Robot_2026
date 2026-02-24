@@ -39,10 +39,10 @@ public final class Constants {
   // vision
   public static final double FlywheelDiamiter = 0.1016;
   public static final double TurretDistFromCenter = 0.2051;
-  public static final String frontCameraName = "RightCamera";
-  public static final String rightCameraName = "FrontCamera";
+  public static final String frontCameraName = "FrontCamera";
+  public static final String rightCameraName = "RightCamera";
   public static final String leftCameraName = "LeftCamera";
-  public static final String intakeCameraName = "IntakeCamera";
+  // public static final String intakeCameraName = "IntakeCamera";
   public static final AprilTagFieldLayout kTagLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded);
   private static final double camPitch = Units.degreesToRadians(23.0);
   public static final Transform3d robotToCamFront = new Transform3d(new Translation3d(-0.3302, 0.1016, 0.2286),

@@ -96,7 +96,7 @@ public class Robot extends LoggedRobot {
     // and put our autonomous chooser on the dashboard.
     robotContainer = new RobotContainer();
     shooter = Shooter.getInstance();
-    climb = Climb.getInstance();
+    // climb = Climb.getInstance();
     intake = Intake.getInstance();
   }
 
@@ -159,8 +159,8 @@ public class Robot extends LoggedRobot {
     setAllianceColor();
     autonomousCommand = robotContainer.getAutonomousCommand();
     shooter.wantedShooterState = ShooterStates.ZERO;
-    climb.wantedState = ClimbStates.ZERO;
-    intake.wantedState = IntakeStates.ZERO;
+    // climb.wantedState = ClimbStates.ZERO;
+    // intake.wantedState = IntakeStates.ZERO;
     // SwerveSubsystem.getInstance().io.getPigeon2().setYaw(90);
 
     Logger.recordOutput("EXECUTING!!!!", false);
@@ -183,12 +183,12 @@ public class Robot extends LoggedRobot {
     if(!shooter.alreadyZeroed){
       shooter.wantedShooterState = ShooterStates.ZERO;
     }
-    if(!climb.alreadyZeroed){
-    climb.wantedState = ClimbStates.ZERO;
-    }
-    if(!intake.alreadyZeroed){
-    intake.wantedState = IntakeStates.ZERO;
-    }
+    // if(!climb.alreadyZeroed){
+    // climb.wantedState = ClimbStates.ZERO;
+    // }
+    // if(!intake.alreadyZeroed){
+    // intake.wantedState = IntakeStates.ZERO;
+    // }
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
@@ -213,8 +213,8 @@ public class Robot extends LoggedRobot {
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     Shooter.getInstance().wantedShooterState = ShooterStates.ZERO;
-    Climb.getInstance().wantedState = ClimbStates.ZERO;
-    Intake.getInstance().wantedState = IntakeStates.ZERO;
+    // Climb.getInstance().wantedState = ClimbStates.ZERO;
+    // Intake.getInstance().wantedState = IntakeStates.ZERO;
     CommandScheduler.getInstance().cancelAll();
   }
 
