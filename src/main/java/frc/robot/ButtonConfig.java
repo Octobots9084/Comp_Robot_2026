@@ -89,6 +89,8 @@ public class ButtonConfig {
             // CommandIntakeStateIntaking()).onFalse(new CommandIntakeStateSafe());
             driverController.leftTrigger(0.5).whileTrue(new CommandIntakeStateIntaking()).onFalse(new CommandIntakeStateSafe());
             // driverController.rightTrigger(0.5).whileTrue();
+            driverController.rightBumper().onTrue(new SetSwerveStateOverBump());
+            driverController.x().onTrue(new SetSwerveStateToManual());
 
             coDriverController.b().onTrue(new CommandStateManual());
             coDriverController.leftTrigger(0.5).onTrue(new CommandStateSafe());

@@ -4,6 +4,8 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.ctre.phoenix6.swerve.SwerveDrivetrain.SwerveDriveState;
 import com.pathplanner.lib.auto.NamedCommands;
 
+import javax.lang.model.util.ElementScanner14;
+
 import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.swerve.SwerveModule;
@@ -11,8 +13,10 @@ import com.ctre.phoenix6.swerve.SwerveModule;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.numbers.N1;
@@ -173,7 +177,6 @@ public class SwerveSubsystem extends SubsystemBase {
                 return SystemState.ALIGN;
             default:
                 return this.systemState;
-
         }
     }
 
@@ -188,7 +191,14 @@ public class SwerveSubsystem extends SubsystemBase {
 
                 break;
             case ROTATION_LOCK:
-
+                ChassisSpeeds speeds = calculateSpeedsBasedOnJoystickInputs();
+                double xSpeed = speeds.vxMetersPerSecond;
+                double ySpeed = speeds.vyMetersPerSecond;
+                double nearestFourtyFiveDegreeAngle = nearestFourtyFiveDegreeAngle();
+                 io.setSwerveState(new SwerveRequest.FieldCentricFacingAngle().withTargetDirection(Rotation2d.fromDegrees(nearestFourtyFiveDegreeAngle)).withVelocityX(xSpeed).withVelocityY(ySpeed));
+                 if(this.getRobotPose().getRotation().getDegrees() <nearestFourtyFiveDegreeAngle +3 && this.getRobotPose().getRotation().getDegrees() >nearestFourtyFiveDegreeAngle -3){
+                    wantedState = SystemState.MANUAL;
+                 }
                 break;
             case REVERSE:
                 io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(-0.3, 0, 0))
@@ -241,5 +251,23 @@ public class SwerveSubsystem extends SubsystemBase {
         // poseEstimator.resetPose(visionMeasurement);
 
         io.addVisionMeasurement(visionMeasurement, timestampSeconds, stdDevs);
+    }
+
+    public double nearestFourtyFiveDegreeAngle(){
+        double robotRotation = this.getRobotPose().getRotation().getDegrees();
+        double wantedRotation = 45;
+        if(robotRotation > 0 &&  robotRotation <=90){
+            wantedRotation = 45;
+        }
+        else if(robotRotation>90 && robotRotation <= 180){
+            wantedRotation = 135;
+        }
+        else if(robotRotation > 180 && robotRotation <= 270){
+            wantedRotation = 225;
+        }
+        else{
+            wantedRotation = 315;
+        }
+        return wantedRotation;
     }
 }
