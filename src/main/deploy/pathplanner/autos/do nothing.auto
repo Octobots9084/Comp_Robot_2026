@@ -5,6 +5,12 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "StartShoot"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "do nothing"
