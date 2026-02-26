@@ -26,8 +26,10 @@ public class ShooterAngleCalculator {
         double R = Math.sqrt(pfx * pfx + pfy * pfy);
         double theta = Math.atan((s * s + Math.sqrt(s*s*s*s - g*g*R*R - 2*pfz*g*s*s)) / (g * R));
 
-        // then estimate t
+        // // then estimate t
         double T = R / (s * Math.cos(theta));
+
+        // double T = 0.3;
 
         // Newton's method
         double f = Integer.MAX_VALUE;

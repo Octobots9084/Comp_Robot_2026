@@ -14,7 +14,7 @@ import frc.robot.subsystems.Shooter.Flywheel.*;
 public class Superstructure extends SubsystemBase {
     public States currentState = States.SAFE;
     public States wantedState = States.SAFE;
-    public IntakeStates userRequestedIntakeState = IntakeStates.SAFE;
+    // public IntakeStates userRequestedIntakeState = IntakeStates.SAFE;
 
     boolean climbDescending = true;
     boolean climbAligned = false;
@@ -120,11 +120,12 @@ public class Superstructure extends SubsystemBase {
           
     }
     public boolean isClimbAligned() {
-        if(climbAligned == true){
-            return true;
-        }else{
-            return false;
-        }
+        // if(climbAligned == true){
+        //     return true;
+        // }else{
+        //     return false;
+        // }
+        return false;
     
     }
     private void stateMANUAL() {

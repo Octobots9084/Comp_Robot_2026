@@ -84,8 +84,7 @@ public class RobotContainer {
               new FeederIOTalonFX(),
               new FlywheelIOTalonFX(),
               new TurretIOTalonFX(),
-              new ShooterIOSystem(shooter),
-              ButtonConfig.coDriverController);
+              new ShooterIOSystem(shooter));
           // intake = new Intake(new IntakeIOTalonFX());
           // climb = new Climb(new ClimbIOTalonFX());
           superstructure = new Superstructure();
@@ -117,7 +116,7 @@ public class RobotContainer {
       case SIM:
         superstructure = new Superstructure();
         shooter = new Shooter(new FeederIOTalonFX(), new FlywheelIOTalonFX(), new TurretIOTalonFX(),
-            new ShooterIOSystem(shooter), ButtonConfig.coDriverController);
+            new ShooterIOSystem(shooter));
         // intake = new Intake(new IntakeIOTalonFX());
         // climb = new Climb(new ClimbIOTalonFX());
         break;
