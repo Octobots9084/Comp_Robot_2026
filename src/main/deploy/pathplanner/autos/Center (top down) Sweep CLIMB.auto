@@ -5,51 +5,51 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "wait",
           "data": {
-            "pathName": "M Start 1 to Depot top"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "M Depot top to Depot bottom (out)"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "M Depot bottom (out) to Ramp 1 BL"
+            "waitTime": 0
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "DriveOverBump"
+            "name": "DriveOverBumpFromAlliance"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "M Ramp 1 BR to Neutral 2"
+            "pathName": "bump alignment to center (top center)"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "I Neutral 2 to Neutral 1"
+            "pathName": "Top Down Neutral Sweep"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "M Neutral 1 to Ramp 1 TL"
+            "pathName": "fix bump alignment bottom"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "DriveOverBumpToAlliance"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "MS Ramp 1 TL to Ramp 1 TL (shoot)"
+            "pathName": "Outpost Climb"
           }
         }
       ]

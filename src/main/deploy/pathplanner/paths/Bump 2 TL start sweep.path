@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.712915662650602,
-        "y": 2.898518072289156
+        "x": 5.7019879518072285,
+        "y": 2.9
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.182807228915664,
-        "y": 3.1280000000000006
+        "x": 6.1718795180722905,
+        "y": 3.1294819277108443
       },
       "isLocked": false,
-      "linkedName": "Bump 2 TL"
+      "linkedName": "Bump 2 TR"
     },
     {
       "anchor": {
@@ -48,7 +48,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 8.0,
-    "rotation": 0.0
+    "rotation": 90.0
   },
   "useDefaultConstraints": true
 }

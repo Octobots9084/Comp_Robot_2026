@@ -5,9 +5,9 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Bottom Center"
+            "name": "DriveOverBumpFromAlliance"
           }
         },
         {
@@ -29,9 +29,15 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Sweep Up Bump & to Shoot"
+            "name": "DriveOverBumpToAlliance"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.0
           }
         },
         {

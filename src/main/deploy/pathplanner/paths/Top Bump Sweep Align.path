@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.3903566333808842,
-        "y": 5.7364336661911555
+        "x": 5.721084165477888,
+        "y": 5.9
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.5091896430170287,
-        "y": 5.194007665462519
+        "x": 5.979857346647646,
+        "y": 6.034022824536376
       },
       "isLocked": false,
-      "linkedName": "Depot bottom (out)"
+      "linkedName": "Bump 1 TR"
     },
     {
       "anchor": {
-        "x": 1.5807132667617685,
-        "y": 3.7180028530670475
+        "x": 8.438202567760342,
+        "y": 6.6809557774607695
       },
       "prevControl": {
-        "x": 1.877815104902957,
-        "y": 5.0379442266754975
+        "x": 8.197323090352857,
+        "y": 6.614044811514246
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "climb"
+      "linkedName": "Top Sweep Align"
     }
   ],
   "rotationTargets": [],
@@ -41,13 +41,13 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 8.0,
-    "rotation": 90.0
+    "velocity": 4.0,
+    "rotation": -90.0
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
-    "velocity": 2.0,
+    "velocity": 0,
     "rotation": -90.0
   },
   "useDefaultConstraints": true

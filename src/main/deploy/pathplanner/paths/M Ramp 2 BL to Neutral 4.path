@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 7.0,
+        "x": 5.708145506419401,
         "y": 2.18
       },
       "prevControl": {
-        "x": 6.0,
+        "x": 4.708145506419401,
         "y": 2.18
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Neutral 4"
+      "linkedName": "Bump 2 BR"
     }
   ],
   "rotationTargets": [],

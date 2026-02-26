@@ -3,48 +3,57 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.495,
-        "y": 5.149626506024097
+        "x": 8.438202567760342,
+        "y": 6.6809557774607695
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.495000000000007,
-        "y": 5.149626506024097
+        "x": 8.688202567760342,
+        "y": 6.6809557774607695
       },
       "isLocked": false,
-      "linkedName": "Bump 1 BL"
+      "linkedName": "Top Sweep Align"
     },
     {
       "anchor": {
-        "x": 5.723843373493976,
-        "y": 5.149626506024097
+        "x": 7.4678031383737515,
+        "y": 4.766034236804566
       },
       "prevControl": {
-        "x": 5.341373493975903,
-        "y": 5.160554216867472
+        "x": 8.056334369865828,
+        "y": 4.766034236804566
       },
       "nextControl": {
-        "x": 6.078270236231076,
-        "y": 5.139500024231607
+        "x": 6.877142369475857,
+        "y": 4.766034236804566
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.849397590361446,
-        "y": 4.865506024096386
+        "x": 5.721084165477888,
+        "y": 5.167
       },
       "prevControl": {
-        "x": 6.335795180722892,
-        "y": 4.996638554216868
+        "x": 5.963619790514221,
+        "y": 5.227633906259082
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Neutral 2 (sweep)"
+      "linkedName": "Bump 1 BR"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": -115.0
+    },
+    {
+      "waypointRelativePos": 1,
+      "rotationDegrees": 180.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -58,13 +67,13 @@
   },
   "goalEndState": {
     "velocity": 4.0,
-    "rotation": 0.0
+    "rotation": 90.0
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
-    "velocity": 0,
-    "rotation": 180.0
+    "velocity": 4.0,
+    "rotation": -90.0
   },
   "useDefaultConstraints": true
 }

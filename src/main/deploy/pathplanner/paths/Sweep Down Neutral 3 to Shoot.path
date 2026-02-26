@@ -3,32 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.849397590361446,
-        "y": 3.1616405135520687
+        "x": 3.508573466476462,
+        "y": 2.9
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.9927960057061345,
-        "y": 3.0193152639087018
+        "x": 2.740422425794476,
+        "y": 2.930226578210131
       },
       "isLocked": false,
-      "linkedName": "Center Sweep Down"
-    },
-    {
-      "anchor": {
-        "x": 5.294108416547789,
-        "y": 2.9
-      },
-      "prevControl": {
-        "x": 5.552881597717547,
-        "y": 2.889928673323824
-      },
-      "nextControl": {
-        "x": 5.04429754279853,
-        "y": 2.9097225180191266
-      },
-      "isLocked": false,
-      "linkedName": null
+      "linkedName": "Bump 2 TL"
     },
     {
       "anchor": {
@@ -46,7 +30,7 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.75,
+      "waypointRelativePos": 0.4,
       "rotationDegrees": 180.0
     }
   ],
@@ -69,7 +53,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 4.0,
-    "rotation": 180.0
+    "rotation": 90.0
   },
   "useDefaultConstraints": true
 }

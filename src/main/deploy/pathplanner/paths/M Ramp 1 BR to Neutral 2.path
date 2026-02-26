@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.0,
-        "y": 5.1800713266761775
+        "x": 5.721084165477888,
+        "y": 5.167
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.0,
-        "y": 5.1800713266761775
+        "x": 6.721084165477888,
+        "y": 5.167
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Bump 1 BR"
     },
     {
       "anchor": {
@@ -48,7 +48,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 2.0,
-    "rotation": 180.0
+    "rotation": 90.0
   },
   "useDefaultConstraints": true
 }
