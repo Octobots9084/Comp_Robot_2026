@@ -7,6 +7,7 @@ import com.ctre.phoenix6.hardware.CANrange;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -44,7 +45,7 @@ public class Shooter extends SubsystemBase {
     public final TurretIO tIO;
     public final ShooterIO sIO;
     public SwerveSubsystem swerve = SwerveSubsystem.getInstance();
-    public final CommandXboxController coDriverController;
+    // public final CommandXboxController coDriverController;
     public Feeder feeder = new Feeder();
     public Turret turret;
     public boolean alreadyZeroed = false;
@@ -56,24 +57,25 @@ public class Shooter extends SubsystemBase {
     private double lemonDetectionTimestamp;
     public double turretAim = -0.1;
     private ShooterAngle shooterAngle;
-    private Pose2d hubPoseBlue = new Pose2d(4.6228, 4.02082, new Rotation2d());
-    private Pose2d hubPoseRed = new Pose2d(11.88974, 4.02082, new Rotation2d());
+    private Translation2d hubPoseBlue = new Translation2d(4.6228, 4.02082);
+    private Translation2d hubPoseRed = new Translation2d(11.88974, 4.02082);
+    private Translation2d blueFerryOutpost = new Translation2d(4.6239 - 2,2.011);
+    private Translation2d redFerryOutpost = new Translation2d(11.917 + 2,6.031);
+    private Translation2d blueFerryDepot = new Translation2d(4.6239 - 2,6.03);
+    private Translation2d redFerryDepot = new Translation2d(11.917 + 2,2.011);
     public boolean isAimedAtHub;
 
-    public Shooter(FeederIO fIO, FlywheelIO fwIO, TurretIO tIO, ShooterIO sIO,
-            CommandXboxController coDriverController) {
+    public Shooter(FeederIO fIO, FlywheelIO fwIO, TurretIO tIO, ShooterIO sIO) {
         this.fIO = fIO;
         this.fwIO = fwIO;
         this.tIO = tIO;
         this.sIO = sIO;
-        this.coDriverController = coDriverController;
         instance = this;
         turret = new Turret(tIO);
     }
 
-    public static Shooter setInstance(FeederIO fIO, FlywheelIO fwIO, TurretIO tIO, ShooterIO sIO,
-            CommandXboxController coDriverController) {
-        instance = new Shooter(fIO, fwIO, tIO, sIO, coDriverController);
+    public static Shooter setInstance(FeederIO fIO, FlywheelIO fwIO, TurretIO tIO, ShooterIO sIO) {
+        instance = new Shooter(fIO, fwIO, tIO, sIO);
         return instance;
     }
 
@@ -112,8 +114,8 @@ public class Shooter extends SubsystemBase {
                 break;
             case MANUAL:
                 // joystick controlls turret
-                tIO.setTurretPosition(getTurretPosFromJoystick());
-                tIO.setHoodPosition(getHoodPosFromJoystick());
+                // tIO.setTurretPosition(getTurretPosFromJoystick());
+                // tIO.setHoodPosition(getHoodPosFromJoystick());
             case FERRY:
                 // if(ferry()){
                 // wantedShooterState = ShooterStates.BUMP;
@@ -127,6 +129,7 @@ public class Shooter extends SubsystemBase {
                 // )
 
                 isAimedAtHub = isAimedAtHub();
+                // isAimedAtHub = aimFerry();
                 
                 if(driverOverride){
                     flywheel.setFlywheelVelocity(FlywheelStates.HUB);
@@ -353,21 +356,81 @@ public class Shooter extends SubsystemBase {
         return false;
     }
 
-    // public boolean shootFerry() {
-        
-    // }
+
+
+    public boolean aimFerry() {
+        Translation2d target;
+        if(!Constants.isBlueAlliance){
+            double redFerryDepotDistance = Math.sqrt(Math.pow(redFerryDepot.getX() - swerve.io.getPose2d().getX(),2)+Math.pow((redFerryDepot.getY() - swerve.io.getPose2d().getY()),2));
+            double redFerryOutpostDistance = Math.sqrt(Math.pow(redFerryOutpost.getX() - swerve.io.getPose2d().getX(),2)+Math.pow((redFerryOutpost.getY() - swerve.io.getPose2d().getY()),2));
+            if(redFerryDepotDistance <= redFerryOutpostDistance){
+                target = redFerryDepot;
+            }else{
+                target = redFerryOutpost;
+            }
+        }else{
+            double blueFerryDepotDistance = Math.sqrt(Math.pow(blueFerryDepot.getX() - swerve.io.getPose2d().getX(),2)+Math.pow((blueFerryDepot.getY() - swerve.io.getPose2d().getY()),2));
+            double blueFerryOutpostDistance = Math.sqrt(Math.pow(blueFerryOutpost.getX() - swerve.io.getPose2d().getX(),2)+Math.pow((blueFerryOutpost.getY() - swerve.io.getPose2d().getY()),2));
+            if(blueFerryDepotDistance <= blueFerryOutpostDistance){
+                target = blueFerryDepot;
+            }else{
+                target = blueFerryOutpost;
+            }
+        }
+        shooterAngle = ShooterAngleCalculator.getShooterAngleToFerry(
+                    swerve.io.getChassisSpeeds().vxMetersPerSecond,
+                    swerve.io.getChassisSpeeds().vxMetersPerSecond,
+                    target.getX() - swerve.io.getPose2d().getX()
+                            + Constants.TurretDistFromCenter
+                                    * Math.cos((Math.PI * (swerve.io.getGyro() / 180)) + (Math.PI * 3) / 4),
+                    target.getY() - swerve.io.getPose2d().getY()
+                            + Constants.TurretDistFromCenter
+                                    * Math.sin((Math.PI * (swerve.io.getGyro() / 180)) + (Math.PI * 3) / 4),
+                    7.77);
+
+        if (shooterAngle != null) {
+            pastShooterAngle = shooterAngle;
+        }
+        SmartDashboard.putNumber("shooterHoodAngle", pastShooterAngle.hoodRotation);
+        SmartDashboard.putNumber("shooterAngle", pastShooterAngle.turretRotation);
+
+        double rotation = SwerveSubsystem.getInstance().getRobotPose().getRotation().getDegrees();
+        rotation = rotation % 360;
+        rotation = 360 - rotation;
+
+        // Invert gyro direction BEFORE scaling
+        // double offset = 190;//pastShooterAngle.turretRotation * (180.0 / Math.PI);
+        double alphabotJankboticsOffset = 6;
+        double offset = pastShooterAngle.turretRotation * (180.0 / Math.PI) + alphabotJankboticsOffset;
+        rotation += offset + 255; //maybe 255
+        rotation = rotation % 360;
+
+        double turretAngle = -(rotation / 360.0);
+
+        turret.setTurretPosition(turretAngle);
+
+        double hoodInverted = 85 - (pastShooterAngle.hoodRotation * 180) / Math.PI;
+        // double hoodInverted = 40;
+        double hoodRelative = hoodInverted / 360;
+        turret.setHoodPosition(hoodRelative);
+
+        if (turret.hoodInTolerance(.05) && turret.turretInTolerance(0.05)) {
+            return true;
+        }
+        return false;
+    }
 
     // public boolean aimFerry(){}
 
-    public double getTurretPosFromJoystick() {
-        return tIO.getTurretPosition()
-                + 0.05 * MathUtil.applyDeadband(coDriverController.getLeftX(), Constants.leftYDeadband);
-    }
+    // public double getTurretPosFromJoystick() {
+    //     return tIO.getTurretPosition()
+    //             + 0.05 * MathUtil.applyDeadband(coDriverController.getLeftX(), Constants.leftYDeadband);
+    // }
 
-    public double getHoodPosFromJoystick() {
-        return tIO.getHoodPosition()
-                + 0.05 * -MathUtil.applyDeadband(coDriverController.getLeftY(), Constants.leftXDeadband);
-    }
+    // public double getHoodPosFromJoystick() {
+    //     return tIO.getHoodPosition()
+    //             + 0.05 * -MathUtil.applyDeadband(coDriverController.getLeftY(), Constants.leftXDeadband);
+    // }
 
     public boolean isHubActive() {
         double timer = Constants.timer.get();

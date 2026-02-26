@@ -21,7 +21,7 @@ import frc.robot.subsystems.Shooter.ShooterStates;
 
 public class ButtonConfig {
     public static CommandXboxController driverController = new CommandXboxController(0);
-    public static CommandXboxController coDriverController = new CommandXboxController(1);
+    //public static CommandXboxController coDriverController = new CommandXboxController(1);
     public static Superstructure superstructure = Superstructure.getInstance();
 
     public void initTeleop() {
@@ -33,7 +33,7 @@ public class ButtonConfig {
         // SmartDashboard.putBoolean("rightrigger",true);
         // driverController.rightTrigger(0.5).onTrue(new InstantCommand(
         // () -> {Shooter.getInstance().wantedShooterState = ShooterStates.HUB;
-        // SmartDashboard.putBoolean("rightrigger",true);}))
+        // SmartDashboard.putBoolean("",true);}))
         // .onFalse(new InstantCommand(
         // () -> {Shooter.getInstance().wantedShooterState = ShooterStates.SAFE;
         // /*superstructure.setWantedState(States.SAFE);*/
@@ -71,23 +71,23 @@ public class ButtonConfig {
         })).onFalse(new InstantCommand(() -> SmartDashboard.putBoolean("A button", false)));
 
         if (Constants.robotType != RobotTypes.ALPHA) {
-            driverController.a().onTrue(new SetStateClimbL3());
-            driverController.b().onTrue(new SetStateUnclimb());
+            // driverController.a().onTrue(new SetStateClimbL3());
+            // driverController.b().onTrue(new SetStateUnclimb());
             // driverController.leftBumper().whileTrue(new
             // SetIntakeStateIntaking()).onFalse(new SetIntakeStateSafe());
-            driverController.leftTrigger(0.5).whileTrue(new SetIntakeStateIntaking()).onFalse(new SetIntakeStateSafe());
+            // driverController.leftTrigger(0.5).whileTrue(new SetIntakeStateIntaking()).onFalse(new SetIntakeStateSafe());
             // driverController.rightTrigger(0.5).whileTrue();
 
-            coDriverController.b().onTrue(new SetStateManual());
-            coDriverController.leftTrigger(0.5).onTrue(new SetStateSafe());
-            coDriverController.leftBumper().onTrue(new SetStateSafe()); // yo twin, make ts cancel instead of safe state
+            //coDriverController.b().onTrue(new SetStateManual());
+            //coDriverController.leftTrigger(0.5).onTrue(new SetStateSafe());
+            //coDriverController.leftBumper().onTrue(new SetStateSafe()); // yo twin, make ts cancel instead of safe state
                                                                         // -Oliver (trust)
-            coDriverController.rightTrigger().onTrue(new Spit())
-                    .onFalse(new InstantCommand(() -> {
-                        if (Superstructure.getInstance().currentState == States.MANUAL) {
-                            Shooter.driverOverride = false;
-                        }
-                    }));
+            //coDriverController.rightTrigger().onTrue(new Spit())
+                    // .onFalse(new InstantCommand(() -> {
+                    //     if (Superstructure.getInstance().currentState == States.MANUAL) {
+                    //         Shooter.driverOverride = false;
+                    //     }
+                    // }));
         }
         // add in manual mode for turret and hood
     }

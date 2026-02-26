@@ -97,7 +97,7 @@ public class Robot extends LoggedRobot {
     // and put our autonomous chooser on the dashboard.
     robotContainer = new RobotContainer();
     shooter = Shooter.getInstance();
-    climb = Climb.getInstance();
+    // climb = Climb.getInstance();
     // intake = Intake.getInstance();
   }
 
@@ -215,7 +215,7 @@ public class Robot extends LoggedRobot {
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     Shooter.getInstance().wantedShooterState = ShooterStates.ZERO;
-    Climb.getInstance().wantedState = ClimbStates.ZERO;
+    // Climb.getInstance().wantedState = ClimbStates.ZERO;
     // Intake.getInstance().wantedState = IntakeStates.ZERO;
     CommandScheduler.getInstance().cancelAll();
   }

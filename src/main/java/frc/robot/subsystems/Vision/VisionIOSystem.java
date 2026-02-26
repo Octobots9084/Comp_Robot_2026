@@ -38,7 +38,7 @@ public class VisionIOSystem implements VisionIO {
     public VisionIOSystem(EstimateConsumer estConsumer) {
         // intakeCamera = new PhotonCamera(Constants.intakeCameraName);
         // intakeCamera.setDriverMode(true);
-        CameraServer.startAutomaticCapture(Constants.intakeCameraName, "/dev/video0");
+        // CameraServer.startAutomaticCapture(Constants.intakeCameraName, "/dev/video0");
         frontCamera = new PhotonCamera(Constants.frontCameraName);
         leftCamera = new PhotonCamera(Constants.leftCameraName);
         rightCamera = new PhotonCamera(Constants.rightCameraName);
@@ -52,85 +52,85 @@ public class VisionIOSystem implements VisionIO {
     public void updateInputs(VisionIOInputs inputs) {
         // inputs.intakeCameraConected = intakeCamera.isConnected();
         inputs.frontCameraConected = frontCamera.isConnected();
-        inputs.rightCameraConected = frontCamera.isConnected();
-        inputs.leftCameraConected = frontCamera.isConnected();
+        inputs.rightCameraConected = rightCamera.isConnected();
+        inputs.leftCameraConected = leftCamera.isConnected();
     }
 
     @Override
     public void periodic() {
         Optional<EstimatedRobotPose> visionEst = Optional.empty();
         for (var result : 
+            rightCamera.getAllUnreadResults()
+        ) {
+            visionEst = photonEstimatorRight.estimateCoprocMultiTagPose(result);
+            if (visionEst.isEmpty()) {
+                visionEst = photonEstimatorRight.estimateLowestAmbiguityPose(result);
+            }
+            updateEstimationStdDevs(visionEst, result.getTargets());
+
+            // if (Robot.isSimulation()) {
+            // visionEst.ifPresentOrElse(
+            // est ->
+            // getSimDebugField()
+            // .getObject("VisionEstimation")
+            // .setPose(est.estimatedPose.toPose2d()),
+            // () -> {
+            // getSimDebugField().getObject("VisionEstimation").setPoses();
+            // });
+            // }
+
+            visionEst.ifPresent(
+                    est -> {
+                        // Change our trust in the measurement based on the tags we can see
+                        var estStdDevs = getEstimationStdDevs();
+                        SmartDashboard.putNumber("VisionEstimatedPose_X", est.estimatedPose.toPose2d().getX());
+                        SmartDashboard.putNumber("VisionEstimatedPose_Y", est.estimatedPose.toPose2d().getY());
+                        SmartDashboard.putNumber("VisionEstimatedTimeStampSeconds",
+                                Utils.fpgaToCurrentTime(est.timestampSeconds));
+
+                        estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+                    });
+        }
+    
+        for (var result : 
+            leftCamera.getAllUnreadResults()
+        ) {
+            visionEst = photonEstimatorLeft.estimateCoprocMultiTagPose(result);
+            if (visionEst.isEmpty()) {
+                visionEst = photonEstimatorLeft.estimateLowestAmbiguityPose(result);
+            }
+            updateEstimationStdDevs(visionEst, result.getTargets());
+
+            // if (Robot.isSimulation()) {
+            // visionEst.ifPresentOrElse(
+            // est ->
+            // getSimDebugField()
+            // .getObject("VisionEstimation")
+            // .setPose(est.estimatedPose.toPose2d()),
+            // () -> {
+            // getSimDebugField().getObject("VisionEstimation").setPoses();
+            // });
+            // }
+
+            visionEst.ifPresent(
+                    est -> {
+                        // Change our trust in the measurement based on the tags we can see
+                        var estStdDevs = getEstimationStdDevs();
+                        SmartDashboard.putNumber("VisionEstimatedPose_X", est.estimatedPose.toPose2d().getX());
+                        SmartDashboard.putNumber("VisionEstimatedPose_Y", est.estimatedPose.toPose2d().getY());
+                        SmartDashboard.putNumber("VisionEstimatedTimeStampSeconds",
+                                Utils.fpgaToCurrentTime(est.timestampSeconds));
+
+                        estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+                    });
+        }
+    
+        for (var result : 
             frontCamera.getAllUnreadResults()
         ) {
             visionEst = photonEstimatorFront.estimateCoprocMultiTagPose(result);
             if (visionEst.isEmpty()) {
                 visionEst = photonEstimatorFront.estimateLowestAmbiguityPose(result);
-            }
-            updateEstimationStdDevs(visionEst, result.getTargets());
-
-            // if (Robot.isSimulation()) {
-            // visionEst.ifPresentOrElse(
-            // est ->
-            // getSimDebugField()
-            // .getObject("VisionEstimation")
-            // .setPose(est.estimatedPose.toPose2d()),
-            // () -> {
-            // getSimDebugField().getObject("VisionEstimation").setPoses();
-            // });
-            // }
-
-            visionEst.ifPresent(
-                    est -> {
-                        // Change our trust in the measurement based on the tags we can see
-                        var estStdDevs = getEstimationStdDevs();
-                        SmartDashboard.putNumber("VisionEstimatedPose_X", est.estimatedPose.toPose2d().getX());
-                        SmartDashboard.putNumber("VisionEstimatedPose_Y", est.estimatedPose.toPose2d().getY());
-                        SmartDashboard.putNumber("VisionEstimatedTimeStampSeconds",
-                                Utils.fpgaToCurrentTime(est.timestampSeconds));
-
-                        estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
-                    });
-        }
-    
-        for (var result : 
-            rightCamera.getAllUnreadResults()
-        ) {
-            visionEst = photonEstimatorRight.estimateCoprocMultiTagPose(result);
-            if (visionEst.isEmpty()) {
-                visionEst = photonEstimatorRight.estimateLowestAmbiguityPose(result);
-            }
-            updateEstimationStdDevs(visionEst, result.getTargets());
-
-            // if (Robot.isSimulation()) {
-            // visionEst.ifPresentOrElse(
-            // est ->
-            // getSimDebugField()
-            // .getObject("VisionEstimation")
-            // .setPose(est.estimatedPose.toPose2d()),
-            // () -> {
-            // getSimDebugField().getObject("VisionEstimation").setPoses();
-            // });
-            // }
-
-            visionEst.ifPresent(
-                    est -> {
-                        // Change our trust in the measurement based on the tags we can see
-                        var estStdDevs = getEstimationStdDevs();
-                        SmartDashboard.putNumber("VisionEstimatedPose_X", est.estimatedPose.toPose2d().getX());
-                        SmartDashboard.putNumber("VisionEstimatedPose_Y", est.estimatedPose.toPose2d().getY());
-                        SmartDashboard.putNumber("VisionEstimatedTimeStampSeconds",
-                                Utils.fpgaToCurrentTime(est.timestampSeconds));
-
-                        estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
-                    });
-        }
-    
-        for (var result : 
-            rightCamera.getAllUnreadResults()
-        ) {
-            visionEst = photonEstimatorRight.estimateCoprocMultiTagPose(result);
-            if (visionEst.isEmpty()) {
-                visionEst = photonEstimatorRight.estimateLowestAmbiguityPose(result);
             }
             updateEstimationStdDevs(visionEst, result.getTargets());
 
