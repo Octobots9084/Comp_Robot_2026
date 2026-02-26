@@ -19,7 +19,7 @@ public class Superstructure extends SubsystemBase {
     boolean climbDescending = true;
     boolean climbAligned = false;
     public static Superstructure currentInstance;
-    public Climb climb = Climb.getInstance();
+    // public Climb climb = Climb.getInstance();
 
     @Override
     public void periodic() {
@@ -61,18 +61,18 @@ public class Superstructure extends SubsystemBase {
     public void handleStateTransitions() {
         switch (wantedState) {
             case SAFE:
-                if (climb.getClimbState() != ClimbStates.CLIMBEDL1 || climb.getClimbState() != ClimbStates.CLIMBEDL3) {
+                // if (climb.getClimbState() != ClimbStates.CLIMBEDL1 || climb.getClimbState() != ClimbStates.CLIMBEDL3) {
                     currentState = States.SAFE;
-                }
+                // }
             case CLIMB_L3:
                 currentState = States.CLIMB_L3;
             case CLIMB_L1:
                 currentState = States.CLIMB_L1;
 
             case SHOOTER:
-                if (climb.getClimbState() != ClimbStates.CLIMBEDL1 || climb.getClimbState() != ClimbStates.CLIMBEDL3) {
+                // if (climb.getClimbState() != ClimbStates.CLIMBEDL1 || climb.getClimbState() != ClimbStates.CLIMBEDL3) {
                     currentState = States.SHOOTER;
-                }
+                // }
             case ZERO:
                 currentState = States.ZERO;
                 break;
@@ -109,13 +109,13 @@ public class Superstructure extends SubsystemBase {
     }
 
     private void stateSAFE() {
-        Climb.getInstance().setClimbState(ClimbStates.IDLE);
+        // Climb.getInstance().setClimbState(ClimbStates.IDLE);
         // set shooter into safe state
         // Intake.getInstance().setWantedState(IntakeStates.SAFE)
 
     }
     public void stowForClimb(){
-          Intake.getInstance().setWantedState(IntakeStates.SAFE);
+        //   Intake.getInstance().setWantedState(IntakeStates.SAFE);
           Shooter.getInstance().wantedShooterState = ShooterStates.SAFE;
           
     }
@@ -134,25 +134,25 @@ public class Superstructure extends SubsystemBase {
     }
     private void stateCLIMBL3() {
         stowForClimb();
-        climb.setClimbState(ClimbStates.DEPLOYEDL3);
-        // TODO align to bar(use button before alignment)
-        climb.setClimbState(ClimbStates.ENGAGEDL3);
-        //TODO align to vertical pole(button before alignment)
-        climb.setClimbState(ClimbStates.CLIMBEDL3);
+        // climb.setClimbState(ClimbStates.DEPLOYEDL3);
+        // // TODO align to bar(use button before alignment)
+        // climb.setClimbState(ClimbStates.ENGAGEDL3);
+        // //TODO align to vertical pole(button before alignment)
+        // climb.setClimbState(ClimbStates.CLIMBEDL3);
         boolean climbAligned = true; //TODO when rui finishes alignment put this when it finishes
 
     }
     private void stateCLIMBL1() {
         stowForClimb();
-        climb.setClimbState(ClimbStates.DEPLOYEDL1);
-        //TODO align to bar(button before alignment)
-        climb.setClimbState(ClimbStates.CLIMBEDL1);
+        // climb.setClimbState(ClimbStates.DEPLOYEDL1);
+        // //TODO align to bar(button before alignment)
+        // climb.setClimbState(ClimbStates.CLIMBEDL1);
     }
    
 
     private void stateSHOOTER() {
-        if (userRequestedIntakeState != Intake.getInstance().currentState) {
-            Intake.getInstance().wantedState = userRequestedIntakeState;
-        }
+        // if (userRequestedIntakeState != Intake.getInstance().currentState) {
+        //     Intake.getInstance().wantedState = userRequestedIntakeState;
+        // }
     }
 }
