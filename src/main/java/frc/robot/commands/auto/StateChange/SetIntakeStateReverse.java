@@ -8,6 +8,6 @@ import frc.robot.subsystems.Intake.IntakeStates;
 
 public class SetIntakeStateReverse extends InstantCommand {
     public SetIntakeStateReverse() {
-        Intake.getInstance().wantedState = IntakeStates.REVERSEINTAKING;
+        // Intake.getInstance().wantedState = IntakeStates.REVERSEINTAKING;
     }
 }

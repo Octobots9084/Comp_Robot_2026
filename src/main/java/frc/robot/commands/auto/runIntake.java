@@ -9,7 +9,7 @@ public class runIntake extends Command {
 
     @Override
     public void initialize() {
-        intake = Intake.getInstance();
+        // intake = Intake.getInstance();
     }
 
     @Override
