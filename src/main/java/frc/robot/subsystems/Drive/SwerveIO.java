@@ -25,6 +25,8 @@ public interface SwerveIO {
 
     @AutoLog
     class SwerveIOInputs {
+        public SwerveStates currentState;
+        public SwerveStates wantedState;
         public ChassisSpeeds Speeds = new ChassisSpeeds();
         public SwerveModuleState[] ModuleStates;
         public SwerveModuleState[] ModuleTargets;

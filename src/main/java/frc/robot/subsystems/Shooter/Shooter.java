@@ -143,6 +143,22 @@ public class Shooter extends SubsystemBase {
                     flywheel.setFlywheelVelocity(FlywheelStates.SAFE);
                 }
                 break;
+            case AUTOHUB:
+                // if(shootHub()) {
+                    // wantedShooterState = ShooterStates.BUMP;
+                    // Lights.getLightInstance().lightsWantedState = LightAnimations.CANTSHOOT;
+                // )
+
+                isAimedAtHub = isAimedAtHub();
+                // isAimedAtHub = aimFerry();
+                
+                    flywheel.setFlywheelVelocity(FlywheelStates.HUB);
+                    if(isAimedAtHub && flywheel.FlywheelInTolerance(18)){
+                        feeder.setFeederVelocity(FeederStates.SCORING);
+                    }else{
+                        feeder.setFeederVelocity(FeederStates.OFF);
+                    }
+                break;
             case BUMP:
                 // dont shoot
                 if (!swerve.onRamp(0, 0.3)) {// !tilted
@@ -184,6 +200,12 @@ public class Shooter extends SubsystemBase {
                 // if we're on our side of the field
                 if (true) {// !tilted and in alliance
                     currentShooterState = ShooterStates.HUB;
+                }
+                break;
+            case AUTOHUB:
+                // if we're on our side of the field
+                if (true) {// !tilted and in alliance
+                    currentShooterState = ShooterStates.AUTOHUB;
                 }
                 break;
 

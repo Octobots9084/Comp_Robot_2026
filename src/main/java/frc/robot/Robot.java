@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.Climb.Climb;
 import frc.robot.subsystems.Climb.ClimbStates;
+import frc.robot.subsystems.Drive.SwerveStates;
 import frc.robot.subsystems.Drive.SwerveSubsystem;
 import frc.robot.subsystems.Intake.Intake;
 import frc.robot.subsystems.Intake.IntakeStates;
@@ -97,6 +98,7 @@ public class Robot extends LoggedRobot {
     // and put our autonomous chooser on the dashboard.
     robotContainer = new RobotContainer();
     shooter = Shooter.getInstance();
+    swerve = SwerveSubsystem.getInstance();
     // climb = Climb.getInstance();
     // intake = Intake.getInstance();
   }
@@ -159,7 +161,10 @@ public class Robot extends LoggedRobot {
   public void autonomousInit() {
     setAllianceColor();
     autonomousCommand = robotContainer.getAutonomousCommand();
-    shooter.wantedShooterState = ShooterStates.ZERO;
+    if(!shooter.alreadyZeroed){
+      shooter.wantedShooterState = ShooterStates.ZERO;
+    }    
+    swerve.wantedState = SwerveStates.IDLE;
     // climb.wantedState = ClimbStates.ZERO;
     // intake.wantedState = IntakeStates.ZERO;
     // SwerveSubsystem.getInstance().io.getPigeon2().setYaw(90);
@@ -185,6 +190,7 @@ public class Robot extends LoggedRobot {
     if(!shooter.alreadyZeroed){
       shooter.wantedShooterState = ShooterStates.ZERO;
     }
+    swerve.wantedState = SwerveStates.MANUAL;
     // if(!climb.alreadyZeroed){
     // climb.wantedState = ClimbStates.ZERO;
     // }

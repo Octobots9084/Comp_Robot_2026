@@ -281,6 +281,8 @@ public class SwerveIOSystem extends TunerSwerveDrivetrain implements Subsystem, 
 
     @Override
     public void updateInputs(SwerveIOInputs inputs) {
+        inputs.currentState = SwerveSubsystem.getInstance().getCurrentState();
+        inputs.wantedState = SwerveSubsystem.getInstance().wantedState;
         SwerveDriveState state = this.getState();
         inputs.robotPose = state.Pose;
         inputs.Speeds = state.Speeds;

@@ -34,17 +34,11 @@ import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.ShooterStates;
 
 public class SwerveSubsystem extends SubsystemBase {
-    public enum SystemState {
-        MANUAL,
-        IDLE,
-        ROTATION_LOCK,
-        REVERSE,
-        ALIGN
-    }
+
 
     private static SwerveSubsystem instance;
-    public SystemState wantedState = SystemState.MANUAL;
-    public SystemState systemState = SystemState.IDLE;
+    public SwerveStates wantedState = SwerveStates.MANUAL;
+    private SwerveStates currentState = SwerveStates.IDLE;
     public SwerveIO io;
     public CommandXboxController driverController;
     public double maxVelocity;
@@ -118,7 +112,7 @@ public class SwerveSubsystem extends SubsystemBase {
     public void periodic() {
         this.io.updateInputs(inputs);
         Logger.processInputs("Swerve", inputs);
-        systemState = handleStateTransition();
+        currentState = handleStateTransition();
         // Logger.recordOutput("Xrot", this.io.getRotation3d().getX());
         // Logger.recordOutput("Yrot", this.io.getRotation3d().getY());
         // Logger.recordOutput("Zrot", this.io.getRotation3d().getZ());
@@ -156,7 +150,7 @@ public class SwerveSubsystem extends SubsystemBase {
       NamedCommands.registerCommand("DriveBack",
                   new DriveBack().withTimeout(3));
 
-      NamedCommands.registerCommand("StartShoot", new InstantCommand(() -> {Shooter.getInstance().wantedShooterState = ShooterStates.HUB;}));
+      NamedCommands.registerCommand("StartShoot", new InstantCommand(() -> {Shooter.getInstance().wantedShooterState = ShooterStates.AUTOHUB;}
       NamedCommands.registerCommand("StopShoot", new InstantCommand(() -> {Shooter.getInstance().wantedShooterState = ShooterStates.SAFE;}));
         
 
@@ -170,26 +164,26 @@ public class SwerveSubsystem extends SubsystemBase {
 
     }
 
-    private SystemState handleStateTransition() {
+    private SwerveStates handleStateTransition() {
         switch (wantedState) {
             case MANUAL:
-                return SystemState.MANUAL;
+                return SwerveStates.MANUAL;
             case IDLE:
-                return SystemState.IDLE;
+                return SwerveStates.IDLE;
             case ROTATION_LOCK:
-                return SystemState.ROTATION_LOCK;
+                return SwerveStates.ROTATION_LOCK;
             case REVERSE:
-                return SystemState.REVERSE;
+                return SwerveStates.REVERSE;
             case ALIGN:
-                return SystemState.ALIGN;
+                return SwerveStates.ALIGN;
             default:
-                return this.systemState;
+                return this.currentState;
 
         }
     }
 
     public void applyStates() {
-        switch (systemState) {
+        switch (currentState) {
             case MANUAL:
                 io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds()
                         .withSpeeds(calculateSpeedsBasedOnJoystickInputs())
@@ -252,5 +246,9 @@ public class SwerveSubsystem extends SubsystemBase {
         // poseEstimator.resetPose(visionMeasurement);
 
         io.addVisionMeasurement(visionMeasurement, timestampSeconds, stdDevs);
+    }
+
+    public SwerveStates getCurrentState() {
+        return this.currentState;
     }
 }
