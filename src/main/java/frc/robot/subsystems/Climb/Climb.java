@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 //import things to check in handleStateTransitions()
 
 public class Climb extends SubsystemBase {
-    ClimbStates currentState = ClimbStates.IDLE;
+    public ClimbStates currentState = ClimbStates.IDLE;
     public ClimbStates wantedState = ClimbStates.IDLE;
     public ClimbIO io;
     public static Climb instance;

@@ -84,10 +84,9 @@ public class RobotContainer {
               new FeederIOTalonFX(),
               new FlywheelIOTalonFX(),
               new TurretIOTalonFX(),
-              new ShooterIOSystem(shooter),
-              ButtonConfig.coDriverController);
-          intake = new Intake(new IntakeIOTalonFX());
-          climb = new Climb(new ClimbIOTalonFX());
+              new ShooterIOSystem(shooter));
+          // intake = new Intake(new IntakeIOTalonFX());
+          // climb = new Climb(new ClimbIOTalonFX());
           superstructure = new Superstructure();
           buttons = new ButtonConfig();
           // SmartDashboard.putBoolean("rightrigger",true);
@@ -117,9 +116,9 @@ public class RobotContainer {
       case SIM:
         superstructure = new Superstructure();
         shooter = new Shooter(new FeederIOTalonFX(), new FlywheelIOTalonFX(), new TurretIOTalonFX(),
-            new ShooterIOSystem(shooter), ButtonConfig.coDriverController);
-        intake = new Intake(new IntakeIOTalonFX());
-        climb = new Climb(new ClimbIOTalonFX());
+            new ShooterIOSystem(shooter));
+        // intake = new Intake(new IntakeIOTalonFX());
+        // climb = new Climb(new ClimbIOTalonFX());
         break;
 
       default:
