@@ -174,7 +174,6 @@ public class Robot extends LoggedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    Shooter.getInstance().wantedShooterState = ShooterStates.HUB;
     Intake.getInstance().wantedState = IntakeStates.INTAKING;
   }
 

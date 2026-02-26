@@ -20,6 +20,7 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -29,6 +30,8 @@ import frc.robot.commands.auto.DriveBack;
 import frc.robot.commands.auto.DriveOverBump;
 import frc.robot.commands.auto.NoPoseBump.DriveOverBumpFromAlliance;
 import frc.robot.commands.auto.NoPoseBump.DriveOverBumpToAlliance;
+import frc.robot.subsystems.Shooter.Shooter;
+import frc.robot.subsystems.Shooter.ShooterStates;
 
 public class SwerveSubsystem extends SubsystemBase {
     public enum SystemState {
@@ -152,7 +155,13 @@ public class SwerveSubsystem extends SubsystemBase {
                   //////////////////////////
       NamedCommands.registerCommand("DriveBack",
                   new DriveBack().withTimeout(3));
-        SmartDashboard.putBoolean("FinishedDriveForwardUntilLevel", false);
+
+      NamedCommands.registerCommand("StartShoot", new InstantCommand(() -> {Shooter.getInstance().wantedShooterState = ShooterStates.HUB;}));
+      NamedCommands.registerCommand("StopShoot", new InstantCommand(() -> {Shooter.getInstance().wantedShooterState = ShooterStates.SAFE;}));
+        
+
+
+      SmartDashboard.putBoolean("FinishedDriveForwardUntilLevel", false);
 
         SmartDashboard.putNumber("tilt", Math.acos(this.io.getRotation3d().toMatrix().get(2, 2)) - 0.015);
         SmartDashboard.putBoolean("hasBeenTilted", false);
