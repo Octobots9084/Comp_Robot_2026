@@ -5,9 +5,21 @@
     "data": {
       "commands": [
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "DriveOverBumpFromAlliance"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "Bump 1 BL"
+            "pathName": "bump alignment to center (top center)"
           }
         },
         {
@@ -19,13 +31,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Sweep Down Neutral 3 to Shoot"
+            "pathName": "fix bump alignment bottom"
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Outpost Climb"
+            "name": "DriveOverBumpToAlliance"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0
           }
         }
       ]

@@ -5,9 +5,15 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "wait",
           "data": {
-            "pathName": "Bottom Center"
+            "waitTime": 0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "DriveOverBumpFromAlliance"
           }
         },
         {
@@ -20,6 +26,24 @@
           "type": "path",
           "data": {
             "pathName": "Bottom Up Sweep"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Finish Up Sweep"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "DriveOverBumpToAlliance"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0
           }
         }
       ]

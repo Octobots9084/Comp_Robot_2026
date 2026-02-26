@@ -7,25 +7,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Outpost"
+            "pathName": "M Start 1 to Depot top"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Outpost to Shoot"
+            "pathName": "M Depot top to Depot bottom (out)"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Depot to Bump"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 0
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Outpost Shoot to Bump"
+            "waitTime": 0.0
           }
         },
         {
@@ -37,19 +37,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Fix Outpost Bump Alignment"
+            "pathName": "Top Bump Sweep Align"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Neutral 4 to Neutral 3(aura)"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Fix outpost #3"
+            "pathName": "Oliver's really tuff path"
           }
         },
         {
@@ -67,7 +61,37 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Outpost Climb"
+            "pathName": "Top Bump Bottom Down Top"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "DriveOverBumpFromAlliance"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Sweep In front of Hub"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "DriveOverBumpToAlliance"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0
           }
         }
       ]
