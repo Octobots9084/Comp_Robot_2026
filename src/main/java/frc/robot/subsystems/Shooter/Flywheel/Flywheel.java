@@ -25,6 +25,10 @@ public class Flywheel extends SubsystemBase {
         io.setFlywheelVelocity(currentState);
     }
 
+    public void setFlywheelVelocity(double rps) {
+        io.setFlywheelVelocity(rps);
+    }
+
     public double[] getFlywheelVelocity() {
         return io.getFlywheelVelocity();
     }

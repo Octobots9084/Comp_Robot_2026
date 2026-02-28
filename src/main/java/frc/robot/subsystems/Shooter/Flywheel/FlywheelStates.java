@@ -5,7 +5,7 @@ public enum FlywheelStates {
     FERRY(0),
     BUMP(0),
     SPIT(0), // todo: find out what this should be
-    HUB(55);
+    HUB(40);
 
     public double FlywheelRightRPS;
 
