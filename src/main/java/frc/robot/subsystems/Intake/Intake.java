@@ -94,6 +94,8 @@ public class Intake extends SubsystemBase {
                 if (zeroIntake()) {
                     alreadyZeroed = true;
                     wantedState = IntakeStates.SAFE;
+                }else{
+                    alreadyZeroed = false;
                 }
                 break;
 

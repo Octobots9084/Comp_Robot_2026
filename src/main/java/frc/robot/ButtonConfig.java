@@ -44,24 +44,20 @@ public class ButtonConfig {
         // Shooter.getInstance().turretAim = 0;
         // }));
 
-        driverController.rightBumper().onTrue(new InstantCommand(() -> {
-            Shooter.getInstance().turretAim = -0.57;
-        }));
-
         // driverController.leftBumper().onTrue(new InstantCommand(() -> {
         // Shooter.getInstance().turretAim = -0.29;
         // }));
-        driverController.leftBumper().onTrue(new InstantCommand(
-                () -> {
-                    Shooter.getInstance().wantedShooterState = ShooterStates.ZERO;
-                    SmartDashboard.putBoolean("rightrigger", true);
-                }))
-                .onFalse(new InstantCommand(
-                        () -> {
-                            Shooter.getInstance().wantedShooterState = ShooterStates.HUB;
-                            /* superstructure.setWantedState(States.SAFE); */ SmartDashboard.putBoolean("rightrigger",
-                                    false);
-                        }));
+        // driverController.leftBumper().onTrue(new InstantCommand(
+        //         () -> {
+        //             Shooter.getInstance().wantedShooterState = ShooterStates.ZERO;
+        //             SmartDashboard.putBoolean("rightrigger", true);
+        //         }))
+        //         .onFalse(new InstantCommand(
+        //                 () -> {
+        //                     Shooter.getInstance().wantedShooterState = ShooterStates.HUB;
+        //                     /* superstructure.setWantedState(States.SAFE); */ SmartDashboard.putBoolean("rightrigger",
+        //                             false);
+        //                 }));
         // driverRight.button(1).onTrue(new InstantCommand(() ->
         // SwerveSubsystem.getInstance().io.zeroGyro()));
 
