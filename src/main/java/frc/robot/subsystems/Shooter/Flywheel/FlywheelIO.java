@@ -22,6 +22,8 @@ public interface FlywheelIO {
 
   public default void setFlywheelVelocity(FlywheelStates state) {
   }
+  public default void setFlywheelVelocity(double state) {
+  }
 
   public default double[] getFlywheelVelocity() {
     double[] defaultOut = new double[2];

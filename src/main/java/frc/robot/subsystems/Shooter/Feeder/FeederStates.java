@@ -1,7 +1,7 @@
 package frc.robot.subsystems.Shooter.Feeder;
 
 public enum FeederStates {
-    SCORING(8, -7),
+    SCORING(10, -10),
     FERRYING(0, 0),
     OFF(0, 0),
     AGITATION(2,0),

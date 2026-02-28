@@ -26,7 +26,7 @@ public class ShooterConfigurator {
         // fly wheel right config
         flyWheelRightConfig.CurrentLimits.SupplyCurrentLimit = 20;
         flyWheelRightConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-        flyWheelRightConfig.CurrentLimits.StatorCurrentLimit = 40;
+        flyWheelRightConfig.CurrentLimits.StatorCurrentLimit = 60;
         flyWheelRightConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 
         // set break mode and inversion
