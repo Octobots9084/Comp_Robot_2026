@@ -57,7 +57,6 @@ public class Shooter extends SubsystemBase {
     private double lemonDetectionTimestamp;
     public double turretAim = -0.1;
     private ShooterAngle shooterAngle;
-<<<<<<< Updated upstream
     private Translation2d hubPoseBlue = new Translation2d(4.6228, 4.02082);
     private Translation2d hubPoseRed = new Translation2d(11.88974, 4.02082);
     private Translation2d blueFerryOutpost = new Translation2d(4.6239 - 2,2.011);
@@ -65,14 +64,6 @@ public class Shooter extends SubsystemBase {
     private Translation2d blueFerryDepot = new Translation2d(4.6239 - 2,6.03);
     private Translation2d redFerryDepot = new Translation2d(11.917 + 2,2.011);
     public boolean isAimedAtHub;
-=======
-    private Pose2d hubPoseBlue = new Pose2d(4.6228, 4.02082, new Rotation2d());
-    private Pose2d hubPoseRed = new Pose2d(11.88974, 4.02082, new Rotation2d());
-    private Pose2d blueFerryOutpost = new Pose2d(0,0,new Rotation2d());
-    private Pose2d redFerryOutpost = new Pose2d(0,0,new Rotation2d());
-    private Pose2d blueFerryDepot = new Pose2d(0,0,new Rotation2d());
-    private Pose2d redFerryDepot = new Pose2d(0,0, new Rotation2d());
->>>>>>> Stashed changes
 
     public Shooter(FeederIO fIO, FlywheelIO fwIO, TurretIO tIO, ShooterIO sIO) {
         this.fIO = fIO;
@@ -118,51 +109,51 @@ public class Shooter extends SubsystemBase {
                 // Turret.getInstance().setTurretPosition(0);
                 feeder.setFeederVelocity(FeederStates.OFF);
                 flywheel.setFlywheelVelocity(FlywheelStates.SAFE);
-                turret.setHoodPosition(0);
-                turret.setTurretPosition(0);
                 break;
             case MANUAL:
                 // joystick controlls turret
                 // tIO.setTurretPosition(getTurretPosFromJoystick());
                 // tIO.setHoodPosition(getHoodPosFromJoystick());
             case FERRY:
-                // if(ferry()){
-                // wantedShooterState = ShooterStates.BUMP;
-                // Lights.getLightInstance().lightsWantedState = LightAnimations.CANTSHOOT;
-                // }
-                break;
-            case HUB:
-                // if(shootHub()) {
-                    // wantedShooterState = ShooterStates.BUMP;
-                    // Lights.getLightInstance().lightsWantedState = LightAnimations.CANTSHOOT;
-                // )
-
-                isAimedAtHub = isAimedAtHub();
-                // isAimedAtHub = aimFerry();
-                
-                if(driverOverride){
-                    flywheel.setFlywheelVelocity(FlywheelStates.HUB);
-                    if(isAimedAtHub && flywheel.FlywheelInTolerance(18)){
-                        feeder.setFeederVelocity(FeederStates.SCORING);
+                isAimedAtHub = aimFerry();
+                if(swerve.isInAllianceZone() && swerve.onRamp(0,5)){
+                    if(driverOverride){
+                        flywheel.setFlywheelVelocity(FlywheelStates.HUB);
+                        if(isAimedAtHub && flywheel.FlywheelInTolerance(18)){
+                            feeder.setFeederVelocity(FeederStates.SCORING);
+                        }else{
+                            feeder.setFeederVelocity(FeederStates.OFF);
+                        }
                     }else{
                         feeder.setFeederVelocity(FeederStates.OFF);
+                        flywheel.setFlywheelVelocity(FlywheelStates.SAFE);
+                    }
+                }
+                break;
+            case HUB:
+                isAimedAtHub = isAimedAtHub();
+                if(swerve.isInAllianceZone() && swerve.onRamp(0,5)){
+                    if(driverOverride){
+                        flywheel.setFlywheelVelocity(FlywheelStates.HUB);
+                        if(isAimedAtHub && flywheel.FlywheelInTolerance(18)){
+                            feeder.setFeederVelocity(FeederStates.SCORING);
+                        }else{
+                            feeder.setFeederVelocity(FeederStates.OFF);
+                        }
+                    }else{
+                        feeder.setFeederVelocity(FeederStates.OFF);
+                        flywheel.setFlywheelVelocity(FlywheelStates.SAFE);
                     }
                 }else{
-                    feeder.setFeederVelocity(FeederStates.OFF);
-                    flywheel.setFlywheelVelocity(FlywheelStates.SAFE);
+                    wantedShooterState = ShooterStates.BUMP;
                 }
                 break;
             case BUMP:
-                // dont shoot
-                if (!swerve.onRamp(0, 0.3)) {// !tilted
-                    if (swerve.isInAllianceZone()) { // in alliance zone
+                if (!swerve.onRamp(0, 5)) {
+                    if (swerve.isInAllianceZone()) {
                         wantedShooterState = ShooterStates.HUB;
-                        // Lights.getLightInstance().lightsWantedState =
-                        // LightAnimations.SHOOTREADYCONTINIOUS;
                     } else {
                         wantedShooterState = ShooterStates.FERRY;
-                        // Lights.getLightInstance().lightsWantedState =
-                        // LightAnimations.SHOOTREADYCONTINIOUS;
 
                     }
                 }
@@ -329,7 +320,7 @@ public class Shooter extends SubsystemBase {
                     swerve.io.getChassisSpeeds().vyMetersPerSecond,
                     XToHub,
                     YToHub,
-                    7.4
+                    9.25
                     );
         }
 
@@ -368,13 +359,8 @@ public class Shooter extends SubsystemBase {
 
 
     public boolean aimFerry() {
-<<<<<<< Updated upstream
         Translation2d target;
         if(!Constants.isBlueAlliance){
-=======
-        Pose2d target;
-        if(Constants.isBlueAlliance){
->>>>>>> Stashed changes
             double redFerryDepotDistance = Math.sqrt(Math.pow(redFerryDepot.getX() - swerve.io.getPose2d().getX(),2)+Math.pow((redFerryDepot.getY() - swerve.io.getPose2d().getY()),2));
             double redFerryOutpostDistance = Math.sqrt(Math.pow(redFerryOutpost.getX() - swerve.io.getPose2d().getX(),2)+Math.pow((redFerryOutpost.getY() - swerve.io.getPose2d().getY()),2));
             if(redFerryDepotDistance <= redFerryOutpostDistance){
@@ -408,7 +394,6 @@ public class Shooter extends SubsystemBase {
         SmartDashboard.putNumber("shooterHoodAngle", pastShooterAngle.hoodRotation);
         SmartDashboard.putNumber("shooterAngle", pastShooterAngle.turretRotation);
 
-<<<<<<< Updated upstream
         double rotation = SwerveSubsystem.getInstance().getRobotPose().getRotation().getDegrees();
         rotation = rotation % 360;
         rotation = 360 - rotation;
@@ -421,34 +406,15 @@ public class Shooter extends SubsystemBase {
         rotation = rotation % 360;
 
         double turretAngle = -(rotation / 360.0);
-=======
-        double gyro = SwerveSubsystem.getInstance().io.getGyro();
-        gyro = gyro % 360;
-        gyro = 360 - gyro;
-
-        // Invert gyro direction BEFORE scaling
-        double offset = pastShooterAngle.turretRotation * (180.0 / Math.PI);
-        gyro += offset + 80;
-        gyro = gyro % 360;
-
-        double turretAngle = -(gyro / 360.0);
->>>>>>> Stashed changes
 
         turret.setTurretPosition(turretAngle);
 
         double hoodInverted = 85 - (pastShooterAngle.hoodRotation * 180) / Math.PI;
-<<<<<<< Updated upstream
         // double hoodInverted = 40;
         double hoodRelative = hoodInverted / 360;
         turret.setHoodPosition(hoodRelative);
 
         if (turret.hoodInTolerance(.05) && turret.turretInTolerance(0.05)) {
-=======
-        double hoodRelative = hoodInverted / 360;
-        turret.setHoodPosition(hoodRelative);
-
-        if (turret.hoodInTolerance(.009) && turret.turretInTolerance(0.009)) {
->>>>>>> Stashed changes
             return true;
         }
         return false;
