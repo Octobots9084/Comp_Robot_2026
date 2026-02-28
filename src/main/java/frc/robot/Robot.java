@@ -103,7 +103,7 @@ public class Robot extends LoggedRobot {
   /** This function is called periodically during all modes. */
   @Override
   public void robotPeriodic() {
-    robotContainer.vision.periodic();
+    // robotContainer.vision.periodic();
     // Optional<Alliance> ally = DriverStation.getAlliance();
     // if (ally.isPresent()) {
     // if (ally.get() == Alliance.Red) {

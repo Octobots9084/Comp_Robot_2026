@@ -2,7 +2,6 @@ package frc.robot.subsystems.Vision;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
@@ -17,7 +16,7 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Constants;
 
 public class VisionIOSystem implements VisionIO {
@@ -30,6 +29,7 @@ public class VisionIOSystem implements VisionIO {
     private final PhotonPoseEstimator photonEstimatorRight;
     private Matrix<N3, N1> curStdDevs;
     private final EstimateConsumer estConsumer;
+    private double visonCycleTime;
 
     // // Simulation
     // private PhotonCameraSim cameraSim;
@@ -54,10 +54,12 @@ public class VisionIOSystem implements VisionIO {
         inputs.frontCameraConected = frontCamera.isConnected();
         inputs.rightCameraConected = rightCamera.isConnected();
         inputs.leftCameraConected = leftCamera.isConnected();
+        inputs.visonCycleTime = this.visonCycleTime;
     }
 
     @Override
     public void periodic() {
+        double startTime = Timer.getFPGATimestamp();
         Optional<EstimatedRobotPose> visionEst = Optional.empty();
         for (var result : 
             rightCamera.getAllUnreadResults()
@@ -68,30 +70,13 @@ public class VisionIOSystem implements VisionIO {
             }
             updateEstimationStdDevs(visionEst, result.getTargets());
 
-            // if (Robot.isSimulation()) {
-            // visionEst.ifPresentOrElse(
-            // est ->
-            // getSimDebugField()
-            // .getObject("VisionEstimation")
-            // .setPose(est.estimatedPose.toPose2d()),
-            // () -> {
-            // getSimDebugField().getObject("VisionEstimation").setPoses();
-            // });
-            // }
-
             visionEst.ifPresent(
                     est -> {
                         // Change our trust in the measurement based on the tags we can see
                         var estStdDevs = getEstimationStdDevs();
-                        SmartDashboard.putNumber("VisionEstimatedPose_X", est.estimatedPose.toPose2d().getX());
-                        SmartDashboard.putNumber("VisionEstimatedPose_Y", est.estimatedPose.toPose2d().getY());
-                        SmartDashboard.putNumber("VisionEstimatedTimeStampSeconds",
-                                Utils.fpgaToCurrentTime(est.timestampSeconds));
-
                         estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
                     });
         }
-    
         for (var result : 
             leftCamera.getAllUnreadResults()
         ) {
@@ -101,26 +86,10 @@ public class VisionIOSystem implements VisionIO {
             }
             updateEstimationStdDevs(visionEst, result.getTargets());
 
-            // if (Robot.isSimulation()) {
-            // visionEst.ifPresentOrElse(
-            // est ->
-            // getSimDebugField()
-            // .getObject("VisionEstimation")
-            // .setPose(est.estimatedPose.toPose2d()),
-            // () -> {
-            // getSimDebugField().getObject("VisionEstimation").setPoses();
-            // });
-            // }
-
             visionEst.ifPresent(
                     est -> {
                         // Change our trust in the measurement based on the tags we can see
                         var estStdDevs = getEstimationStdDevs();
-                        SmartDashboard.putNumber("VisionEstimatedPose_X", est.estimatedPose.toPose2d().getX());
-                        SmartDashboard.putNumber("VisionEstimatedPose_Y", est.estimatedPose.toPose2d().getY());
-                        SmartDashboard.putNumber("VisionEstimatedTimeStampSeconds",
-                                Utils.fpgaToCurrentTime(est.timestampSeconds));
-
                         estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
                     });
         }
@@ -134,29 +103,15 @@ public class VisionIOSystem implements VisionIO {
             }
             updateEstimationStdDevs(visionEst, result.getTargets());
 
-            // if (Robot.isSimulation()) {
-            // visionEst.ifPresentOrElse(
-            // est ->
-            // getSimDebugField()
-            // .getObject("VisionEstimation")
-            // .setPose(est.estimatedPose.toPose2d()),
-            // () -> {
-            // getSimDebugField().getObject("VisionEstimation").setPoses();
-            // });
-            // }
-
             visionEst.ifPresent(
                     est -> {
                         // Change our trust in the measurement based on the tags we can see
                         var estStdDevs = getEstimationStdDevs();
-                        SmartDashboard.putNumber("VisionEstimatedPose_X", est.estimatedPose.toPose2d().getX());
-                        SmartDashboard.putNumber("VisionEstimatedPose_Y", est.estimatedPose.toPose2d().getY());
-                        SmartDashboard.putNumber("VisionEstimatedTimeStampSeconds",
-                                Utils.fpgaToCurrentTime(est.timestampSeconds));
 
                         estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
                     });
         }
+        this.visonCycleTime = Timer.getFPGATimestamp()-startTime;
     }
 
     /**

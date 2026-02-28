@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
@@ -133,10 +134,11 @@ public class Shooter extends SubsystemBase {
                 break;
             case HUB:
                 isAimedAtHub = isAimedAtHub();
-                if(swerve.isInAllianceZone() && swerve.onRamp(0,5)){
+                // if(swerve.isInAllianceZone() && !swerve.onRamp(0,5)){
                     if(driverOverride){
                         
-                        flywheel.setFlywheelVelocity(40 + 7.5 * ((getDistanceToHub()-1.237)/(5.476-1.237)));
+                        // flywheel.setFlywheelVelocity(40 + 7.5 * ((getDistanceToHub()-1.237)/(5.476-1.237)));
+                        flywheel.setFlywheelVelocity(FlywheelStates.HUB);
 
                         if(isAimedAtHub && flywheel.FlywheelInTolerance(10)){
                             feeder.setFeederVelocity(FeederStates.SCORING);
@@ -147,9 +149,9 @@ public class Shooter extends SubsystemBase {
                         feeder.setFeederVelocity(FeederStates.OFF);
                         flywheel.setFlywheelVelocity(FlywheelStates.SAFE);
                     }
-                }else{
-                    wantedShooterState = ShooterStates.BUMP;
-                }
+                // }else{
+                    // wantedShooterState = ShooterStates.BUMP;
+                // }
                 break;
             case BUMP:
                 if (!swerve.onRamp(0, 5)) {
@@ -304,6 +306,8 @@ public class Shooter extends SubsystemBase {
             
             SmartDashboard.putNumber("distance to hub",toHub);
 
+            
+
             shooterAngle = ShooterAngleCalculator.getShooterAngleToHub(
                     swerve.io.getChassisSpeeds().vxMetersPerSecond,
                     swerve.io.getChassisSpeeds().vyMetersPerSecond,
@@ -356,12 +360,13 @@ public class Shooter extends SubsystemBase {
         SmartDashboard.putNumber("shooterAngle", pastShooterAngle.turretRotation);
 
         double rotation = SwerveSubsystem.getInstance().getRobotPose().getRotation().getDegrees();
+        // double rotation = -180;
         rotation = rotation % 360;
         rotation = 360 - rotation;
 
         // Invert gyro direction BEFORE scaling
         // double offset = 190;//pastShooterAngle.turretRotation * (180.0 / Math.PI);
-        double alphabotJankboticsOffset = 1.5;
+        double alphabotJankboticsOffset = 0;
         double offset = pastShooterAngle.turretRotation * (180.0 / Math.PI) + alphabotJankboticsOffset;
         rotation += offset + 255; //maybe 255
         rotation = rotation % 360;
@@ -369,9 +374,8 @@ public class Shooter extends SubsystemBase {
         double turretAngle = -(rotation / 360.0);
 
         turret.setTurretPosition(turretAngle);
-
         double hoodInverted = 85 - (pastShooterAngle.hoodRotation * 180) / Math.PI;
-        // double hoodInverted = 40;
+        // double hoodInverted = 85-(65);
         double hoodRelative = hoodInverted / 360;
         turret.setHoodPosition(hoodRelative);
 
@@ -425,7 +429,7 @@ public class Shooter extends SubsystemBase {
 
         // Invert gyro direction BEFORE scaling
         // double offset = 190;//pastShooterAngle.turretRotation * (180.0 / Math.PI);
-        double alphabotJankboticsOffset = 6;
+        double alphabotJankboticsOffset = 0;
         double offset = pastShooterAngle.turretRotation * (180.0 / Math.PI) + alphabotJankboticsOffset;
         rotation += offset + 255; //maybe 255
         rotation = rotation % 360;

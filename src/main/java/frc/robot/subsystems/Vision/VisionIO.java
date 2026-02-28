@@ -13,6 +13,7 @@ public interface VisionIO {
         public boolean frontCameraConected = false;
         public boolean rightCameraConected = false;
         public boolean leftCameraConected = false;
+        public double visonCycleTime = -1;
     }
 
     public default void updateInputs(VisionIOInputs inputs) {
