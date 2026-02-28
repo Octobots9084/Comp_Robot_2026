@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Shooter.Flywheel.Flywheel;
 
 public class Flywheel extends SubsystemBase {
+    private FlywheelStates currentState = FlywheelStates.SAFE;
     public static final double flywheelRadius = 0.1; // in Meters
     public static Flywheel currentFlywheelInstance = null;
 
@@ -21,7 +22,12 @@ public class Flywheel extends SubsystemBase {
         currentFlywheelInstance = instance;
     }
 
+    public FlywheelStates getCurrentState() {
+        return this.currentState;
+    }
+
     public void setFlywheelVelocity(FlywheelStates currentState) {
+        this.currentState = currentState;
         io.setFlywheelVelocity(currentState);
     }
 
