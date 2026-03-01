@@ -22,7 +22,7 @@ import frc.robot.subsystems.Shooter.ShooterStates;
 public class ButtonConfig {
     public static CommandXboxController driverController = new CommandXboxController(0);
     //public static CommandXboxController coDriverController = new CommandXboxController(1);
-    public static Superstructure superstructure = Superstructure.getInstance();
+    public Superstructure superstructure = Superstructure.getInstance();
 
     public void initTeleop() {
         SmartDashboard.putBoolean("A button", false);
@@ -47,17 +47,17 @@ public class ButtonConfig {
         // driverController.leftBumper().onTrue(new InstantCommand(() -> {
         // Shooter.getInstance().turretAim = -0.29;
         // }));
-        // driverController.leftBumper().onTrue(new InstantCommand(
-        //         () -> {
-        //             Shooter.getInstance().wantedShooterState = ShooterStates.ZERO;
-        //             SmartDashboard.putBoolean("rightrigger", true);
-        //         }))
-        //         .onFalse(new InstantCommand(
-        //                 () -> {
-        //                     Shooter.getInstance().wantedShooterState = ShooterStates.HUB;
-        //                     /* superstructure.setWantedState(States.SAFE); */ SmartDashboard.putBoolean("rightrigger",
-        //                             false);
-        //                 }));
+        driverController.leftBumper().onTrue(new InstantCommand(
+                () -> {
+                    superstructure.wantedState = States.ZERO;
+                    SmartDashboard.putBoolean("rightrigger", true);
+                }))
+                .onFalse(new InstantCommand(
+                        () -> {
+                            superstructure.wantedState = States.SHOOTER;
+                            /* superstructure.setWantedState(States.SAFE); */ SmartDashboard.putBoolean("rightrigger",
+                                    false);
+                        }));
         // driverRight.button(1).onTrue(new InstantCommand(() ->
         // SwerveSubsystem.getInstance().io.zeroGyro()));
 

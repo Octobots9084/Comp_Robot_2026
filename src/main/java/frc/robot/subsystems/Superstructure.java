@@ -13,7 +13,7 @@ import frc.robot.subsystems.Shooter.Flywheel.*;
 
 public class Superstructure extends SubsystemBase {
     public States currentState = States.SAFE;
-    public States wantedState = States.SAFE;
+    public States wantedState = States.ZERO;
     public IntakeStates userRequestedIntakeState = IntakeStates.SAFE;
 
     boolean climbDescending = true;
@@ -77,7 +77,7 @@ public class Superstructure extends SubsystemBase {
                 // }
                 currentState = States.SHOOTER;
             case ZERO:
-                if (shooter.alreadyZeroed){
+                if (!shooter.alreadyZeroed){
                     currentState = States.ZERO;
                 }
                 break;
@@ -106,6 +106,7 @@ public class Superstructure extends SubsystemBase {
             case ZERO:
                 if(stateZERO()){
                     wantedState = States.SHOOTER;
+                    shooter.wantedShooterState = ShooterStates.HUB;
                 }
                 break;
             default:
@@ -147,7 +148,6 @@ public class Superstructure extends SubsystemBase {
         // if (userRequestedIntakeState != Intake.getInstance().currentState) {
         //     Intake.getInstance().wantedState = userRequestedIntakeState;
         // }
-        shooter.wantedShooterState = ShooterStates.HUB;
     }
 
     private boolean stateZERO(){

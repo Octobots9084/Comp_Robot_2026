@@ -9,6 +9,7 @@ public interface ShooterIO {
     public ShooterStates ShooterWantedState;
     public boolean isAimedAtHub;
     public double flywheelCalculatorVelocity;
+    public double timer;
   }
 
   public default void updateInputs(ShooterIOInputs inputs) {

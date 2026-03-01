@@ -118,7 +118,7 @@ public class Shooter extends SubsystemBase {
                 // tIO.setHoodPosition(getHoodPosFromJoystick());
             case FERRY:
                 isAimedAtHub = aimFerry();
-                if(swerve.isInAllianceZone() && swerve.onRamp(0,5)){
+                if(!swerve.isInAllianceZone() && !swerve.onRamp(0,5)){
                     if(driverOverride){
                         flywheel.setFlywheelVelocity(FlywheelStates.HUB);
                         if(isAimedAtHub && flywheel.FlywheelInTolerance(18)){
@@ -131,12 +131,14 @@ public class Shooter extends SubsystemBase {
                         flywheel.setFlywheelVelocity(FlywheelStates.SAFE);
                     }
                 }
+                else {
+                    wantedShooterState = ShooterStates.BUMP;
+                }
                 break;
             case HUB:
                 isAimedAtHub = isAimedAtHub();
-                // if(swerve.isInAllianceZone() && !swerve.onRamp(0,5)){
+                if(swerve.isInAllianceZone()){
                     if(driverOverride){
-                        
                         // flywheel.setFlywheelVelocity(40 + 7.5 * ((getDistanceToHub()-1.237)/(5.476-1.237)));
                         flywheel.setFlywheelVelocity(FlywheelStates.HUB);
 
@@ -149,9 +151,9 @@ public class Shooter extends SubsystemBase {
                         feeder.setFeederVelocity(FeederStates.OFF);
                         flywheel.setFlywheelVelocity(FlywheelStates.SAFE);
                     }
-                // }else{
-                    // wantedShooterState = ShooterStates.BUMP;
-                // }
+                }else{
+                    wantedShooterState = ShooterStates.BUMP;
+                }
                 break;
             case BUMP:
                 if (!swerve.onRamp(0, 5)) {
@@ -171,7 +173,7 @@ public class Shooter extends SubsystemBase {
                 break;
 
             case ZERO:
-                if (turret.io.turretZeroed()) {
+            if (turret.io.turretZeroed()) {
                     wantedShooterState = ShooterStates.HUB;
                     alreadyZeroed = true;
                 }
@@ -367,7 +369,7 @@ public class Shooter extends SubsystemBase {
         // Invert gyro direction BEFORE scaling
         // double offset = 190;//pastShooterAngle.turretRotation * (180.0 / Math.PI);
         double alphabotJankboticsOffset = 0;
-        double offset = pastShooterAngle.turretRotation * (180.0 / Math.PI) + alphabotJankboticsOffset;
+        double offset = (pastShooterAngle.turretRotation * (180.0 / Math.PI));// + alphabotJankboticsOffset;
         rotation += offset + 255; //maybe 255
         rotation = rotation % 360;
 
@@ -377,6 +379,8 @@ public class Shooter extends SubsystemBase {
         double hoodInverted = 85 - (pastShooterAngle.hoodRotation * 180) / Math.PI;
         // double hoodInverted = 85-(65);
         double hoodRelative = hoodInverted / 360;
+
+
         turret.setHoodPosition(hoodRelative);
 
         if (turret.hoodInTolerance(.05) && turret.turretInTolerance(0.05)) {
@@ -467,7 +471,8 @@ public class Shooter extends SubsystemBase {
         if (gameData.length() > 0) {
             switch (gameData.charAt(0)) {
                 case 'B':
-                    if (Constants.isBlueAlliance) {
+
+                if (Constants.isBlueAlliance) {
                         return (timer <= 10 || (timer >= (40 - prefire) && timer <= 70)
                                 || (timer >= (100 - prefire) && timer <= 161));
                     } else {

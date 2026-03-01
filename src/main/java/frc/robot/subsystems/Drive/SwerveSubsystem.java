@@ -13,6 +13,7 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.numbers.N1;
@@ -133,7 +134,9 @@ public class SwerveSubsystem extends SubsystemBase {
     public boolean onRamp(double wanted, double tolerance) { /////////////////////
         boolean inTolerance = false;
         tolerance = Units.degreesToRadians(tolerance);
-        double tilt = Math.acos(this.io.getRotation3d().toMatrix().get(2, 2)) - 0.015;
+        Rotation3d gyroRotation = this.io.getRotation3d();
+        Matrix<N3,N3> gyroMatrix = gyroRotation.toMatrix();
+        double tilt = Math.acos(gyroMatrix.get(2, 2)) - 0.015 - Math.PI; // gyro mounted upside down so subtact PI radians out
         SmartDashboard.putNumber("Tilt", Units.radiansToDegrees(tilt));
         if (tilt <= (wanted + tolerance) && tilt >= (wanted - tolerance)) {
             inTolerance = true;
