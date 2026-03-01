@@ -15,6 +15,7 @@ import com.ctre.phoenix6.Utils;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -34,6 +35,10 @@ public class VisionIOSystem implements VisionIO {
     private Matrix<N3, N1> curStdDevs;
     private final EstimateConsumer estConsumer;
     private double visonCycleTime;
+
+    public static PIDController xPidcontroller = new PIDController(0,0,0);
+    public static PIDController yPidcontroller = new PIDController(0,0,0);
+    public static PIDController angularPidcontroller = new PIDController(0, 0, 0);
 
     // // Simulation
     // private PhotonCameraSim cameraSim;
@@ -267,7 +272,10 @@ public class VisionIOSystem implements VisionIO {
         }
             
         xVelocity = approatchspeed * ((targetPosition.getX() - pose.getX()) / disToWantedPose);
+        xVelocity = xPidcontroller.calculate(pose.getX(),targetPosition.getX());
         YVelocity = approatchspeed * (targetPosition.getY() - (pose.getY()) / disToWantedPose);
+        YVelocity = yPidcontroller.calculate(pose.getY(),targetPosition.getY());
+        //RotVelocity = Vision.getInstance().io.angularPidcontroller.calculate(pose.getX(),targetPosition.getX());
         
         return new ChassisSpeeds(xVelocity,YVelocity,RotVelocity);
     }
