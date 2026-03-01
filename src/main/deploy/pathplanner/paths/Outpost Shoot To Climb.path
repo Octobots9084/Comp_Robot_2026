@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.708145506419401,
-        "y": 2.18
+        "x": 2.6903523035230354,
+        "y": 2.3021138211382106
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.587985803016859,
-        "y": 1.3027329192546575
+        "x": 2.4171595324386983,
+        "y": 2.4208367127044754
       },
       "isLocked": false,
-      "linkedName": "Bump 2 BR"
+      "linkedName": "Shoot After Outpost Sweep"
     },
     {
       "anchor": {
-        "x": 8.254883333338624,
-        "y": 1.0041083333354663
+        "x": 1.0669083333333333,
+        "y": 2.742524999999999
       },
       "prevControl": {
-        "x": 7.254883333338624,
-        "y": 1.0041083333354663
+        "x": 1.2789079093346056,
+        "y": 2.6100252649992046
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Neutral 4"
+      "linkedName": "climb"
     }
   ],
   "rotationTargets": [],
@@ -41,14 +41,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 4.0,
+    "velocity": 0,
     "rotation": 90.0
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
-    "velocity": 4.0,
-    "rotation": 0.0
+    "velocity": 0,
+    "rotation": 90.0
   },
   "useDefaultConstraints": true
 }

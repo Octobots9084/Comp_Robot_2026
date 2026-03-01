@@ -67,7 +67,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Outpost Climb"
+            "pathName": "Bump 2 TR to Shooting Pos"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Outpost Shoot To Climb"
           }
         }
       ]

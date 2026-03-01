@@ -3,32 +3,37 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.708145506419401,
-        "y": 2.18
+        "x": 3.5036773428232504,
+        "y": 2.630925266903914
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.587985803016859,
-        "y": 1.3027329192546575
+        "x": 4.503677342823252,
+        "y": 2.630925266903914
       },
       "isLocked": false,
-      "linkedName": "Bump 2 BR"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 8.254883333338624,
-        "y": 1.0041083333354663
+        "x": 6.803683333333334,
+        "y": 1.8733166666666659
       },
       "prevControl": {
-        "x": 7.254883333338624,
-        "y": 1.0041083333354663
+        "x": 5.803683333333334,
+        "y": 1.873316666666666
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Neutral 4"
+      "linkedName": "Double Wipe Start Pos"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 0.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -42,12 +47,12 @@
   },
   "goalEndState": {
     "velocity": 4.0,
-    "rotation": 90.0
+    "rotation": 100.0
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
-    "velocity": 4.0,
+    "velocity": 0,
     "rotation": 0.0
   },
   "useDefaultConstraints": true
