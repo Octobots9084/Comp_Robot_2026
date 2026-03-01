@@ -58,11 +58,14 @@ public class RobotContainer {
 
   // Dashboard inputs
   private final SendableChooser<Command> autoChooser;
+  private final SendableChooser<Command> autoChooser2;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    autoChooser2 = AutoBuilder.buildAutoChooser();
+    SmartDashboard.putData("Auto Chooser", autoChooser2);
     // TODO change the buttons from driverleft and right to the xbox controller
     if (Constants.robotType == RobotTypes.BETA) {
       this.swerve = SwerveSubsystem.setInstance(BetaConstants.createDrivetrain(), ButtonConfig.driverController,
@@ -124,6 +127,7 @@ public class RobotContainer {
       default:
         // Replayed robot, disable IO implementations
     }
+    
     autoChooser = AutoBuilder.buildAutoChooser();
     // NAMED COMMANDS IN SWERVE
     SmartDashboard.putData("Auto", autoChooser);
@@ -142,7 +146,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return autoChooser.getSelected();
+    return autoChooser2.getSelected();
     // return new InstantCommand();
   }
 }
