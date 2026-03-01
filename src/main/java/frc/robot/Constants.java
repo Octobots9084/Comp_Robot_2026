@@ -39,9 +39,10 @@ public final class Constants {
   // vision
   public static final double VisionSubStateAllignTollerance = 0.3;
   public static final double VisionAllignTollerance = 0.05;
+  public static final double VisionAllignRotTolleranceToPerportinalSpeed = 0.5;
   public static final double VisionAllignRotationTollerance = 0.05;
-  public static final double VisionAllignspeed = 4;
-  public static final double VisionAllignRotspeed = 0.5;
+  public static final double VisionAllignspeed = 1;
+  public static final double VisionAllignRotspeed = 3;
   public static final double FlywheelDiamiter = 0.1016;
   public static final double TurretDistFromCenter = 0.2051;
   public static final String frontCameraName = "FrontCamera";

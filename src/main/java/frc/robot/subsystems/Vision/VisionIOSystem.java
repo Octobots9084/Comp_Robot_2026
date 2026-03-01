@@ -212,24 +212,26 @@ public class VisionIOSystem implements VisionIO {
                 climbEngagedPosition = Constants.climbEngagedPositionRedNegY;
             }
         }
-        double disToWantedPose = -1;
-        Translation2d wantedPose;
-        if (Math.abs(pose.getRotation().getRadians() - TargetRotationRadians) < 0.25){
-            RotVelocity = (pose.getRotation().getRadians() - TargetRotationRadians)*2;
+        
+        // get rotation error and set rotation speed
+        double rotatationError = pose.getRotation().getRadians() - TargetRotationRadians;
+        if (Math.abs(rotatationError) < Constants.VisionAllignRotTolleranceToPerportinalSpeed){
+            RotVelocity = Constants.VisionAllignRotspeed * rotatationError;
         } else {
-            RotVelocity = Constants.VisionAllignRotspeed;
+            RotVelocity = Constants.VisionAllignRotspeed * Math.signum(rotatationError) * 0.25;
         }
+
+        // get x and y distance error
+        double disToWantedPose = 0;
         if (stage == 0){
             disToWantedPose = getDistBetweenPoints(pose.getTranslation(),climbPrePosition);
-            wantedPose = climbPrePosition;
         } else if (stage == 1) {
             disToWantedPose = getDistBetweenPoints(pose.getTranslation(),climbEngagedPosition);
-            climbPrePosition = climbEngagedPosition;
         }
 
         double approatchspeed = Constants.VisionAllignspeed;
         if (disToWantedPose < Constants.VisionAllignTollerance){ //TODO test these tolerances
-            approatchspeed = Constants.VisionAllignspeed / (disToWantedPose * 50);
+            approatchspeed = Constants.VisionAllignspeed / (disToWantedPose * 30);
         }
         else{
             approatchspeed = Constants.VisionAllignspeed;
@@ -254,8 +256,8 @@ public class VisionIOSystem implements VisionIO {
             throw new ArithmeticException("climb allign stage:"+stage+" invalid");
         }
             
-        xVelocity = approatchspeed * ((pose.getX() - targetPosition.getX()) / disToWantedPose);
-        YVelocity = approatchspeed * ((pose.getY() - targetPosition.getY()) / disToWantedPose);
+        xVelocity = approatchspeed * ((targetPosition.getX() - pose.getX()) / disToWantedPose);
+        YVelocity = approatchspeed * (targetPosition.getY() - (pose.getY()) / disToWantedPose);
         
         return new ChassisSpeeds(xVelocity,YVelocity,RotVelocity);
     }
