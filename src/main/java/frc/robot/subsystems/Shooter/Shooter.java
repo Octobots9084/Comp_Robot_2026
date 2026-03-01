@@ -471,21 +471,20 @@ public class Shooter extends SubsystemBase {
         if (gameData.length() > 0) {
             switch (gameData.charAt(0)) {
                 case 'B':
-
-                if (Constants.isBlueAlliance) {
-                        return (timer <= 10 || (timer >= (40 - prefire) && timer <= 70)
-                                || (timer >= (100 - prefire) && timer <= 161));
+                    if (Constants.isBlueAlliance) {
+                        return (timer <= 10 || (timer >= (35 - prefire) && timer <= 60)
+                                || (timer >= (85 - prefire)));
                     } else {
-                        return (timer <= 40) || (timer >= (70 - prefire) && timer <= 100)
-                                || (timer >= (130 - prefire) && timer <= 161);
+                        return (timer <= 35) || (timer >= (60 - prefire) && timer <= 85)
+                                || (timer >= (110 - prefire));
                     }
                 case 'R':
                     if (!Constants.isBlueAlliance) {
-                        return (timer <= 10 || (timer >= (40 - prefire) && timer <= 70)
-                                || (timer >= (100 - prefire) && timer <= 161));
+                        return (timer <= 35) || (timer >= (60 - prefire) && timer <= 85)
+                                || (timer >= (110 - prefire));
                     } else {
-                        return (timer <= 40) || (timer >= (70 - prefire) && timer <= 100)
-                                || (timer >= (130 - prefire) && timer <= 161);
+                        return (timer <= 10 || (timer >= (35 - prefire) && timer <= 60)
+                                || (timer >= (85 - prefire)));
                     }
 
                 default:

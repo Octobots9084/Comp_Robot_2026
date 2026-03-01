@@ -14,6 +14,7 @@ import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Climb.Climb;
 import frc.robot.subsystems.Climb.ClimbStates;
 import frc.robot.subsystems.Drive.SwerveSubsystem;
+import frc.robot.subsystems.Drive.SwerveSubsystem.SystemState;
 import frc.robot.subsystems.Intake.Intake;
 import frc.robot.subsystems.Intake.IntakeStates;
 import frc.robot.subsystems.Shooter.Shooter;
@@ -65,7 +66,12 @@ public class ButtonConfig {
             SwerveSubsystem.getInstance().io.zeroGyro();
             SmartDashboard.putBoolean("A button", true);
         })).onFalse(new InstantCommand(() -> SmartDashboard.putBoolean("A button", false)));
-
+        
+        driverController.x().onTrue(new InstantCommand(
+            () -> {SwerveSubsystem.getInstance().wantedState = SystemState.ALIGNCLIMB; SmartDashboard.putBoolean("X",true);}))
+            .onFalse(new InstantCommand(
+            () -> {SwerveSubsystem.getInstance().wantedState = SystemState.MANUAL; /*superstructure.setWantedState(States.SAFE);*/ SmartDashboard.putBoolean("X",false);}
+            ));
         if (Constants.robotType != RobotTypes.ALPHA) {
             // driverController.a().onTrue(new SetStateClimbL3());
             // driverController.b().onTrue(new SetStateUnclimb());

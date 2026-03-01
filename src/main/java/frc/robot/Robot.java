@@ -195,12 +195,19 @@ public class Robot extends LoggedRobot {
     Constants.timer.reset();
     Constants.timer.start();
   }
-
+  int rumbleTimer;
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
     if (lastHubPeriod != Shooter.getInstance().isHubActive()) {
       ButtonConfig.driverController.setRumble(RumbleType.kBothRumble, 1);
+      rumbleTimer = 0;
+    }
+    else
+    {
+      rumbleTimer ++;
+      if (rumbleTimer == 50)
+        ButtonConfig.driverController.setRumble(RumbleType.kBothRumble, 0);
     }
     lastHubPeriod = Shooter.getInstance().isHubActive();
   }

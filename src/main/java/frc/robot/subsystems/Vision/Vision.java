@@ -17,13 +17,19 @@ public class Vision extends SubsystemBase{
         FERRYING
     }
 
-    private final VisionIO io;
+    private static Vision instance; 
+    public final VisionIO io;
     private VisionStates visionState = VisionStates.SHOOTINGINHUB;
     private VisionStates visionWantedState = VisionStates.SHOOTINGINHUB;
     private final VisionIOInputsAutoLogged visionInputs = new VisionIOInputsAutoLogged();
 
+    public static Vision getInstance(){
+        return instance;
+    }
+
     public Vision(EstimateConsumer estConsumer) {
         io = new VisionIOSystem(estConsumer);
+        instance = this;
     }
 
     public void periodic() {

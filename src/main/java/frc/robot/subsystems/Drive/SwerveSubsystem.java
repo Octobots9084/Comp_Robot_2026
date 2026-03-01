@@ -30,6 +30,7 @@ import frc.robot.commands.auto.DriveBack;
 import frc.robot.commands.auto.DriveOverBump;
 import frc.robot.commands.auto.NoPoseBump.DriveOverBumpFromAlliance;
 import frc.robot.commands.auto.NoPoseBump.DriveOverBumpToAlliance;
+import frc.robot.subsystems.Vision.VisionIOSystem;
 
 public class SwerveSubsystem extends SubsystemBase {
     public enum SystemState {
@@ -37,7 +38,7 @@ public class SwerveSubsystem extends SubsystemBase {
         IDLE,
         ROTATION_LOCK,
         REVERSE,
-        ALIGN
+        ALIGNCLIMB
     }
 
     private static SwerveSubsystem instance;
@@ -47,9 +48,8 @@ public class SwerveSubsystem extends SubsystemBase {
     public CommandXboxController driverController;
     public double maxVelocity;
     public double maxAngularVelocity;
-    // The robot pose estimator for tracking swerve odometry and applying vision
-    // corrections.
-    // private final SwerveDrivePoseEstimator poseEstimator;
+
+    public int climbAllignStage = -1;
 
     private final SwerveIOInputsAutoLogged inputs = new SwerveIOInputsAutoLogged();
 
@@ -172,8 +172,10 @@ public class SwerveSubsystem extends SubsystemBase {
                 return SystemState.ROTATION_LOCK;
             case REVERSE:
                 return SystemState.REVERSE;
-            case ALIGN:
-                return SystemState.ALIGN;
+            case ALIGNCLIMB:
+                if (systemState != SystemState.ALIGNCLIMB)
+                    climbAllignStage = 0;
+                return SystemState.ALIGNCLIMB;
             default:
                 return this.systemState;
 
@@ -197,8 +199,9 @@ public class SwerveSubsystem extends SubsystemBase {
                 io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(-0.3, 0, 0))
                         .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
                 break;
-            case ALIGN:
-
+            case ALIGNCLIMB:
+                io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(VisionIOSystem.allignClimb(getRobotPose(), climbAllignStage))
+                        .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
                 break;
             default:
                 break;

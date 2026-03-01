@@ -37,6 +37,11 @@ import frc.robot.Constants.RobotTypes;
  */
 public final class Constants {
   // vision
+  public static final double VisionSubStateAllignTollerance = 0.3;
+  public static final double VisionAllignTollerance = 0.05;
+  public static final double VisionAllignRotationTollerance = 0.05;
+  public static final double VisionAllignspeed = 4;
+  public static final double VisionAllignRotspeed = 0.5;
   public static final double FlywheelDiamiter = 0.1016;
   public static final double TurretDistFromCenter = 0.2051;
   public static final String frontCameraName = "FrontCamera";
@@ -116,6 +121,25 @@ public final class Constants {
   public static int climbDeployID = 0;
 
   public static RobotTypes robotType = RobotTypes.BETA;
+
+  //climb positions Red
+    public static Translation2d climbStartPositionRedPosY = new Translation2d(15.500,6.106); //TODO get a real value
+    public static Translation2d climbEngagedPositionRedPosY = new Translation2d(15.500,4.802); //TODO get a real value
+    public static double climbStartRotationRedPosY = Math.PI/2; //TODO get a real value
+
+    public static Translation2d climbStartPositionRedNegY = new Translation2d(15.500,2.296); //TODO get a real value
+    public static Translation2d climbEngagedPositionRedNegY = new Translation2d(15.500,3.527); //TODO get a real value
+    public static double climbStartRotationRedNegY = -Math.PI/2; //TODO get a real value
+    //climb positions Blue
+    public static Translation2d climbStartPositionBluePosY = new Translation2d(1.055,6.106); //TODO get a real value
+    public static Translation2d climbEngagedPositionBluePosY = new Translation2d(1.055,4.802); //TODO get a real value
+    public static double climbStartRotationBluePosY = Math.PI/2; //TODO get a real value
+
+    public static Translation2d climbStartPositionBlueNegY = new Translation2d(1.055,2.296); //TODO get a real value
+    public static Translation2d climbEngagedPositionBlueNegY = new Translation2d(1.055,3.527); //TODO get a real value
+    public static double climbStartRotationBlueNegY = -Math.PI/2; //TODO get a real value
+
+    public static double fieldCenterY = 4.02082;
 
   // set to ALPHA later
   public static enum RobotTypes {
