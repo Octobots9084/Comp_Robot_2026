@@ -36,8 +36,8 @@ public class VisionIOSystem implements VisionIO {
     private final EstimateConsumer estConsumer;
     private double visonCycleTime;
 
-    public static PIDController xPidcontroller = new PIDController(0,0,0);
-    public static PIDController yPidcontroller = new PIDController(0,0,0);
+    public static PIDController xPidcontroller = new PIDController(0.75,0,0.1);
+    public static PIDController yPidcontroller = new PIDController(0.75,0,0.1);
     public static PIDController angularPidcontroller = new PIDController(0, 0, 0);
 
     // // Simulation
@@ -277,7 +277,7 @@ public class VisionIOSystem implements VisionIO {
         YVelocity = yPidcontroller.calculate(pose.getY(),targetPosition.getY());
         //RotVelocity = Vision.getInstance().io.angularPidcontroller.calculate(pose.getX(),targetPosition.getX());
         
-        return new ChassisSpeeds(xVelocity,YVelocity,RotVelocity);
+        return new ChassisSpeeds(xVelocity,YVelocity, 0);
     }
 
     public static double getDistBetweenPoints(Translation2d pose1,Translation2d pose2){
