@@ -1,11 +1,13 @@
 package frc.robot.subsystems.Vision;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
+import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import com.ctre.phoenix6.Utils;
@@ -62,9 +64,8 @@ public class VisionIOSystem implements VisionIO {
     public void periodic() {
         double startTime = Timer.getFPGATimestamp();
         Optional<EstimatedRobotPose> visionEst = Optional.empty();
-        for (var result : 
-            rightCamera.getAllUnreadResults()
-        ) {
+        for (var result : rightCamera.getAllUnreadResults()) {
+            result.targets = removeAmbigousTargets(result.targets);
             visionEst = photonEstimatorRight.estimateCoprocMultiTagPose(result);
             if (visionEst.isEmpty()) {
                 visionEst = photonEstimatorRight.estimateLowestAmbiguityPose(result);
@@ -81,10 +82,11 @@ public class VisionIOSystem implements VisionIO {
         // for (var result : 
         //     leftCamera.getAllUnreadResults()
         // ) {
-        //     visionEst = photonEstimatorLeft.estimateCoprocMultiTagPose(result);
-        //     if (visionEst.isEmpty()) {
-        //         visionEst = photonEstimatorLeft.estimateLowestAmbiguityPose(result);
-        //     }
+                // result.targets = removeAmbigousTargets(result.targets);
+                // visionEst = photonEstimatorLeft.estimateCoprocMultiTagPose(result);
+                // if (visionEst.isEmpty()) {
+                //     visionEst = photonEstimatorLeft.estimateLowestAmbiguityPose(result);
+                // }
         //     updateEstimationStdDevs(visionEst, result.getTargets());
 
         //     visionEst.ifPresent(
@@ -95,15 +97,13 @@ public class VisionIOSystem implements VisionIO {
         //             });
         // }
     
-        for (var result : 
-            frontCamera.getAllUnreadResults()
-        ) {
+        for (var result : frontCamera.getAllUnreadResults()) {
+            result.targets = removeAmbigousTargets(result.targets);
             visionEst = photonEstimatorFront.estimateCoprocMultiTagPose(result);
             if (visionEst.isEmpty()) {
                 visionEst = photonEstimatorFront.estimateLowestAmbiguityPose(result);
             }
             updateEstimationStdDevs(visionEst, result.getTargets());
-
             // if (Robot.isSimulation()) {
             // visionEst.ifPresentOrElse(
             // est ->
@@ -124,6 +124,16 @@ public class VisionIOSystem implements VisionIO {
                     });
         }
         this.visonCycleTime = Timer.getFPGATimestamp()-startTime;
+    }
+
+    private List<PhotonTrackedTarget> removeAmbigousTargets(List<PhotonTrackedTarget> allTargets){
+        List<PhotonTrackedTarget> optimizedTargets = new ArrayList<PhotonTrackedTarget>();
+        for(var target : allTargets){
+            if(target.poseAmbiguity < 0.2){
+                optimizedTargets.add(target);
+            }
+        }
+        return optimizedTargets;
     }
 
     /**

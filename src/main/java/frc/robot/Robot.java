@@ -147,7 +147,7 @@ public class Robot extends LoggedRobot {
       }
     }
     SmartDashboard.putBoolean("IsBlueAlliance", Constants.isBlueAlliance);
-
+    ButtonConfig.driverController.setRumble(RumbleType.kBothRumble, 0);
   }
 
   /** This function is called periodically when disabled. */
