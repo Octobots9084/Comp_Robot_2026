@@ -101,6 +101,8 @@ public class Climb extends SubsystemBase {
                 if (zeroClimb()) {
                     alreadyZeroed = true;
                     wantedState = ClimbStates.IDLE;
+                }else{
+                    alreadyZeroed = false;
                 }
                 break;
             default:

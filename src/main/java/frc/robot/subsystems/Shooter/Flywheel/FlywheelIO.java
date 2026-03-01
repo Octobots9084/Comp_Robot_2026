@@ -2,9 +2,12 @@ package frc.robot.subsystems.Shooter.Flywheel;
 
 import org.littletonrobotics.junction.AutoLog;
 
+import frc.robot.subsystems.Shooter.Feeder.FeederStates;
+
 public interface FlywheelIO {
   @AutoLog
   public static class FlywheelIOInputs {
+    public FlywheelStates flywheelCurrentState;
     public double FlywheelLeftRPS = 0.0;
     public double FlywheelLeftMotorTemp = 0.0;
     public double FlywheelRightRPS = 0.0;
@@ -18,6 +21,8 @@ public interface FlywheelIO {
   }
 
   public default void setFlywheelVelocity(FlywheelStates state) {
+  }
+  public default void setFlywheelVelocity(double state) {
   }
 
   public default double[] getFlywheelVelocity() {

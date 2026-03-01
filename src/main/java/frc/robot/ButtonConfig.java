@@ -14,6 +14,7 @@ import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Climb.Climb;
 import frc.robot.subsystems.Climb.ClimbStates;
 import frc.robot.subsystems.Drive.SwerveSubsystem;
+import frc.robot.subsystems.Drive.SwerveStates;
 import frc.robot.subsystems.Intake.Intake;
 import frc.robot.subsystems.Intake.IntakeStates;
 import frc.robot.subsystems.Shooter.Shooter;
@@ -22,7 +23,7 @@ import frc.robot.subsystems.Shooter.ShooterStates;
 public class ButtonConfig {
     public static CommandXboxController driverController = new CommandXboxController(0);
     //public static CommandXboxController coDriverController = new CommandXboxController(1);
-    public static Superstructure superstructure = Superstructure.getInstance();
+    public Superstructure superstructure = Superstructure.getInstance();
 
     public void initTeleop() {
         SmartDashboard.putBoolean("A button", false);
@@ -44,21 +45,17 @@ public class ButtonConfig {
         // Shooter.getInstance().turretAim = 0;
         // }));
 
-        driverController.rightBumper().onTrue(new InstantCommand(() -> {
-            Shooter.getInstance().turretAim = -0.57;
-        }));
-
         // driverController.leftBumper().onTrue(new InstantCommand(() -> {
         // Shooter.getInstance().turretAim = -0.29;
         // }));
         driverController.leftBumper().onTrue(new InstantCommand(
                 () -> {
-                    Shooter.getInstance().wantedShooterState = ShooterStates.ZERO;
+                    superstructure.wantedState = States.ZERO;
                     SmartDashboard.putBoolean("rightrigger", true);
                 }))
                 .onFalse(new InstantCommand(
                         () -> {
-                            Shooter.getInstance().wantedShooterState = ShooterStates.HUB;
+                            superstructure.wantedState = States.SHOOTER;
                             /* superstructure.setWantedState(States.SAFE); */ SmartDashboard.putBoolean("rightrigger",
                                     false);
                         }));
@@ -69,7 +66,12 @@ public class ButtonConfig {
             SwerveSubsystem.getInstance().io.zeroGyro();
             SmartDashboard.putBoolean("A button", true);
         })).onFalse(new InstantCommand(() -> SmartDashboard.putBoolean("A button", false)));
-
+        
+        driverController.x().onTrue(new InstantCommand(
+            () -> {SwerveSubsystem.getInstance().wantedState = SwerveStates.ALIGNCLIMB; SmartDashboard.putBoolean("X",true);}))
+            .onFalse(new InstantCommand(
+            () -> {SwerveSubsystem.getInstance().wantedState = SwerveStates.MANUAL; /*superstructure.setWantedState(States.SAFE);*/ SmartDashboard.putBoolean("X",false);}
+            ));
         if (Constants.robotType != RobotTypes.ALPHA) {
             // driverController.a().onTrue(new SetStateClimbL3());
             // driverController.b().onTrue(new SetStateUnclimb());

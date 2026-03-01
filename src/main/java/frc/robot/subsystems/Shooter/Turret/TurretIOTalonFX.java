@@ -66,6 +66,7 @@ public class TurretIOTalonFX implements TurretIO {
     @Override
     public double getHoodPosition() {
         return hoodMotor.getPosition().getValueAsDouble();
+        
     }
 
     @Override

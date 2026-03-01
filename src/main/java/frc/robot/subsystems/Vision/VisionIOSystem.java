@@ -1,12 +1,13 @@
 package frc.robot.subsystems.Vision;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
+import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import com.ctre.phoenix6.Utils;
@@ -15,14 +16,16 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Constants;
 
 public class VisionIOSystem implements VisionIO {
     private final PhotonCamera frontCamera;
-    private final PhotonCamera leftCamera;
+    // private final PhotonCamera leftCamera;
     private final PhotonCamera rightCamera;
     // private final PhotonCamera intakeCamera;
     private final PhotonPoseEstimator photonEstimatorFront;
@@ -30,6 +33,7 @@ public class VisionIOSystem implements VisionIO {
     private final PhotonPoseEstimator photonEstimatorRight;
     private Matrix<N3, N1> curStdDevs;
     private final EstimateConsumer estConsumer;
+    private double visonCycleTime;
 
     // // Simulation
     // private PhotonCameraSim cameraSim;
@@ -40,7 +44,7 @@ public class VisionIOSystem implements VisionIO {
         // intakeCamera.setDriverMode(true);
         // CameraServer.startAutomaticCapture(Constants.intakeCameraName, "/dev/video0");
         frontCamera = new PhotonCamera(Constants.frontCameraName);
-        leftCamera = new PhotonCamera(Constants.leftCameraName);
+        // leftCamera = new PhotonCamera(Constants.leftCameraName);
         rightCamera = new PhotonCamera(Constants.rightCameraName);
         photonEstimatorFront = new PhotonPoseEstimator(Constants.kTagLayout, Constants.robotToCamFront);
         photonEstimatorRight = new PhotonPoseEstimator(Constants.kTagLayout, Constants.robotToCamRight);
@@ -53,87 +57,53 @@ public class VisionIOSystem implements VisionIO {
         // inputs.intakeCameraConected = intakeCamera.isConnected();
         inputs.frontCameraConected = frontCamera.isConnected();
         inputs.rightCameraConected = rightCamera.isConnected();
-        inputs.leftCameraConected = leftCamera.isConnected();
+        // inputs.leftCameraConected = leftCamera.isConnected();
     }
 
     @Override
     public void periodic() {
+        double startTime = Timer.getFPGATimestamp();
         Optional<EstimatedRobotPose> visionEst = Optional.empty();
-        for (var result : 
-            rightCamera.getAllUnreadResults()
-        ) {
+        for (var result : rightCamera.getAllUnreadResults()) {
+            result.targets = removeAmbigousTargets(result.targets);
             visionEst = photonEstimatorRight.estimateCoprocMultiTagPose(result);
             if (visionEst.isEmpty()) {
                 visionEst = photonEstimatorRight.estimateLowestAmbiguityPose(result);
             }
             updateEstimationStdDevs(visionEst, result.getTargets());
 
-            // if (Robot.isSimulation()) {
-            // visionEst.ifPresentOrElse(
-            // est ->
-            // getSimDebugField()
-            // .getObject("VisionEstimation")
-            // .setPose(est.estimatedPose.toPose2d()),
-            // () -> {
-            // getSimDebugField().getObject("VisionEstimation").setPoses();
-            // });
-            // }
-
             visionEst.ifPresent(
                     est -> {
                         // Change our trust in the measurement based on the tags we can see
                         var estStdDevs = getEstimationStdDevs();
-                        SmartDashboard.putNumber("VisionEstimatedPose_X", est.estimatedPose.toPose2d().getX());
-                        SmartDashboard.putNumber("VisionEstimatedPose_Y", est.estimatedPose.toPose2d().getY());
-                        SmartDashboard.putNumber("VisionEstimatedTimeStampSeconds",
-                                Utils.fpgaToCurrentTime(est.timestampSeconds));
-
                         estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
                     });
         }
+        // for (var result : 
+        //     leftCamera.getAllUnreadResults()
+        // ) {
+                // result.targets = removeAmbigousTargets(result.targets);
+                // visionEst = photonEstimatorLeft.estimateCoprocMultiTagPose(result);
+                // if (visionEst.isEmpty()) {
+                //     visionEst = photonEstimatorLeft.estimateLowestAmbiguityPose(result);
+                // }
+        //     updateEstimationStdDevs(visionEst, result.getTargets());
+
+        //     visionEst.ifPresent(
+        //             est -> {
+        //                 // Change our trust in the measurement based on the tags we can see
+        //                 var estStdDevs = getEstimationStdDevs();
+        //                 estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+        //             });
+        // }
     
-        for (var result : 
-            leftCamera.getAllUnreadResults()
-        ) {
-            visionEst = photonEstimatorLeft.estimateCoprocMultiTagPose(result);
-            if (visionEst.isEmpty()) {
-                visionEst = photonEstimatorLeft.estimateLowestAmbiguityPose(result);
-            }
-            updateEstimationStdDevs(visionEst, result.getTargets());
-
-            // if (Robot.isSimulation()) {
-            // visionEst.ifPresentOrElse(
-            // est ->
-            // getSimDebugField()
-            // .getObject("VisionEstimation")
-            // .setPose(est.estimatedPose.toPose2d()),
-            // () -> {
-            // getSimDebugField().getObject("VisionEstimation").setPoses();
-            // });
-            // }
-
-            visionEst.ifPresent(
-                    est -> {
-                        // Change our trust in the measurement based on the tags we can see
-                        var estStdDevs = getEstimationStdDevs();
-                        SmartDashboard.putNumber("VisionEstimatedPose_X", est.estimatedPose.toPose2d().getX());
-                        SmartDashboard.putNumber("VisionEstimatedPose_Y", est.estimatedPose.toPose2d().getY());
-                        SmartDashboard.putNumber("VisionEstimatedTimeStampSeconds",
-                                Utils.fpgaToCurrentTime(est.timestampSeconds));
-
-                        estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
-                    });
-        }
-    
-        for (var result : 
-            frontCamera.getAllUnreadResults()
-        ) {
+        for (var result : frontCamera.getAllUnreadResults()) {
+            result.targets = removeAmbigousTargets(result.targets);
             visionEst = photonEstimatorFront.estimateCoprocMultiTagPose(result);
             if (visionEst.isEmpty()) {
                 visionEst = photonEstimatorFront.estimateLowestAmbiguityPose(result);
             }
             updateEstimationStdDevs(visionEst, result.getTargets());
-
             // if (Robot.isSimulation()) {
             // visionEst.ifPresentOrElse(
             // est ->
@@ -149,14 +119,21 @@ public class VisionIOSystem implements VisionIO {
                     est -> {
                         // Change our trust in the measurement based on the tags we can see
                         var estStdDevs = getEstimationStdDevs();
-                        SmartDashboard.putNumber("VisionEstimatedPose_X", est.estimatedPose.toPose2d().getX());
-                        SmartDashboard.putNumber("VisionEstimatedPose_Y", est.estimatedPose.toPose2d().getY());
-                        SmartDashboard.putNumber("VisionEstimatedTimeStampSeconds",
-                                Utils.fpgaToCurrentTime(est.timestampSeconds));
 
                         estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
                     });
         }
+        this.visonCycleTime = Timer.getFPGATimestamp()-startTime;
+    }
+
+    private List<PhotonTrackedTarget> removeAmbigousTargets(List<PhotonTrackedTarget> allTargets){
+        List<PhotonTrackedTarget> optimizedTargets = new ArrayList<PhotonTrackedTarget>();
+        for(var target : allTargets){
+            if(target.poseAmbiguity < 0.2){
+                optimizedTargets.add(target);
+            }
+        }
+        return optimizedTargets;
     }
 
     /**
@@ -211,6 +188,123 @@ public class VisionIOSystem implements VisionIO {
                 curStdDevs = estStdDevs;
             }
         }
+    }
+
+    public static ChassisSpeeds allignClimb(Pose2d pose, int stage){ //stage -1 is the first interation of this function stage 0 is climbOptionalPreStartPosition stage 1 is climbPrePosition stage 2 is climbEngagedPosition
+        Translation2d climbPrePosition;
+        Translation2d climbEngagedPosition;
+        double TargetRotationRadians;
+        
+        Translation2d targetPosition;
+
+        double xVelocity;
+        double YVelocity;
+        double RotVelocity;
+        
+        if(Constants.isBlueAlliance){
+            if(pose.getY() > Constants.fieldCenterY){
+                TargetRotationRadians = Constants.climbStartRotationBluePosY;
+                climbPrePosition = Constants.climbStartPositionBluePosY;
+                climbEngagedPosition = Constants.climbEngagedPositionBluePosY;
+            } else {
+                TargetRotationRadians = Constants.climbStartRotationBlueNegY;
+                climbPrePosition = Constants.climbStartPositionBlueNegY;
+                climbEngagedPosition = Constants.climbEngagedPositionBlueNegY;
+            }
+        } else {
+            if(pose.getY() > Constants.fieldCenterY){
+                TargetRotationRadians = Constants.climbStartRotationRedPosY;
+                climbPrePosition = Constants.climbStartPositionRedPosY;
+                climbEngagedPosition = Constants.climbEngagedPositionRedPosY;
+            } else {
+                TargetRotationRadians = Constants.climbStartRotationRedNegY;
+                climbPrePosition = Constants.climbStartPositionRedNegY;
+                climbEngagedPosition = Constants.climbEngagedPositionRedNegY;
+            }
+        }
+        
+        // get rotation error and set rotation speed
+        double rotatationError = pose.getRotation().getRadians() - TargetRotationRadians;
+        if (Math.abs(rotatationError) < Constants.VisionAllignRotTolleranceToPerportinalSpeed){
+            RotVelocity = Constants.VisionAllignRotspeed * rotatationError;
+        } else {
+            RotVelocity = Constants.VisionAllignRotspeed * Math.signum(rotatationError) * 0.25;
+        }
+
+        // get x and y distance error
+        double disToWantedPose = 0;
+        if (stage == 0){
+            disToWantedPose = getDistBetweenPoints(pose.getTranslation(),climbPrePosition);
+        } else if (stage == 1) {
+            disToWantedPose = getDistBetweenPoints(pose.getTranslation(),climbEngagedPosition);
+        }
+
+        double approatchspeed = Constants.VisionAllignspeed;
+        if (disToWantedPose < Constants.VisionAllignTollerance){ //TODO test these tolerances
+            approatchspeed = Constants.VisionAllignspeed / (disToWantedPose * 30);
+        }
+        else{
+            approatchspeed = Constants.VisionAllignspeed;
+        }
+        
+        //getting x/y velocitys
+        if (stage == 0){
+            if(disToWantedPose < Constants.VisionSubStateAllignTollerance && Math.abs(pose.getRotation().getRadians() - TargetRotationRadians) < Constants.VisionAllignRotationTollerance){
+                stage = 1;
+                targetPosition = climbEngagedPosition;
+            } else {
+                targetPosition = climbPrePosition;
+            }
+        } else if (stage == 1){
+            if(disToWantedPose < Constants.VisionAllignTollerance){
+                return new ChassisSpeeds(0,0,RotVelocity);
+            } else {
+                targetPosition = climbEngagedPosition;
+            }
+        }
+        else {
+            throw new ArithmeticException("climb allign stage:"+stage+" invalid");
+        }
+            
+        xVelocity = approatchspeed * ((targetPosition.getX() - pose.getX()) / disToWantedPose);
+        YVelocity = approatchspeed * (targetPosition.getY() - (pose.getY()) / disToWantedPose);
+        
+        return new ChassisSpeeds(xVelocity,YVelocity,RotVelocity);
+    }
+
+    public static double getDistBetweenPoints(Translation2d pose1,Translation2d pose2){
+        return Math.sqrt((
+                pose1.getY() - pose2.getY())
+                * (pose1.getY() - pose2.getY()
+            ) + (
+                pose1.getY() - pose2.getY())
+                * (pose1.getY() - pose2.getY()
+            ));
+    }
+
+    public boolean isAlligned(Pose2d pose){
+        Translation2d climbEngagedPosition;
+        double TargetRotationRadians;
+
+        if(Constants.isBlueAlliance){
+            if(pose.getY() > Constants.fieldCenterY){
+                TargetRotationRadians = Constants.climbStartRotationBluePosY;
+                climbEngagedPosition = Constants.climbEngagedPositionBluePosY;
+            } else {
+                TargetRotationRadians = Constants.climbStartRotationBlueNegY;
+                climbEngagedPosition = Constants.climbEngagedPositionBlueNegY;
+            }
+        } else {
+            if(pose.getY() > Constants.fieldCenterY){
+                TargetRotationRadians = Constants.climbStartRotationRedPosY;
+                climbEngagedPosition = Constants.climbEngagedPositionRedPosY;
+            } else {
+                TargetRotationRadians = Constants.climbStartRotationRedNegY;
+                climbEngagedPosition = Constants.climbEngagedPositionRedNegY;
+            }
+        }
+
+        return (Math.abs(pose.getRotation().getRadians() - TargetRotationRadians) < Constants.VisionAllignRotationTollerance) && (getDistBetweenPoints(pose.getTranslation(),climbEngagedPosition)<Constants.VisionAllignTollerance);
     }
 
     public Matrix<N3, N1> getEstimationStdDevs() {

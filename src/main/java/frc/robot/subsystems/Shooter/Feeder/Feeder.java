@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Feeder extends SubsystemBase {
     public static Feeder currentInstance = null;
+    private FeederStates currentState = FeederStates.OFF;
 
     public FeederIO io = new FeederIOTalonFX();
 
@@ -20,7 +21,12 @@ public class Feeder extends SubsystemBase {
     }
 
     public void setFeederVelocity(FeederStates currentState) {
+        this.currentState = currentState;
         io.setFeederVelocity(currentState);
+    }
+
+    public FeederStates getCurrentState() {
+        return this.currentState;
     }
 
     public double[] getFeederVelocity() {

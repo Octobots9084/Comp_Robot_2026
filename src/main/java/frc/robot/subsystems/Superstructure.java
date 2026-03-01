@@ -13,13 +13,15 @@ import frc.robot.subsystems.Shooter.Flywheel.*;
 
 public class Superstructure extends SubsystemBase {
     public States currentState = States.SAFE;
-    public States wantedState = States.SAFE;
-    // public IntakeStates userRequestedIntakeState = IntakeStates.SAFE;
+    public States wantedState = States.ZERO;
+    public IntakeStates userRequestedIntakeState = IntakeStates.SAFE;
 
     boolean climbDescending = true;
     boolean climbAligned = false;
     public static Superstructure currentInstance;
     // public Climb climb = Climb.getInstance();
+    public Shooter shooter = Shooter.getInstance();
+    // public Intake intake = Intake.getInstance();
 
     @Override
     public void periodic() {
@@ -73,8 +75,11 @@ public class Superstructure extends SubsystemBase {
                 // if (climb.getClimbState() != ClimbStates.CLIMBEDL1 || climb.getClimbState() != ClimbStates.CLIMBEDL3) {
                     currentState = States.SHOOTER;
                 // }
+                currentState = States.SHOOTER;
             case ZERO:
-                currentState = States.ZERO;
+                if (!shooter.alreadyZeroed){
+                    currentState = States.ZERO;
+                }
                 break;
             default:
                 break; // do nothing
@@ -96,11 +101,13 @@ public class Superstructure extends SubsystemBase {
                 stateCLIMBL1();
                 break;
             case SHOOTER:
-                // stateSHOOTER();
-                Shooter.getInstance().wantedShooterState = ShooterStates.SPIT;
+                stateSHOOTER();
                 break;
             case ZERO:
-                // todo
+                if(stateZERO()){
+                    wantedState = States.SHOOTER;
+                    shooter.wantedShooterState = ShooterStates.HUB;
+                }
                 break;
             default:
                 // throw an exception
@@ -109,24 +116,11 @@ public class Superstructure extends SubsystemBase {
     }
 
     private void stateSAFE() {
-        // Climb.getInstance().setClimbState(ClimbStates.IDLE);
-        // set shooter into safe state
-        // Intake.getInstance().setWantedState(IntakeStates.SAFE)
+        // climb.setClimbState(ClimbStates.IDLE);
+        // // set shooter into safe state
+        // intake.setWantedState(IntakeStates.SAFE);
+        shooter.wantedShooterState = ShooterStates.SAFE;
 
-    }
-    public void stowForClimb(){
-        //   Intake.getInstance().setWantedState(IntakeStates.SAFE);
-          Shooter.getInstance().wantedShooterState = ShooterStates.SAFE;
-          
-    }
-    public boolean isClimbAligned() {
-        // if(climbAligned == true){
-        //     return true;
-        // }else{
-        //     return false;
-        // }
-        return false;
-    
     }
     private void stateMANUAL() {
         // TODO map buttons to direct inputs
@@ -155,5 +149,18 @@ public class Superstructure extends SubsystemBase {
         // if (userRequestedIntakeState != Intake.getInstance().currentState) {
         //     Intake.getInstance().wantedState = userRequestedIntakeState;
         // }
+    }
+
+    private boolean stateZERO(){
+        shooter.wantedShooterState = ShooterStates.ZERO;
+        // climb.wantedState = ClimbStates.ZERO;
+        // intake.wantedState = IntakeStates.ZERO;
+        return (shooter.alreadyZeroed);//&& climb.alreadyZeroed && intake.alreadyZeroed);
+    }
+
+    public void stowForClimb(){
+        //   Intake.getInstance().setWantedState(IntakeStates.SAFE);
+          Shooter.getInstance().wantedShooterState = ShooterStates.SAFE;
+          
     }
 }

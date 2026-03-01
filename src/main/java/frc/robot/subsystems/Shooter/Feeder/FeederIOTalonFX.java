@@ -7,7 +7,7 @@ import frc.robot.Constants;
 import frc.robot.subsystems.States;
 import frc.robot.subsystems.Shooter.ShooterConfigurator;
 import frc.robot.subsystems.Shooter.Flywheel.FlywheelIOTalonFX;
-
+import frc.robot.subsystems.Shooter.Flywheel.FlywheelStates;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.units.Units;
 
@@ -28,6 +28,7 @@ public class FeederIOTalonFX implements FeederIO {
     }
 
     public void updateInputs(FeederIOInputs inputs) {
+        inputs.feederCurrentState = Feeder.getInstance().getCurrentState();
         inputs.spindexerRPS = spindexerMotor.getVelocity().getValueAsDouble();
         inputs.verticalFeederRPS = verticalFeederMotor.getVelocity().getValueAsDouble();
         inputs.spindexerMotorTemp = spindexerMotor.getDeviceTemp().getValueAsDouble();

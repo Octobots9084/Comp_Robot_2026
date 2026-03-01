@@ -9,9 +9,12 @@ package frc.robot;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.States;
+import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Climb.Climb;
 import frc.robot.subsystems.Climb.ClimbStates;
 import frc.robot.subsystems.Drive.SwerveStates;
@@ -47,6 +50,8 @@ public class Robot extends LoggedRobot {
   public Shooter shooter;
   public Climb climb;
   public Intake intake;
+
+  private boolean lastHubPeriod = false;
 
   public Robot() {
     // Set up data receivers & replay source
@@ -106,7 +111,7 @@ public class Robot extends LoggedRobot {
   /** This function is called periodically during all modes. */
   @Override
   public void robotPeriodic() {
-    robotContainer.vision.periodic();
+    // robotContainer.vision.periodic();
     // Optional<Alliance> ally = DriverStation.getAlliance();
     // if (ally.isPresent()) {
     // if (ally.get() == Alliance.Red) {
@@ -145,7 +150,7 @@ public class Robot extends LoggedRobot {
       }
     }
     SmartDashboard.putBoolean("IsBlueAlliance", Constants.isBlueAlliance);
-
+    ButtonConfig.driverController.setRumble(RumbleType.kBothRumble, 0);
   }
 
   /** This function is called periodically when disabled. */
@@ -161,13 +166,7 @@ public class Robot extends LoggedRobot {
   public void autonomousInit() {
     setAllianceColor();
     autonomousCommand = robotContainer.getAutonomousCommand();
-    if(!shooter.alreadyZeroed){
-      shooter.wantedShooterState = ShooterStates.ZERO;
-    }    
-    swerve.wantedState = SwerveStates.IDLE;
-    // climb.wantedState = ClimbStates.ZERO;
-    // intake.wantedState = IntakeStates.ZERO;
-    // SwerveSubsystem.getInstance().io.getPigeon2().setYaw(90);
+    Superstructure.getInstance().wantedState = States.ZERO;
 
     Logger.recordOutput("EXECUTING!!!!", false);
     // schedule the autonomous command (example)
@@ -187,16 +186,7 @@ public class Robot extends LoggedRobot {
   public void teleopInit() {
     setAllianceColor();
     //only automaticly zeros if we havent already zeroed while still allowing a zero button
-    if(!shooter.alreadyZeroed){
-      shooter.wantedShooterState = ShooterStates.ZERO;
-    }
-    swerve.wantedState = SwerveStates.MANUAL;
-    // if(!climb.alreadyZeroed){
-    // climb.wantedState = ClimbStates.ZERO;
-    // }
-    // if(!intake.alreadyZeroed){
-    // intake.wantedState = IntakeStates.ZERO;
-    // }
+    Superstructure.getInstance().wantedState = States.ZERO;
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
@@ -206,14 +196,24 @@ public class Robot extends LoggedRobot {
     if (autonomousCommand != null) {
       CommandScheduler.getInstance().cancel(autonomousCommand);
     }
+    Constants.timer.reset();
+    Constants.timer.start();
   }
-
+  int rumbleTimer;
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    // runs the vision periodic
-    robotContainer.vision.periodic();
-    robotContainer.shooter.periodic();
+    if (lastHubPeriod != Shooter.getInstance().isHubActive()) {
+      ButtonConfig.driverController.setRumble(RumbleType.kBothRumble, 1);
+      rumbleTimer = 0;
+    }
+    else
+    {
+      rumbleTimer ++;
+      if (rumbleTimer == 50)
+        ButtonConfig.driverController.setRumble(RumbleType.kBothRumble, 0);
+    }
+    lastHubPeriod = Shooter.getInstance().isHubActive();
   }
 
   /** This function is called once when test mode is enabled. */

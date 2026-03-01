@@ -3,6 +3,8 @@ package frc.robot.subsystems.Vision;
 import org.littletonrobotics.junction.AutoLog;
 import org.photonvision.EstimatedRobotPose;
 import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 
@@ -13,6 +15,7 @@ public interface VisionIO {
         public boolean frontCameraConected = false;
         public boolean rightCameraConected = false;
         public boolean leftCameraConected = false;
+        public double visonCycleTime = -1;
     }
 
     public default void updateInputs(VisionIOInputs inputs) {

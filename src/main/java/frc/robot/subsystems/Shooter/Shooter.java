@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
@@ -64,6 +65,7 @@ public class Shooter extends SubsystemBase {
     private Translation2d blueFerryDepot = new Translation2d(4.6239 - 2,6.03);
     private Translation2d redFerryDepot = new Translation2d(11.917 + 2,2.011);
     public boolean isAimedAtHub;
+    public double shooterCalculatorVelocity;
 
     public Shooter(FeederIO fIO, FlywheelIO fwIO, TurretIO tIO, ShooterIO sIO) {
         this.fIO = fIO;
@@ -109,38 +111,48 @@ public class Shooter extends SubsystemBase {
                 // Turret.getInstance().setTurretPosition(0);
                 feeder.setFeederVelocity(FeederStates.OFF);
                 flywheel.setFlywheelVelocity(FlywheelStates.SAFE);
-                turret.setHoodPosition(0);
-                turret.setTurretPosition(0);
                 break;
             case MANUAL:
                 // joystick controlls turret
                 // tIO.setTurretPosition(getTurretPosFromJoystick());
                 // tIO.setHoodPosition(getHoodPosFromJoystick());
             case FERRY:
-                // if(ferry()){
-                // wantedShooterState = ShooterStates.BUMP;
-                // Lights.getLightInstance().lightsWantedState = LightAnimations.CANTSHOOT;
-                // }
-                break;
-            case HUB:
-                // if(shootHub()) {
-                    // wantedShooterState = ShooterStates.BUMP;
-                    // Lights.getLightInstance().lightsWantedState = LightAnimations.CANTSHOOT;
-                // )
-
-                isAimedAtHub = isAimedAtHub();
-                // isAimedAtHub = aimFerry();
-                
-                if(driverOverride){
-                    flywheel.setFlywheelVelocity(FlywheelStates.HUB);
-                    if(isAimedAtHub && flywheel.FlywheelInTolerance(18)){
-                        feeder.setFeederVelocity(FeederStates.SCORING);
+                isAimedAtHub = aimFerry();
+                if(!swerve.isInAllianceZone() && !swerve.onRamp(0,5)){
+                    if(driverOverride){
+                        flywheel.setFlywheelVelocity(FlywheelStates.HUB);
+                        if(isAimedAtHub && flywheel.FlywheelInTolerance(18)){
+                            feeder.setFeederVelocity(FeederStates.SCORING);
+                        }else{
+                            feeder.setFeederVelocity(FeederStates.OFF);
+                        }
                     }else{
                         feeder.setFeederVelocity(FeederStates.OFF);
+                        flywheel.setFlywheelVelocity(FlywheelStates.SAFE);
+                    }
+                }
+                else {
+                    wantedShooterState = ShooterStates.BUMP;
+                }
+                break;
+            case HUB:
+                isAimedAtHub = isAimedAtHub();
+                if(swerve.isInAllianceZone()){
+                    if(driverOverride){
+                        // flywheel.setFlywheelVelocity(40 + 7.5 * ((getDistanceToHub()-1.237)/(5.476-1.237)));
+                        flywheel.setFlywheelVelocity(FlywheelStates.HUB);
+
+                        if(isAimedAtHub && flywheel.FlywheelInTolerance(10)){
+                            feeder.setFeederVelocity(FeederStates.SCORING);
+                        }else{
+                            feeder.setFeederVelocity(FeederStates.OFF);
+                        }
+                    }else{
+                        feeder.setFeederVelocity(FeederStates.OFF);
+                        flywheel.setFlywheelVelocity(FlywheelStates.SAFE);
                     }
                 }else{
-                    feeder.setFeederVelocity(FeederStates.OFF);
-                    flywheel.setFlywheelVelocity(FlywheelStates.SAFE);
+                    wantedShooterState = ShooterStates.BUMP;
                 }
                 break;
             case AUTOHUB:
@@ -160,16 +172,11 @@ public class Shooter extends SubsystemBase {
                     }
                 break;
             case BUMP:
-                // dont shoot
-                if (!swerve.onRamp(0, 0.3)) {// !tilted
-                    if (swerve.isInAllianceZone()) { // in alliance zone
+                if (!swerve.onRamp(0, 5)) {
+                    if (swerve.isInAllianceZone()) {
                         wantedShooterState = ShooterStates.HUB;
-                        // Lights.getLightInstance().lightsWantedState =
-                        // LightAnimations.SHOOTREADYCONTINIOUS;
                     } else {
                         wantedShooterState = ShooterStates.FERRY;
-                        // Lights.getLightInstance().lightsWantedState =
-                        // LightAnimations.SHOOTREADYCONTINIOUS;
 
                     }
                 }
@@ -182,7 +189,7 @@ public class Shooter extends SubsystemBase {
                 break;
 
             case ZERO:
-                if (turret.io.turretZeroed()) {
+            if (turret.io.turretZeroed()) {
                     wantedShooterState = ShooterStates.HUB;
                     alreadyZeroed = true;
                 }
@@ -285,36 +292,60 @@ public class Shooter extends SubsystemBase {
         return false;
     }
 
-    
+    public double getDistanceToHub(){
+        double XToHub;
+        double YToHub;
+        if(Constants.isBlueAlliance){
+            YToHub = hubPoseBlue.getY() - swerve.io.getPose2d().getY()
+                - Constants.TurretDistFromCenter
+                    * Math.sin((Math.PI * (swerve.io.getGyro() / 180)) + (Math.PI * 5) / 4);
+            XToHub =  hubPoseBlue.getX() - swerve.io.getPose2d().getX()
+                - Constants.TurretDistFromCenter
+                    * Math.cos((Math.PI * (swerve.io.getGyro() / 180)) + (Math.PI * 5) / 4);
+        } else {
+            YToHub = hubPoseRed.getY() - swerve.io.getPose2d().getY()
+                - Constants.TurretDistFromCenter
+                    * Math.sin((Math.PI * (swerve.io.getGyro() / 180)) + (Math.PI * 5) / 4);
+            XToHub =  hubPoseRed.getX() - swerve.io.getPose2d().getX()
+                - Constants.TurretDistFromCenter
+                    * Math.cos((Math.PI * (swerve.io.getGyro() / 180)) + (Math.PI * 5) / 4);
+        }
+        
+            
+        SmartDashboard.putNumber("X distance to hub",XToHub);
+        SmartDashboard.putNumber("Y distance to hub",YToHub);
+        return Math.sqrt(YToHub*YToHub+XToHub*XToHub);
+    }
 
     public boolean isAimedAtHub() {
         if (Constants.isBlueAlliance) {
-            double YToHub = hubPoseBlue.getY() - swerve.io.getPose2d().getY()
-                - Constants.TurretDistFromCenter
-                    * Math.sin((Math.PI * (swerve.io.getGyro() / 180)) + (Math.PI * 5) / 4);
-            double XToHub =  hubPoseBlue.getX() - swerve.io.getPose2d().getX()
-                - Constants.TurretDistFromCenter
-                    * Math.cos((Math.PI * (swerve.io.getGyro() / 180)) + (Math.PI * 5) / 4);
-                    
+        double YToHub = hubPoseBlue.getY() - swerve.io.getPose2d().getY()
+            - Constants.TurretDistFromCenter
+                * Math.sin((Math.PI * (swerve.io.getGyro() / 180)) + (Math.PI * 5) / 4);
+        double XToHub =  hubPoseBlue.getX() - swerve.io.getPose2d().getX()
+            - Constants.TurretDistFromCenter
+                * Math.cos((Math.PI * (swerve.io.getGyro() / 180)) + (Math.PI * 5) / 4);
+            
             double toHub = Math.sqrt(YToHub*YToHub+XToHub*XToHub);
-
-            SmartDashboard.putNumber("X distance to hub",XToHub);
-            SmartDashboard.putNumber("Y distance to hub",YToHub);
+            
             SmartDashboard.putNumber("distance to hub",toHub);
 
-
+            
 
             shooterAngle = ShooterAngleCalculator.getShooterAngleToHub(
                     swerve.io.getChassisSpeeds().vxMetersPerSecond,
                     swerve.io.getChassisSpeeds().vyMetersPerSecond,
                     XToHub,
                     YToHub,
-                    7.7// 0.5 * Constants.FlywheelDiamiter * Math.PI *
+                    6.7+1.2*((getDistanceToHub()-1.237)/(5.476-1.237))// 0.5 * Constants.FlywheelDiamiter * Math.PI *
                        // (Flywheel.getInstance().getFlywheelVelocity()[1]*2*Math.PI *
                        // Flywheel.flywheelRadius +
                        // Flywheel.getInstance().getFlywheelVelocity()[0]*2*Math.PI *
                        // Flywheel.flywheelRadius)/2.0
             );
+
+            SmartDashboard.putNumber("flywheel modulated speed", 6.7+1.2*((getDistanceToHub()-1.237)/(5.476-1.237)));
+
         } else {
 
             double YToHub = hubPoseRed.getY() - swerve.io.getPose2d().getY()
@@ -336,14 +367,14 @@ public class Shooter extends SubsystemBase {
             SmartDashboard.putNumber("Y distance to hub",YToHub);
             SmartDashboard.putNumber("distance to hub",toHub);
 
-
+            shooterCalculatorVelocity = 6.7+1.2*((getDistanceToHub()-1.237)/(5.476-1.237));
             shooterAngle = ShooterAngleCalculator.getShooterAngleToHub(
                     swerve.io.getChassisSpeeds().vxMetersPerSecond,
                     swerve.io.getChassisSpeeds().vyMetersPerSecond,
                     XToHub,
                     YToHub,
-                    7.4
-                    );
+                    shooterCalculatorVelocity);
+            SmartDashboard.putNumber("flywheel modulated speed", 6.7+1.2*((getDistanceToHub()-1.237)/(5.476-1.237)));
         }
 
         if (shooterAngle != null) {
@@ -353,23 +384,25 @@ public class Shooter extends SubsystemBase {
         SmartDashboard.putNumber("shooterAngle", pastShooterAngle.turretRotation);
 
         double rotation = SwerveSubsystem.getInstance().getRobotPose().getRotation().getDegrees();
+        // double rotation = -180;
         rotation = rotation % 360;
         rotation = 360 - rotation;
 
         // Invert gyro direction BEFORE scaling
         // double offset = 190;//pastShooterAngle.turretRotation * (180.0 / Math.PI);
-        double alphabotJankboticsOffset = 6;
-        double offset = pastShooterAngle.turretRotation * (180.0 / Math.PI) + alphabotJankboticsOffset;
+        double alphabotJankboticsOffset = 0;
+        double offset = (pastShooterAngle.turretRotation * (180.0 / Math.PI));// + alphabotJankboticsOffset;
         rotation += offset + 255; //maybe 255
         rotation = rotation % 360;
 
         double turretAngle = -(rotation / 360.0);
 
         turret.setTurretPosition(turretAngle);
-
         double hoodInverted = 85 - (pastShooterAngle.hoodRotation * 180) / Math.PI;
-        // double hoodInverted = 40;
+        // double hoodInverted = 85-(65);
         double hoodRelative = hoodInverted / 360;
+
+
         turret.setHoodPosition(hoodRelative);
 
         if (turret.hoodInTolerance(.05) && turret.turretInTolerance(0.05)) {
@@ -422,7 +455,7 @@ public class Shooter extends SubsystemBase {
 
         // Invert gyro direction BEFORE scaling
         // double offset = 190;//pastShooterAngle.turretRotation * (180.0 / Math.PI);
-        double alphabotJankboticsOffset = 6;
+        double alphabotJankboticsOffset = 0;
         double offset = pastShooterAngle.turretRotation * (180.0 / Math.PI) + alphabotJankboticsOffset;
         rotation += offset + 255; //maybe 255
         rotation = rotation % 360;
@@ -461,19 +494,19 @@ public class Shooter extends SubsystemBase {
             switch (gameData.charAt(0)) {
                 case 'B':
                     if (Constants.isBlueAlliance) {
-                        return (timer <= 10 || (timer >= (40 - prefire) && timer <= 70)
-                                || (timer >= (100 - prefire) && timer <= 161));
+                        return (timer <= 10 || (timer >= (35 - prefire) && timer <= 60)
+                                || (timer >= (85 - prefire)));
                     } else {
-                        return (timer <= 40) || (timer >= (70 - prefire) && timer <= 100)
-                                || (timer >= (130 - prefire) && timer <= 161);
+                        return (timer <= 35) || (timer >= (60 - prefire) && timer <= 85)
+                                || (timer >= (110 - prefire));
                     }
                 case 'R':
                     if (!Constants.isBlueAlliance) {
-                        return (timer <= 10 || (timer >= (40 - prefire) && timer <= 70)
-                                || (timer >= (100 - prefire) && timer <= 161));
+                        return (timer <= 35) || (timer >= (60 - prefire) && timer <= 85)
+                                || (timer >= (110 - prefire));
                     } else {
-                        return (timer <= 40) || (timer >= (70 - prefire) && timer <= 100)
-                                || (timer >= (130 - prefire) && timer <= 161);
+                        return (timer <= 10 || (timer >= (35 - prefire) && timer <= 60)
+                                || (timer >= (85 - prefire)));
                     }
 
                 default:

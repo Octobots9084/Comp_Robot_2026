@@ -13,6 +13,7 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.numbers.N1;
@@ -30,6 +31,7 @@ import frc.robot.commands.auto.DriveBack;
 import frc.robot.commands.auto.DriveOverBump;
 import frc.robot.commands.auto.NoPoseBump.DriveOverBumpFromAlliance;
 import frc.robot.commands.auto.NoPoseBump.DriveOverBumpToAlliance;
+import frc.robot.subsystems.Vision.VisionIOSystem;
 import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.ShooterStates;
 
@@ -43,9 +45,8 @@ public class SwerveSubsystem extends SubsystemBase {
     public CommandXboxController driverController;
     public double maxVelocity;
     public double maxAngularVelocity;
-    // The robot pose estimator for tracking swerve odometry and applying vision
-    // corrections.
-    // private final SwerveDrivePoseEstimator poseEstimator;
+
+    public int climbAllignStage = -1;
 
     private final SwerveIOInputsAutoLogged inputs = new SwerveIOInputsAutoLogged();
 
@@ -130,7 +131,9 @@ public class SwerveSubsystem extends SubsystemBase {
     public boolean onRamp(double wanted, double tolerance) { /////////////////////
         boolean inTolerance = false;
         tolerance = Units.degreesToRadians(tolerance);
-        double tilt = Math.acos(this.io.getRotation3d().toMatrix().get(2, 2)) - 0.015;
+        Rotation3d gyroRotation = this.io.getRotation3d();
+        Matrix<N3,N3> gyroMatrix = gyroRotation.toMatrix();
+        double tilt = Math.acos(gyroMatrix.get(2, 2)) - 0.015 - Math.PI; // gyro mounted upside down so subtact PI radians out
         SmartDashboard.putNumber("Tilt", Units.radiansToDegrees(tilt));
         if (tilt <= (wanted + tolerance) && tilt >= (wanted - tolerance)) {
             inTolerance = true;
@@ -150,7 +153,7 @@ public class SwerveSubsystem extends SubsystemBase {
       NamedCommands.registerCommand("DriveBack",
                   new DriveBack().withTimeout(3));
 
-      NamedCommands.registerCommand("StartShoot", new InstantCommand(() -> {Shooter.getInstance().wantedShooterState = ShooterStates.AUTOHUB;}
+      NamedCommands.registerCommand("StartShoot", new InstantCommand(() -> {Shooter.getInstance().wantedShooterState = ShooterStates.AUTOHUB;}));
       NamedCommands.registerCommand("StopShoot", new InstantCommand(() -> {Shooter.getInstance().wantedShooterState = ShooterStates.SAFE;}));
         
 
@@ -174,8 +177,10 @@ public class SwerveSubsystem extends SubsystemBase {
                 return SwerveStates.ROTATION_LOCK;
             case REVERSE:
                 return SwerveStates.REVERSE;
-            case ALIGN:
-                return SwerveStates.ALIGN;
+            case ALIGNCLIMB:
+                if (this.currentState != SwerveStates.ALIGNCLIMB)
+                    climbAllignStage = 0;
+                return SwerveStates.ALIGNCLIMB;
             default:
                 return this.currentState;
 
@@ -199,8 +204,9 @@ public class SwerveSubsystem extends SubsystemBase {
                 io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(-0.3, 0, 0))
                         .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
                 break;
-            case ALIGN:
-
+            case ALIGNCLIMB:
+                io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(VisionIOSystem.allignClimb(getRobotPose(), climbAllignStage))
+                        .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
                 break;
             default:
                 break;
