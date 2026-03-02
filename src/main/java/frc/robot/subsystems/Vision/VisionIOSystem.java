@@ -3,7 +3,9 @@ package frc.robot.subsystems.Vision;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.DoubleBinaryOperator;
 
+import org.littletonrobotics.junction.Logger;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
@@ -35,10 +37,11 @@ public class VisionIOSystem implements VisionIO {
     private Matrix<N3, N1> curStdDevs;
     private final EstimateConsumer estConsumer;
     private double visonCycleTime;
+    public static int climbAlignStage = 0;
 
-    public static PIDController xPidcontroller = new PIDController(0.75,0,0.1);
-    public static PIDController yPidcontroller = new PIDController(0.75,0,0.1);
-    public static PIDController angularPidcontroller = new PIDController(0, 0, 0);
+    public static PIDController xPidcontroller = new PIDController(2,0.2,0.01);
+    public static PIDController yPidcontroller = new PIDController(2,0.2,0.01);
+    public static PIDController angularPidcontroller = new PIDController(3, 0.5, 0);
 
     // // Simulation
     // private PhotonCameraSim cameraSim;
@@ -195,7 +198,7 @@ public class VisionIOSystem implements VisionIO {
         }
     }
 
-    public static ChassisSpeeds allignClimb(Pose2d pose, int stage){ //stage -1 is the first interation of this function stage 0 is climbOptionalPreStartPosition stage 1 is climbPrePosition stage 2 is climbEngagedPosition
+    public static ChassisSpeeds allignClimb(Pose2d pose){ //stage -1 is the first interation of this function stage 0 is climbOptionalPreStartPosition stage 1 is climbPrePosition stage 2 is climbEngagedPosition
         Translation2d climbPrePosition;
         Translation2d climbEngagedPosition;
         double TargetRotationRadians;
@@ -227,57 +230,48 @@ public class VisionIOSystem implements VisionIO {
                 climbEngagedPosition = Constants.climbEngagedPositionRedNegY;
             }
         }
-        
-        // get rotation error and set rotation speed
-        double rotatationError = pose.getRotation().getRadians() - TargetRotationRadians;
-        if (Math.abs(rotatationError) < Constants.VisionAllignRotTolleranceToPerportinalSpeed){
-            RotVelocity = Constants.VisionAllignRotspeed * rotatationError;
-        } else {
-            RotVelocity = Constants.VisionAllignRotspeed * Math.signum(rotatationError) * 0.25;
-        }
 
-        // get x and y distance error
-        double disToWantedPose = 0;
-        if (stage == 0){
-            disToWantedPose = getDistBetweenPoints(pose.getTranslation(),climbPrePosition);
-        } else if (stage == 1) {
-            disToWantedPose = getDistBetweenPoints(pose.getTranslation(),climbEngagedPosition);
-        }
+        Logger.recordOutput("climbAlignStage",climbAlignStage);
 
-        double approatchspeed = Constants.VisionAllignspeed;
-        if (disToWantedPose < Constants.VisionAllignTollerance){ //TODO test these tolerances
-            approatchspeed = Constants.VisionAllignspeed / (disToWantedPose * 30);
-        }
-        else{
-            approatchspeed = Constants.VisionAllignspeed;
-        }
-        
         //getting x/y velocitys
-        if (stage == 0){
-            if(disToWantedPose < Constants.VisionSubStateAllignTollerance && Math.abs(pose.getRotation().getRadians() - TargetRotationRadians) < Constants.VisionAllignRotationTollerance){
-                stage = 1;
-                targetPosition = climbEngagedPosition;
-            } else {
-                targetPosition = climbPrePosition;
+        if (climbAlignStage == 0){
+            targetPosition = climbPrePosition;
+            double xErr = pose.getX() - targetPosition.getX();
+            double yErr = pose.getY() - targetPosition.getY();
+            double rotErr = pose.getRotation().getRadians() - TargetRotationRadians;
+
+            if(Math.abs(xErr) < Constants.VisionSubStateAllignTollerance
+                && Math.abs(yErr) < Constants.VisionSubStateAllignTollerance
+                && Math.abs(rotErr) < Constants.VisionAllignRotationTollerance){
+                    climbAlignStage = 1;
             }
-        } else if (stage == 1){
-            if(disToWantedPose < Constants.VisionAllignTollerance){
-                return new ChassisSpeeds(0,0,RotVelocity);
-            } else {
-                targetPosition = climbEngagedPosition;
+        } else if (climbAlignStage == 1){
+            targetPosition = climbEngagedPosition;
+            double xErr = pose.getX() - targetPosition.getX();
+            double yErr = pose.getY() - targetPosition.getY();
+            double rotErr = pose.getRotation().getRadians() - TargetRotationRadians;
+
+            if(Math.abs(xErr) < Constants.VisionSubStateAllignTollerance
+                && Math.abs(yErr) < Constants.VisionSubStateAllignTollerance
+                && Math.abs(rotErr) < Constants.VisionAllignRotationTollerance){
+                climbAlignStage = 2;
             }
         }
+        else if(climbAlignStage == 2) {
+            return new ChassisSpeeds(0,0,0);
+        } 
         else {
-            throw new ArithmeticException("climb allign stage:"+stage+" invalid");
+            throw new ArithmeticException("climb allign stage:"+climbAlignStage+" invalid");
         }
             
-        xVelocity = approatchspeed * ((targetPosition.getX() - pose.getX()) / disToWantedPose);
+        Logger.recordOutput("climbAlignTargetX",targetPosition.getX());
+        Logger.recordOutput("climbAlignTargetY",targetPosition.getY());
+        Logger.recordOutput("climbAlignTargetRotation",TargetRotationRadians);
         xVelocity = xPidcontroller.calculate(pose.getX(),targetPosition.getX());
-        YVelocity = approatchspeed * (targetPosition.getY() - (pose.getY()) / disToWantedPose);
         YVelocity = yPidcontroller.calculate(pose.getY(),targetPosition.getY());
-        //RotVelocity = Vision.getInstance().io.angularPidcontroller.calculate(pose.getX(),targetPosition.getX());
+        RotVelocity = angularPidcontroller.calculate(pose.getRotation().getRadians(),TargetRotationRadians);
         
-        return new ChassisSpeeds(xVelocity,YVelocity, 0);
+        return new ChassisSpeeds(xVelocity, YVelocity, RotVelocity);
     }
 
     public static double getDistBetweenPoints(Translation2d pose1,Translation2d pose2){
@@ -285,8 +279,8 @@ public class VisionIOSystem implements VisionIO {
                 pose1.getY() - pose2.getY())
                 * (pose1.getY() - pose2.getY()
             ) + (
-                pose1.getY() - pose2.getY())
-                * (pose1.getY() - pose2.getY()
+                pose1.getX() - pose2.getX())
+                * (pose1.getX() - pose2.getX()
             ));
     }
 
