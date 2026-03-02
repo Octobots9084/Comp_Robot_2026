@@ -7,19 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Bump 1 to Depot"
+            "pathName": "Outpost"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "M Depot top to Depot bottom (out)"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Shoot From Depot"
+            "pathName": "Outpost to Shoot"
           }
         },
         {
@@ -31,13 +25,19 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 5.0
+            "waitTime": 0.0
           }
         },
         {
           "type": "named",
           "data": {
             "name": "StopShoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Outpost Shoot to Bump"
           }
         }
       ]

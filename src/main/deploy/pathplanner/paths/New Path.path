@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.537825,
-        "y": 6.892049999999999
+        "x": 3.508573466476462,
+        "y": 2.9
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.46006640828154244,
-        "y": 6.6464030856664404
+        "x": 2.540783333333333,
+        "y": 2.523333333333334
       },
       "isLocked": false,
-      "linkedName": "Depot top"
+      "linkedName": "Bump 2 TL"
     },
     {
       "anchor": {
-        "x": 0.537825,
-        "y": 5.274566666666667
+        "x": 1.0669083333333333,
+        "y": 2.742524999999999
       },
       "prevControl": {
-        "x": 0.5529416666666668,
-        "y": 6.461225
+        "x": 1.6111083333333331,
+        "y": 2.7349666666666668
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Depot bottom (out)"
+      "linkedName": "climb"
     }
   ],
   "rotationTargets": [],
@@ -37,18 +37,18 @@
     "maxAcceleration": 1.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
-    "nominalVoltage": 12.0,
+    "nominalVoltage": 10.0,
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0.0,
-    "rotation": -90.0
+    "velocity": 0,
+    "rotation": 90.0
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
-    "velocity": 0.0,
-    "rotation": -90.0
+    "velocity": 0,
+    "rotation": 180.0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }
