@@ -39,12 +39,6 @@
           "data": {
             "pathName": "Outpost Shoot to Bump"
           }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StopShoot"
-          }
         }
       ]
     }
