@@ -11,20 +11,17 @@ import frc.robot.Constants;
 public class ClimbConfigurator {
     // 2 motors spin the climb
     public TalonFXConfiguration climbRotateControlledConfig;
-    public TalonFXConfiguration climbDeployConfig;
 
     // 1 deploy the climb
 
     public ClimbConfigurator() {
         climbRotateControlledConfig = new TalonFXConfiguration()
                 .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(Constants.rotateGearRatio));
-        climbDeployConfig = new TalonFXConfiguration()
-                .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(Constants.deployGearRatio));
 
-        // fly wheel right config
+        // climb motor config
         climbRotateControlledConfig.CurrentLimits.SupplyCurrentLimit = 20;
         climbRotateControlledConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-        climbRotateControlledConfig.CurrentLimits.StatorCurrentLimit = 40;
+        climbRotateControlledConfig.CurrentLimits.StatorCurrentLimit = 20;
         climbRotateControlledConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 
         // set break mode and inversion
@@ -43,31 +40,6 @@ public class ClimbConfigurator {
         climbRotateControlledConfig.MotionMagic.MotionMagicAcceleration = 0;
         climbRotateControlledConfig.MotionMagic.MotionMagicJerk = 0;
         climbRotateControlledConfig.MotionMagic.MotionMagicCruiseVelocity = 0;
-
-        // -----------------------------------------------------------------//
-
-        // fly wheel right config
-        climbDeployConfig.CurrentLimits.SupplyCurrentLimit = 20;
-        climbDeployConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-        climbDeployConfig.CurrentLimits.StatorCurrentLimit = 40;
-        climbDeployConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-
-        // set break mode and inversion
-        climbDeployConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-        climbDeployConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-
-        // create PID gains
-        climbDeployConfig.Slot0.kP = 0.0;
-        climbDeployConfig.Slot0.kI = 0.0;
-        climbDeployConfig.Slot0.kD = 0.0;
-        climbDeployConfig.Slot0.kA = 0.0;
-        climbDeployConfig.Slot0.kV = 0.0;
-        climbDeployConfig.Slot0.kS = 0.0;
-        climbDeployConfig.Slot0.kG = 0.0;
-
-        climbDeployConfig.MotionMagic.MotionMagicAcceleration = 0;
-        climbDeployConfig.MotionMagic.MotionMagicJerk = 0;
-        climbDeployConfig.MotionMagic.MotionMagicCruiseVelocity = 0;
     }
 
 }

@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.4809272467902993,
-        "y": 0.5868473609129818
+        "x": 3.508573466476462,
+        "y": 2.9
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.298120481927711,
-        "y": 1.128228915662652
+        "x": 3.235380695392125,
+        "y": 3.0187228915662647
       },
       "isLocked": false,
-      "linkedName": "Outpost"
+      "linkedName": "Bump 2 TL"
     },
     {
       "anchor": {
-        "x": 1.9100722891566262,
-        "y": 1.4888433734939759
+        "x": 1.5807132667617685,
+        "y": 3.7180028530670475
       },
       "prevControl": {
-        "x": 1.166987951807229,
-        "y": 1.0626626506024093
+        "x": 1.7927128427630408,
+        "y": 3.585503118066253
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Outpost Shoot"
+      "linkedName": "climb"
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 90.0
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 90.0
   },
   "useDefaultConstraints": true
 }

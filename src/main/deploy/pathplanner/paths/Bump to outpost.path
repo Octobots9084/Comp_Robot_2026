@@ -3,32 +3,37 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.4809272467902993,
-        "y": 0.5868473609129818
+        "x": 3.421038461538463,
+        "y": 2.0000641025641026
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.298120481927711,
-        "y": 1.128228915662652
+        "x": 3.967565762369922,
+        "y": 2.267509428709104
       },
       "isLocked": false,
-      "linkedName": "Outpost"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.9100722891566262,
-        "y": 1.4888433734939759
+        "x": 0.5488717948717963,
+        "y": 0.6628205128205127
       },
       "prevControl": {
-        "x": 1.166987951807229,
-        "y": 1.0626626506024093
+        "x": 2.28147435897436,
+        "y": 1.407025641025641
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Outpost Shoot"
+      "linkedName": "bump to outpost"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": -153.83607958183126
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -41,7 +46,7 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
+    "velocity": 0.9,
     "rotation": 180.0
   },
   "reversed": false,

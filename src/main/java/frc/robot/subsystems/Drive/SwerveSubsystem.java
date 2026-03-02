@@ -46,8 +46,6 @@ public class SwerveSubsystem extends SubsystemBase {
     public double maxVelocity;
     public double maxAngularVelocity;
 
-    public int climbAllignStage = -1;
-
     private final SwerveIOInputsAutoLogged inputs = new SwerveIOInputsAutoLogged();
 
     public SwerveSubsystem(
@@ -179,7 +177,7 @@ public class SwerveSubsystem extends SubsystemBase {
                 return SwerveStates.REVERSE;
             case ALIGNCLIMB:
                 if (this.currentState != SwerveStates.ALIGNCLIMB)
-                    climbAllignStage = 0;
+                    VisionIOSystem.climbAlignStage = 0;
                 return SwerveStates.ALIGNCLIMB;
             default:
                 return this.currentState;
@@ -205,7 +203,7 @@ public class SwerveSubsystem extends SubsystemBase {
                         .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
                 break;
             case ALIGNCLIMB:
-                io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(VisionIOSystem.allignClimb(getRobotPose(), climbAllignStage))
+                io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(VisionIOSystem.allignClimb(getRobotPose()))
                         .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
                 break;
             default:

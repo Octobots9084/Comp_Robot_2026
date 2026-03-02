@@ -18,6 +18,7 @@ public interface VisionIO {
         public double visonCycleTime = -1;
     }
 
+
     public default void updateInputs(VisionIOInputs inputs) {
     }
 

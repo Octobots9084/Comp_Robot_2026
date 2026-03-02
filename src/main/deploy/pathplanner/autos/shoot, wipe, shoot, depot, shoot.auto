@@ -5,69 +5,63 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Outpost"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Outpost to Shoot"
+            "name": "StartShoot"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 0
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Outpost Shoot to Bump"
+            "waitTime": 2.0
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "DriveOverBumpFromAlliance"
+            "name": "StopShoot"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Fix Outpost Bump Alignment"
+            "pathName": "start neutral wipe"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Neutral 4 to Neutral 3(aura)"
+            "pathName": "Neutral Wipe"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Fix outpost #3"
+            "pathName": "Finish Neutral Wipe"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "DriveOverBumpToAlliance"
+            "name": "StartShoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Move to depot"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 0
+            "waitTime": 3.0
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Outpost Climb"
+            "pathName": "collect depot"
           }
         }
       ]

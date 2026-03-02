@@ -18,6 +18,10 @@ public interface TurretIO {
     public default void updateInputs(TurretIOInputs inputs) {
     }
 
+    public default boolean getAimedToShoot(){
+        return false;
+    }
+
     public default void setTurretPosition(double turretAngle) {
     }
 
