@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.587985803016859,
-        "y": 1.3027329192546575
+        "x": 6.708145506419401,
+        "y": 2.1799999999999997
       },
       "isLocked": false,
       "linkedName": "Bump 2 BR"
     },
     {
       "anchor": {
-        "x": 8.254883333338624,
-        "y": 1.0041083333354663
+        "x": 6.846747503566333,
+        "y": 1.9195292439372325
       },
       "prevControl": {
-        "x": 7.254883333338624,
-        "y": 1.0041083333354663
+        "x": 5.846747503566333,
+        "y": 1.9195292439372327
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 1.0,
+    "maxAcceleration": 1.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 4.0,
-    "rotation": 90.0
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": null,

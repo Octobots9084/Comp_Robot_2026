@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.4809272467902993,
-        "y": 0.5868473609129818
+        "x": 3.5,
+        "y": 5.9
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.298120481927711,
-        "y": 1.128228915662652
+        "x": 2.979166666666667,
+        "y": 7.6554416666666665
       },
       "isLocked": false,
-      "linkedName": "Outpost"
+      "linkedName": "bump 1 TL"
     },
     {
       "anchor": {
-        "x": 1.9100722891566262,
-        "y": 1.4888433734939759
+        "x": 0.46224166666666666,
+        "y": 7.13391666666775
       },
       "prevControl": {
-        "x": 1.166987951807229,
-        "y": 1.0626626506024093
+        "x": 0.7570166666666667,
+        "y": 7.40601666666775
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Outpost Shoot"
+      "linkedName": "Setup Depot "
     }
   ],
   "rotationTargets": [],
@@ -37,18 +37,18 @@
     "maxAcceleration": 1.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
-    "nominalVoltage": 12.0,
+    "nominalVoltage": 10.0,
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": 180.0
+    "velocity": 2.0,
+    "rotation": -90.0
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": -90.0
   },
   "useDefaultConstraints": true
 }

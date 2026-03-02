@@ -10,4 +10,5 @@ public enum States {
     UNCLIMB,
     SHOOTER,
     ZERO,
+    AUTO,
 }
