@@ -11,6 +11,7 @@ public class Climb extends SubsystemBase {
     public ClimbStates currentState = ClimbStates.IDLE;
     public ClimbStates wantedState = ClimbStates.IDLE;
     public ClimbIO io;
+    public boolean latched = false;
     public static Climb instance;
     public boolean alreadyZeroed = false;
     public ClimbIOInputsAutoLogged inputs = new ClimbIOInputsAutoLogged();
@@ -26,10 +27,6 @@ public class Climb extends SubsystemBase {
 
     public double getClimbPosition() {
         return io.getClimbPosition();
-    }
-
-    public double getDeployPosition() {
-        return io.getDeployPosition();
     }
 
     public boolean climbInTolerance(double climbTolerance) {
@@ -54,71 +51,67 @@ public class Climb extends SubsystemBase {
     }
 
     public void handleStateTransitions() {
+        double currentPostition = currentState.climbPosition;
         switch (wantedState) {
             case IDLE:
-                if (currentState == ClimbStates.DEPLOYEDL1 || currentState == ClimbStates.DEPLOYEDL3) {
+                if (!latched) {
                     currentState = ClimbStates.IDLE;
                 }
                 break;
-            case DEPLOYEDL1:
-                if (currentState == ClimbStates.IDLE || currentState == ClimbStates.CLIMBEDL1) {
-                    currentState = ClimbStates.DEPLOYEDL1;
+            case EXTENDED:
+                if (currentState == ClimbStates.IDLE){
+                    currentState = ClimbStates.EXTENDED;
+                }
+                break;
+             case LATCHING:
+                if(currentState == ClimbStates.EXTENDED && climbInTolerance(currentPostition)){
+                    currentState = ClimbStates.LATCHING;
                 }
                 break;
             case CLIMBEDL1:
-                if (currentState == ClimbStates.DEPLOYEDL1) {
+                if(currentState == ClimbStates.LATCHING && latched){
                     currentState = ClimbStates.CLIMBEDL1;
                 }
                 break;
-            case DEPLOYEDL3:
-                if (currentState == ClimbStates.IDLE || currentState == ClimbStates.ENGAGEDL3) {
-                    currentState = ClimbStates.DEPLOYEDL3;
+            case UNCLIMB:
+                if(currentState == ClimbStates.CLIMBEDL1){
+                    currentState = ClimbStates.UNCLIMB;
                 }
                 break;
-            case ENGAGEDL3:
-                if (currentState == ClimbStates.DEPLOYEDL3 || currentState == ClimbStates.CLIMBEDL3) {
-                    currentState = ClimbStates.ENGAGEDL3;
-                }
-                break;
-            case CLIMBEDL3:
-                if (currentState == ClimbStates.ENGAGEDL3) {
-                    currentState = ClimbStates.CLIMBEDL3;
-                }
-                break;
-            case ZERO:
-                if (currentState != ClimbStates.CLIMBEDL3 && currentState != ClimbStates.CLIMBEDL1) {
-                    currentState = ClimbStates.ZERO;
-                }
-                break;
-
         }
 
     }
 
     public void applyStates() {
-        switch (currentState) {
-            case ZERO:
-                if (zeroClimb()) {
-                    alreadyZeroed = true;
-                    wantedState = ClimbStates.IDLE;
-                }else{
-                    alreadyZeroed = false;
-                }
-                break;
-            default:
+
+        switch(currentState){
+            case EXTENDED:
+            if(climbInTolerance(currentState.climbPosition)){
+                latched = false;
+            }
+            setClimbState(currentState);
+            break;
+            case CLIMBEDL1:
+                this.io.setCurrentLimit(60);
                 setClimbState(currentState);
                 break;
-
+            case UNCLIMB:
+                this.io.setCurrentLimit(20);
+                setClimbState(currentState);
+                break;
+            case IDLE:
+                setClimbState(currentState);
+                break;
+            case LATCHING:
+                if(this.io.isAtCurrentLimit()){
+                    latched = true;
+                    wantedState = ClimbStates.CLIMBEDL1;
+                }
+                if(climbInTolerance(currentState.climbPosition)){
+                    wantedState = ClimbStates.EXTENDED;
+                }
+                setClimbState(currentState);
+                break;
         }
-    }
-
-    public boolean zeroClimb() {
-        boolean ifPressed = io.isZeroingSwitchPressed();
-        if (ifPressed) {
-            io.setRotateVoltage(0);
-        } else {
-            io.setRotateVoltage(-3);
-        }
-        return ifPressed;
     }
 }
