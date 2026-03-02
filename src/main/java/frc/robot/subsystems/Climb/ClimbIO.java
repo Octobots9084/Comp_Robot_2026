@@ -30,6 +30,5 @@ public interface ClimbIO {
     public default void setCurrentLimit(double current) {}
 
     public default boolean isAtCurrentLimit() {
-        return false;
-    }
+        return false;}
 }

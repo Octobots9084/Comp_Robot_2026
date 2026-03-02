@@ -16,19 +16,24 @@
     },
     {
       "anchor": {
-        "x": 0.6651538461538475,
-        "y": 0.7209615384615393
+        "x": 0.5488717948717963,
+        "y": 0.6628205128205127
       },
       "prevControl": {
-        "x": -0.33484615384615246,
-        "y": 0.7209615384615393
+        "x": 2.28147435897436,
+        "y": 1.407025641025641
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "bump to outpost"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": -153.83607958183126
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -41,7 +46,7 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0.0,
+    "velocity": 0.9,
     "rotation": 180.0
   },
   "reversed": false,
