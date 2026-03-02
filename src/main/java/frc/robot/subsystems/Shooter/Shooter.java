@@ -394,7 +394,6 @@ public class Shooter extends SubsystemBase {
         double offset = (pastShooterAngle.turretRotation * (180.0 / Math.PI));// + alphabotJankboticsOffset;
         rotation += offset + 255; //maybe 255
         rotation = rotation % 360;
-
         double turretAngle = -(rotation / 360.0);
 
         turret.setTurretPosition(turretAngle);
@@ -405,7 +404,7 @@ public class Shooter extends SubsystemBase {
 
         turret.setHoodPosition(hoodRelative);
 
-        if (turret.hoodInTolerance(.05) && turret.turretInTolerance(0.05)) {
+        if (turret.hoodInTolerance(.05) && turret.turretInTolerance(0.05) && turret.io.getAimedToShoot()) {
             return true;
         }
         return false;

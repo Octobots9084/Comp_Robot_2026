@@ -263,12 +263,28 @@ public class VisionIOSystem implements VisionIO {
         else {
             throw new ArithmeticException("climb allign stage:"+climbAlignStage+" invalid");
         }
+
+        double disToWantedPose = 0;
+        if (climbAlignStage == 0){
+            disToWantedPose = getDistBetweenPoints(pose.getTranslation(),climbPrePosition);
+        } else if (climbAlignStage == 1) {
+            disToWantedPose = getDistBetweenPoints(pose.getTranslation(),climbEngagedPosition);
+        }
+
+        double approatchspeed = Constants.VisionAllignspeed;
+        if (disToWantedPose < Constants.VisionAllignTollerance){ //TODO test these tolerances
+            xVelocity = xPidcontroller.calculate(pose.getX(),targetPosition.getX());
+            YVelocity = yPidcontroller.calculate(pose.getY(),targetPosition.getY());
+        }
+        else{
+            approatchspeed = Constants.VisionAllignspeed;
+        }
             
         Logger.recordOutput("climbAlignTargetX",targetPosition.getX());
         Logger.recordOutput("climbAlignTargetY",targetPosition.getY());
         Logger.recordOutput("climbAlignTargetRotation",TargetRotationRadians);
-        xVelocity = xPidcontroller.calculate(pose.getX(),targetPosition.getX());
-        YVelocity = yPidcontroller.calculate(pose.getY(),targetPosition.getY());
+        xVelocity = Constants.VisionAllignspeed * (targetPosition.getX() - pose.getX())/getDistBetweenPoints(targetPosition,pose.getTranslation());
+        YVelocity = Constants.VisionAllignspeed * (targetPosition.getY() - pose.getY())/getDistBetweenPoints(targetPosition,pose.getTranslation());
         RotVelocity = angularPidcontroller.calculate(pose.getRotation().getRadians(),TargetRotationRadians);
         
         return new ChassisSpeeds(xVelocity, YVelocity, RotVelocity);
