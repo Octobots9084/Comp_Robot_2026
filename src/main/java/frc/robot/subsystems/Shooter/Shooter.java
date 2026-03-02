@@ -139,10 +139,10 @@ public class Shooter extends SubsystemBase {
                 isAimedAtHub = isAimedAtHub();
                 if(swerve.isInAllianceZone()){
                     if(driverOverride){
-                        // flywheel.setFlywheelVelocity(40 + 7.5 * ((getDistanceToHub()-1.237)/(5.476-1.237)));
-                        flywheel.setFlywheelVelocity(FlywheelStates.HUB);
+                        flywheel.setFlywheelVelocity(40 + 7.5 * ((getDistanceToHub()-1.237)/(5.476-1.237)));
+                        // flywheel.setFlywheelVelocity(FlywheelStates.HUB);
 
-                        if(isAimedAtHub && flywheel.FlywheelInTolerance(10)){
+                        if(isAimedAtHub && flywheel.FlywheelInTolerance(8)){
                             feeder.setFeederVelocity(FeederStates.SCORING);
                         }else{
                             feeder.setFeederVelocity(FeederStates.OFF);

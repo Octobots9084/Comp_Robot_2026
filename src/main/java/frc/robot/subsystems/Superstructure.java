@@ -2,29 +2,43 @@ package frc.robot.subsystems;
 
 import java.security.spec.ECPublicKeySpec;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.commands.auto.StateChange.SetIntakeStateSafe;
 import frc.robot.subsystems.*; // WHY DID WE HAVE SO MANY IMPORTS FROM THIS THING JUST IMPORT IT ALL
 import frc.robot.subsystems.Climb.*; //I don't know why we need this
+import frc.robot.subsystems.Drive.SwerveStates;
+import frc.robot.subsystems.Drive.SwerveSubsystem;
 import frc.robot.subsystems.Intake.*;//same
 import frc.robot.subsystems.Shooter.*;//same here
 import frc.robot.subsystems.Shooter.Feeder.Feeder;
 import frc.robot.subsystems.Shooter.Flywheel.*;
+import org.littletonrobotics.junction.Logger;
+
+import com.ctre.phoenix6.swerve.SwerveDrivetrain.SwerveControlParameters;
 
 public class Superstructure extends SubsystemBase {
     public States currentState = States.SAFE;
     public States wantedState = States.ZERO;
+    public States prevState = States.SAFE;
     public IntakeStates userRequestedIntakeState = IntakeStates.SAFE;
 
     boolean climbDescending = true;
     boolean climbAligned = false;
     public static Superstructure currentInstance;
+    private SwerveSubsystem swerve = SwerveSubsystem.getInstance();
     // public Climb climb = Climb.getInstance();
     public Shooter shooter = Shooter.getInstance();
     // public Intake intake = Intake.getInstance();
 
     @Override
     public void periodic() {
+        prevState = currentState;
+        Logger.recordOutput("prevState", this.prevState);
+        Logger.recordOutput("currentState", this.currentState);
+        Logger.recordOutput("wantedState", this.wantedState);
+        Logger.recordOutput("climbDescending", this.climbDescending);
         handleStateTransitions();
         applyStates();
     }
@@ -74,13 +88,20 @@ public class Superstructure extends SubsystemBase {
             case SHOOTER:
                 // if (climb.getClimbState() != ClimbStates.CLIMBEDL1 || climb.getClimbState() != ClimbStates.CLIMBEDL3) {
                     currentState = States.SHOOTER;
+                    
                 // }
                 currentState = States.SHOOTER;
             case ZERO:
                 if (!shooter.alreadyZeroed){
                     currentState = States.ZERO;
+                }else{
+                    wantedState = States.SHOOTER;
                 }
                 break;
+            case AUTO:
+                if(DriverStation.isAutonomous())
+                    this.currentState = States.AUTO;
+            break;
             default:
                 break; // do nothing
         }
@@ -106,9 +127,11 @@ public class Superstructure extends SubsystemBase {
             case ZERO:
                 if(stateZERO()){
                     wantedState = States.SHOOTER;
-                    shooter.wantedShooterState = ShooterStates.HUB;
                 }
                 break;
+            case AUTO:
+                swerve.wantedState = SwerveStates.IDLE;
+            break;
             default:
                 // throw an exception
                 break;
@@ -149,6 +172,10 @@ public class Superstructure extends SubsystemBase {
         // if (userRequestedIntakeState != Intake.getInstance().currentState) {
         //     Intake.getInstance().wantedState = userRequestedIntakeState;
         // }
+        if(prevState != States.SHOOTER){
+            shooter.wantedShooterState = ShooterStates.HUB;
+        }
+        
     }
 
     private boolean stateZERO(){

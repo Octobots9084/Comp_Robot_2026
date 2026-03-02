@@ -19,6 +19,7 @@ public class TurretIOTalonFX implements TurretIO {
     public double deadZoneTolerance = 0.1;
     public double wrapPoint = 0;
     public boolean aimed;
+    public boolean aimedToShoot;
 
     public ShooterConfigurator shooterConfigs = new ShooterConfigurator();
 
@@ -46,13 +47,20 @@ public class TurretIOTalonFX implements TurretIO {
     @Override
     public void setTurretPosition(double turretAngle) {
         // turretAngle = Math.max(turretAngle, -0.434);
+        aimedToShoot = false;
         if (turretAngle < -0.44) {
             turretMotor.setControl(turretRequest.withPosition(0));
         }else if(turretAngle > 0){
             turretMotor.setControl(turretRequest.withPosition(-0.434));
         }else{
+            aimedToShoot = true;
             turretMotor.setControl(turretRequest.withPosition(turretAngle));
         }
+    }
+
+    @Override
+    public boolean getAimedToShoot(){
+        return aimedToShoot;
     }
 
     @Override

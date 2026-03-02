@@ -34,7 +34,7 @@ public class ShooterConfigurator {
         flyWheelRightConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
         // create PID gains
-        flyWheelRightConfig.Slot0.kP = 0.1;
+        flyWheelRightConfig.Slot0.kP = 0.15;
         flyWheelRightConfig.Slot0.kI = 0.0;
         flyWheelRightConfig.Slot0.kD = 0.0;
         flyWheelRightConfig.Slot0.kA = 0.0;
