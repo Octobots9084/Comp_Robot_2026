@@ -5,12 +5,6 @@
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "StopShoot"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "Outpost"
