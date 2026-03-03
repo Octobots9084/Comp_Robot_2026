@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 9.02314353499407,
-        "y": 1.092360616844602
+        "x": 8.851410256410258,
+        "y": 1.0232948717948727
       },
       "isLocked": false,
       "linkedName": "start neutral wipe"
@@ -46,8 +46,8 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0.0,
-    "rotation": 135.0
+    "velocity": 4.0,
+    "rotation": 180.0
   },
   "reversed": false,
   "folder": null,

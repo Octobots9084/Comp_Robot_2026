@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.508573466476462,
-        "y": 2.9
+        "x": 3.5373205128205143,
+        "y": 4.023371794871795
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.540783333333333,
-        "y": 2.523333333333334
+        "x": 2.66520512820513,
+        "y": 3.9070897435897436
       },
       "isLocked": false,
-      "linkedName": "Bump 2 TL"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.5807132667617685,
-        "y": 3.7180028530670475
+        "x": 2.6070641025641033,
+        "y": 2.3721666666666668
       },
       "prevControl": {
-        "x": 2.1249132667617685,
-        "y": 3.710444519733715
+        "x": 1.2581923076923087,
+        "y": 4.39547435897436
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "climb"
+      "linkedName": "bump to neutral"
     }
   ],
   "rotationTargets": [],
@@ -37,18 +37,18 @@
     "maxAcceleration": 1.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
-    "nominalVoltage": 10.0,
+    "nominalVoltage": 12.0,
     "unlimited": false
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }
