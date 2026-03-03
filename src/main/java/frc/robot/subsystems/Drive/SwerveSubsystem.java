@@ -154,7 +154,7 @@ public class SwerveSubsystem extends SubsystemBase {
                   new DriveBack().withTimeout(3));
 
       NamedCommands.registerCommand("StartShoot", new InstantCommand(() -> {Superstructure.getInstance().wantedState = States.AUTO;}));
-      NamedCommands.registerCommand("StopShoot", new InstantCommand(() -> {Shooter.getInstance().wantedShooterState = ShooterStates.SAFE;}));
+      NamedCommands.registerCommand("StopShoot", new InstantCommand(() -> {Superstructure.getInstance().wantedState = States.SAFE;}));
         
 
 
