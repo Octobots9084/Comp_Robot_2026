@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 1.9100722891566262,
-        "y": 1.4888433734939759
+        "x": 3.5508968460648154,
+        "y": 2.586122612847222
       },
       "prevControl": {
-        "x": 1.166987951807229,
-        "y": 1.0626626506024093
+        "x": 2.8078125087154184,
+        "y": 2.1599418899556553
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Outpost Shoot"
+      "linkedName": "starting for bump"
     }
   ],
   "rotationTargets": [],
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": -135.0
   },
   "reversed": false,
   "folder": null,
