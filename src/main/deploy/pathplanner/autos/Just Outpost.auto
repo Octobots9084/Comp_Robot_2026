@@ -5,12 +5,6 @@
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "StartShoot"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "Outpost"
@@ -29,15 +23,15 @@
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 4.0
+            "name": "StartShoot"
           }
         },
         {
-          "type": "path",
+          "type": "wait",
           "data": {
-            "pathName": "Outpost Shoot to Bump"
+            "waitTime": 10.0
           }
         }
       ]
