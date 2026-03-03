@@ -48,4 +48,11 @@ public class Turret extends SubsystemBase {
     public boolean turretInTolerance(double tolerance) {
         return io.turretInTolerance(tolerance);
     }
+
+    public boolean isTurretAtPosition(double turretAngle, double hoodAngle, double tolerance) {
+        double turretErr = this.getTurretPosition() - turretAngle;
+        double hoodErr = this.getHoodPosition() - hoodAngle;
+
+        return (Math.abs(turretErr) < tolerance && Math.abs(hoodErr) < tolerance);
+    }
 }

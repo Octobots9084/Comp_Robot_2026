@@ -11,10 +11,13 @@ public class ShooterIOSystem implements ShooterIO {
     }
 
     public void updateInputs(ShooterIOInputs inputs) {
-        inputs.ShooterCurrentState = Shooter.getInstance().currentShooterState;
-        inputs.ShooterWantedState = Shooter.getInstance().wantedShooterState;
-        inputs.isAimedAtHub = Shooter.getInstance().isAimedAtHub;
-        inputs.flywheelCalculatorVelocity = Shooter.getInstance().shooterCalculatorVelocity;
+        Shooter shooter = Shooter.getInstance();
+        inputs.ShooterCurrentState = shooter.currentShooterState;
+        inputs.ShooterWantedState = shooter.wantedShooterState;
+        inputs.turretHubAngle = shooter.turretHubAngle;
+        inputs.hoodHubAngle = shooter.hoodHubAngle;
+        inputs.isAimedAtHub = shooter.isAimedAtHub;
+        inputs.flywheelCalculatorVelocity = shooter.shooterCalculatorVelocity;
         inputs.timer = Constants.timer.get();
     }
 

@@ -38,34 +38,31 @@ public class TurretIOTalonFX implements TurretIO {
         inputs.turretLimitSwitch = turretLimitSwitch.get();
         inputs.hoodMotorTemp = hoodMotor.getDeviceTemp().getValueAsDouble();
         inputs.turretMotorTemp = turretMotor.getDeviceTemp().getValueAsDouble();
-        inputs.hoodPosition = this.getHoodPosition()*360;
-        inputs.turretPosition = this.getTurretPosition()*360;
-        inputs.hoodRequest = hoodRequest.Position*360;
-        inputs.turretRequest = turretRequest.Position*360;
+        inputs.hoodPosition = this.getHoodPosition() * 360;
+        inputs.turretPosition = this.getTurretPosition() * 360;
+        inputs.hoodRequest = hoodRequest.Position * 360;
+        inputs.turretRequest = turretRequest.Position * 360;
     }
 
     @Override
     public void setTurretPosition(double turretAngle) {
-        // turretAngle = Math.max(turretAngle, -0.434);
-        aimedToShoot = false;
         if (turretAngle < -0.44) {
             turretMotor.setControl(turretRequest.withPosition(0));
-        }else if(turretAngle > 0){
+        } else if (turretAngle > 0) {
             turretMotor.setControl(turretRequest.withPosition(-0.434));
-        }else{
-            aimedToShoot = true;
+        } else {
             turretMotor.setControl(turretRequest.withPosition(turretAngle));
         }
     }
 
     @Override
-    public boolean getAimedToShoot(){
+    public boolean getAimedToShoot() {
         return aimedToShoot;
     }
 
     @Override
     public void setHoodPosition(double hoodAngle) {
-        double hoodAngleAfterCompensation = 1.39131*hoodAngle -32.83666;
+        double hoodAngleAfterCompensation = 1.39131 * hoodAngle - 32.83666;
         hoodAngleAfterCompensation = Math.max(hoodAngle, 0);
         hoodAngleAfterCompensation = Math.min(hoodAngleAfterCompensation, Constants.maximumHoodPosition);
         hoodMotor.setControl(hoodRequest.withPosition(hoodAngleAfterCompensation));
@@ -74,7 +71,7 @@ public class TurretIOTalonFX implements TurretIO {
     @Override
     public double getHoodPosition() {
         return hoodMotor.getPosition().getValueAsDouble();
-        
+
     }
 
     @Override

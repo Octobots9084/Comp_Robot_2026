@@ -60,10 +60,12 @@ public class Shooter extends SubsystemBase {
     private ShooterAngle shooterAngle;
     private Translation2d hubPoseBlue = new Translation2d(4.6228, 4.02082);
     private Translation2d hubPoseRed = new Translation2d(11.88974, 4.02082);
-    private Translation2d blueFerryOutpost = new Translation2d(4.6239 - 2,2.011);
-    private Translation2d redFerryOutpost = new Translation2d(11.917 + 2,6.031);
-    private Translation2d blueFerryDepot = new Translation2d(4.6239 - 2,6.03);
-    private Translation2d redFerryDepot = new Translation2d(11.917 + 2,2.011);
+    private Translation2d blueFerryOutpost = new Translation2d(4.6239 - 2, 2.011);
+    private Translation2d redFerryOutpost = new Translation2d(11.917 + 2, 6.031);
+    private Translation2d blueFerryDepot = new Translation2d(4.6239 - 2, 6.03);
+    private Translation2d redFerryDepot = new Translation2d(11.917 + 2, 2.011);
+    protected double turretHubAngle = 0;
+    protected double hoodHubAngle = 0;
     public boolean isAimedAtHub;
     public double shooterCalculatorVelocity;
 
@@ -118,51 +120,50 @@ public class Shooter extends SubsystemBase {
                 // tIO.setHoodPosition(getHoodPosFromJoystick());
             case FERRY:
                 isAimedAtHub = aimFerry();
-                if(!swerve.isInAllianceZone() && !swerve.onRamp(0,5)){
-                    if(driverOverride){
+                if (!swerve.isInAllianceZone() && !swerve.onRamp(0, 5)) {
+                    if (driverOverride) {
                         flywheel.setFlywheelVelocity(FlywheelStates.HUB);
-                        if(isAimedAtHub && flywheel.FlywheelInTolerance(18)){
+                        if (isAimedAtHub && flywheel.FlywheelInTolerance(18)) {
                             feeder.setFeederVelocity(FeederStates.SCORING);
-                        }else{
+                        } else {
                             feeder.setFeederVelocity(FeederStates.OFF);
                         }
-                    }else{
+                    } else {
                         feeder.setFeederVelocity(FeederStates.OFF);
                         flywheel.setFlywheelVelocity(FlywheelStates.SAFE);
                     }
-                }
-                else {
+                } else {
                     wantedShooterState = ShooterStates.BUMP;
                 }
                 break;
             case HUB:
                 isAimedAtHub = isAimedAtHub();
-                if(swerve.isInAllianceZone()){
-                    if(driverOverride){
-                        flywheel.setFlywheelVelocity(37+10*((getDistanceToHub()-1.237)/(5.476-1.237)));
+                if (swerve.isInAllianceZone()) {
+                    if (driverOverride) {
+                        flywheel.setFlywheelVelocity(37 + 10 * ((getDistanceToHub() - 1.237) / (5.476 - 1.237)));
                         // flywheel.setFlywheelVelocity(FlywheelStates.HUB);
 
-                        if(isAimedAtHub && flywheel.FlywheelInTolerance(8)){
+                        if (isAimedAtHub && flywheel.FlywheelInTolerance(8)) {
                             feeder.setFeederVelocity(FeederStates.SCORING);
-                        }else{
+                        } else {
                             feeder.setFeederVelocity(FeederStates.OFF);
                         }
-                    }else{
+                    } else {
                         feeder.setFeederVelocity(FeederStates.OFF);
                         flywheel.setFlywheelVelocity(FlywheelStates.SAFE);
                     }
-                }else{
+                } else {
                     wantedShooterState = ShooterStates.BUMP;
                 }
                 break;
             case AUTOHUB:
-               isAimedAtHub = isAimedAtHub();
-                flywheel.setFlywheelVelocity(37+10*((getDistanceToHub()-1.237)/(5.476-1.237)));
+                isAimedAtHub = isAimedAtHub();
+                flywheel.setFlywheelVelocity(37 + 10 * ((getDistanceToHub() - 1.237) / (5.476 - 1.237)));
                 // flywheel.setFlywheelVelocity(FlywheelStates.HUB);
-                
-                if(isAimedAtHub && flywheel.FlywheelInTolerance(8)){
+
+                if (isAimedAtHub && flywheel.FlywheelInTolerance(8)) {
                     feeder.setFeederVelocity(FeederStates.SCORING);
-                }else{
+                } else {
                     feeder.setFeederVelocity(FeederStates.OFF);
                 }
                 break;
@@ -184,7 +185,7 @@ public class Shooter extends SubsystemBase {
                 break;
 
             case ZERO:
-            if (turret.io.turretZeroed()) {
+                if (turret.io.turretZeroed()) {
                     wantedShooterState = ShooterStates.HUB;
                     alreadyZeroed = true;
                 }
@@ -230,7 +231,7 @@ public class Shooter extends SubsystemBase {
                 currentShooterState = ShooterStates.SAFE;
                 break;
             case ZERO:
-                    currentShooterState = ShooterStates.ZERO;
+                currentShooterState = ShooterStates.ZERO;
                 break;
             case MANUAL:
                 currentShooterState = ShooterStates.MANUAL;
@@ -250,129 +251,111 @@ public class Shooter extends SubsystemBase {
         } else {
             return false;
         }
-
     }
 
-    // public boolean hubManualShoot() {
-    //     if (aimHub() /* && isHubActive() */) {
-    //         // TODO ACTIVELY NEEDS TO BE FIXED
-    //         if (driverOverride) {
-    //             flywheel.setFlywheelVelocity(FlywheelStates.HUB);
-    //             // if(flywheel.FlywheelInTolerance(0.5)){
-    //             feeder.setFeederVelocity(FeederStates.SCORING);
-    //             // }
-    //         } else {
-    //             feeder.setFeederVelocity(FeederStates.OFF);
-    //         }
-    //     }
-    //     return false;
-    // }
-
     public boolean shootHub() {
-        if (isAimedAtHub() /*&& isHubActive()*/) {
+        if (isAimedAtHub() /* && isHubActive() */) {
             // TODO ACTIVELY NEEDS TO BE FIXED
-            if(swerve.isInAllianceZone() && !swerve.onRamp(0, 0.3)){
+            if (swerve.isInAllianceZone() && !swerve.onRamp(0, 0.3)) {
                 // if (driverOverride) {
-                    flywheel.setFlywheelVelocity(FlywheelStates.HUB);
-                    if (flywheel.FlywheelInTolerance(12)) {
-                        feeder.setFeederVelocity(FeederStates.SCORING);
-                    }
+                flywheel.setFlywheelVelocity(FlywheelStates.HUB);
+                if (flywheel.FlywheelInTolerance(12)) {
+                    feeder.setFeederVelocity(FeederStates.SCORING);
+                }
                 // } else {
-                //     feeder.setFeederVelocity(FeederStates.AGITATION);
+                // feeder.setFeederVelocity(FeederStates.AGITATION);
                 // }
-            }else{
+            } else {
                 return true;
             }
         }
         return false;
     }
 
-    public double getDistanceToHub(){
+    public double getDistanceToHub() {
         double XToHub;
         double YToHub;
-        if(Constants.isBlueAlliance){
+        if (Constants.isBlueAlliance) {
             YToHub = hubPoseBlue.getY() - swerve.io.getPose2d().getY()
-                - Constants.TurretDistFromCenter
-                    * Math.sin((Math.PI * (swerve.io.getGyro() / 180)) + (Math.PI * 5) / 4);
-            XToHub =  hubPoseBlue.getX() - swerve.io.getPose2d().getX()
-                - Constants.TurretDistFromCenter
-                    * Math.cos((Math.PI * (swerve.io.getGyro() / 180)) + (Math.PI * 5) / 4);
+                    - Constants.TurretDistFromCenter
+                            * Math.sin((Math.PI * (swerve.io.getGyro() / 180)) + (Math.PI * 5) / 4);
+            XToHub = hubPoseBlue.getX() - swerve.io.getPose2d().getX()
+                    - Constants.TurretDistFromCenter
+                            * Math.cos((Math.PI * (swerve.io.getGyro() / 180)) + (Math.PI * 5) / 4);
         } else {
             YToHub = hubPoseRed.getY() - swerve.io.getPose2d().getY()
-                - Constants.TurretDistFromCenter
-                    * Math.sin((Math.PI * (swerve.io.getGyro() / 180)) + (Math.PI * 5) / 4);
-            XToHub =  hubPoseRed.getX() - swerve.io.getPose2d().getX()
-                - Constants.TurretDistFromCenter
-                    * Math.cos((Math.PI * (swerve.io.getGyro() / 180)) + (Math.PI * 5) / 4);
+                    - Constants.TurretDistFromCenter
+                            * Math.sin((Math.PI * (swerve.io.getGyro() / 180)) + (Math.PI * 5) / 4);
+            XToHub = hubPoseRed.getX() - swerve.io.getPose2d().getX()
+                    - Constants.TurretDistFromCenter
+                            * Math.cos((Math.PI * (swerve.io.getGyro() / 180)) + (Math.PI * 5) / 4);
         }
-        
-            
-        SmartDashboard.putNumber("X distance to hub",XToHub);
-        SmartDashboard.putNumber("Y distance to hub",YToHub);
-        return Math.sqrt(YToHub*YToHub+XToHub*XToHub);
+
+        SmartDashboard.putNumber("X distance to hub", XToHub);
+        SmartDashboard.putNumber("Y distance to hub", YToHub);
+        return Math.sqrt(YToHub * YToHub + XToHub * XToHub);
     }
 
     public boolean isAimedAtHub() {
         if (Constants.isBlueAlliance) {
-        double YToHub = hubPoseBlue.getY() - swerve.io.getPose2d().getY()
-            - Constants.TurretDistFromCenter
-                * Math.sin((Math.PI * (swerve.io.getGyro() / 180)) + (Math.PI * 5) / 4);
-        double XToHub =  hubPoseBlue.getX() - swerve.io.getPose2d().getX()
-            - Constants.TurretDistFromCenter
-                * Math.cos((Math.PI * (swerve.io.getGyro() / 180)) + (Math.PI * 5) / 4);
-            
-            double toHub = Math.sqrt(YToHub*YToHub+XToHub*XToHub);
-            
-            SmartDashboard.putNumber("distance to hub",toHub);
+            double YToHub = hubPoseBlue.getY() - swerve.io.getPose2d().getY()
+                    - Constants.TurretDistFromCenter
+                            * Math.sin((Math.PI * (swerve.io.getGyro() / 180)) + (Math.PI * 5) / 4);
+            double XToHub = hubPoseBlue.getX() - swerve.io.getPose2d().getX()
+                    - Constants.TurretDistFromCenter
+                            * Math.cos((Math.PI * (swerve.io.getGyro() / 180)) + (Math.PI * 5) / 4);
 
-            
+            double toHub = Math.sqrt(YToHub * YToHub + XToHub * XToHub);
+
+            SmartDashboard.putNumber("distance to hub", toHub);
 
             shooterAngle = ShooterAngleCalculator.getShooterAngleToHub(
                     swerve.io.getChassisSpeeds().vxMetersPerSecond,
                     swerve.io.getChassisSpeeds().vyMetersPerSecond,
                     XToHub,
                     YToHub,
-                    7.098+1.34*((getDistanceToHub()-1.237)/(5.476-1.237))// 0.5 * Constants.FlywheelDiamiter * Math.PI *
-                       // (Flywheel.getInstance().getFlywheelVelocity()[1]*2*Math.PI *
-                       // Flywheel.flywheelRadius +
-                       // Flywheel.getInstance().getFlywheelVelocity()[0]*2*Math.PI *
-                       // Flywheel.flywheelRadius)/2.0
+                    7.098 + 1.34 * ((getDistanceToHub() - 1.237) / (5.476 - 1.237))// 0.5 * Constants.FlywheelDiamiter *
+                                                                                   // Math.PI *
+            // (Flywheel.getInstance().getFlywheelVelocity()[1]*2*Math.PI *
+            // Flywheel.flywheelRadius +
+            // Flywheel.getInstance().getFlywheelVelocity()[0]*2*Math.PI *
+            // Flywheel.flywheelRadius)/2.0
             );
 
-            SmartDashboard.putNumber("flywheel modulated speed",  6.22273+0.84091*((getDistanceToHub()-1.237)/(5.476-1.237)));
+            SmartDashboard.putNumber("flywheel modulated speed",
+                    6.22273 + 0.84091 * ((getDistanceToHub() - 1.237) / (5.476 - 1.237)));
 
         } else {
 
             double YToHub = hubPoseRed.getY() - swerve.io.getPose2d().getY()
-                - Constants.TurretDistFromCenter
-                    * Math.sin((swerve.io.getPose2d().getRotation().getRadians()) + (Math.PI * 5) / 4);
-            double XToHub =  hubPoseRed.getX() - swerve.io.getPose2d().getX()
-                - Constants.TurretDistFromCenter
-                    * Math.cos((swerve.io.getPose2d().getRotation().getRadians()) + (Math.PI * 5) / 4);
-            
+                    - Constants.TurretDistFromCenter
+                            * Math.sin((swerve.io.getPose2d().getRotation().getRadians()) + (Math.PI * 5) / 4);
+            double XToHub = hubPoseRed.getX() - swerve.io.getPose2d().getX()
+                    - Constants.TurretDistFromCenter
+                            * Math.cos((swerve.io.getPose2d().getRotation().getRadians()) + (Math.PI * 5) / 4);
+
             double xTurretOffset = Constants.TurretDistFromCenter
                     * Math.cos((swerve.io.getPose2d().getRotation().getRadians()) + (Math.PI * 5) / 4);
 
             double yTurretOffset = Constants.TurretDistFromCenter
                     * Math.sin((swerve.io.getPose2d().getRotation().getRadians()) + (Math.PI * 5) / 4);
-                    
-            double toHub = Math.sqrt(YToHub*YToHub+XToHub*XToHub);
 
-            shooterCalculatorVelocity = 7.09786+1.91*((getDistanceToHub()-1.237)/(5.476-1.237));
+            double toHub = Math.sqrt(YToHub * YToHub + XToHub * XToHub);
+
+            shooterCalculatorVelocity = 7.09786 + 1.91 * ((getDistanceToHub() - 1.237) / (5.476 - 1.237));
             shooterAngle = ShooterAngleCalculator.getShooterAngleToHub(
                     swerve.io.getChassisSpeeds().vxMetersPerSecond,
                     swerve.io.getChassisSpeeds().vyMetersPerSecond,
                     XToHub,
                     YToHub,
                     shooterCalculatorVelocity);
-            SmartDashboard.putNumber("flywheel modulated speed",  6.22273+0.84091*((getDistanceToHub()-1.237)/(5.476-1.237)));
+            SmartDashboard.putNumber("flywheel modulated speed",
+                    6.22273 + 0.84091 * ((getDistanceToHub() - 1.237) / (5.476 - 1.237)));
         }
 
         if (shooterAngle != null) {
             pastShooterAngle = shooterAngle;
         }
-        SmartDashboard.putNumber("shooterHoodAngle", pastShooterAngle.hoodRotation);
-        SmartDashboard.putNumber("shooterAngle", pastShooterAngle.turretRotation);
 
         double rotation = SwerveSubsystem.getInstance().getRobotPose().getRotation().getDegrees();
         // double rotation = -180;
@@ -381,57 +364,59 @@ public class Shooter extends SubsystemBase {
 
         // Invert gyro direction BEFORE scaling
         // double offset = 190;//pastShooterAngle.turretRotation * (180.0 / Math.PI);
-        double alphabotJankboticsOffset = 0;
         double offset = (pastShooterAngle.turretRotation * (180.0 / Math.PI));// + alphabotJankboticsOffset;
-        rotation += offset + 255; //maybe 255
+        rotation += offset + 255; // maybe 255
         rotation = rotation % 360;
-        double turretAngle = -(rotation / 360.0);
+        this.turretHubAngle = -(rotation / 360.0);
+        // turret may handle angle wrapping around the dead zone so the commanded
+        // position may not be turretAngle
+        turret.setTurretPosition(this.turretHubAngle);
 
-        turret.setTurretPosition(turretAngle);
         double hoodInverted = 85 - (pastShooterAngle.hoodRotation * 180) / Math.PI;
         // double hoodInverted = 85-(67);
-        double hoodRelative = hoodInverted / 360;
+        this.hoodHubAngle = hoodInverted / 360;
+        turret.setHoodPosition(this.hoodHubAngle);
 
-
-        turret.setHoodPosition(hoodRelative);
-
-        if (turret.hoodInTolerance(.05) && turret.turretInTolerance(0.05) && turret.io.getAimedToShoot()) {
-            return true;
-        }
-        return false;
+        // check if the turret is at the angles calculated by Newton's Eqs using vision
+        // and pose
+        return turret.isTurretAtPosition(this.turretHubAngle, this.hoodHubAngle, 0.05);
     }
-
-
 
     public boolean aimFerry() {
         Translation2d target;
-        if(!Constants.isBlueAlliance){
-            double redFerryDepotDistance = Math.sqrt(Math.pow(redFerryDepot.getX() - swerve.io.getPose2d().getX(),2)+Math.pow((redFerryDepot.getY() - swerve.io.getPose2d().getY()),2));
-            double redFerryOutpostDistance = Math.sqrt(Math.pow(redFerryOutpost.getX() - swerve.io.getPose2d().getX(),2)+Math.pow((redFerryOutpost.getY() - swerve.io.getPose2d().getY()),2));
-            if(redFerryDepotDistance <= redFerryOutpostDistance){
+        if (!Constants.isBlueAlliance) {
+            double redFerryDepotDistance = Math.sqrt(Math.pow(redFerryDepot.getX() - swerve.io.getPose2d().getX(), 2)
+                    + Math.pow((redFerryDepot.getY() - swerve.io.getPose2d().getY()), 2));
+            double redFerryOutpostDistance = Math
+                    .sqrt(Math.pow(redFerryOutpost.getX() - swerve.io.getPose2d().getX(), 2)
+                            + Math.pow((redFerryOutpost.getY() - swerve.io.getPose2d().getY()), 2));
+            if (redFerryDepotDistance <= redFerryOutpostDistance) {
                 target = redFerryDepot;
-            }else{
+            } else {
                 target = redFerryOutpost;
             }
-        }else{
-            double blueFerryDepotDistance = Math.sqrt(Math.pow(blueFerryDepot.getX() - swerve.io.getPose2d().getX(),2)+Math.pow((blueFerryDepot.getY() - swerve.io.getPose2d().getY()),2));
-            double blueFerryOutpostDistance = Math.sqrt(Math.pow(blueFerryOutpost.getX() - swerve.io.getPose2d().getX(),2)+Math.pow((blueFerryOutpost.getY() - swerve.io.getPose2d().getY()),2));
-            if(blueFerryDepotDistance <= blueFerryOutpostDistance){
+        } else {
+            double blueFerryDepotDistance = Math.sqrt(Math.pow(blueFerryDepot.getX() - swerve.io.getPose2d().getX(), 2)
+                    + Math.pow((blueFerryDepot.getY() - swerve.io.getPose2d().getY()), 2));
+            double blueFerryOutpostDistance = Math
+                    .sqrt(Math.pow(blueFerryOutpost.getX() - swerve.io.getPose2d().getX(), 2)
+                            + Math.pow((blueFerryOutpost.getY() - swerve.io.getPose2d().getY()), 2));
+            if (blueFerryDepotDistance <= blueFerryOutpostDistance) {
                 target = blueFerryDepot;
-            }else{
+            } else {
                 target = blueFerryOutpost;
             }
         }
         shooterAngle = ShooterAngleCalculator.getShooterAngleToFerry(
-                    swerve.io.getChassisSpeeds().vxMetersPerSecond,
-                    swerve.io.getChassisSpeeds().vxMetersPerSecond,
-                    target.getX() - swerve.io.getPose2d().getX()
-                            + Constants.TurretDistFromCenter
-                                    * Math.cos((Math.PI * (swerve.io.getGyro() / 180)) + (Math.PI * 3) / 4),
-                    target.getY() - swerve.io.getPose2d().getY()
-                            + Constants.TurretDistFromCenter
-                                    * Math.sin((Math.PI * (swerve.io.getGyro() / 180)) + (Math.PI * 3) / 4),
-                    7.77);
+                swerve.io.getChassisSpeeds().vxMetersPerSecond,
+                swerve.io.getChassisSpeeds().vxMetersPerSecond,
+                target.getX() - swerve.io.getPose2d().getX()
+                        + Constants.TurretDistFromCenter
+                                * Math.cos((Math.PI * (swerve.io.getGyro() / 180)) + (Math.PI * 3) / 4),
+                target.getY() - swerve.io.getPose2d().getY()
+                        + Constants.TurretDistFromCenter
+                                * Math.sin((Math.PI * (swerve.io.getGyro() / 180)) + (Math.PI * 3) / 4),
+                7.77);
 
         if (shooterAngle != null) {
             pastShooterAngle = shooterAngle;
@@ -447,7 +432,7 @@ public class Shooter extends SubsystemBase {
         // double offset = 190;//pastShooterAngle.turretRotation * (180.0 / Math.PI);
         double alphabotJankboticsOffset = 0;
         double offset = pastShooterAngle.turretRotation * (180.0 / Math.PI) + alphabotJankboticsOffset;
-        rotation += offset + 255; //maybe 255
+        rotation += offset + 255; // maybe 255
         rotation = rotation % 360;
 
         double turretAngle = -(rotation / 360.0);
@@ -468,13 +453,15 @@ public class Shooter extends SubsystemBase {
     // public boolean aimFerry(){}
 
     // public double getTurretPosFromJoystick() {
-    //     return tIO.getTurretPosition()
-    //             + 0.05 * MathUtil.applyDeadband(coDriverController.getLeftX(), Constants.leftYDeadband);
+    // return tIO.getTurretPosition()
+    // + 0.05 * MathUtil.applyDeadband(coDriverController.getLeftX(),
+    // Constants.leftYDeadband);
     // }
 
     // public double getHoodPosFromJoystick() {
-    //     return tIO.getHoodPosition()
-    //             + 0.05 * -MathUtil.applyDeadband(coDriverController.getLeftY(), Constants.leftXDeadband);
+    // return tIO.getHoodPosition()
+    // + 0.05 * -MathUtil.applyDeadband(coDriverController.getLeftY(),
+    // Constants.leftXDeadband);
     // }
 
     public boolean isHubActive() {
