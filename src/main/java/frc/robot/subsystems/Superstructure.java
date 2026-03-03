@@ -94,7 +94,11 @@ public class Superstructure extends SubsystemBase {
             case ZERO:
                 if (!shooter.alreadyZeroed){
                     currentState = States.ZERO;
-                }else{
+                }
+                else if(DriverStation.isAutonomousEnabled()){
+                    wantedState = States.AUTONONFIRE;
+                }
+                else {
                     wantedState = States.SHOOTER;
                 }
                 break;
@@ -132,7 +136,11 @@ public class Superstructure extends SubsystemBase {
                 break;
             case ZERO:
                 if(stateZERO()){
-                    wantedState = States.SHOOTER;
+                    if(!DriverStation.isAutonomousEnabled()){
+                        wantedState = States.SHOOTER;
+                    }else{
+                        wantedState = States.AUTONONFIRE;
+                    }
                 }
                 break;
             case AUTONONFIRE:
@@ -183,6 +191,7 @@ public class Superstructure extends SubsystemBase {
         // if (userRequestedIntakeState != Intake.getInstance().currentState) {
         //     Intake.getInstance().wantedState = userRequestedIntakeState;
         // }
+        swerve.wantedState = SwerveStates.MANUAL;
         if(prevState != States.SHOOTER){
             shooter.wantedShooterState = ShooterStates.HUB;
         }
@@ -190,7 +199,9 @@ public class Superstructure extends SubsystemBase {
     }
 
     private boolean stateZERO(){
+        swerve.wantedState = SwerveStates.MANUAL;
         shooter.wantedShooterState = ShooterStates.ZERO;
+        
         // climb.wantedState = ClimbStates.ZERO;
         // intake.wantedState = IntakeStates.ZERO;
         return (shooter.alreadyZeroed);//&& climb.alreadyZeroed && intake.alreadyZeroed);
