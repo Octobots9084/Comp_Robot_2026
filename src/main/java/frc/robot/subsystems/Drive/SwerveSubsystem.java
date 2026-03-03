@@ -32,6 +32,8 @@ import frc.robot.commands.auto.DriveOverBump;
 import frc.robot.commands.auto.NoPoseBump.DriveOverBumpFromAlliance;
 import frc.robot.commands.auto.NoPoseBump.DriveOverBumpToAlliance;
 import frc.robot.subsystems.Vision.VisionIOSystem;
+import frc.robot.subsystems.States;
+import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.ShooterStates;
 
@@ -151,7 +153,7 @@ public class SwerveSubsystem extends SubsystemBase {
       NamedCommands.registerCommand("DriveBack",
                   new DriveBack().withTimeout(3));
 
-      NamedCommands.registerCommand("StartShoot", new InstantCommand(() -> {Shooter.getInstance().wantedShooterState = ShooterStates.AUTOHUB;}));
+      NamedCommands.registerCommand("StartShoot", new InstantCommand(() -> {Superstructure.getInstance().wantedState = States.AUTO;}));
       NamedCommands.registerCommand("StopShoot", new InstantCommand(() -> {Shooter.getInstance().wantedShooterState = ShooterStates.SAFE;}));
         
 

@@ -139,7 +139,7 @@ public class Shooter extends SubsystemBase {
                 isAimedAtHub = isAimedAtHub();
                 if(swerve.isInAllianceZone()){
                     if(driverOverride){
-                        flywheel.setFlywheelVelocity(40 + 7.5 * ((getDistanceToHub()-1.237)/(5.476-1.237)));
+                        flywheel.setFlywheelVelocity(37+10*((getDistanceToHub()-1.237)/(5.476-1.237)));
                         // flywheel.setFlywheelVelocity(FlywheelStates.HUB);
 
                         if(isAimedAtHub && flywheel.FlywheelInTolerance(8)){
@@ -156,20 +156,15 @@ public class Shooter extends SubsystemBase {
                 }
                 break;
             case AUTOHUB:
-                // if(shootHub()) {
-                    // wantedShooterState = ShooterStates.BUMP;
-                    // Lights.getLightInstance().lightsWantedState = LightAnimations.CANTSHOOT;
-                // )
+               isAimedAtHub = isAimedAtHub();
+                flywheel.setFlywheelVelocity(37+10*((getDistanceToHub()-1.237)/(5.476-1.237)));
+                // flywheel.setFlywheelVelocity(FlywheelStates.HUB);
 
-                isAimedAtHub = isAimedAtHub();
-                // isAimedAtHub = aimFerry();
-                
-                    flywheel.setFlywheelVelocity(FlywheelStates.HUB);
-                    if(isAimedAtHub && flywheel.FlywheelInTolerance(18)){
-                        feeder.setFeederVelocity(FeederStates.SCORING);
-                    }else{
-                        feeder.setFeederVelocity(FeederStates.OFF);
-                    }
+                if(isAimedAtHub && flywheel.FlywheelInTolerance(8)){
+                    feeder.setFeederVelocity(FeederStates.SCORING);
+                }else{
+                    feeder.setFeederVelocity(FeederStates.OFF);
+                }
                 break;
             case BUMP:
                 if (!swerve.onRamp(0, 5)) {
@@ -337,14 +332,14 @@ public class Shooter extends SubsystemBase {
                     swerve.io.getChassisSpeeds().vyMetersPerSecond,
                     XToHub,
                     YToHub,
-                    6.7+1.2*((getDistanceToHub()-1.237)/(5.476-1.237))// 0.5 * Constants.FlywheelDiamiter * Math.PI *
+                    7.098+1.34*((getDistanceToHub()-1.237)/(5.476-1.237))// 0.5 * Constants.FlywheelDiamiter * Math.PI *
                        // (Flywheel.getInstance().getFlywheelVelocity()[1]*2*Math.PI *
                        // Flywheel.flywheelRadius +
                        // Flywheel.getInstance().getFlywheelVelocity()[0]*2*Math.PI *
                        // Flywheel.flywheelRadius)/2.0
             );
 
-            SmartDashboard.putNumber("flywheel modulated speed", 6.7+1.2*((getDistanceToHub()-1.237)/(5.476-1.237)));
+            SmartDashboard.putNumber("flywheel modulated speed",  6.22273+0.84091*((getDistanceToHub()-1.237)/(5.476-1.237)));
 
         } else {
 
@@ -363,18 +358,14 @@ public class Shooter extends SubsystemBase {
                     
             double toHub = Math.sqrt(YToHub*YToHub+XToHub*XToHub);
 
-            SmartDashboard.putNumber("X distance to hub",XToHub);
-            SmartDashboard.putNumber("Y distance to hub",YToHub);
-            SmartDashboard.putNumber("distance to hub",toHub);
-
-            shooterCalculatorVelocity = 6.7+1.2*((getDistanceToHub()-1.237)/(5.476-1.237));
+            shooterCalculatorVelocity = 7.09786+1.91*((getDistanceToHub()-1.237)/(5.476-1.237));
             shooterAngle = ShooterAngleCalculator.getShooterAngleToHub(
                     swerve.io.getChassisSpeeds().vxMetersPerSecond,
                     swerve.io.getChassisSpeeds().vyMetersPerSecond,
                     XToHub,
                     YToHub,
                     shooterCalculatorVelocity);
-            SmartDashboard.putNumber("flywheel modulated speed", 6.7+1.2*((getDistanceToHub()-1.237)/(5.476-1.237)));
+            SmartDashboard.putNumber("flywheel modulated speed",  6.22273+0.84091*((getDistanceToHub()-1.237)/(5.476-1.237)));
         }
 
         if (shooterAngle != null) {
@@ -390,7 +381,7 @@ public class Shooter extends SubsystemBase {
 
         // Invert gyro direction BEFORE scaling
         // double offset = 190;//pastShooterAngle.turretRotation * (180.0 / Math.PI);
-        double alphabotJankboticsOffset = 0;
+        double alphabotJankboticsOffset = 6;
         double offset = (pastShooterAngle.turretRotation * (180.0 / Math.PI));// + alphabotJankboticsOffset;
         rotation += offset + 255; //maybe 255
         rotation = rotation % 360;
@@ -398,7 +389,7 @@ public class Shooter extends SubsystemBase {
 
         turret.setTurretPosition(turretAngle);
         double hoodInverted = 85 - (pastShooterAngle.hoodRotation * 180) / Math.PI;
-        // double hoodInverted = 85-(65);
+        // double hoodInverted = 85-(67);
         double hoodRelative = hoodInverted / 360;
 
 

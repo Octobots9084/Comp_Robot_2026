@@ -1,5 +1,7 @@
 package frc.robot.subsystems.Vision;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ShooterAngleCalculator {
@@ -25,6 +27,8 @@ public class ShooterAngleCalculator {
         // first estimate theta
         double R = Math.sqrt(pfx * pfx + pfy * pfy);
         double theta = Math.atan((s * s + Math.sqrt(s*s*s*s - g*g*R*R - 2*pfz*g*s*s)) / (g * R));
+
+        Logger.recordOutput("hood Ferry", theta);
 
         // // then estimate t
         double T = R / (s * Math.cos(theta));
@@ -82,6 +86,7 @@ public class ShooterAngleCalculator {
         // first estimate theta
         double R = Math.sqrt(phx * phx + phy * phy);
         double theta = Math.atan((s * s + Math.sqrt(s*s*s*s - g*g*R*R - 2*phz*g*s*s)) / (g * R));
+        Logger.recordOutput("hood hub", theta);
 
         // then estimate t
         double T = R / (s * Math.cos(theta));

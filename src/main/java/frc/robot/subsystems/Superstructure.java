@@ -131,6 +131,7 @@ public class Superstructure extends SubsystemBase {
                 break;
             case AUTO:
                 swerve.wantedState = SwerveStates.IDLE;
+                shooter.wantedShooterState = ShooterStates.AUTOHUB;
             break;
             default:
                 // throw an exception
