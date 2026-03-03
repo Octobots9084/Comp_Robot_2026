@@ -166,7 +166,7 @@ public class Robot extends LoggedRobot {
   public void autonomousInit() {
     setAllianceColor();
     autonomousCommand = robotContainer.getAutonomousCommand();
-    Superstructure.getInstance().wantedState = States.AUTO;
+    Superstructure.getInstance().wantedState = States.AUTONONFIRE;
 
     // schedule the autonomous command (example)
     if (autonomousCommand != null) {

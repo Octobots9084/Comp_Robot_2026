@@ -159,7 +159,7 @@ public class Shooter extends SubsystemBase {
                isAimedAtHub = isAimedAtHub();
                 flywheel.setFlywheelVelocity(37+10*((getDistanceToHub()-1.237)/(5.476-1.237)));
                 // flywheel.setFlywheelVelocity(FlywheelStates.HUB);
-
+                
                 if(isAimedAtHub && flywheel.FlywheelInTolerance(8)){
                     feeder.setFeederVelocity(FeederStates.SCORING);
                 }else{
@@ -381,7 +381,7 @@ public class Shooter extends SubsystemBase {
 
         // Invert gyro direction BEFORE scaling
         // double offset = 190;//pastShooterAngle.turretRotation * (180.0 / Math.PI);
-        double alphabotJankboticsOffset = 6;
+        double alphabotJankboticsOffset = 0;
         double offset = (pastShooterAngle.turretRotation * (180.0 / Math.PI));// + alphabotJankboticsOffset;
         rotation += offset + 255; //maybe 255
         rotation = rotation % 360;

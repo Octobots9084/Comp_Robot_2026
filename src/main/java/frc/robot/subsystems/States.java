@@ -11,4 +11,5 @@ public enum States {
     SHOOTER,
     ZERO,
     AUTO,
+    AUTONONFIRE
 }

@@ -154,7 +154,7 @@ public class SwerveSubsystem extends SubsystemBase {
                   new DriveBack().withTimeout(3));
 
       NamedCommands.registerCommand("StartShoot", new InstantCommand(() -> {Superstructure.getInstance().wantedState = States.AUTO;}));
-      NamedCommands.registerCommand("StopShoot", new InstantCommand(() -> {Superstructure.getInstance().wantedState = States.SAFE;}));
+      NamedCommands.registerCommand("StopShoot", new InstantCommand(() -> {Superstructure.getInstance().wantedState = States.AUTONONFIRE;}));
         
 
 
@@ -164,7 +164,6 @@ public class SwerveSubsystem extends SubsystemBase {
         SmartDashboard.putBoolean("hasBeenTilted", false);
         SmartDashboard.putBoolean("done w/ auto", false);
         SmartDashboard.putBoolean("precon", false);
-
     }
 
     private SwerveStates handleStateTransition() {

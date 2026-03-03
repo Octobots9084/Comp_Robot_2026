@@ -99,8 +99,14 @@ public class Superstructure extends SubsystemBase {
                 }
                 break;
             case AUTO:
-                if(DriverStation.isAutonomous())
+                if(DriverStation.isAutonomous()){
                     this.currentState = States.AUTO;
+                }
+                break;
+            case AUTONONFIRE:
+                if(DriverStation.isAutonomous()){
+                    this.currentState = States.AUTONONFIRE;
+                }
             break;
             default:
                 break; // do nothing
@@ -129,10 +135,14 @@ public class Superstructure extends SubsystemBase {
                     wantedState = States.SHOOTER;
                 }
                 break;
+            case AUTONONFIRE:
+                swerve.wantedState = SwerveStates.IDLE;
+                shooter.wantedShooterState = ShooterStates.SAFE;
+                break;
             case AUTO:
                 swerve.wantedState = SwerveStates.IDLE;
                 shooter.wantedShooterState = ShooterStates.AUTOHUB;
-            break;
+                break;
             default:
                 // throw an exception
                 break;
