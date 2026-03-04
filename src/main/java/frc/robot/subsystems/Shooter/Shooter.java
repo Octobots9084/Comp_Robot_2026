@@ -52,7 +52,6 @@ public class Shooter extends SubsystemBase {
     public boolean alreadyZeroed = false;
     public Flywheel flywheel = new Flywheel();
     public final double prefire = 1;
-    public CANrange lemonDetector = new CANrange(Constants.lemonDetector, Constants.krakenBus);
     public static boolean driverOverride = false;
     private String gameData;
     private double lemonDetectionTimestamp;

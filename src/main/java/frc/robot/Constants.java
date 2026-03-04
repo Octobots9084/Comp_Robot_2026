@@ -105,21 +105,17 @@ public final class Constants {
   public static double maximumHoodPosition = 0.1157;
   public static double maximumTurretPosition = 0.8; // TODO set this to an actual value so sinjin doesnt cry
 
-  public static double turretGearRatio = (3 / 1) * (256.0 / 22);
-  public static double hoodGearRatio = 20;// (23/20)*(18/0.9);
+  public static double turretGearRatio = (60/ 14) * (156 / 23);
+  public static double hoodGearRatio = 20/14;// (23/20)*(18/0.9);
 
-  public static double rotateGearRatio = 125;// TODO fix this gear ratio
-  public static double deployGearRatio = 1;
+  public static double rotateGearRatio = 12;// TODO fix this gear ratio
 
-  public static double intakePivotGearRatio = (5) * (34 / 29.0);
+  public static double intakePivotGearRatio = 25;
 
-  public static int lemonDetector = 0;
   public static int intakePivotID = 20;
   public static int intakeRollerID = 19;
 
   public static int climbRotateControlledID = 14;
-  public static int climbRotateFollowerID = 0;
-  public static int climbDeployID = 0;
 
   public static RobotTypes robotType = RobotTypes.BETA;
 
