@@ -3,6 +3,7 @@ package frc.robot.subsystems.Drive;
 import java.util.function.Supplier;
 
 import frc.robot.subsystems.Drive.BetaConstants.TunerSwerveDrivetrain;
+import frc.robot.Constants;
 import frc.robot.subsystems.Drive.SwerveSubsystem;
 
 import com.ctre.phoenix6.Utils;
@@ -331,9 +332,6 @@ public class SwerveIOSystem extends TunerSwerveDrivetrain implements Subsystem, 
         return this.getModule(index).getEncoder().getAbsolutePosition().getValueAsDouble();
     }
 
-    public void resetRotation() {
-    }
-
     public void resetToParamaterizedRotation(Rotation2d rotation2d) {
     }
 
@@ -371,7 +369,12 @@ public class SwerveIOSystem extends TunerSwerveDrivetrain implements Subsystem, 
 
     @Override
     public void zeroGyro() {
-        this.getPigeon2().setYaw(0);
+        // this.getPigeon2().setYaw(0);
+        if(Constants.isBlueAlliance){
+            this.resetRotation(new Rotation2d(0));
+        }else{
+            this.resetRotation(new Rotation2d(Math.PI));
+        }
     }
 
     @Override
