@@ -59,6 +59,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "StopShoot"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "start double wipe"
@@ -69,11 +75,17 @@
           "data": {
             "pathName": "Double Wipe"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "the end of double wipe so it goes back"
+          }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "real ones",
   "choreoAuto": false
 }

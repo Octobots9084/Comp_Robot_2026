@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.4809272467902993,
-        "y": 0.5868473609129818
+        "x": 0.3903566333808842,
+        "y": 0.6903566333808839
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.298120481927711,
-        "y": 1.128228915662652
+        "x": 0.894964336661911,
+        "y": 1.7125106990014263
       },
       "isLocked": false,
       "linkedName": "Outpost"
     },
     {
       "anchor": {
-        "x": 3.5508968460648154,
-        "y": 2.586122612847222
+        "x": 3.3274322396576315,
+        "y": 2.4370756062767476
       },
       "prevControl": {
-        "x": 2.8078125087154184,
-        "y": 2.1599418899556553
+        "x": 2.5843479023082345,
+        "y": 2.010894883385181
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,14 +31,7 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "StartShoot",
-      "waypointRelativePos": 0.5137631425233644,
-      "endWaypointRelativePos": null,
-      "command": null
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -48,8 +41,8 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": -135.0
+    "velocity": 4.0,
+    "rotation": 145.52778611996357
   },
   "reversed": false,
   "folder": null,

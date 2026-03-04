@@ -5,9 +5,9 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Outpost"
+            "name": "StartShoot"
           }
         },
         {
@@ -17,9 +17,27 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "StopShoot"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "Outpost to Shoot"
+            "pathName": "start neutral wipe"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Neutral Wipe"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Finish Neutral Wipe"
           }
         },
         {
@@ -27,17 +45,11 @@
           "data": {
             "name": "StartShoot"
           }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 10.0
-          }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "real ones",
   "choreoAuto": false
 }

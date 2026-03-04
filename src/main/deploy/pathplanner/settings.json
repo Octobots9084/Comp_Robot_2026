@@ -5,7 +5,9 @@
   "pathFolders": [
     "DELETE ME (NOT YET THO)"
   ],
-  "autoFolders": [],
+  "autoFolders": [
+    "real ones"
+  ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 720.0,

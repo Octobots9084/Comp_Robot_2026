@@ -5,87 +5,75 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "StartShoot"
+            "pathName": "Outpost"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "mid to bump"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StopShoot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "start neutral wipe"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Neutral Wipe"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Finish Neutral Wipe"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StartShoot"
+            "pathName": "Outpost to Shoot"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 4.0
+            "waitTime": 0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Outpost Shoot to Bump"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "StopShoot"
+            "name": "DriveOverBumpFromAlliance"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "left bump to neutral"
+            "pathName": "Fix Outpost Bump Alignment"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "left neutral wipe"
+            "pathName": "Neutral 4 to Neutral 3(aura)"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "neutral to mid"
+            "pathName": "Fix outpost #3"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "StartShoot"
+            "name": "DriveOverBumpToAlliance"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Outpost Climb"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "real ones",
   "choreoAuto": false
 }

@@ -27,23 +27,11 @@
           "data": {
             "name": "StartShoot"
           }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 5.0
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StopShoot"
-          }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "real ones",
   "choreoAuto": false
 }

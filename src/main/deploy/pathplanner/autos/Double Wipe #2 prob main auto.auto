@@ -13,7 +13,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 4.0
+            "waitTime": 2.0
           }
         },
         {
@@ -49,13 +49,49 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 5.0
+            "waitTime": 1.25
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Prepare for double wipe"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopShoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "start double wipe"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Neutral Wipe 2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "the end of double wipe so it goes back"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StartShoot"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "real ones",
   "choreoAuto": false
 }

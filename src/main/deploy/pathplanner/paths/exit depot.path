@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.4442179487179503,
-        "y": 4.825717948717949
+        "x": 0.3386019971469325,
+        "y": 5.128316690442225
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.6659814323607423,
-        "y": 5.225888594164457
+        "x": 0.8173323823109842,
+        "y": 5.10243937232525
       },
       "isLocked": false,
       "linkedName": "collect depot"
@@ -20,8 +20,8 @@
         "y": 5.237917771883288
       },
       "prevControl": {
-        "x": 0.4510344827586201,
-        "y": 4.852984084880636
+        "x": 1.2054921540656205,
+        "y": 5.1800713266761775
       },
       "nextControl": null,
       "isLocked": false,
@@ -41,7 +41,7 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
+    "velocity": 8.0,
     "rotation": -90.0
   },
   "reversed": false,

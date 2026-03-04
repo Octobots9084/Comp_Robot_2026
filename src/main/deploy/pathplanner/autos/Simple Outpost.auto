@@ -5,39 +5,27 @@
     "data": {
       "commands": [
         {
+          "type": "path",
+          "data": {
+            "pathName": "Outpost"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 3.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Outpost to Shoot"
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "StartShoot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "bump to neutral67"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "neutral sweep1"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "neutral sweep2"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Neutral Sweep3"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "finish ferry"
           }
         }
       ]
