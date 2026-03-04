@@ -155,6 +155,20 @@ public class Shooter extends SubsystemBase {
                     wantedShooterState = ShooterStates.BUMP;
                 }
                 break;
+            case AUTOFERRY:
+                isAimedAtHub = aimFerry();
+                if(!swerve.isInAllianceZone() && !swerve.onRamp(0,5)){
+                        flywheel.setFlywheelVelocity(FlywheelStates.HUB);
+                        if(isAimedAtHub && flywheel.FlywheelInTolerance(18)){
+                            feeder.setFeederVelocity(FeederStates.SCORING);
+                        }else{
+                            feeder.setFeederVelocity(FeederStates.OFF);
+                        } 
+                }
+                else {
+                    wantedShooterState = ShooterStates.BUMP;
+                }
+                break;
             case AUTOHUB:
                isAimedAtHub = isAimedAtHub();
                 flywheel.setFlywheelVelocity(37+10*((getDistanceToHub()-1.237)/(5.476-1.237)));
@@ -169,10 +183,17 @@ public class Shooter extends SubsystemBase {
             case BUMP:
                 if (!swerve.onRamp(0, 5)) {
                     if (swerve.isInAllianceZone()) {
+                        if (DriverStation.isAutonomousEnabled()){
+                        wantedShooterState = ShooterStates.AUTOHUB;
+                        } else{
                         wantedShooterState = ShooterStates.HUB;
+                        }
                     } else {
+                        if (DriverStation.isAutonomousEnabled()){
+                        wantedShooterState = ShooterStates.AUTOFERRY;
+                        } else{
                         wantedShooterState = ShooterStates.FERRY;
-
+                        }
                     }
                 }
                 break;
