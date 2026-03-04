@@ -16,7 +16,7 @@ public class ShooterConfigurator {
     public TalonFXConfiguration topRollerConfig;
 
     public ShooterConfigurator() {
-        flyWheelRightConfig = new TalonFXConfiguration();
+        flyWheelRightConfig = new TalonFXConfiguration().withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(((Constants.flywheelGearRatio*Constants.flywheelToTopRollerRatio*Constants.topRollerRadius)+(Constants.flywheelGearRatio*Constants.FlywheelDiamiter))/4*Math.PI));
         turretConfig = new TalonFXConfiguration()
                 .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(Constants.turretGearRatio));
         hoodConfig = new TalonFXConfiguration()
