@@ -72,7 +72,7 @@ public class ButtonConfig {
             .onFalse(new InstantCommand(
             () -> {SwerveSubsystem.getInstance().wantedState = SwerveStates.MANUAL; /*superstructure.setWantedState(States.SAFE);*/ SmartDashboard.putBoolean("X",false);}
             ));
-        if (Constants.robotType != RobotTypes.ALPHA) {
+        // if (Constants.robotType != RobotTypes.COMP) {
             // driverController.a().onTrue(new SetStateClimbL3());
             // driverController.b().onTrue(new SetStateUnclimb());
             // driverController.leftBumper().whileTrue(new
@@ -90,7 +90,7 @@ public class ButtonConfig {
                     //         Shooter.driverOverride = false;
                     //     }
                     // }));
-        }
+        // }
         // add in manual mode for turret and hood
     }
 }

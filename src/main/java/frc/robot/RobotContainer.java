@@ -22,6 +22,7 @@ import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Climb.Climb;
 import frc.robot.subsystems.Climb.ClimbIOTalonFX;
 import frc.robot.subsystems.Drive.BetaConstants;
+import frc.robot.subsystems.Drive.CompConstants;
 import frc.robot.subsystems.Drive.SwerveSubsystem;
 import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.ShooterIOSystem;
@@ -30,7 +31,6 @@ import frc.robot.subsystems.Shooter.Flywheel.FlywheelIOTalonFX;
 import frc.robot.subsystems.Shooter.Turret.TurretIOTalonFX;
 import frc.robot.subsystems.Drive.SwerveIO;
 import frc.robot.subsystems.Drive.SwerveIOSystem;
-import frc.robot.subsystems.Drive.AlphaConstants;
 import frc.robot.subsystems.Vision.Vision;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
@@ -70,7 +70,7 @@ public class RobotContainer {
       this.swerve = SwerveSubsystem.setInstance(BetaConstants.createDrivetrain(), ButtonConfig.driverController,
           Constants.maxAngularVelocity, Constants.maxVelocity);
     } else {
-      this.swerve = SwerveSubsystem.setInstance(AlphaConstants.createDrivetrain(), ButtonConfig.driverController,
+      this.swerve = SwerveSubsystem.setInstance(CompConstants.createDrivetrain(), ButtonConfig.driverController,
           Constants.maxAngularVelocity, Constants.maxVelocity);
     }
 
@@ -81,7 +81,6 @@ public class RobotContainer {
         // Real robot, instantiate hardware IO implementations
         // ModuleIOTalonFX is intended for modules with TalonFX drive, TalonFX turn, and
         // a CANcoder
-        if (Constants.robotType != RobotTypes.ALPHA) {
           shooter = new Shooter(
               new FeederIOTalonFX(),
               new FlywheelIOTalonFX(),
@@ -94,7 +93,6 @@ public class RobotContainer {
           // SmartDashboard.putBoolean("rightrigger",true);
           buttons.initTeleop();
           // superstructure.setInstance(new Superstructure());
-        }
 
         // The ModuleIOTalonFXS implementation provides an example implementation for
         // TalonFXS controller connected to a CANdi with a PWM encoder. The

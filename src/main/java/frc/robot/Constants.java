@@ -121,7 +121,7 @@ public final class Constants {
 
   public static int climbRotateControlledID = 14;
 
-  public static RobotTypes robotType = RobotTypes.BETA;
+  public static RobotTypes robotType = RobotTypes.COMP;
 
   //climb positions Red
     public static Translation2d climbStartPositionRedPosY = new Translation2d(15.500,6.106); //TODO get a real value
@@ -145,7 +145,7 @@ public final class Constants {
   // set to ALPHA later
   public static enum RobotTypes {
     // alpha
-    ALPHA, // swerve bot
+    COMP, // swerve bot
 
     // beta
     BETA, // turret bot

@@ -10,8 +10,8 @@ import frc.robot.Constants;
 import frc.robot.subsystems.Shooter.ShooterConfigurator;
 
 public class TurretIOTalonFX implements TurretIO {
-    public TalonFX hoodMotor;
-    public TalonFX turretMotor;
+    //public TalonFX hoodMotor;
+    // public TalonFX turretMotor;
     public double zeroTurret;
     private MotionMagicVoltage turretRequest = new MotionMagicVoltage(0);
     private MotionMagicVoltage hoodRequest = new MotionMagicVoltage(0);
@@ -25,23 +25,23 @@ public class TurretIOTalonFX implements TurretIO {
 
     public TurretIOTalonFX() {
         shooterConfigs = new ShooterConfigurator();
-        hoodMotor = new TalonFX(Constants.hoodID, Constants.krakenBus);
-        hoodMotor.setPosition(0);
-        turretMotor = new TalonFX(Constants.turretID, Constants.krakenBus);
-        turretMotor.setPosition(0);
-        hoodMotor.getConfigurator().apply(shooterConfigs.hoodConfig);
-        turretMotor.getConfigurator().apply(shooterConfigs.turretConfig);
+        //hoodMotor = new TalonFX(Constants.hoodID, Constants.krakenBus);
+        //hoodMotor.setPosition(0);
+        // turretMotor = new TalonFX(Constants.turretID, Constants.krakenBus);
+        // turretMotor.setPosition(0);
+        //hoodMotor.getConfigurator().apply(shooterConfigs.hoodConfig);
+        // turretMotor.getConfigurator().apply(shooterConfigs.turretConfig);
     }
 
     @Override
     public void updateInputs(TurretIOInputs inputs) {
         inputs.turretLimitSwitch = turretLimitSwitch.get();
-        inputs.hoodMotorTemp = hoodMotor.getDeviceTemp().getValueAsDouble();
-        inputs.turretMotorTemp = turretMotor.getDeviceTemp().getValueAsDouble();
-        inputs.hoodPosition = this.getHoodPosition()*360;
-        inputs.turretPosition = this.getTurretPosition()*360;
-        inputs.hoodRequest = hoodRequest.Position*360;
-        inputs.turretRequest = turretRequest.Position*360;
+        //inputs.hoodMotorTemp = //hoodMotor.getDeviceTemp().getValueAsDouble();
+        // inputs.turretMotorTemp = turretMotor.getDeviceTemp().getValueAsDouble();
+        // inputs.hoodPosition = this.getHoodPosition()*360;
+        // inputs.turretPosition = this.getTurretPosition()*360;
+        // inputs.hoodRequest = hoodRequest.Position*360;
+        // inputs.turretRequest = turretRequest.Position*360;
     }
 
     @Override
@@ -49,12 +49,12 @@ public class TurretIOTalonFX implements TurretIO {
         // turretAngle = Math.max(turretAngle, -0.434);
         aimedToShoot = false;
         if (turretAngle < -0.44) {
-            turretMotor.setControl(turretRequest.withPosition(0));
+            // turretMotor.setControl(turretRequest.withPosition(0));
         }else if(turretAngle > 0){
-            turretMotor.setControl(turretRequest.withPosition(-0.434));
+            // turretMotor.setControl(turretRequest.withPosition(-0.434));
         }else{
             aimedToShoot = true;
-            turretMotor.setControl(turretRequest.withPosition(turretAngle));
+            // turretMotor.setControl(turretRequest.withPosition(turretAngle));
         }
     }
 
@@ -68,18 +68,19 @@ public class TurretIOTalonFX implements TurretIO {
         double hoodAngleAfterCompensation = 1.39131*hoodAngle -32.83666;
         hoodAngleAfterCompensation = Math.max(hoodAngle, 0);
         hoodAngleAfterCompensation = Math.min(hoodAngleAfterCompensation, Constants.maximumHoodPosition);
-        hoodMotor.setControl(hoodRequest.withPosition(hoodAngleAfterCompensation));
+        //hoodMotor.setControl(hoodRequest.withPosition(hoodAngleAfterCompensation));
     }
 
     @Override
     public double getHoodPosition() {
-        return hoodMotor.getPosition().getValueAsDouble();
+        return 0.0;//hoodMotor.getPosition().getValueAsDouble();
         
     }
 
     @Override
     public double getTurretPosition() {
-        return turretMotor.getPosition().getValueAsDouble();
+        // return turretMotor.getPosition().getValueAsDouble();
+        return 0.0;
     }
 
     @Override
@@ -106,12 +107,12 @@ public class TurretIOTalonFX implements TurretIO {
     @Override
     public boolean turretZeroed() {
         if (!turretLimitSwitch.get()) {
-            turretMotor.setVoltage(0);
-            turretMotor.setPosition(0.013);
+            // turretMotor.setVoltage(0);
+            // turretMotor.setPosition(0.013);
             this.setTurretPosition(0);
             return true;
         } else {
-            turretMotor.setVoltage(1);// was 3v
+            // turretMotor.setVoltage(1);// was 3v
             return false;
         }
     }
