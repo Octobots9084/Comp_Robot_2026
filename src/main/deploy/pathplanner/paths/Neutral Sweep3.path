@@ -3,32 +3,37 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.5508968460648154,
-        "y": 2.586122612847222
+        "x": 8.313036773428234,
+        "y": 1.113879003558718
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.9218391653976012,
-        "y": 2.6337105825097153
+        "x": 7.81811387900356,
+        "y": 1.4474139976275193
       },
       "isLocked": false,
-      "linkedName": "starting for bump"
+      "linkedName": "neutral sweep 2"
     },
     {
       "anchor": {
-        "x": 0.4809272467902993,
-        "y": 0.5868473609129818
+        "x": 7.721281138790035,
+        "y": 6.740937129300119
       },
       "prevControl": {
-        "x": 0.23089946130821587,
-        "y": 0.4896645644087049
+        "x": 7.839632265717675,
+        "y": 4.0403795966785285
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Outpost"
+      "linkedName": "neutral sweep 3"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.9200710479573782,
+      "rotationDegrees": 90.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -42,13 +47,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": -90.0
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
-    "velocity": 3.0,
-    "rotation": -135.0
+    "velocity": 0,
+    "rotation": 90.0
   },
   "useDefaultConstraints": true
 }
