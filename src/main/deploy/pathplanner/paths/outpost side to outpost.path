@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.4809272467902993,
-        "y": 0.5868473609129818
-      },
-      "prevControl": null,
-      "nextControl": {
-        "x": 1.298120481927711,
-        "y": 1.128228915662652
-      },
-      "isLocked": false,
-      "linkedName": "Outpost"
-    },
-    {
-      "anchor": {
         "x": 3.5508968460648154,
         "y": 2.586122612847222
       },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.9218391653976012,
+        "y": 2.6337105825097153
+      },
+      "isLocked": false,
+      "linkedName": "starting for bump"
+    },
+    {
+      "anchor": {
+        "x": 0.4809272467902993,
+        "y": 0.5868473609129818
+      },
       "prevControl": {
-        "x": 2.8078125087154184,
-        "y": 2.1599418899556553
+        "x": 0.23089946130821587,
+        "y": 0.4896645644087049
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "starting for bump"
+      "linkedName": "Outpost"
     }
   ],
   "rotationTargets": [],
@@ -33,8 +33,14 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
+      "name": "StopShoot",
+      "waypointRelativePos": 0.32459960937500015,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
       "name": "StartShoot",
-      "waypointRelativePos": 0.681171875,
+      "waypointRelativePos": 0.7076171874999998,
       "endWaypointRelativePos": null,
       "command": null
     }
@@ -49,13 +55,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -135.0
+    "rotation": 180.0
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
-    "velocity": 0,
-    "rotation": 180.0
+    "velocity": 3.0,
+    "rotation": -135.0
   },
   "useDefaultConstraints": true
 }
