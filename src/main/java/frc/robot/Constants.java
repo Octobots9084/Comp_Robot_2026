@@ -45,18 +45,23 @@ public final class Constants {
   public static final double VisionAllignRotspeed = 3;
   public static final double FlywheelDiamiter = 0.1016;
   public static final double TurretDistFromCenter = 0.2051;
-  public static final String frontCameraName = "FrontCamera";
+  public static final String frontRightCameraName = "FrontRightCamera";
+  public static final String frontleftCameraName = "FrontleftCamera";
   public static final String rightCameraName = "RightCamera";
   public static final String leftCameraName = "LeftCamera";
   // public static final String intakeCameraName = "IntakeCamera";
   public static final AprilTagFieldLayout kTagLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded);
-  private static final double camPitch = Units.degreesToRadians(23.0);
-  public static final Transform3d robotToCamFront = new Transform3d(new Translation3d(-0.3302, 0.1016, 0.2286),
-      new Rotation3d(0, -camPitch, Math.PI));
-  public static final Transform3d robotToCamRight = new Transform3d(new Translation3d(-0.0889, -0.3048, 0.1778),
-      new Rotation3d(0, -camPitch, Math.PI*0.5));
-  public static final Transform3d robotToCamLeft = new Transform3d(new Translation3d(-0.1397,-0.3175, 0.1524),
-      new Rotation3d(0, -camPitch, Math.PI*1.5));
+  private static final double camPitch = Units.degreesToRadians(20);
+  //-20 -26.57
+  public static final Transform3d robotToCamFrontRight = new Transform3d(new Translation3d(-0.16,0.245,-0.31),
+      new Rotation3d(0,0,Math.PI).plus(new Rotation3d(0, (-20/180.0)*Math.PI, 0).plus(new Rotation3d(0, 0, (-26.57/180.0)*Math.PI))));
+  //-20 +30
+  public static final Transform3d robotToCamFrontLeft = new Transform3d(new Translation3d(-0.16, 0.185, -12.5),
+      new Rotation3d(0,0,Math.PI).plus(new Rotation3d(0, (-20/180.0)*Math.PI, 0).plus(new Rotation3d(0, 0, (30/180.0)*Math.PI))));
+  public static final Transform3d robotToCamRight = new Transform3d(new Translation3d(-0.09, 0.37, .30),
+      new Rotation3d(0, -camPitch, Math.PI/2));
+  public static final Transform3d robotToCamLeft = new Transform3d(new Translation3d(-0.12,-0.37, 0.20),
+      new Rotation3d(0, -camPitch, 3.0*Math.PI/2.0));
   // The standard deviations of our vision estimated poses, which affect
   // correction rate
   // (Fake values. Experiment and determine estimation noise on an actual robot.)
