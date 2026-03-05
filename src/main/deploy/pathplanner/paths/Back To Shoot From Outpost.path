@@ -1,0 +1,59 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 6.1838999999999995,
+        "y": 5.418175
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 4.816678484860098,
+        "y": 6.24980391441645
+      },
+      "isLocked": false,
+      "linkedName": "End of Big Wipe From Outpost"
+    },
+    {
+      "anchor": {
+        "x": 2.1736687573571967,
+        "y": 4.254302137972164
+      },
+      "prevControl": {
+        "x": 2.679902246366661,
+        "y": 4.631034036769906
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Shoot After Wipe (Top)"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 135.0
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 1.0,
+    "maxAcceleration": 1.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 135.0
+  },
+  "useDefaultConstraints": true
+}

@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 8.221712511091393,
+        "y": 1.0532475598935218
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 8.292675000000001,
+        "y": 3.6570833333333335
+      },
+      "isLocked": false,
+      "linkedName": "Start rush to center from bump 2"
+    },
+    {
+      "anchor": {
+        "x": 6.1838999999999995,
+        "y": 5.418175
+      },
+      "prevControl": {
+        "x": 7.642658333333333,
+        "y": 5.592016666666666
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "End of Big Wipe From Outpost"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 1.0,
+    "maxAcceleration": 1.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 135.0
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 90.0
+  },
+  "useDefaultConstraints": true
+}
