@@ -8,6 +8,7 @@ import frc.robot.subsystems.Intake.IntakeStates;
 
 public class SetIntakeStateIntaking extends InstantCommand {
     public SetIntakeStateIntaking() {
+         Superstructure.getInstance().userRequestedIntakeState = IntakeStates.INTAKING;
         // Intake.getInstance().wantedState = IntakeStates.INTAKING;
     }
 }

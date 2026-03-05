@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.354125,
-        "y": 1.419816666666667
+        "x": 1.3541250000000002,
+        "y": 1.4198166666666672
       },
       "isLocked": false,
       "linkedName": "Outpost park"
     },
     {
       "anchor": {
-        "x": 3.4573469387755096,
-        "y": 2.4696805678793248
+        "x": 3.3533095577746077,
+        "y": 2.5405848787446508
       },
       "prevControl": {
-        "x": 2.457346938775509,
-        "y": 2.4696805678793248
+        "x": 2.3533095577746073,
+        "y": 2.5405848787446508
       },
       "nextControl": null,
       "isLocked": false,
@@ -41,7 +41,7 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
+    "velocity": 1.0,
     "rotation": 45.0
   },
   "reversed": false,

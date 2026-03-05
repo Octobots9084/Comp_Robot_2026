@@ -3,25 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.221712511091393,
-        "y": 1.0532475598935218
+        "x": 7.985349500713266,
+        "y": 1.2208416547788885
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.292675000000001,
-        "y": 3.6570833333333335
+        "x": 8.062981455064193,
+        "y": 3.8215121255349533
       },
       "isLocked": false,
       "linkedName": "Start rush to center from bump 2"
     },
     {
       "anchor": {
-        "x": 6.1838999999999995,
-        "y": 5.418175
+        "x": 6.80793152639087,
+        "y": 3.82151212553495
       },
       "prevControl": {
-        "x": 7.642658333333333,
-        "y": 5.592016666666666
+        "x": 7.700699001426534,
+        "y": 3.6144935805991443
+      },
+      "nextControl": {
+        "x": 6.201879058302166,
+        "y": 3.962046031178707
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 6.186875891583452,
+        "y": 5.671740370898717
+      },
+      "prevControl": {
+        "x": 6.898502139800283,
+        "y": 5.361212553495007
       },
       "nextControl": null,
       "isLocked": false,
@@ -41,7 +57,7 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
+    "velocity": 1.0,
     "rotation": 135.0
   },
   "reversed": false,

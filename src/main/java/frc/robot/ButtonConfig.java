@@ -48,17 +48,19 @@ public class ButtonConfig {
         // driverController.leftBumper().onTrue(new InstantCommand(() -> {
         // Shooter.getInstance().turretAim = -0.29;
         // }));
-        driverController.leftBumper().onTrue(new InstantCommand(
-                () -> {
-                    superstructure.wantedState = States.ZERO;
-                    SmartDashboard.putBoolean("rightrigger", true);
-                }))
-                .onFalse(new InstantCommand(
-                        () -> {
-                            superstructure.wantedState = States.SHOOTER;
-                            /* superstructure.setWantedState(States.SAFE); */ SmartDashboard.putBoolean("rightrigger",
-                                    false);
-                        }));
+        //driverController.leftBumper().onTrue(new InstantCommand(
+        //        () -> {
+        //            superstructure.wantedState = States.ZERO;
+        //            SmartDashboard.putBoolean("rightrigger", true);
+        //        }))
+        //        .onFalse(new InstantCommand(
+         //               () -> {
+         //                   superstructure.wantedState = States.SHOOTER;
+        //                    /* superstructure.setWantedState(States.SAFE); */ SmartDashboard.putBoolean("rightrigger",
+         //                           false);
+         //               }));
+
+        driverController.leftBumper().onTrue(new SetIntakeStateReverse()).onFalse(new SetIntakeStateSafe());
         // driverRight.button(1).onTrue(new InstantCommand(() ->
         // SwerveSubsystem.getInstance().io.zeroGyro()));
 
@@ -67,6 +69,8 @@ public class ButtonConfig {
             SmartDashboard.putBoolean("A button", true);
         })).onFalse(new InstantCommand(() -> SmartDashboard.putBoolean("A button", false)));
         
+        // driverController.leftBumper().whileTrue();
+
         driverController.x().onTrue(new InstantCommand(
             () -> {SwerveSubsystem.getInstance().wantedState = SwerveStates.ALIGNCLIMB; SmartDashboard.putBoolean("X",true);}))
             .onFalse(new InstantCommand(

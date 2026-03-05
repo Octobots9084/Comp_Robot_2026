@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.1838999999999995,
-        "y": 5.418175
+        "x": 6.186875891583452,
+        "y": 5.671740370898717
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.816678484860098,
-        "y": 6.24980391441645
+        "x": 4.819654376443551,
+        "y": 6.503369285315167
       },
       "isLocked": false,
       "linkedName": "End of Big Wipe From Outpost"
