@@ -9,7 +9,7 @@
       "prevControl": null,
       "nextControl": {
         "x": 8.452906287069991,
-        "y": 5.299205219454331
+        "y": 5.299205219454332
       },
       "isLocked": false,
       "linkedName": "bump to neutral 67"
@@ -50,7 +50,7 @@
     "rotation": -90.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "flipped paths",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 90.0

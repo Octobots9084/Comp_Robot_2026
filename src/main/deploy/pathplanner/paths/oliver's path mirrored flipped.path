@@ -70,7 +70,7 @@
     "rotation": -100.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "flipped paths",
   "idealStartingState": {
     "velocity": 4.0,
     "rotation": 100.0

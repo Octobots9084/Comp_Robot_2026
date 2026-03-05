@@ -4,11 +4,13 @@
   "holonomicMode": true,
   "pathFolders": [
     "DELETE ME (NOT YET THO)",
+    "NORMAL PATHS!",
     "flipped paths"
   ],
   "autoFolders": [
     "Flipped Autos",
-    "real ones"
+    "not needed",
+    "Regular Autos"
   ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,
