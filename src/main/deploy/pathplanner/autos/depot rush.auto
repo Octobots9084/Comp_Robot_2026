@@ -3,7 +3,32 @@
   "command": {
     "type": "sequential",
     "data": {
-      "commands": []
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Start depot rush"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "collect mid depot rush"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "move to depot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "collect depot"
+          }
+        }
+      ]
     }
   },
   "resetOdom": true,
