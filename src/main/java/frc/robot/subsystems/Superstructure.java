@@ -23,7 +23,7 @@ import com.ctre.phoenix6.swerve.SwerveDrivetrain.SwerveControlParameters;
 
 public class Superstructure extends SubsystemBase {
     public States currentState = States.SAFE;
-    public States wantedState = States.ZERO;
+    public States wantedState = States.SAFE;
     public States prevState = States.SAFE;
     public IntakeStates userRequestedIntakeState = IntakeStates.SAFE;
 
