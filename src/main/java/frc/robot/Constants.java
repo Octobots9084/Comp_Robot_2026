@@ -46,17 +46,17 @@ public final class Constants {
   public static final double FlywheelDiamiter = 0.1016;
   public static final double TurretDistFromCenter = 0.2051;
   public static final String frontRightCameraName = "FrontRightCamera";
-  public static final String frontleftCameraName = "FrontleftCamera";
+  public static final String frontleftCameraName = "FrontLeftCamera";
   public static final String rightCameraName = "RightCamera";
   public static final String leftCameraName = "LeftCamera";
   // public static final String intakeCameraName = "IntakeCamera";
   public static final AprilTagFieldLayout kTagLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded);
   private static final double camPitch = Units.degreesToRadians(20);
   //-20 -26.57
-  public static final Transform3d robotToCamFrontRight = new Transform3d(new Translation3d(-0.16,0.245,-0.31),
+  public static final Transform3d robotToCamFrontRight = new Transform3d(new Translation3d(-0.16,-0.31,0.245),
       new Rotation3d(0,0,Math.PI).plus(new Rotation3d(0, (-20/180.0)*Math.PI, 0).plus(new Rotation3d(0, 0, (-26.57/180.0)*Math.PI))));
   //-20 +30
-  public static final Transform3d robotToCamFrontLeft = new Transform3d(new Translation3d(-0.16, 0.185, -12.5),
+  public static final Transform3d robotToCamFrontLeft = new Transform3d(new Translation3d(-0.16, -0.125, 0.185),
       new Rotation3d(0,0,Math.PI).plus(new Rotation3d(0, (-20/180.0)*Math.PI, 0).plus(new Rotation3d(0, 0, (30/180.0)*Math.PI))));
   public static final Transform3d robotToCamRight = new Transform3d(new Translation3d(-0.09, 0.37, .30),
       new Rotation3d(0, -camPitch, Math.PI/2));

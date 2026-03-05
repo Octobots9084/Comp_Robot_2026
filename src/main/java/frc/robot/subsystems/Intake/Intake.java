@@ -75,23 +75,23 @@ public class Intake extends SubsystemBase {
 
         switch (currentState) {
 
-            // case INTAKING:
-            // //motors on intake out
-            // break;
+            case INTAKING:
+            //motors on intake out
+            break;
 
-            // case EXTENDED:
-            // //motors off intake out
-            // break;
+            case EXTENDED:
+            //motors off intake out
+            break;
 
-            // case SAFE:
-            // //motors off intake in
-            // break;
+            case SAFE:
+            //motors off intake in
+            break;
 
-            // case REVERSEINTAKING:
-            // //motors reverse intake out
-            // break;
+            case REVERSEINTAKING:
+            //motors reverse intake out
+            break;
             case ZERO:
-                if (zeroIntake()) {
+                if (io.zeroIntake()) {
                     alreadyZeroed = true;
                     wantedState = IntakeStates.SAFE;
                 }else{
@@ -120,16 +120,4 @@ public class Intake extends SubsystemBase {
     public IntakeStates getWantedState() {
         return this.wantedState;
     }
-
-    public boolean zeroIntake() {
-        boolean pressed = io.isZeroingSwitchPressed();
-        if (pressed) {
-            io.setRotateVoltage(3);
-        } else {
-            io.setRotateVoltage(-3);
-        }
-        return pressed;
-
-    }
-
 }

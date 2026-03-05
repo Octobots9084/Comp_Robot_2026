@@ -16,14 +16,14 @@ public class IntakeIOTalonFX implements IntakeIO {
      public TalonFX pivot;
      public TalonFX roller;
      private MotionMagicVelocityVoltage rollerRequest = new MotionMagicVelocityVoltage(0);
-     private MotionMagicVoltage pivotRequest;
+     private MotionMagicVoltage pivotRequest = new MotionMagicVoltage(0);
 
      public IntakeIOTalonFX() {
           config = new IntakeConfigurator();
-          roller.setNeutralMode(NeutralModeValue.Coast);
 
           roller = new TalonFX(Constants.intakeRollerID, Constants.krakenBus);
           pivot = new TalonFX(Constants.intakePivotID, Constants.krakenBus);
+          roller.setNeutralMode(NeutralModeValue.Coast);
           roller.getConfigurator().apply(config.intakeRollerConfig);
           pivot.getConfigurator().apply(config.intakePivotConfig);
      }
@@ -31,17 +31,15 @@ public class IntakeIOTalonFX implements IntakeIO {
      public void updateInputs(IntakeIOInputs inputs) {
           inputs.intakePosition = pivot.getPosition().getValueAsDouble();
           inputs.rollerRPS = roller.getVelocity().getValueAsDouble();
-          inputs.rollerTemp = roller.getDeviceTemp().getValueAsDouble();
+          // inputs.rollerTemp = roller.getDeviceTemp().getValueAsDouble();
           inputs.pivotTemp = pivot.getDeviceTemp().getValueAsDouble();
      }
 
      @Override
      public void setIntakeState(IntakeStates states) {
-          pivotRequest.Position = states.intakePosition;
-          rollerRequest.Velocity = states.rollerRPS;
-          pivot.setControl(pivotRequest);
-          roller.setControl(rollerRequest);
-          roller.setVoltage(states.rollerRPS/6);
+          // pivotRequest.Position = states.intakePosition;
+          pivot.setControl(pivotRequest.withPosition(states.intakePosition));
+          roller.setVoltage(states.rollerRPS);
      }
 
      @Override
@@ -61,4 +59,15 @@ public class IntakeIOTalonFX implements IntakeIO {
      public boolean isZeroingSwitchPressed() {// GAS_D
           return zeroingSwitch.get();
      }
+
+         public boolean zeroIntake() {
+        boolean pressed = isZeroingSwitchPressed();
+        if (!pressed) {
+            setRotateVoltage(0);
+            pivot.setPosition(0);
+        } else {
+            setRotateVoltage(-3);
+        }
+        return !pressed;
+    }
 }

@@ -72,6 +72,12 @@ public class ButtonConfig {
             .onFalse(new InstantCommand(
             () -> {SwerveSubsystem.getInstance().wantedState = SwerveStates.MANUAL; /*superstructure.setWantedState(States.SAFE);*/ SmartDashboard.putBoolean("X",false);}
             ));
+
+        driverController.leftBumper().onTrue(new InstantCommand(() -> {
+            Intake.getInstance().wantedState = IntakeStates.ZERO;
+        })).onFalse(new InstantCommand(() -> {
+            Intake.getInstance().wantedState = IntakeStates.SAFE;
+        }));
         // if (Constants.robotType != RobotTypes.COMP) {
             // driverController.a().onTrue(new SetStateClimbL3());
             // driverController.b().onTrue(new SetStateUnclimb());

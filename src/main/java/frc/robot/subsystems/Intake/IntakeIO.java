@@ -34,4 +34,7 @@ public interface IntakeIO {
     public default boolean isZeroingSwitchPressed() {// GAS_D
         return false;
     }
+    public default boolean zeroIntake(){
+        return false;
+    }
 }
