@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.4573469387755096,
+        "y": 2.4696805678793248
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 5.97634427684117,
+        "y": 3.13765749778172
+      },
+      "isLocked": false,
+      "linkedName": "Start Bottom Bump"
+    },
+    {
+      "anchor": {
+        "x": 8.221712511091393,
+        "y": 1.0532475598935218
+      },
+      "prevControl": {
+        "x": 6.748944099378882,
+        "y": 0.8520496894409931
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Start rush to center from bump 2"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 1.0,
+    "maxAcceleration": 1.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 90.0
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 45.0
+  },
+  "useDefaultConstraints": true
+}
