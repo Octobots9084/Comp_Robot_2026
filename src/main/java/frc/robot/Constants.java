@@ -89,6 +89,8 @@ public final class Constants {
   public static Translation2d swerveModuleThreeOffset = new Translation2d(-1, 1);
   public static Translation2d swerveModuleFourOffset = new Translation2d(-1, -1);
 
+  public static boolean isZeroed = false;
+
   public static enum Mode {
     /** Running on a real robot. */
     REAL,
@@ -110,10 +112,10 @@ public final class Constants {
   public static double maximumHoodPosition = 0.1157;
   public static double maximumTurretPosition = 0.8; // TODO set this to an actual value so sinjin doesnt cry
 
-  public static double turretGearRatio = (60/ 14) * (156 / 23);
-  public static double hoodGearRatio = 19/12;// (23/20)*(18/0.9);
-  public static double flywheelGearRatio = 29/33;
-  public static double flywheelToTopRollerRatio = 24/18;
+  public static double turretGearRatio = (60 / 14.0) * (156 / 20.0); //it is flipped to allign turret and gyro yaw rotation
+  public static double hoodGearRatio = 19/12.0 *(18/0.9);
+  public static double flywheelGearRatio = 29/33.0;
+  public static double flywheelToTopRollerRatio = 24/18.0;
   public static double flywheelRadius = 0.0508;
   public static double topRollerRadius = 0.0254;
 
@@ -146,6 +148,9 @@ public final class Constants {
     public static double climbStartRotationBlueNegY = -Math.PI/2; //TODO get a real value
 
     public static double fieldCenterY = 4.02082;
+
+    public static final double maxTurretAngle = (359/360.0)*Math.PI;
+    public static final double minTurretAngle = -(359/360.0)*Math.PI;
 
   // set to ALPHA later
   public static enum RobotTypes {

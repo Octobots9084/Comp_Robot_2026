@@ -12,7 +12,8 @@ public interface TurretIO {
         public double turretMotorTemp;
         public double turretRequest;
         public double hoodRequest;
-
+        public double turretVoltage;
+        public double turretCurrent;
     }
 
     public default void updateInputs(TurretIOInputs inputs) {

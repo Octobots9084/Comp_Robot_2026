@@ -5,6 +5,7 @@ import java.security.spec.ECPublicKeySpec;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.commands.auto.StateChange.SetIntakeStateSafe;
 import frc.robot.subsystems.*; // WHY DID WE HAVE SO MANY IMPORTS FROM THIS THING JUST IMPORT IT ALL
 import frc.robot.subsystems.Climb.*; //I don't know why we need this
@@ -14,6 +15,8 @@ import frc.robot.subsystems.Intake.*;//same
 import frc.robot.subsystems.Shooter.*;//same here
 import frc.robot.subsystems.Shooter.Feeder.Feeder;
 import frc.robot.subsystems.Shooter.Flywheel.*;
+import frc.robot.subsystems.Shooter.Turret.Turret;
+
 import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.swerve.SwerveDrivetrain.SwerveControlParameters;
@@ -80,17 +83,19 @@ public class Superstructure extends SubsystemBase {
                 // if (climb.getClimbState() != ClimbStates.CLIMBEDL1 || climb.getClimbState() != ClimbStates.CLIMBEDL3) {
                     currentState = States.SAFE;
                 // }
+                break;
             case CLIMB_L3:
                 currentState = States.CLIMB_L3;
+                break;
             case CLIMB_L1:
                 currentState = States.CLIMB_L1;
-
+                break;
             case SHOOTER:
                 // if (climb.getClimbState() != ClimbStates.CLIMBEDL1 || climb.getClimbState() != ClimbStates.CLIMBEDL3) {
                     currentState = States.SHOOTER;
                     
                 // }
-                currentState = States.SHOOTER;
+                break;
             case ZERO:
                 if (!shooter.alreadyZeroed){
                     currentState = States.ZERO;
@@ -99,7 +104,7 @@ public class Superstructure extends SubsystemBase {
                     wantedState = States.AUTONONFIRE;
                 }
                 else {
-                    wantedState = States.SHOOTER;
+                    wantedState = States.SAFE;
                 }
                 break;
             case AUTO:
@@ -136,10 +141,10 @@ public class Superstructure extends SubsystemBase {
                 break;
             case ZERO:
                 if(stateZERO()){
-                    if(!DriverStation.isAutonomousEnabled()){
-                        wantedState = States.SHOOTER;
-                    }else{
+                    if(DriverStation.isAutonomousEnabled()){
                         wantedState = States.AUTONONFIRE;
+                    }else{
+                        wantedState = States.SAFE;
                     }
                 }
                 break;

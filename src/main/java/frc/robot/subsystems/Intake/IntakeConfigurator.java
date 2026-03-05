@@ -50,16 +50,15 @@ public class IntakeConfigurator {
         intakePivotConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
         // create PID gains
-        intakePivotConfig.Slot0.kP = 1;
-        intakePivotConfig.Slot0.kI = 0.0;
+        intakePivotConfig.Slot0.kP = 20;
+        intakePivotConfig.Slot0.kI = 0.1;
         intakePivotConfig.Slot0.kD = 0.0;
         intakePivotConfig.Slot0.kA = 0.0;
         intakePivotConfig.Slot0.kV = 0.0;
         intakePivotConfig.Slot0.kS = 0.0;
         intakePivotConfig.Slot0.kG = 0.0;
 
-        intakePivotConfig.MotionMagic.MotionMagicAcceleration = 0;
-        intakePivotConfig.MotionMagic.MotionMagicJerk = 0;
-        intakePivotConfig.MotionMagic.MotionMagicCruiseVelocity = 0;
+        intakePivotConfig.MotionMagic.MotionMagicAcceleration = 300;
+        intakePivotConfig.MotionMagic.MotionMagicJerk = 40;
     }
 }

@@ -31,7 +31,7 @@ public class ShooterConfigurator {
 
         // set break mode and inversion
         flyWheelRightConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-        flyWheelRightConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+        flyWheelRightConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
         // create PID gains
         flyWheelRightConfig.Slot0.kP = 0.15;
@@ -54,12 +54,12 @@ public class ShooterConfigurator {
         turretConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
         turretConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
         // create PID gains
-        turretConfig.Slot0.kP = 1125;
+        turretConfig.Slot0.kP = 2; //1125;
         turretConfig.Slot0.kI = 0.0;
         turretConfig.Slot0.kD = 0.0;
         turretConfig.Slot0.kA = 0.0;
         turretConfig.Slot0.kV = 0.0;
-        turretConfig.Slot0.kS = 0.5;
+        turretConfig.Slot0.kS = 0; //0.5;
         turretConfig.Slot0.kG = 0.0;
 
         turretConfig.MotionMagic.MotionMagicAcceleration = 10;
@@ -76,7 +76,7 @@ public class ShooterConfigurator {
         hoodConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
         // hoodConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
         // create PID gains
-        hoodConfig.Slot0.kP = 100;
+        hoodConfig.Slot0.kP = 5;
         hoodConfig.Slot0.kI = 0.0;
         hoodConfig.Slot0.kD = 0.0;
         hoodConfig.Slot0.kA = 0.0;

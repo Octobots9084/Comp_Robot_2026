@@ -35,7 +35,7 @@ import frc.robot.subsystems.Shooter.Turret.TurretIOInputsAutoLogged;
 public class Shooter extends SubsystemBase {
     private ShooterAngle pastShooterAngle = new ShooterAngle(0, 0);
     public ShooterStates currentShooterState = ShooterStates.SAFE;// SAFE; //should be safe but useing hub for testing
-    public ShooterStates wantedShooterState = ShooterStates.HUB;
+    public ShooterStates wantedShooterState = ShooterStates.SAFE;
     private static Shooter instance = null;
     private final FeederIOInputsAutoLogged feederInputs = new FeederIOInputsAutoLogged();
     private final FlywheelIOInputsAutoLogged flywheelInputs = new FlywheelIOInputsAutoLogged();
@@ -107,7 +107,6 @@ public class Shooter extends SubsystemBase {
         switch (currentShooterState) {
             case SAFE:
                 // stop the flywheel
-                // Turret.getInstance().setTurretPosition(0);
                 feeder.setFeederVelocity(FeederStates.OFF);
                 flywheel.setFlywheelVelocity(FlywheelStates.SAFE);
                 break;
@@ -205,7 +204,7 @@ public class Shooter extends SubsystemBase {
 
             case ZERO:
             if (turret.io.turretZeroed()) {
-                    wantedShooterState = ShooterStates.HUB;
+                    wantedShooterState = ShooterStates.SAFE;
                     alreadyZeroed = true;
                 }
                 break;
@@ -250,7 +249,7 @@ public class Shooter extends SubsystemBase {
                 currentShooterState = ShooterStates.SAFE;
                 break;
             case ZERO:
-                    currentShooterState = ShooterStates.ZERO;
+                currentShooterState = ShooterStates.ZERO;
                 break;
             case MANUAL:
                 currentShooterState = ShooterStates.MANUAL;
@@ -394,22 +393,42 @@ public class Shooter extends SubsystemBase {
         SmartDashboard.putNumber("shooterHoodAngle", pastShooterAngle.hoodRotation);
         SmartDashboard.putNumber("shooterAngle", pastShooterAngle.turretRotation);
 
-        double rotation = SwerveSubsystem.getInstance().getRobotPose().getRotation().getDegrees();
+        double rotation = SwerveSubsystem.getInstance().getRobotPose().getRotation().getRadians();
+
+        double proposedAngle = (shooterAngle.turretRotation - rotation) + Math.PI % (2*Math.PI) - Math.PI;
+
+        if (
+            (proposedAngle - 2*Math.PI) > Constants.minTurretAngle
+            &&
+            Math.abs((rotation - 2*Math.PI)-shooterAngle.turretRotation) < Math.abs((rotation)-shooterAngle.turretRotation)
+            )
+        {
+            proposedAngle = proposedAngle - 2*Math.PI;
+        }
+        else if (
+            (proposedAngle + 2*Math.PI) < Constants.maxTurretAngle 
+            && 
+            Math.abs((rotation + 2*Math.PI) - shooterAngle.turretRotation) < Math.abs((rotation)-shooterAngle.turretRotation))
+        {
+            proposedAngle = proposedAngle + 2*Math.PI;
+        }
+
+        turret.setTurretPosition(proposedAngle/(2*Math.PI));//wrong
+
         // double rotation = -180;
-        rotation = rotation % 360;
-        rotation = 360 - rotation;
+        // rotation = rotation % 360;
+        // rotation = 360 - rotation;
 
-        // Invert gyro direction BEFORE scaling
-        // double offset = 190;//pastShooterAngle.turretRotation * (180.0 / Math.PI);
-        double alphabotJankboticsOffset = 0;
-        double offset = (pastShooterAngle.turretRotation * (180.0 / Math.PI));// + alphabotJankboticsOffset;
-        rotation += offset + 255; //maybe 255
-        rotation = rotation % 360;
-        double turretAngle = -(rotation / 360.0);
+        // // Invert gyro direction BEFORE scaling
+        // // double offset = 190;//pastShooterAngle.turretRotation * (180.0 / Math.PI);
+        // double offset = (pastShooterAngle.turretRotation * (180.0 / Math.PI));// + alphabotJankboticsOffset;
+        // rotation += offset + 255; //maybe 255
+        // rotation = rotation % 360;
+        // double turretAngle = -(rotation / 360.0);
 
-        turret.setTurretPosition(turretAngle);
+        // turret.setTurretPosition(turretAngle);
         double hoodInverted = 85 - (pastShooterAngle.hoodRotation * 180) / Math.PI;
-        // double hoodInverted = 85-(67);
+        // // double hoodInverted = 85-(67);
         double hoodRelative = hoodInverted / 360;
 
 
