@@ -219,8 +219,10 @@ public class Shooter extends SubsystemBase {
         switch (wantedShooterState) {
             case HUB:
                 // if we're on our side of the field
-                if (true) {// !tilted and in alliance
+                if (swerve.isInAllianceZone()) {// !tilted and in alliance
                     currentShooterState = ShooterStates.HUB;
+                }else{
+                    currentShooterState = ShooterStates.FERRY;
                 }
                 break;
             case AUTOHUB:
@@ -232,16 +234,16 @@ public class Shooter extends SubsystemBase {
 
             case FERRY:
                 // if we're in neutral or enemy zone
-                if (true) {// !tilted and !in alliance
+                if (!swerve.isInAllianceZone()) {// !tilted and !in alliance
                     currentShooterState = ShooterStates.FERRY;
+                }else{
+                    currentShooterState = ShooterStates.HUB;
                 }
                 break;
 
             case BUMP:
                 // if we're on the bump (SHOCKING!!!)
-                if (true) { // robot is tilted
-                    currentShooterState = ShooterStates.BUMP;
-                }
+                currentShooterState = ShooterStates.BUMP;
                 break;
 
             case SAFE:

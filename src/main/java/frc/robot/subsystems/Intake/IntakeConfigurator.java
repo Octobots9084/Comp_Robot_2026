@@ -46,7 +46,7 @@ public class IntakeConfigurator {
         intakePivotConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 
         // set break mode and inversion
-        intakePivotConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+        intakePivotConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
         intakePivotConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
         // create PID gains

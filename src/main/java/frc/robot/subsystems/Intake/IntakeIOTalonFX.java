@@ -31,7 +31,7 @@ public class IntakeIOTalonFX implements IntakeIO {
      public void updateInputs(IntakeIOInputs inputs) {
           inputs.intakePosition = pivot.getPosition().getValueAsDouble();
           inputs.rollerRPS = roller.getVelocity().getValueAsDouble();
-          // inputs.rollerTemp = roller.getDeviceTemp().getValueAsDouble();
+          inputs.rollerTemp = roller.getDeviceTemp().getValueAsDouble();
           inputs.pivotTemp = pivot.getDeviceTemp().getValueAsDouble();
      }
 
@@ -66,7 +66,7 @@ public class IntakeIOTalonFX implements IntakeIO {
             setRotateVoltage(0);
             pivot.setPosition(0);
         } else {
-            setRotateVoltage(-3);
+
         }
         return !pressed;
     }
