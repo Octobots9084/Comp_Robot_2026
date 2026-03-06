@@ -75,90 +75,79 @@ public class VisionIOSystem implements VisionIO {
 
     @Override
     public void periodic() {
+        boolean hadGoodPose = false;
         double startTime = Timer.getFPGATimestamp();
         Optional<EstimatedRobotPose> visionEst = Optional.empty();
         for (var result : rightCamera.getAllUnreadResults()) {
-            result.targets = removeAmbigousTargets(result.targets);
-            visionEst = photonEstimatorRight.estimateCoprocMultiTagPose(result);
-            if (visionEst.isEmpty()) {
-                visionEst = photonEstimatorRight.estimateLowestAmbiguityPose(result);
-            }
-            updateEstimationStdDevs(visionEst, result.getTargets());
+            if(result.hasTargets()) {
+                result.targets = removeAmbigousTargets(result.targets);
+                visionEst = photonEstimatorRight.estimateCoprocMultiTagPose(result);
+                if (visionEst.isEmpty()) {
+                    visionEst = photonEstimatorRight.estimateLowestAmbiguityPose(result);
+                }
+                updateEstimationStdDevs(visionEst, result.getTargets());
 
-            visionEst.ifPresent(
-                    est -> {
-                        // Change our trust in the measurement based on the tags we can see
-                        var estStdDevs = getEstimationStdDevs();
-                        estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
-                    });
+                visionEst.ifPresent(
+                        est -> {
+                            // Change our trust in the measurement based on the tags we can see
+                            var estStdDevs = getEstimationStdDevs();
+                            estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+                        });
+                }
         }
         for (var result : leftCamera.getAllUnreadResults()) {
-                result.targets = removeAmbigousTargets(result.targets);
-                visionEst = photonEstimatorLeft.estimateCoprocMultiTagPose(result);
-                if (visionEst.isEmpty()) {
-                    visionEst = photonEstimatorLeft.estimateLowestAmbiguityPose(result);
-                }
-            updateEstimationStdDevs(visionEst, result.getTargets());
+            if(result.hasTargets()) {
+                    result.targets = removeAmbigousTargets(result.targets);
+                    visionEst = photonEstimatorLeft.estimateCoprocMultiTagPose(result);
+                    if (visionEst.isEmpty()) {
+                        visionEst = photonEstimatorLeft.estimateLowestAmbiguityPose(result);
+                    }
+                updateEstimationStdDevs(visionEst, result.getTargets());
 
-            visionEst.ifPresent(
-                    est -> {
-                        // Change our trust in the measurement based on the tags we can see
-                        var estStdDevs = getEstimationStdDevs();
-                        estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
-                    });
+                visionEst.ifPresent(
+                        est -> {
+                            // Change our trust in the measurement based on the tags we can see
+                            var estStdDevs = getEstimationStdDevs();
+                            estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+                        });
+            }
         }
     
         for (var result : frontRightCamera.getAllUnreadResults()) {
-            result.targets = removeAmbigousTargets(result.targets);
-            visionEst = photonEstimatorFrontRight.estimateCoprocMultiTagPose(result);
-            if (visionEst.isEmpty()) {
-                visionEst = photonEstimatorFrontRight.estimateLowestAmbiguityPose(result);
-            }
-            updateEstimationStdDevs(visionEst, result.getTargets());
-            // if (Robot.isSimulation()) {
-            // visionEst.ifPresentOrElse(
-            // est ->
-            // getSimDebugField()
-            // .getObject("VisionEstimation")
-            // .setPose(est.estimatedPose.toPose2d()),
-            // () -> {
-            // getSimDebugField().getObject("VisionEstimation").setPoses();
-            // });
-            // }
+            if(result.hasTargets()) {
+                result.targets = removeAmbigousTargets(result.targets);
+                visionEst = photonEstimatorFrontRight.estimateCoprocMultiTagPose(result);
+                if (visionEst.isEmpty()) {
+                    visionEst = photonEstimatorFrontRight.estimateLowestAmbiguityPose(result);
+                }
+                updateEstimationStdDevs(visionEst, result.getTargets());
 
-            visionEst.ifPresent(
-                    est -> {
-                        // Change our trust in the measurement based on the tags we can see
-                        var estStdDevs = getEstimationStdDevs();
+                visionEst.ifPresent(
+                        est -> {
+                            // Change our trust in the measurement based on the tags we can see
+                            var estStdDevs = getEstimationStdDevs();
 
-                        estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
-                    });
+                            estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+                        });
+                }
         }
         for (var result : frontLeftCamera.getAllUnreadResults()) {
-            result.targets = removeAmbigousTargets(result.targets);
-            visionEst = photonEstimatorFrontLeft.estimateCoprocMultiTagPose(result);
-            if (visionEst.isEmpty()) {
-                visionEst = photonEstimatorFrontLeft.estimateLowestAmbiguityPose(result);
+            if(result.hasTargets()) {
+                result.targets = removeAmbigousTargets(result.targets);
+                visionEst = photonEstimatorFrontLeft.estimateCoprocMultiTagPose(result);
+                if (visionEst.isEmpty()) {
+                    visionEst = photonEstimatorFrontLeft.estimateLowestAmbiguityPose(result);
+                }
+                updateEstimationStdDevs(visionEst, result.getTargets());
+
+                visionEst.ifPresent(
+                        est -> {
+                            // Change our trust in the measurement based on the tags we can see
+                            var estStdDevs = getEstimationStdDevs();
+
+                            estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+                        });
             }
-            updateEstimationStdDevs(visionEst, result.getTargets());
-            // if (Robot.isSimulation()) {
-            // visionEst.ifPresentOrElse(
-            // est ->
-            // getSimDebugField()
-            // .getObject("VisionEstimation")
-            // .setPose(est.estimatedPose.toPose2d()),
-            // () -> {
-            // getSimDebugField().getObject("VisionEstimation").setPoses();
-            // });
-            // }
-
-            visionEst.ifPresent(
-                    est -> {
-                        // Change our trust in the measurement based on the tags we can see
-                        var estStdDevs = getEstimationStdDevs();
-
-                        estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
-                    });
         }
         this.visonCycleTime = Timer.getFPGATimestamp()-startTime;
     }

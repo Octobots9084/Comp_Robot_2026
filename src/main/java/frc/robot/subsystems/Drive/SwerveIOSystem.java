@@ -296,29 +296,10 @@ public class SwerveIOSystem extends TunerSwerveDrivetrain implements Subsystem, 
         inputs.OdometryPeriod = state.OdometryPeriod;
         inputs.SuccessfulDaqs = state.SuccessfulDaqs;
         inputs.FailedDaqs = state.FailedDaqs;
-        inputs.GyroRotation = this.getPigeon2().getRotation3d();
-        inputs.GyroRoll = this.getPigeon2().getRoll().getValueAsDouble();
-        inputs.GyroPitch = this.getPigeon2().getPitch().getValueAsDouble();
-        inputs.GyroYaw = this.getPigeon2().getYaw().getValueAsDouble();
-        inputs.steerCurrent0 = this.getModule(0).getSteerMotor().getStatorCurrent().getValueAsDouble();
-        inputs.steerCurrent1 = this.getModule(1).getSteerMotor().getStatorCurrent().getValueAsDouble();
-        inputs.steerCurrent2 = this.getModule(2).getSteerMotor().getStatorCurrent().getValueAsDouble();
-        inputs.steerCurrent3 = this.getModule(3).getSteerMotor().getStatorCurrent().getValueAsDouble();
-        inputs.driveCurrent0 = this.getModule(0).getDriveMotor().getStatorCurrent().getValueAsDouble();
-        inputs.driveCurrent1 = this.getModule(1).getDriveMotor().getStatorCurrent().getValueAsDouble();
-        inputs.driveCurrent2 = this.getModule(2).getDriveMotor().getStatorCurrent().getValueAsDouble();
-        inputs.driveCurrent3 = this.getModule(3).getDriveMotor().getStatorCurrent().getValueAsDouble();
-
-        // public Pose2d Pose = new Pose2d();
-        // public ChassisSpeeds Speeds = new ChassisSpeeds();
-        // public SwerveModuleState[] ModuleStates;
-        // public SwerveModuleState[] ModuleTargets;
-        // public SwerveModulePosition[] ModulePositions;
-        // public Rotation2d RawHeading = new Rotation2d();
-        // public double Timestamp;
-        // public double OdometryPeriod;
-        // public int SuccessfulDaqs;
-        // public int FailedDaqs;
+        // inputs.GyroRotation = this.getPigeon2().getRotation3d();
+        // inputs.GyroRoll = this.getPigeon2().getRoll().getValueAsDouble();
+        // inputs.GyroPitch = this.getPigeon2().getPitch().getValueAsDouble();
+        // inputs.GyroYaw = this.getPigeon2().getYaw().getValueAsDouble();
     }
 
     public void registerTelemetryFunction(SwerveIOInputs inputs) {

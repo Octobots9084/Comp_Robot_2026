@@ -54,7 +54,7 @@ public class ShooterConfigurator {
         turretConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
         turretConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
         // create PID gains
-        turretConfig.Slot0.kP = 100; //1125;
+        turretConfig.Slot0.kP = 1000; //1125;
         turretConfig.Slot0.kI = 0.0;
         turretConfig.Slot0.kD = 0.0;
         turretConfig.Slot0.kA = 0.0;

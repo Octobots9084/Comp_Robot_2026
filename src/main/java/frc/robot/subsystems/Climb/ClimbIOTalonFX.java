@@ -38,7 +38,6 @@ public class ClimbIOTalonFX implements ClimbIO {
 
     @Override
     public void updateInputs(ClimbIOInputs inputs) {
-        // inputs.climbMotorControlledTemperature = climbRotateMotorControlled.getDeviceTemp().getValueAsDouble();
         // inputs.climbPosition = climbRotateMotorControlled.getPosition().getValueAsDouble();
     }
 

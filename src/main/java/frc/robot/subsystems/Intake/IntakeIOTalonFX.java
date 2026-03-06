@@ -32,10 +32,8 @@ public class IntakeIOTalonFX implements IntakeIO {
      public void updateInputs(IntakeIOInputs inputs) {
           inputs.intakePosition = pivot.getPosition().getValueAsDouble();
           inputs.rollerRPS = roller.getVelocity().getValueAsDouble();
-          inputs.rollerTemp = roller.getDeviceTemp().getValueAsDouble();
-          inputs.pivotTemp = pivot.getDeviceTemp().getValueAsDouble();
           inputs.pivotRequest = pivotRequest.getPositionMeasure().in(Units.Rotations);
-          inputs.pivotCurrent = pivot.getStatorCurrent().getValueAsDouble();
+          // inputs.pivotCurrent = pivot.getStatorCurrent().getValueAsDouble();
           inputs.pivotLimitSwitch = this.isZeroingSwitchPressed();
      }
 
