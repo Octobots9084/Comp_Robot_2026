@@ -35,9 +35,9 @@ public class IntakeConfigurator {
         intakeRollerConfig.Slot0.kS = 0.0;
         intakeRollerConfig.Slot0.kG = 0.0;
 
-        intakeRollerConfig.MotionMagic.MotionMagicAcceleration = 0;
+        intakeRollerConfig.MotionMagic.MotionMagicAcceleration = 10;
         intakeRollerConfig.MotionMagic.MotionMagicJerk = 0;
-        intakeRollerConfig.MotionMagic.MotionMagicCruiseVelocity = 0;
+        intakeRollerConfig.MotionMagic.MotionMagicCruiseVelocity = 10;
 
         // intake pivot right config
         intakePivotConfig.CurrentLimits.SupplyCurrentLimit = 20;

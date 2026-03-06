@@ -22,6 +22,7 @@ public interface IntakeIO {
 
     public default void setIntakeState(IntakeStates states) {
     }
+    public default void setRollerSpeed(double rps){}
 
     public default double getRollerRPS() {
         return 0;

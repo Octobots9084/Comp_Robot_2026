@@ -5,6 +5,7 @@ import org.littletonrobotics.junction.Logger;
 import com.ctre.phoenix6.hardware.CANrange;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -66,6 +67,7 @@ public class Shooter extends SubsystemBase {
     private Translation2d redFerryDepot = new Translation2d(11.917 + 2,2.011);
     public boolean isAimedAtHub;
     public double shooterCalculatorVelocity;
+    public int flywheelDebouncer = 0;
 
     public Shooter(FeederIO fIO, FlywheelIO fwIO, TurretIO tIO, ShooterIO sIO) {
         this.fIO = fIO;
@@ -146,12 +148,19 @@ public class Shooter extends SubsystemBase {
                         // flywheel.setFlywheelVelocity(10+2*((getDistanceToHub()-1.237)/(5.476-1.237)));
                         flywheel.setFlywheelVelocity(12);
                         // flywheel.setFlywheelVelocity(FlywheelStates.HUB);
-
-                        if(isAimedAtHub && flywheel.FlywheelInTolerance(8)){
-                            feeder.setFeederVelocity(FeederStates.SCORING);
-                        }else{
-                            feeder.setFeederVelocity(FeederStates.OFF);
+                        if(isAimedAtHub){
+                            if(flywheel.FlywheelInTolerance(1)){
+                                feeder.setFeederVelocity(FeederStates.SCORING);
+                                flywheelDebouncer = 0;
+                            }else if (flywheelDebouncer<10){
+                                flywheelDebouncer ++;
+                                feeder.setFeederVelocity(FeederStates.SCORING);
+                            }
+                            else{
+                                feeder.setFeederVelocity(FeederStates.OFF);
+                            }
                         }
+                        
                     }else{
                         feeder.setFeederVelocity(FeederStates.OFF);
                         flywheel.setFlywheelVelocity(FlywheelStates.SAFE);
@@ -224,6 +233,9 @@ public class Shooter extends SubsystemBase {
 
     // state transitions for spit and manual needed
     public void handleStateTransitions() {
+        if (wantedShooterState != ShooterStates.HUB && currentShooterState == ShooterStates.HUB){
+            flywheelDebouncer = 0;
+        }
         switch (wantedShooterState) {
             case HUB:
                 // if we're on our side of the field

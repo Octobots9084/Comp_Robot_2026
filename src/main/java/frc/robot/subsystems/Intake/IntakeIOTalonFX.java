@@ -58,6 +58,11 @@ public class IntakeIOTalonFX implements IntakeIO {
           this.pivot.setVoltage(voltage);
      }
 
+     @Override
+     public void setRollerSpeed(double rps){
+          roller.setControl(rollerRequest.withVelocity(rps));
+     }
+
      public boolean isZeroingSwitchPressed() {// GAS_D
           return zeroingSwitch.get();
      }
