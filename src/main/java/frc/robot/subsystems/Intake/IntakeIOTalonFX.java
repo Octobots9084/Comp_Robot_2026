@@ -8,6 +8,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.units.Units;
 import frc.robot.Constants;
 
 public class IntakeIOTalonFX implements IntakeIO {
@@ -33,6 +34,9 @@ public class IntakeIOTalonFX implements IntakeIO {
           inputs.rollerRPS = roller.getVelocity().getValueAsDouble();
           inputs.rollerTemp = roller.getDeviceTemp().getValueAsDouble();
           inputs.pivotTemp = pivot.getDeviceTemp().getValueAsDouble();
+          inputs.pivotRequest = pivotRequest.getPositionMeasure().in(Units.Rotations);
+          inputs.pivotCurrent = pivot.getStatorCurrent().getValueAsDouble();
+          inputs.pivotLimitSwitch = this.isZeroingSwitchPressed();
      }
 
      @Override
@@ -60,13 +64,15 @@ public class IntakeIOTalonFX implements IntakeIO {
           return zeroingSwitch.get();
      }
 
-         public boolean zeroIntake() {
+     public boolean zeroIntake() {
         boolean pressed = isZeroingSwitchPressed();
         if (!pressed) {
             setRotateVoltage(0);
             pivot.setPosition(0);
+            Intake.getInstance().alreadyZeroed = true;
         } else {
-
+          setRotateVoltage(-2);
+          Intake.getInstance().alreadyZeroed = false;
         }
         return !pressed;
     }

@@ -34,8 +34,8 @@ import frc.robot.subsystems.Shooter.Turret.TurretIOInputsAutoLogged;
 
 public class Shooter extends SubsystemBase {
     private ShooterAngle pastShooterAngle = new ShooterAngle(0, 0);
-    public ShooterStates currentShooterState = ShooterStates.HUB;// SAFE; //should be safe but useing hub for testing
-    public ShooterStates wantedShooterState = ShooterStates.HUB;
+    public ShooterStates currentShooterState = ShooterStates.SAFE;// SAFE; //should be safe but useing hub for testing
+    public ShooterStates wantedShooterState = ShooterStates.SAFE;
     private static Shooter instance = null;
     private final FeederIOInputsAutoLogged feederInputs = new FeederIOInputsAutoLogged();
     private final FlywheelIOInputsAutoLogged flywheelInputs = new FlywheelIOInputsAutoLogged();
@@ -49,7 +49,8 @@ public class Shooter extends SubsystemBase {
     // public final CommandXboxController coDriverController;
     public Feeder feeder = new Feeder();
     public Turret turret;
-    public boolean alreadyZeroed = false;
+    public boolean turretAlreadyZeroed = false;
+    public boolean hoodAlreadyZeroed = false;
     public Flywheel flywheel = new Flywheel();
     public final double prefire = 1;
     public static boolean driverOverride = false;
@@ -135,9 +136,15 @@ public class Shooter extends SubsystemBase {
                 break;
             case HUB:
                 isAimedAtHub = isAimedAtHub();
+                // isAimedAtHub = true;
+                // turret.setTurretPosition(-90.0/360.0);
+                // turret.setHoodPosition(45/360.0);
+                
                 if(swerve.isInAllianceZone()){
                     if(driverOverride){
-                        flywheel.setFlywheelVelocity(37+10*((getDistanceToHub()-1.237)/(5.476-1.237)));
+                        // flywheel.setFlywheelVelocity(7.098+1.34*((getDistanceToHub()-1.237)/(5.476-1.237)));
+                        // flywheel.setFlywheelVelocity(10+2*((getDistanceToHub()-1.237)/(5.476-1.237)));
+                        flywheel.setFlywheelVelocity(12);
                         // flywheel.setFlywheelVelocity(FlywheelStates.HUB);
 
                         if(isAimedAtHub && flywheel.FlywheelInTolerance(8)){
@@ -203,9 +210,9 @@ public class Shooter extends SubsystemBase {
                 break;
 
             case ZERO:
-            if (turret.io.turretZeroed() && turret.io.hoodZeroed()) {
-                    wantedShooterState = ShooterStates.SAFE;
-                    alreadyZeroed = true;
+                // TODO add hood zeroing
+                if (turret.io.turretZeroed()) {
+                        wantedShooterState = ShooterStates.HUB;
                 }
                 break;
             default:
@@ -353,7 +360,8 @@ public class Shooter extends SubsystemBase {
                     swerve.io.getChassisSpeeds().vyMetersPerSecond,
                     XToHub,
                     YToHub,
-                    7.098+1.34*((getDistanceToHub()-1.237)/(5.476-1.237))// 0.5 * Constants.FlywheelDiamiter * Math.PI *
+                    8.5
+                    // 7.098+1.34*((getDistanceToHub()-1.237)/(5.476-1.237))// 0.5 * Constants.FlywheelDiamiter * Math.PI *
                        // (Flywheel.getInstance().getFlywheelVelocity()[1]*2*Math.PI *
                        // Flywheel.flywheelRadius +
                        // Flywheel.getInstance().getFlywheelVelocity()[0]*2*Math.PI *
@@ -379,13 +387,13 @@ public class Shooter extends SubsystemBase {
                     
             double toHub = Math.sqrt(YToHub*YToHub+XToHub*XToHub);
 
-            shooterCalculatorVelocity = 7.09786+1.91*((getDistanceToHub()-1.237)/(5.476-1.237));
+            // shooterCalculatorVelocity = 7.09786+1.91*((getDistanceToHub()-1.237)/(5.476-1.237));
             shooterAngle = ShooterAngleCalculator.getShooterAngleToHub(
                     swerve.io.getChassisSpeeds().vxMetersPerSecond,
                     swerve.io.getChassisSpeeds().vyMetersPerSecond,
                     XToHub,
                     YToHub,
-                    shooterCalculatorVelocity);
+                    8.5);
             // SmartDashboard.putNumber("flywheel modulated speed",  6.22273+0.84091*((getDistanceToHub()-1.237)/(5.476-1.237)));
         }
 
@@ -397,7 +405,7 @@ public class Shooter extends SubsystemBase {
 
         double rotation = SwerveSubsystem.getInstance().getRobotPose().getRotation().getRadians();
 
-        rotation = rotation+Math.PI/2;
+        rotation = rotation-Math.PI/2;
 
         double proposedAngle = (((pastShooterAngle.turretRotation - rotation) + Math.PI) % (2*Math.PI) - Math.PI);
         Logger.recordOutput("ProposedAngle", 180*proposedAngle/(Math.PI));
@@ -421,6 +429,7 @@ public class Shooter extends SubsystemBase {
 
         turret.setTurretPosition(proposedAngle/(2*Math.PI));
         
+        
         Logger.recordOutput("CalculatedCorrectedTurretAngle", 180*proposedAngle/(Math.PI));
 
 
@@ -442,13 +451,11 @@ public class Shooter extends SubsystemBase {
 
 
         turret.setHoodPosition(pastShooterAngle.hoodRotation/(2.0*Math.PI));
+        
         Logger.recordOutput("CalculatedHoodAngle", pastShooterAngle.hoodRotation/(2*Math.PI));
 
 
-        if (turret.hoodInTolerance(.05) && turret.turretInTolerance(0.05) && turret.io.getAimedToShoot()) {
-            return true;
-        }
-        return false;
+        return (turret.hoodInTolerance(.05) && turret.turretInTolerance(0.05));
     }
 
 

@@ -8,8 +8,8 @@ import frc.robot.subsystems.Lights.LightAnimations;
 // import frc.robot.subsystems.Lights;
 public class Intake extends SubsystemBase {
 
-    public IntakeStates currentState = IntakeStates.INTAKING;
-    public IntakeStates wantedState = IntakeStates.SAFE;
+    public IntakeStates currentState = IntakeStates.SAFE;
+    public IntakeStates wantedState = IntakeStates.ZERO;
     public IntakeIO io;
     public static Intake instance;
     public boolean alreadyZeroed = false;
@@ -77,14 +77,18 @@ public class Intake extends SubsystemBase {
 
             case INTAKING:
             //motors on intake out
+            io.setIntakeState(currentState);
             break;
 
             case EXTENDED:
             //motors off intake out
+            io.setIntakeState(currentState);
+                
             break;
 
             case SAFE:
             //motors off intake in
+            io.setIntakeState(currentState);
             break;
 
             case REVERSEINTAKING:

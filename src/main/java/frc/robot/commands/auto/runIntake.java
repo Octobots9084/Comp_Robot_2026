@@ -9,7 +9,7 @@ public class runIntake extends Command {
 
     @Override
     public void initialize() {
-        // intake = Intake.getInstance();
+        intake = Intake.getInstance();
     }
 
     @Override
@@ -19,6 +19,6 @@ public class runIntake extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        intake.setWantedState(IntakeStates.SAFE);
+        intake.setWantedState(IntakeStates.EXTENDED);
     }
 }

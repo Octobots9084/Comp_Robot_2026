@@ -23,7 +23,7 @@ import com.ctre.phoenix6.swerve.SwerveDrivetrain.SwerveControlParameters;
 
 public class Superstructure extends SubsystemBase {
     public States currentState = States.SAFE;
-    public States wantedState = States.SHOOTER;
+    public States wantedState = States.SAFE;
     public States prevState = States.SAFE;
     public IntakeStates userRequestedIntakeState = IntakeStates.SAFE;
 
@@ -33,7 +33,7 @@ public class Superstructure extends SubsystemBase {
     private SwerveSubsystem swerve = SwerveSubsystem.getInstance();
     // public Climb climb = Climb.getInstance();
     public Shooter shooter = Shooter.getInstance();
-    // public Intake intake = Intake.getInstance();
+    public Intake intake = Intake.getInstance();
 
     @Override
     public void periodic() {
@@ -97,14 +97,14 @@ public class Superstructure extends SubsystemBase {
                 // }
                 break;
             case ZERO:
-                if (!shooter.alreadyZeroed){
+                if (!shooter.turretAlreadyZeroed || !intake.alreadyZeroed){
                     currentState = States.ZERO;
                 }
                 else if(DriverStation.isAutonomousEnabled()){
                     wantedState = States.AUTONONFIRE;
                 }
                 else {
-                    wantedState = States.SAFE;
+                    wantedState = States.SHOOTER;
                 }
                 break;
             case AUTO:
@@ -198,21 +198,22 @@ public class Superstructure extends SubsystemBase {
         //     Intake.getInstance().wantedState = userRequestedIntakeState;
         // }
         swerve.wantedState = SwerveStates.MANUAL;
-        if(prevState != States.SHOOTER){
-            shooter.wantedShooterState = ShooterStates.HUB;
-            prevState = States.SHOOTER;
+        // if(prevState != States.SHOOTER){
+        //     shooter.wantedShooterState = ShooterStates.HUB;
+        //     prevState = States.SHOOTER;
 
-        }
+        // }
+        shooter.wantedShooterState = ShooterStates.HUB;
+
         
     }
 
     private boolean stateZERO(){
         swerve.wantedState = SwerveStates.MANUAL;
         shooter.wantedShooterState = ShooterStates.ZERO;
-        
+        intake.wantedState = IntakeStates.ZERO; 
         // climb.wantedState = ClimbStates.ZERO;
-        // intake.wantedState = IntakeStates.ZERO;
-        return (shooter.alreadyZeroed);//&& climb.alreadyZeroed && intake.alreadyZeroed);
+        return (shooter.turretAlreadyZeroed && intake.alreadyZeroed);//&& climb.alreadyZeroed);
     }
 
     public void stowForClimb(){

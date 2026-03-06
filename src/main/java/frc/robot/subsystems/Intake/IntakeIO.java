@@ -13,6 +13,8 @@ public interface IntakeIO {
         public double pivotTemp = 0.0;
         public double rollerCurrent = 0.0;
         public double pivotCurrent = 0.0;
+        public double pivotRequest = 0.0;
+        public boolean pivotLimitSwitch = false;
     }
 
     public default void updateInputs(IntakeIOInputs inputs) {

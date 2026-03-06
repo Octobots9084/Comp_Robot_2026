@@ -19,7 +19,7 @@ public class IntakeConfigurator {
         // intake roller config
         intakeRollerConfig.CurrentLimits.SupplyCurrentLimit = 20;
         intakeRollerConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-        intakeRollerConfig.CurrentLimits.StatorCurrentLimit = 40;
+        intakeRollerConfig.CurrentLimits.StatorCurrentLimit = 80;
         intakeRollerConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 
         // set break mode and inversion
@@ -50,7 +50,7 @@ public class IntakeConfigurator {
         intakePivotConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
         // create PID gains
-        intakePivotConfig.Slot0.kP = 20;
+        intakePivotConfig.Slot0.kP = 100;
         intakePivotConfig.Slot0.kI = 0.1;
         intakePivotConfig.Slot0.kD = 0.0;
         intakePivotConfig.Slot0.kA = 0.0;
@@ -58,7 +58,7 @@ public class IntakeConfigurator {
         intakePivotConfig.Slot0.kS = 0.0;
         intakePivotConfig.Slot0.kG = 0.0;
 
-        intakePivotConfig.MotionMagic.MotionMagicAcceleration = 300;
-        intakePivotConfig.MotionMagic.MotionMagicJerk = 40;
+        intakePivotConfig.MotionMagic.MotionMagicAcceleration = 40;
+        intakePivotConfig.MotionMagic.MotionMagicCruiseVelocity = 300;
     }
 }

@@ -18,8 +18,8 @@ public class ClimbIOTalonFX implements ClimbIO {
     public DigitalInput zeroingSwitch = new DigitalInput(8);// todo hehe Hello Oliver
     // controlls the climb motor rotate (follower is influenced by extreiror
     // varible)
-    public TalonFX climbRotateMotorControlled;
-    public TalonFX climbRotateMotorFollower;
+    // public TalonFX climbRotateMotorControlled;
+    // public TalonFX climbRotateMotorFollower;
 
     public ClimbConfigurator climbConfig;
 
@@ -30,27 +30,28 @@ public class ClimbIOTalonFX implements ClimbIO {
     public ClimbIOTalonFX() {
         climbConfig = new ClimbConfigurator();
 
-        climbRotateMotorControlled = new TalonFX(Constants.climbRotateControlledID, Constants.krakenBus);
+        // climbRotateMotorControlled = new TalonFX(Constants.climbRotateControlledID, Constants.krakenBus);
 
-        climbRotateMotorControlled.getConfigurator().apply(climbConfig.climbRotateControlledConfig);
+        // climbRotateMotorControlled.getConfigurator().apply(climbConfig.climbRotateControlledConfig);
         climbMotionControlledRequest = new MotionMagicVoltage(0.0);
     }
 
     @Override
     public void updateInputs(ClimbIOInputs inputs) {
-        inputs.climbMotorControlledTemperature = climbRotateMotorControlled.getDeviceTemp().getValueAsDouble();
-        inputs.climbPosition = climbRotateMotorControlled.getPosition().getValueAsDouble();
+        // inputs.climbMotorControlledTemperature = climbRotateMotorControlled.getDeviceTemp().getValueAsDouble();
+        // inputs.climbPosition = climbRotateMotorControlled.getPosition().getValueAsDouble();
     }
 
     @Override
     public void setClimbState(ClimbStates state) {
-        climbMotionControlledRequest.Position = state.climbPosition;
-        climbRotateMotorControlled.setControl(climbMotionControlledRequest);
+        // climbMotionControlledRequest.Position = state.climbPosition;
+        // climbRotateMotorControlled.setControl(climbMotionControlledRequest);
     }
 
     @Override
     public double getClimbPosition() {
-        return climbRotateMotorControlled.getPosition().getValueAsDouble();
+        // return climbRotateMotorControlled.getPosition().getValueAsDouble();
+        return 0.0;
     }
 
     @Override
@@ -61,18 +62,19 @@ public class ClimbIOTalonFX implements ClimbIO {
 
     @Override
     public void setRotateVoltage(double voltage) {
-        this.climbRotateMotorControlled.setVoltage(voltage);
-        this.climbRotateMotorFollower.setVoltage(-voltage);
+        // this.climbRotateMotorControlled.setVoltage(voltage);
+        // this.climbRotateMotorFollower.setVoltage(-voltage);
     }
 
     @Override
     public void setCurrentLimit(double current) {
-        climbConfig.climbRotateControlledConfig.CurrentLimits.StatorCurrentLimit = current;
-        this.climbRotateMotorControlled.getConfigurator().apply(climbConfig.climbRotateControlledConfig);
+        // climbConfig.climbRotateControlledConfig.CurrentLimits.StatorCurrentLimit = current;
+        // this.climbRotateMotorControlled.getConfigurator().apply(climbConfig.climbRotateControlledConfig);
     }
 
     @Override
     public boolean isAtCurrentLimit() {
-        return this.climbRotateMotorControlled.getFault_StatorCurrLimit().getValue();
+        // return this.climbRotateMotorControlled.getFault_StatorCurrLimit().getValue();
+        return false;
     }
 }

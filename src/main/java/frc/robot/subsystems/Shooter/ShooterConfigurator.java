@@ -31,7 +31,7 @@ public class ShooterConfigurator {
 
         // set break mode and inversion
         flyWheelRightConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-        flyWheelRightConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+        flyWheelRightConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
         // create PID gains
         flyWheelRightConfig.Slot0.kP = 1.85;
@@ -69,7 +69,7 @@ public class ShooterConfigurator {
         // hood config
         hoodConfig.CurrentLimits.SupplyCurrentLimit = 20;
         hoodConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-        hoodConfig.CurrentLimits.StatorCurrentLimit = 40;
+        hoodConfig.CurrentLimits.StatorCurrentLimit = 20;
         hoodConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 
         // set break mode and inversion

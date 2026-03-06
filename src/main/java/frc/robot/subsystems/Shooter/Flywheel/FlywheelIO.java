@@ -14,6 +14,7 @@ public interface FlywheelIO {
     public double FlywheelRightMotorTemp = 0.0;
     public double FlywheelLeftCurrent = 0.0;
     public double FlywheelRightCurrent = 0.0;
+    public double flywheelWantedSpeed = 0.0;
 
   }
 

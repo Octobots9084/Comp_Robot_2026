@@ -46,6 +46,7 @@ public class TurretIOTalonFX implements TurretIO {
         inputs.turretRequest = turretRequest.Position*360;
         inputs.turretVoltage = this.turretMotor.getMotorVoltage().getValueAsDouble();
         inputs.turretCurrent = this.turretMotor.getStatorCurrent().getValueAsDouble();
+        inputs.hoodCurrent = this.hoodMotor.getStatorCurrent().getValueAsDouble();
     }
 
     @Override
@@ -111,26 +112,34 @@ public class TurretIOTalonFX implements TurretIO {
 
     @Override
     public boolean turretZeroed() {
-        if (!turretMagnetBreak.get() || Shooter.getInstance().alreadyZeroed) {
-            turretMotor.setVoltage(0);
-            turretMotor.setPosition(192/360.0);
-            this.setTurretPosition(0);
-            return true;
-        } else {
-            turretMotor.setVoltage(1);// was 3v
-            return false;
-        }
+        if(!Shooter.getInstance().turretAlreadyZeroed){
+            if (!turretMagnetBreak.get()) {
+                turretMotor.setVoltage(0);
+                turretMotor.setPosition(192/360.0);
+                this.setTurretPosition(0);
+                Shooter.getInstance().turretAlreadyZeroed = true;
+            } else {
+                turretMotor.setVoltage(1);// was 3v
+
+                Shooter.getInstance().turretAlreadyZeroed = false;
+            }
+        }    
+        return Shooter.getInstance().turretAlreadyZeroed;
     }
 
-    public boolean hoodZeroed() {
-        if (hoodMotor.getSupplyCurrent().getValueAsDouble() > hoodMotor.getMotorStallCurrent().getValueAsDouble() || Shooter.getInstance().alreadyZeroed) {
-            hoodMotor.setVoltage(0);
-            hoodMotor.setPosition(0);
-            return true;
-        } else {
-            hoodMotor.setVoltage(1);// was 3v
-            return false;
-        }
-
-    }
+    // TODO add later gravity zeroing is fine for now
+    // public boolean hoodZeroed() {
+    //     if(!Shooter.getInstance().hoodAlreadyZeroed){
+    //         if (hoodMotor.getFault_StatorCurrLimit().getValue()){
+    //             hoodMotor.setVoltage(0);
+    //             hoodMotor.setPosition(85/360.0);
+    //             setHoodPosition(45/360.0);
+    //             Shooter.getInstance().hoodAlreadyZeroed = true;
+    //         } else {
+    //             hoodMotor.setVoltage(1);// was 3v
+    //             Shooter.getInstance().hoodAlreadyZeroed = false;
+    //         }
+    //     }
+    //     return Shooter.getInstance().hoodAlreadyZeroed;
+    // }
 }

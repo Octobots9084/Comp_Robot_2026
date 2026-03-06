@@ -29,9 +29,11 @@ public class ButtonConfig {
         SmartDashboard.putBoolean("A button", false);
 
         
-        driverController.leftTrigger().onTrue(new SetIntakeStateIntaking()).onFalse(new SetIntakeStateSafe());
+        // driverController.leftTrigger().onTrue(new SetIntakeStateIntaking()).onFalse(new SetIntakeStateSafe());
 
-        driverController.leftBumper().onTrue(new SetIntakeStateReverse()).onFalse(new SetIntakeStateSafe());
+        driverController.leftBumper().whileTrue(new SetIntakeStateReverse()).toggleOnFalse(new SetIntakeStateExtended());
+
+        driverController.leftTrigger().whileTrue(new runIntake());
 
         driverController.y().onTrue(new InstantCommand(() ->
         {SwerveSubsystem.getInstance().io.zeroGyro();}));
@@ -48,8 +50,8 @@ public class ButtonConfig {
 
         coDriverController.b().onTrue(new SetStateManual());
         coDriverController.leftTrigger(0.5).onTrue(new SetStateSafe());
-        coDriverController.rightBumper().onTrue(new Spit()).onFalse(new SetStateShooter());
-        driverController.rightTrigger(0.5).onTrue(new SetStateShooter());
+        coDriverController.rightBumper().onTrue(new Spit());
+        coDriverController.rightTrigger(0.5).onTrue(new SetStateShooter());
         coDriverController.rightTrigger().onTrue(new InstantCommand(
                 () -> Shooter.driverOverride = true))
                 .onFalse(new InstantCommand(
