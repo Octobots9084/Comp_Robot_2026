@@ -3,35 +3,35 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.335795180722892,
-        "y": 3.0187228915662647
+        "x": 7.491491666666667,
+        "y": 1.0418999999999994
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.253951807228916,
-        "y": 2.1226506024096388
+        "x": 6.901941666666667,
+        "y": 0.7168916666666668
       },
       "isLocked": false,
-      "linkedName": "End center Rush from Bottom"
+      "linkedName": "Ending Sweep"
     },
     {
       "anchor": {
-        "x": 3.2869638554216865,
-        "y": 2.4395542168674704
+        "x": 3.3533095577746077,
+        "y": 2.5405848787446508
       },
       "prevControl": {
-        "x": 3.855204819277108,
-        "y": 2.647180722891568
+        "x": 6.032733333333333,
+        "y": 3.4001
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Rush Center From bottom To Shoot"
+      "linkedName": "Start Bottom Bump"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.4,
-      "rotationDegrees": 135.0
+      "waypointRelativePos": 0.6,
+      "rotationDegrees": -135.0
     }
   ],
   "constraintZones": [],
@@ -46,14 +46,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0.0,
-    "rotation": 146.97613244420342
+    "velocity": 1.0,
+    "rotation": -135.0
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 1.0,
-    "rotation": 126.55247275209152
+    "rotation": -135.0
   },
   "useDefaultConstraints": true
 }
