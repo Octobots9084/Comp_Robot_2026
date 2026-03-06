@@ -203,7 +203,7 @@ public class Shooter extends SubsystemBase {
                 break;
 
             case ZERO:
-            if (turret.io.turretZeroed()) {
+            if (turret.io.turretZeroed() && turret.io.hoodZeroed()) {
                     wantedShooterState = ShooterStates.SAFE;
                     alreadyZeroed = true;
                 }

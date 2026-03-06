@@ -121,4 +121,16 @@ public class TurretIOTalonFX implements TurretIO {
             return false;
         }
     }
+
+    public boolean hoodZeroed() {
+        if (hoodMotor.getSupplyCurrent().getValueAsDouble() > hoodMotor.getMotorStallCurrent().getValueAsDouble() || Shooter.getInstance().alreadyZeroed) {
+            hoodMotor.setVoltage(0);
+            hoodMotor.setPosition(0);
+            return true;
+        } else {
+            hoodMotor.setVoltage(1);// was 3v
+            return false;
+        }
+
+    }
 }

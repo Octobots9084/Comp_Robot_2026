@@ -48,4 +48,8 @@ public interface TurretIO {
     public default boolean turretZeroed() {
         return false;
     }
+
+    public default boolean hoodZeroed() {
+        return false;
+    }
 }
