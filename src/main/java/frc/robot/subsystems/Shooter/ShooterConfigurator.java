@@ -34,11 +34,11 @@ public class ShooterConfigurator {
         flyWheelRightConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
         // create PID gains
-        flyWheelRightConfig.Slot0.kP = 0.15;
+        flyWheelRightConfig.Slot0.kP = 1.85;
         flyWheelRightConfig.Slot0.kI = 0.0;
         flyWheelRightConfig.Slot0.kD = 0.0;
         flyWheelRightConfig.Slot0.kA = 0.0;
-        flyWheelRightConfig.Slot0.kV = 0.135;
+        flyWheelRightConfig.Slot0.kV = 0.6;
         flyWheelRightConfig.Slot0.kS = 0.0;
         flyWheelRightConfig.Slot0.kG = 0.0;
 
@@ -52,9 +52,9 @@ public class ShooterConfigurator {
 
         // set break mode and inversion
         turretConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-        turretConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+        turretConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
         // create PID gains
-        turretConfig.Slot0.kP = 2; //1125;
+        turretConfig.Slot0.kP = 100; //1125;
         turretConfig.Slot0.kI = 0.0;
         turretConfig.Slot0.kD = 0.0;
         turretConfig.Slot0.kA = 0.0;
@@ -74,9 +74,9 @@ public class ShooterConfigurator {
 
         // set break mode and inversion
         hoodConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-        // hoodConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+        hoodConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
         // create PID gains
-        hoodConfig.Slot0.kP = 5;
+        hoodConfig.Slot0.kP = 100;//5;
         hoodConfig.Slot0.kI = 0.0;
         hoodConfig.Slot0.kD = 0.0;
         hoodConfig.Slot0.kA = 0.0;
@@ -86,7 +86,7 @@ public class ShooterConfigurator {
 
         hoodConfig.MotionMagic.MotionMagicAcceleration = 10;
         hoodConfig.MotionMagic.MotionMagicJerk = 100;
-        hoodConfig.MotionMagic.MotionMagicCruiseVelocity = 0.2;
+        hoodConfig.MotionMagic.MotionMagicCruiseVelocity = 4;
 
         // spindexer config(four lane highway)
         spindexerConfig.CurrentLimits.SupplyCurrentLimit = 20;

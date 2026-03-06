@@ -37,10 +37,10 @@ public class DriverCommunications {
         // shift time
         double PhaseClock = (PhaseTime - PhaseCountdown.get());
 
-        SmartDashboard.putNumber("Phase Shift Countdown", PhaseClock);
-        SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime());
-        SmartDashboard.putBoolean("Is Hub Active?", Shooter.getInstance().isHubActive());
-        SmartDashboard.putBoolean("In Manual?", Superstructure.getInstance().getCurrentState() == States.MANUAL);
-        SmartDashboard.putBoolean("Can Shoot", Shooter.getInstance().Shootable());
+        // SmartDashboard.putNumber("Phase Shift Countdown", PhaseClock);
+        // SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime());
+        // SmartDashboard.putBoolean("Is Hub Active?", Shooter.getInstance().isHubActive());
+        // SmartDashboard.putBoolean("In Manual?", Superstructure.getInstance().getCurrentState() == States.MANUAL);
+        // SmartDashboard.putBoolean("Can Shoot", Shooter.getInstance().Shootable());
     }
 }

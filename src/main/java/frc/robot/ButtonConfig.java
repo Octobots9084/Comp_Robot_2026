@@ -27,7 +27,7 @@ public class ButtonConfig {
     public Superstructure superstructure = Superstructure.getInstance();
 
     public void initTeleop() {
-        SmartDashboard.putBoolean("A button", false);
+        // SmartDashboard.putBoolean("A button", false);
         driverController.rightTrigger(0.5).onTrue(new InstantCommand(
                 () -> Shooter.driverOverride = true))
                 .onFalse(new InstantCommand(
@@ -35,29 +35,29 @@ public class ButtonConfig {
         driverController.leftBumper().onTrue(new InstantCommand(
                 () -> {
                     superstructure.wantedState = States.ZERO;
-                    SmartDashboard.putBoolean("rightrigger", true);
+                    // SmartDashboard.putBoolean("rightrigger", true);
                 }))
                 .onFalse(new InstantCommand(
                         () -> {
                             superstructure.wantedState = States.SHOOTER;
-                            /* superstructure.setWantedState(States.SAFE); */ SmartDashboard.putBoolean("rightrigger",
-                                    false);
+                            // /* superstructure.setWantedState(States.SAFE); */ SmartDashboard.putBoolean("rightrigger",
+                            //         false);
                         }));
 
         driverController.y().onTrue(new InstantCommand(() -> {
             SwerveSubsystem.getInstance().io.zeroGyro();
-            SmartDashboard.putBoolean("A button", true);
-        })).onFalse(new InstantCommand(() -> SmartDashboard.putBoolean("A button", false)));
+            // SmartDashboard.putBoolean("A button", true);
+        }));//.onFalse(new InstantCommand(() -> SmartDashboard.putBoolean("A button", false)));
 
         driverController.x().onTrue(new InstantCommand(
                 () -> {
                     SwerveSubsystem.getInstance().wantedState = SwerveStates.ALIGNCLIMB;
-                    SmartDashboard.putBoolean("X", true);
+                    //SmartDashboard.putBoolean("X", true);
                 }))
                 .onFalse(new InstantCommand(
                         () -> {
                             SwerveSubsystem.getInstance().wantedState = SwerveStates.MANUAL;
-                            /* superstructure.setWantedState(States.SAFE); */ SmartDashboard.putBoolean("X", false);
+                            /* superstructure.setWantedState(States.SAFE); */ //SmartDashboard.putBoolean("X", false);
                         }));
         driverController.leftBumper().whileTrue(new SetIntakeStateReverse()).onFalse(new SetIntakeStateSafe());
         driverController.leftTrigger().whileTrue(new SetIntakeStateIntaking()).onFalse(new SetIntakeStateSafe());

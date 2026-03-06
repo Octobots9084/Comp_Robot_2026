@@ -30,7 +30,7 @@ public class DriveForwardUntilLevel extends Command {
 
     @Override
     public boolean isFinished() {
-        SmartDashboard.putBoolean("FinishedDriveForwardUntilLevel", !swerve.onRamp(0, 2));
+        // SmartDashboard.putBoolean("FinishedDriveForwardUntilLevel", !swerve.onRamp(0, 2));
         return !swerve.onRamp(0, 0.1);
     }
 }

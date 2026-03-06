@@ -18,7 +18,7 @@ public class DriveForwardWithTimeout extends Command {
 
     public DriveForwardWithTimeout(double time) {
         this.time = time;
-        SmartDashboard.putBoolean("did the thing", true);
+        // SmartDashboard.putBoolean("did the thing", true);
     }
 
     public DriveForwardWithTimeout() {

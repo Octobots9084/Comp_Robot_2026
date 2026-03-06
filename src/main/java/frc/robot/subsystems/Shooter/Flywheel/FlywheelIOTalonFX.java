@@ -43,15 +43,13 @@ public class FlywheelIOTalonFX implements FlywheelIO {
 
     @Override
     public void setFlywheelVelocity(FlywheelStates state) {
-        // FlywheelRightMotorRequest.Velocity = state.FlywheelRightRPS;
-        FlywheelRightMotor.setControl(FlywheelRightMotorRequest.withVelocity(state.FlywheelRightRPS));
-        FlywheelLeftMotor.setControl(follow);
+        // FlywheelRightMotor.setControl(FlywheelRightMotorRequest.withVelocity(state.FlywheelRightRPS));
+        // FlywheelLeftMotor.setControl(follow);
     }
     @Override
     public void setFlywheelVelocity(double rps) {
-        // FlywheelRightMotorRequest.Velocity = state.FlywheelRightRPS;
-        FlywheelRightMotor.setControl(FlywheelRightMotorRequest.withVelocity(rps));
-        FlywheelLeftMotor.setControl(follow);
+        // FlywheelRightMotor.setControl(FlywheelRightMotorRequest.withVelocity(rps));
+        // FlywheelLeftMotor.setControl(follow);
     }
 
     public double getRightMotorVelocity() {

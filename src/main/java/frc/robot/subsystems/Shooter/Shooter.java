@@ -34,8 +34,8 @@ import frc.robot.subsystems.Shooter.Turret.TurretIOInputsAutoLogged;
 
 public class Shooter extends SubsystemBase {
     private ShooterAngle pastShooterAngle = new ShooterAngle(0, 0);
-    public ShooterStates currentShooterState = ShooterStates.SAFE;// SAFE; //should be safe but useing hub for testing
-    public ShooterStates wantedShooterState = ShooterStates.SAFE;
+    public ShooterStates currentShooterState = ShooterStates.HUB;// SAFE; //should be safe but useing hub for testing
+    public ShooterStates wantedShooterState = ShooterStates.HUB;
     private static Shooter instance = null;
     private final FeederIOInputsAutoLogged feederInputs = new FeederIOInputsAutoLogged();
     private final FlywheelIOInputsAutoLogged flywheelInputs = new FlywheelIOInputsAutoLogged();
@@ -100,7 +100,7 @@ public class Shooter extends SubsystemBase {
         Logger.processInputs("Shooter/Turret and Hood", turretInputs);
         sIO.updateInputs(shooterInputs);
         Logger.processInputs("Shooter/Shooter", shooterInputs);
-        SmartDashboard.putBoolean("HubAcivity", isHubActive());
+        // SmartDashboard.putBoolean("HubAcivity", isHubActive());
     }
 
     public void ApplyStates() {
@@ -326,8 +326,8 @@ public class Shooter extends SubsystemBase {
         }
         
             
-        SmartDashboard.putNumber("X distance to hub",XToHub);
-        SmartDashboard.putNumber("Y distance to hub",YToHub);
+        // SmartDashboard.putNumber("X distance to hub",XToHub);
+        // SmartDashboard.putNumber("Y distance to hub",YToHub);
         return Math.sqrt(YToHub*YToHub+XToHub*XToHub);
     }
 
@@ -342,7 +342,7 @@ public class Shooter extends SubsystemBase {
             
             double toHub = Math.sqrt(YToHub*YToHub+XToHub*XToHub);
             
-            SmartDashboard.putNumber("distance to hub",toHub);
+            // SmartDashboard.putNumber("distance to hub",toHub);
 
             
 
@@ -358,7 +358,7 @@ public class Shooter extends SubsystemBase {
                        // Flywheel.flywheelRadius)/2.0
             );
 
-            SmartDashboard.putNumber("flywheel modulated speed",  6.22273+0.84091*((getDistanceToHub()-1.237)/(5.476-1.237)));
+            // SmartDashboard.putNumber("flywheel modulated speed",  6.22273+0.84091*((getDistanceToHub()-1.237)/(5.476-1.237)));
 
         } else {
 
@@ -384,23 +384,23 @@ public class Shooter extends SubsystemBase {
                     XToHub,
                     YToHub,
                     shooterCalculatorVelocity);
-            SmartDashboard.putNumber("flywheel modulated speed",  6.22273+0.84091*((getDistanceToHub()-1.237)/(5.476-1.237)));
+            // SmartDashboard.putNumber("flywheel modulated speed",  6.22273+0.84091*((getDistanceToHub()-1.237)/(5.476-1.237)));
         }
 
         if (shooterAngle != null) {
             pastShooterAngle = shooterAngle;
         }
-        SmartDashboard.putNumber("shooterHoodAngle", pastShooterAngle.hoodRotation);
-        SmartDashboard.putNumber("shooterAngle", pastShooterAngle.turretRotation);
+        // SmartDashboard.putNumber("shooterHoodAngle", pastShooterAngle.hoodRotation);
+        // SmartDashboard.putNumber("shooterAngle", pastShooterAngle.turretRotation);
 
         double rotation = SwerveSubsystem.getInstance().getRobotPose().getRotation().getRadians();
 
-        double proposedAngle = (shooterAngle.turretRotation - rotation) + Math.PI % (2*Math.PI) - Math.PI;
+        double proposedAngle = (pastShooterAngle.turretRotation - rotation) + Math.PI % (2*Math.PI) - Math.PI;
 
         if (
             (proposedAngle - 2*Math.PI) > Constants.minTurretAngle
             &&
-            Math.abs((rotation - 2*Math.PI)-shooterAngle.turretRotation) < Math.abs((rotation)-shooterAngle.turretRotation)
+            Math.abs((rotation - 2*Math.PI)-pastShooterAngle.turretRotation) < Math.abs((rotation)-pastShooterAngle.turretRotation)
             )
         {
             proposedAngle = proposedAngle - 2*Math.PI;
@@ -408,12 +408,15 @@ public class Shooter extends SubsystemBase {
         else if (
             (proposedAngle + 2*Math.PI) < Constants.maxTurretAngle 
             && 
-            Math.abs((rotation + 2*Math.PI) - shooterAngle.turretRotation) < Math.abs((rotation)-shooterAngle.turretRotation))
+            Math.abs((rotation + 2*Math.PI) - pastShooterAngle.turretRotation) < Math.abs((rotation)-pastShooterAngle.turretRotation))
         {
             proposedAngle = proposedAngle + 2*Math.PI;
         }
 
-        turret.setTurretPosition(proposedAngle/(2*Math.PI));//wrong
+        // turret.setTurretPosition(proposedAngle/(2*Math.PI));
+        Logger.recordOutput("CalculatedTurretAngle", ((pastShooterAngle.turretRotation - rotation) + Math.PI % (2*Math.PI) - Math.PI)/(2*Math.PI));
+        Logger.recordOutput("CalculatedCorrectedTurretAngle", proposedAngle/(2*Math.PI));
+
 
         // double rotation = -180;
         // rotation = rotation % 360;
@@ -427,12 +430,14 @@ public class Shooter extends SubsystemBase {
         // double turretAngle = -(rotation / 360.0);
 
         // turret.setTurretPosition(turretAngle);
-        double hoodInverted = 85 - (pastShooterAngle.hoodRotation * 180) / Math.PI;
+        // double hoodInverted = 85 - (pastShooterAngle.hoodRotation * 180) / Math.PI;
         // // double hoodInverted = 85-(67);
-        double hoodRelative = hoodInverted / 360;
+        // double hoodRelative = hoodInverted / 360;
 
 
-        turret.setHoodPosition(hoodRelative);
+        turret.setHoodPosition(pastShooterAngle.hoodRotation/(2.0*Math.PI));
+        Logger.recordOutput("CalculatedHoodAngle", pastShooterAngle.hoodRotation/(2*Math.PI));
+
 
         if (turret.hoodInTolerance(.05) && turret.turretInTolerance(0.05) && turret.io.getAimedToShoot()) {
             return true;
@@ -475,8 +480,8 @@ public class Shooter extends SubsystemBase {
         if (shooterAngle != null) {
             pastShooterAngle = shooterAngle;
         }
-        SmartDashboard.putNumber("shooterHoodAngle", pastShooterAngle.hoodRotation);
-        SmartDashboard.putNumber("shooterAngle", pastShooterAngle.turretRotation);
+        // SmartDashboard.putNumber("shooterHoodAngle", pastShooterAngle.hoodRotation);
+        // SmartDashboard.putNumber("shooterAngle", pastShooterAngle.turretRotation);
 
         double rotation = SwerveSubsystem.getInstance().getRobotPose().getRotation().getDegrees();
         rotation = rotation % 360;

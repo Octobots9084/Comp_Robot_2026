@@ -23,7 +23,7 @@ import com.ctre.phoenix6.swerve.SwerveDrivetrain.SwerveControlParameters;
 
 public class Superstructure extends SubsystemBase {
     public States currentState = States.SAFE;
-    public States wantedState = States.SAFE;
+    public States wantedState = States.SHOOTER;
     public States prevState = States.SAFE;
     public IntakeStates userRequestedIntakeState = IntakeStates.SAFE;
 
@@ -144,7 +144,8 @@ public class Superstructure extends SubsystemBase {
                     if(DriverStation.isAutonomousEnabled()){
                         wantedState = States.AUTONONFIRE;
                     }else{
-                        wantedState = States.SAFE;
+                        wantedState = States.SHOOTER;
+                        shooter.wantedShooterState = ShooterStates.HUB;
                     }
                 }
                 break;
@@ -199,6 +200,8 @@ public class Superstructure extends SubsystemBase {
         swerve.wantedState = SwerveStates.MANUAL;
         if(prevState != States.SHOOTER){
             shooter.wantedShooterState = ShooterStates.HUB;
+            prevState = States.SHOOTER;
+
         }
         
     }

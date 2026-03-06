@@ -119,7 +119,7 @@ public class SwerveSubsystem extends SubsystemBase {
         // Logger.recordOutput("Zrot", this.io.getRotation3d().getZ());
         // Logger.recordOutput("Tilt",
         // Math.acos(this.io.getRotation3d().toMatrix().get(2, 2)));
-        SmartDashboard.putBoolean("onRamp", onRamp(0, 3));
+        // SmartDashboard.putBoolean("onRamp", onRamp(0, 3));
         applyStates();
         Logger.recordOutput("front left absolute", io.getAbsoluteEncoderPositions(0));
         Logger.recordOutput("front right absolute", io.getAbsoluteEncoderPositions(1));
@@ -134,7 +134,7 @@ public class SwerveSubsystem extends SubsystemBase {
         Rotation3d gyroRotation = this.io.getRotation3d();
         Matrix<N3,N3> gyroMatrix = gyroRotation.toMatrix();
         double tilt = Math.acos(gyroMatrix.get(2, 2)) - 0.015 - Math.PI; // gyro mounted upside down so subtact PI radians out
-        SmartDashboard.putNumber("Tilt", Units.radiansToDegrees(tilt));
+        // SmartDashboard.putNumber("Tilt", Units.radiansToDegrees(tilt));
         if (tilt <= (wanted + tolerance) && tilt >= (wanted - tolerance)) {
             inTolerance = true;
         }
@@ -158,12 +158,12 @@ public class SwerveSubsystem extends SubsystemBase {
         
 
 
-      SmartDashboard.putBoolean("FinishedDriveForwardUntilLevel", false);
+    //   SmartDashboard.putBoolean("FinishedDriveForwardUntilLevel", false);
 
-        SmartDashboard.putNumber("tilt", Math.acos(this.io.getRotation3d().toMatrix().get(2, 2)) - 0.015);
-        SmartDashboard.putBoolean("hasBeenTilted", false);
-        SmartDashboard.putBoolean("done w/ auto", false);
-        SmartDashboard.putBoolean("precon", false);
+    //     SmartDashboard.putNumber("tilt", Math.acos(this.io.getRotation3d().toMatrix().get(2, 2)) - 0.015);
+    //     SmartDashboard.putBoolean("hasBeenTilted", false);
+    //     SmartDashboard.putBoolean("done w/ auto", false);
+    //     SmartDashboard.putBoolean("precon", false);
     }
 
     private SwerveStates handleStateTransition() {
@@ -247,7 +247,7 @@ public class SwerveSubsystem extends SubsystemBase {
      */
     public void addVisionMeasurement(
             Pose2d visionMeasurement, double timestampSeconds, Matrix<N3, N1> stdDevs) {
-        SmartDashboard.putNumberArray("Vision_STDEVS", stdDevs.getData());
+        // SmartDashboard.putNumberArray("Vision_STDEVS", stdDevs.getData());
         // poseEstimator.resetPose(visionMeasurement);
 
         io.addVisionMeasurement(visionMeasurement, timestampSeconds, stdDevs);

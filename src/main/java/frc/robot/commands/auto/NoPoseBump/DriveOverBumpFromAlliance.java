@@ -33,8 +33,8 @@ public class DriveOverBumpFromAlliance extends Command {
         precon = false;
         tilt = 0;
         hasBeenTilted = false;
-        SmartDashboard.putBoolean("test 1", hasBeenOnRamp);
-        SmartDashboard.putBoolean("has been tilted", hasBeenOnRamp);
+        // SmartDashboard.putBoolean("test 1", hasBeenOnRamp);
+        // SmartDashboard.putBoolean("has been tilted", hasBeenOnRamp);
     }
     
     @Override
@@ -51,14 +51,14 @@ public class DriveOverBumpFromAlliance extends Command {
         if (precon && (tilt > 1)) {
             hasBeenTilted = true;
         }
-        SmartDashboard.putBoolean("precon", precon);
-        SmartDashboard.putBoolean("hasBeenTilted", hasBeenTilted);
-        SmartDashboard.putBoolean("test 1", hasBeenOnRamp);
-        SmartDashboard.putNumber("tilt", tilt);
+        // SmartDashboard.putBoolean("precon", precon);
+        // SmartDashboard.putBoolean("hasBeenTilted", hasBeenTilted);
+        // SmartDashboard.putBoolean("test 1", hasBeenOnRamp);
+        // SmartDashboard.putNumber("tilt", tilt);
         if (tilt > 1 && !hasBeenTilted) {
             hasBeenTilted = true;
         }
-        SmartDashboard.putBoolean("has been tilted", hasBeenTilted);//log th4 new tilt tis so close
+        // SmartDashboard.putBoolean("has been tilted", hasBeenTilted);//log th4 new tilt tis so close
 
 
     }// it is as expected. the is finished is returning early.
@@ -67,7 +67,7 @@ public class DriveOverBumpFromAlliance extends Command {
 
     @Override
     public boolean isFinished () {
-        SmartDashboard.putBoolean("done w/ auto", (!onRamp && hasBeenOnRamp && hasBeenTilted && tilt < 1));
+        // SmartDashboard.putBoolean("done w/ auto", (!onRamp && hasBeenOnRamp && hasBeenTilted && tilt < 1));
         return (!onRamp && hasBeenOnRamp && hasBeenTilted && tilt < 1);//TODO: here from other todo (-1 or 1)
         // return false;
     }

@@ -149,7 +149,8 @@ public class Robot extends LoggedRobot {
         Constants.isBlueAlliance = true;
       }
     }
-    SmartDashboard.putBoolean("IsBlueAlliance", Constants.isBlueAlliance);
+    Superstructure.getInstance().wantedState = States.SAFE;
+    // SmartDashboard.putBoolean("IsBlueAlliance", Constants.isBlueAlliance);
     ButtonConfig.driverController.setRumble(RumbleType.kBothRumble, 0);
   }
 
@@ -244,14 +245,14 @@ public class Robot extends LoggedRobot {
         precon = false;
         tilt = 0;
         hasBeenTilted = false;
-        SmartDashboard.putBoolean("autotest/onRamp", onRamp);
-        SmartDashboard.putBoolean("autotest/precon", precon);
-        SmartDashboard.putNumber("autotest/tilt", tilt);
-        SmartDashboard.putBoolean("autotest/hasBeenOnRamp", hasBeenOnRamp);
-        SmartDashboard.putBoolean("autotest/hasBeenTilted", hasBeenTilted);
-        SmartDashboard.putBoolean("autotest/Reset Test", false);
-        SmartDashboard.putNumber("autotest/TILT INPUT", 0);
-        SmartDashboard.putBoolean("autotest/done w auto", false);
+        // SmartDashboard.putBoolean("autotest/onRamp", onRamp);
+        // SmartDashboard.putBoolean("autotest/precon", precon);
+        // SmartDashboard.putNumber("autotest/tilt", tilt);
+        // SmartDashboard.putBoolean("autotest/hasBeenOnRamp", hasBeenOnRamp);
+        // SmartDashboard.putBoolean("autotest/hasBeenTilted", hasBeenTilted);
+        // SmartDashboard.putBoolean("autotest/Reset Test", false);
+        // SmartDashboard.putNumber("autotest/TILT INPUT", 0);
+        // SmartDashboard.putBoolean("autotest/done w auto", false);
   }
 
   /** This function is called periodically whilst in simulation. */
@@ -273,12 +274,12 @@ public class Robot extends LoggedRobot {
             hasBeenTilted = true;
         }
 
-        SmartDashboard.putBoolean("autotest/onRamp", onRamp);
-        SmartDashboard.putBoolean("autotest/precon", precon);
-        SmartDashboard.putNumber("autotest/tilt", tilt);
-        SmartDashboard.putBoolean("autotest/hasBeenOnRamp", hasBeenOnRamp);
-        SmartDashboard.putBoolean("autotest/hasBeenTilted", hasBeenTilted);
-        SmartDashboard.putBoolean("autotest/done w auto", (!onRamp && hasBeenOnRamp && hasBeenTilted && tilt < 1));
+        // SmartDashboard.putBoolean("autotest/onRamp", onRamp);
+        // SmartDashboard.putBoolean("autotest/precon", precon);
+        // SmartDashboard.putNumber("autotest/tilt", tilt);
+        // SmartDashboard.putBoolean("autotest/hasBeenOnRamp", hasBeenOnRamp);
+        // SmartDashboard.putBoolean("autotest/hasBeenTilted", hasBeenTilted);
+        // SmartDashboard.putBoolean("autotest/done w auto", (!onRamp && hasBeenOnRamp && hasBeenTilted && tilt < 1));
 
         if (SmartDashboard.getBoolean("autotest/Reset Test", false)) {
           onRamp = false;
@@ -286,7 +287,7 @@ public class Robot extends LoggedRobot {
           hasBeenOnRamp = false;
           hasBeenTilted = false;
           tilt = 0;
-        SmartDashboard.putBoolean("autotest/Reset Test", false);
+        // SmartDashboard.putBoolean("autotest/Reset Test", false);
         }
 
   }
