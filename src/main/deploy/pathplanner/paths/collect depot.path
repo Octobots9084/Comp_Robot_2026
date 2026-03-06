@@ -16,32 +16,16 @@
     },
     {
       "anchor": {
-        "x": 0.7526390870185449,
-        "y": 5.128316690442225
+        "x": 0.548871794873055,
+        "y": 5.16055421686747
       },
       "prevControl": {
-        "x": 0.3784347649716137,
-        "y": 5.35050050665759
-      },
-      "nextControl": {
-        "x": 1.1666761768901568,
-        "y": 4.882482168330956
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 1.5807132667617685,
-        "y": 5.568231098430813
-      },
-      "prevControl": {
-        "x": 1.6117219504090707,
-        "y": 5.320161629252396
+        "x": 0.5798804785203573,
+        "y": 4.912484747689053
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "yeah call me a bum you wont"
+      "linkedName": "depot bottom"
     }
   ],
   "rotationTargets": [],
@@ -58,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0.0,
-    "rotation": -90.0
+    "rotation": -89.42286423221921
   },
   "reversed": false,
   "folder": null,

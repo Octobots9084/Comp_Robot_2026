@@ -45,12 +45,6 @@
           "data": {
             "name": "StartShoot"
           }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Shoot After Reverse Sweep"
-          }
         }
       ]
     }

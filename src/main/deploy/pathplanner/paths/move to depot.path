@@ -3,32 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.876348074181007,
-        "y": 5.283580599148994
+        "x": 3.374385542168675,
+        "y": 5.608590361445783
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.009457917261056,
-        "y": 5.34827389443652
+        "x": 1.8882168674698794,
+        "y": 7.105686746987953
       },
       "isLocked": false,
       "linkedName": "End depot wipe"
-    },
-    {
-      "anchor": {
-        "x": 2.318216833095578,
-        "y": 6.577446504992867
-      },
-      "prevControl": {
-        "x": 3.003881486409287,
-        "y": 6.011501076860917
-      },
-      "nextControl": {
-        "x": 1.503081312410841,
-        "y": 7.250256776034237
-      },
-      "isLocked": false,
-      "linkedName": null
     },
     {
       "anchor": {
@@ -36,8 +20,8 @@
         "y": 7.058333333337325
       },
       "prevControl": {
-        "x": 0.8949643366619111,
-        "y": 7.6125392296718974
+        "x": 1.5057469879518073,
+        "y": 6.985481927710843
       },
       "nextControl": null,
       "isLocked": false,
@@ -47,14 +31,7 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "StartShoot",
-      "waypointRelativePos": 0.7184334908845429,
-      "endWaypointRelativePos": null,
-      "command": null
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 1.0,
     "maxAcceleration": 1.0,

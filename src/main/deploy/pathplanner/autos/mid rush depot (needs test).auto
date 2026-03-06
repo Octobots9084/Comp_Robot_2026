@@ -23,12 +23,6 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "StartShoot"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "collect depot"
