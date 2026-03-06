@@ -188,9 +188,9 @@ public class Superstructure extends SubsystemBase {
    
 
     private void stateSHOOTER() {
-        if (userRequestedIntakeState != Intake.getInstance().currentState) {
-             Intake.getInstance().wantedState = userRequestedIntakeState;
-         }
+        // if (userRequestedIntakeState != Intake.getInstance().currentState) {
+        //      Intake.getInstance().wantedState = userRequestedIntakeState;
+        //  }
         swerve.wantedState = SwerveStates.MANUAL;
         if(prevState != States.SHOOTER){
             shooter.wantedShooterState = ShooterStates.HUB;

@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.153398402839397,
-        "y": 3.06522626441881
+        "x": 6.335795180722892,
+        "y": 3.0187228915662647
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.0105944986690325,
-        "y": 2.3811535048802126
+        "x": 5.253951807228916,
+        "y": 2.1226506024096388
       },
       "isLocked": false,
       "linkedName": "End center Rush from Bottom"
     },
     {
       "anchor": {
-        "x": 2.644507542147293,
-        "y": 2.598447204968943
+        "x": 3.2869638554216865,
+        "y": 2.4395542168674704
       },
       "prevControl": {
-        "x": 2.8938244807614706,
-        "y": 2.6169151263477715
+        "x": 3.855204819277108,
+        "y": 2.647180722891568
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,10 +31,6 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 0.4,
-      "rotationDegrees": 135.0
-    },
-    {
-      "waypointRelativePos": 0.6,
       "rotationDegrees": 135.0
     }
   ],
@@ -50,13 +46,13 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": 180.0
+    "velocity": 1.0,
+    "rotation": 146.97613244420342
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
-    "velocity": 0,
+    "velocity": 1.0,
     "rotation": 126.55247275209152
   },
   "useDefaultConstraints": true

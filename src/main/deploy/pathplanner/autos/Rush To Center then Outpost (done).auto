@@ -17,12 +17,6 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "Shoot From Center Rush (bottom)"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "StartShoot"
@@ -31,7 +25,25 @@
         {
           "type": "path",
           "data": {
+            "pathName": "Shoot From Center Rush (bottom)"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
             "pathName": "Shoot To Outpost"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 3.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopShoot"
           }
         }
       ]

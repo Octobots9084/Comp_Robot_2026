@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.819654376443551,
-        "y": 6.503369285315167
+        "x": 2.685939759036144,
+        "y": 5.586734939759036
       },
       "isLocked": false,
       "linkedName": "End of Big Wipe From Outpost"
     },
     {
       "anchor": {
-        "x": 2.1736687573571967,
-        "y": 4.254302137972164
+        "x": 2.8826385542168675,
+        "y": 4.581385542168674
       },
       "prevControl": {
-        "x": 2.679902246366661,
-        "y": 4.631034036769906
+        "x": 3.832017989630755,
+        "y": 5.5204207535941014
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,7 +30,7 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.5,
+      "waypointRelativePos": 0.26298157453936305,
       "rotationDegrees": 135.0
     }
   ],
