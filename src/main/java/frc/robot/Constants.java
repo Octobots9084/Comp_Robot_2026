@@ -44,7 +44,8 @@ public final class Constants {
   public static final double VisionAllignspeed = 1;
   public static final double VisionAllignRotspeed = 3;
   public static final double FlywheelDiamiter = 0.1016;
-  public static final double TurretDistFromCenter = 0.2051;
+  public static final double TurretDistFromCenter = 0.21841;
+  public static final double TurretAngleFromCenter = 2.1524498;
   public static final String frontRightCameraName = "FrontRightCamera";
   public static final String frontleftCameraName = "FrontLeftCamera";
   public static final String rightCameraName = "RightCamera";

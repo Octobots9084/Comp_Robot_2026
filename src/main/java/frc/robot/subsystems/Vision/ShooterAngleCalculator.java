@@ -11,7 +11,7 @@ public class ShooterAngleCalculator {
     private static final double hubHeight = 1.8288; // hub height
     private static final double ferryHeight = 0.5; // hub height
     private static final double minHoodAngle = 1.012; // 58 deg
-    private static final double shooterHeight = 0.4572; // shooter height
+    private static final double shooterHeight = 0.54; // shooter height
     private static final double hubRadius = 1.27; // radius of the hub
     private static final int maxNewtonsMethodIterations = 30; // prevents an ifinate loop 
     
@@ -96,7 +96,7 @@ public class ShooterAngleCalculator {
         int newtonsMethodIterations = 0;
         double[] newtons_method_results= new double[maxNewtonsMethodIterations];
         double[] newtons_method_derivative_results= new double[maxNewtonsMethodIterations];
-        while (Math.abs(f) > 1e-6){
+        while (Math.abs(f) > 1e-2){
             f = quarticFunction(T, vx, vy, phx, phy, phz, s);
             double qd = quarticDerivative(T, vx, vy, phx, phy, phz, s);
             if (qd != 0)

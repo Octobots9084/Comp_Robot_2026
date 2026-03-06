@@ -1,5 +1,7 @@
 package frc.robot.subsystems.Shooter.Turret;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
@@ -30,7 +32,7 @@ public class TurretIOTalonFX implements TurretIO {
         turretMotor = new TalonFX(Constants.turretID, Constants.krakenBus);
         turretMotor.setPosition(0);
         hoodMotor.getConfigurator().apply(shooterConfigs.hoodConfig);
-        hoodMotor.setPosition(85/360.0);
+        hoodMotor.setPosition(90/360.0);
         turretMotor.getConfigurator().apply(shooterConfigs.turretConfig);
         
     }
@@ -42,7 +44,7 @@ public class TurretIOTalonFX implements TurretIO {
         inputs.turretPosition = this.getTurretPosition()*360;
         inputs.hoodRequest = hoodRequest.Position*360;
         inputs.turretRequest = turretRequest.Position*360;
-        inputs.turretVoltage = this.turretMotor.getMotorVoltage().getValueAsDouble();
+        // inputs.turretVoltage = this.turretMotor.getMotorVoltage().getValueAsDouble();
         inputs.turretPositionErr = Math.abs(inputs.turretPosition-inputs.turretRequest);
         // inputs.turretCurrent = this.turretMotor.getStatorCurrent().getValueAsDouble();
         // inputs.hoodCurrent = this.hoodMotor.getStatorCurrent().getValueAsDouble();
@@ -111,6 +113,7 @@ public class TurretIOTalonFX implements TurretIO {
 
     @Override
     public boolean turretZeroed() {
+        Logger.recordOutput("turretAlreadyZeroed", Shooter.getInstance().turretAlreadyZeroed);
         if(!Shooter.getInstance().turretAlreadyZeroed){
             if (!turretMagnetBreak.get()) {
                 turretMotor.setVoltage(0);

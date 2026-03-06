@@ -4,23 +4,16 @@
 
 package frc.robot;
 
-import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.subsystems.Intake.Intake;
 import frc.robot.subsystems.Intake.IntakeIOTalonFX;
-import frc.robot.subsystems.States;
 import frc.robot.Constants.RobotTypes;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Climb.Climb;
-import frc.robot.subsystems.Climb.ClimbIOTalonFX;
 import frc.robot.subsystems.Drive.BetaConstants;
 import frc.robot.subsystems.Drive.CompConstants;
 import frc.robot.subsystems.Drive.SwerveSubsystem;
@@ -29,11 +22,7 @@ import frc.robot.subsystems.Shooter.ShooterIOSystem;
 import frc.robot.subsystems.Shooter.Feeder.FeederIOTalonFX;
 import frc.robot.subsystems.Shooter.Flywheel.FlywheelIOTalonFX;
 import frc.robot.subsystems.Shooter.Turret.TurretIOTalonFX;
-import frc.robot.subsystems.Drive.SwerveIO;
-import frc.robot.subsystems.Drive.SwerveIOSystem;
 import frc.robot.subsystems.Vision.Vision;
-
-import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
  * This class is where the bulk of the robot should be declared. Since

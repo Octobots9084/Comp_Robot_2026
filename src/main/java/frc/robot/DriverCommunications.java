@@ -1,10 +1,6 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.subsystems.States;
-import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Shooter.Shooter;
 
 public class DriverCommunications {

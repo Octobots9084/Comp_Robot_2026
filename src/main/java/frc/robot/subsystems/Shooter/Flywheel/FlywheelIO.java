@@ -9,11 +9,11 @@ public interface FlywheelIO {
   public static class FlywheelIOInputs {
     public FlywheelStates flywheelCurrentState;
     public double FlywheelLeftRPS = 0.0;
-    public double FlywheelLeftMotorTemp = 0.0;
+    // public double FlywheelLeftMotorTemp = 0.0;
     public double FlywheelRightRPS = 0.0;
-    public double FlywheelRightMotorTemp = 0.0;
-    public double FlywheelLeftCurrent = 0.0;
-    public double FlywheelRightCurrent = 0.0;
+    // public double FlywheelRightMotorTemp = 0.0;
+    // public double FlywheelLeftCurrent = 0.0;
+    // public double FlywheelRightCurrent = 0.0;
     public double flywheelWantedSpeed = 0.0;
 
   }

@@ -121,10 +121,10 @@ public class SwerveSubsystem extends SubsystemBase {
         // Math.acos(this.io.getRotation3d().toMatrix().get(2, 2)));
         // SmartDashboard.putBoolean("onRamp", onRamp(0, 3));
         applyStates();
-        Logger.recordOutput("front left absolute", io.getAbsoluteEncoderPositions(0));
-        Logger.recordOutput("front right absolute", io.getAbsoluteEncoderPositions(1));
-        Logger.recordOutput("back left absolute", io.getAbsoluteEncoderPositions(2));
-        Logger.recordOutput("back right absolute", io.getAbsoluteEncoderPositions(3));
+        // Logger.recordOutput("front left absolute", io.getAbsoluteEncoderPositions(0));
+        // Logger.recordOutput("front right absolute", io.getAbsoluteEncoderPositions(1));
+        // Logger.recordOutput("back left absolute", io.getAbsoluteEncoderPositions(2));
+        // Logger.recordOutput("back right absolute", io.getAbsoluteEncoderPositions(3));
     }
 
     // TODO: move somewhere important

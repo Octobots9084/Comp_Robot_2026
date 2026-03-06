@@ -7,14 +7,14 @@ public interface TurretIO {
     public static class TurretIOInputs {
         public boolean turretLimitSwitch;
         public double hoodPosition;
-        public double hoodCurrent;
+        // public double hoodCurrent;
         public double turretPosition;
-        public double hoodMotorTemp;
-        public double turretMotorTemp;
+        // public double hoodMotorTemp;
+        // public double turretMotorTemp;
         public double turretRequest;
         public double hoodRequest;
-        public double turretVoltage;
-        public double turretCurrent;
+        // public double turretVoltage;
+        // public double turretCurrent;
         public double turretPositionErr;
     }
 

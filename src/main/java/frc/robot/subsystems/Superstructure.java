@@ -145,7 +145,6 @@ public class Superstructure extends SubsystemBase {
                         wantedState = States.AUTONONFIRE;
                     }else{
                         wantedState = States.SHOOTER;
-                        shooter.wantedShooterState = ShooterStates.HUB;
                     }
                 }
                 break;
