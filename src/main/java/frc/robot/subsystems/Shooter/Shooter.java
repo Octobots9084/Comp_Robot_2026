@@ -397,7 +397,9 @@ public class Shooter extends SubsystemBase {
 
         double rotation = SwerveSubsystem.getInstance().getRobotPose().getRotation().getRadians();
 
-        double proposedAngle = (((pastShooterAngle.turretRotation - rotation) + Math.PI) % (2*Math.PI) - Math.PI) + Math.PI/2;
+        rotation = rotation+Math.PI/2;
+
+        double proposedAngle = (((pastShooterAngle.turretRotation - rotation) + Math.PI) % (2*Math.PI) - Math.PI);
         Logger.recordOutput("ProposedAngle", 180*proposedAngle/(Math.PI));
 
         if (
