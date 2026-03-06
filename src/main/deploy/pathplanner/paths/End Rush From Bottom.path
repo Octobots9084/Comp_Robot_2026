@@ -3,16 +3,32 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.324638554216868,
-        "y": 1.1937951807228921
+        "x": 7.843024251069899,
+        "y": 1.156148359486449
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.269416770657571,
-        "y": 2.2412180915854334
+        "x": 7.787801179085526,
+        "y": 2.2035712024204006
       },
       "isLocked": false,
       "linkedName": "Start rush to center from bump 2"
+    },
+    {
+      "anchor": {
+        "x": 7.687760342368046,
+        "y": 3.329843081312412
+      },
+      "prevControl": {
+        "x": 7.974429506588853,
+        "y": 3.2940094357848113
+      },
+      "nextControl": {
+        "x": 7.377232524964336,
+        "y": 3.368659058487875
+      },
+      "isLocked": false,
+      "linkedName": null
     },
     {
       "anchor": {
@@ -20,15 +36,20 @@
         "y": 3.0187228915662647
       },
       "prevControl": {
-        "x": 8.452396777883495,
-        "y": 4.189045842554016
+        "x": 6.62679029957204,
+        "y": 3.3557203994293876
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "End center Rush from Bottom"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.0533049040511668,
+      "rotationDegrees": 90.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -48,7 +69,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 1.0,
-    "rotation": 117.16316982099151
+    "rotation": 90.0
   },
   "useDefaultConstraints": true
 }

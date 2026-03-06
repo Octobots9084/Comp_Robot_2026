@@ -9,19 +9,19 @@
       "prevControl": null,
       "nextControl": {
         "x": 1.757084337349397,
-        "y": 2.035228915662651
+        "y": 2.0352289156626515
       },
       "isLocked": false,
       "linkedName": "Rush Center From bottom To Shoot"
     },
     {
       "anchor": {
-        "x": 0.4239036144578311,
-        "y": 0.3086506024096388
+        "x": 0.4679885877318113,
+        "y": 0.5997860199714706
       },
       "prevControl": {
-        "x": 0.6339251023615632,
-        "y": 1.1305463272844904
+        "x": 0.6780100756355434,
+        "y": 1.4216817448463224
       },
       "nextControl": null,
       "isLocked": false,

@@ -16,35 +16,40 @@
     },
     {
       "anchor": {
-        "x": 6.281156626506024,
-        "y": 2.1226506024096388
+        "x": 6.070427960057061,
+        "y": 1.7901426533523535
       },
       "prevControl": {
-        "x": 5.862860881541442,
-        "y": 3.0084533564522844
+        "x": 5.822669304258011,
+        "y": 2.326953074250296
       },
       "nextControl": {
-        "x": 6.838469879518071,
-        "y": 0.9424578313253016
+        "x": 6.380955777460769,
+        "y": 1.1173323823109853
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 8.324638554216868,
-        "y": 1.1937951807228921
+        "x": 7.843024251069899,
+        "y": 1.156148359486449
       },
       "prevControl": {
-        "x": 7.658578210130107,
-        "y": 1.0683993090765331
+        "x": 7.804208273894435,
+        "y": 0.6386019971469341
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "Start rush to center from bump 2"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.614072494669503,
+      "rotationDegrees": 45.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -58,7 +63,7 @@
   },
   "goalEndState": {
     "velocity": 1.0,
-    "rotation": 117.16316982099151
+    "rotation": 90.0
   },
   "reversed": false,
   "folder": null,

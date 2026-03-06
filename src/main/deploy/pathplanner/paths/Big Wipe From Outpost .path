@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.324638554216868,
-        "y": 1.1937951807228921
+        "x": 7.843024251069899,
+        "y": 1.156148359486449
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.402270508567796,
-        "y": 3.7944656514789568
+        "x": 7.920656205420826,
+        "y": 3.756818830242514
       },
       "isLocked": false,
       "linkedName": "Start rush to center from bump 2"
@@ -64,7 +64,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 117.16316982099151
+    "rotation": 90.0
   },
   "useDefaultConstraints": true
 }
