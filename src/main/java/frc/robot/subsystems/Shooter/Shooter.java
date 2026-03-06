@@ -395,27 +395,29 @@ public class Shooter extends SubsystemBase {
 
         double rotation = SwerveSubsystem.getInstance().getRobotPose().getRotation().getRadians();
 
-        double proposedAngle = (pastShooterAngle.turretRotation - rotation) + Math.PI % (2*Math.PI) - Math.PI;
+        double proposedAngle = (((pastShooterAngle.turretRotation - rotation) + Math.PI) % (2*Math.PI) - Math.PI) + Math.PI/2;
+        Logger.recordOutput("ProposedAngle", 180*proposedAngle/(Math.PI));
 
         if (
             (proposedAngle - 2*Math.PI) > Constants.minTurretAngle
             &&
-            Math.abs((rotation - 2*Math.PI)-pastShooterAngle.turretRotation) < Math.abs((rotation)-pastShooterAngle.turretRotation)
+            Math.abs(tIO.getTurretPosition()-(proposedAngle - 2*Math.PI)) < Math.abs(tIO.getTurretPosition()-proposedAngle)
             )
         {
             proposedAngle = proposedAngle - 2*Math.PI;
         }
         else if (
-            (proposedAngle + 2*Math.PI) < Constants.maxTurretAngle 
-            && 
-            Math.abs((rotation + 2*Math.PI) - pastShooterAngle.turretRotation) < Math.abs((rotation)-pastShooterAngle.turretRotation))
+            (proposedAngle + 2*Math.PI) < Constants.maxTurretAngle
+            &&
+            Math.abs(tIO.getTurretPosition()-(proposedAngle + 2*Math.PI)) < Math.abs(tIO.getTurretPosition()-proposedAngle)
+            )
         {
             proposedAngle = proposedAngle + 2*Math.PI;
         }
 
-        // turret.setTurretPosition(proposedAngle/(2*Math.PI));
-        Logger.recordOutput("CalculatedTurretAngle", ((pastShooterAngle.turretRotation - rotation) + Math.PI % (2*Math.PI) - Math.PI)/(2*Math.PI));
-        Logger.recordOutput("CalculatedCorrectedTurretAngle", proposedAngle/(2*Math.PI));
+        turret.setTurretPosition(proposedAngle/(2*Math.PI));
+        
+        Logger.recordOutput("CalculatedCorrectedTurretAngle", 180*proposedAngle/(Math.PI));
 
 
         // double rotation = -180;
@@ -496,12 +498,12 @@ public class Shooter extends SubsystemBase {
 
         double turretAngle = -(rotation / 360.0);
 
-        turret.setTurretPosition(turretAngle);
+        // turret.setTurretPosition(turretAngle);
 
         double hoodInverted = 85 - (pastShooterAngle.hoodRotation * 180) / Math.PI;
         // double hoodInverted = 40;
         double hoodRelative = hoodInverted / 360;
-        turret.setHoodPosition(hoodRelative);
+        // turret.setHoodPosition(hoodRelative);
 
         if (turret.hoodInTolerance(.05) && turret.turretInTolerance(0.05)) {
             return true;
