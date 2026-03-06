@@ -22,44 +22,38 @@ import frc.robot.subsystems.Shooter.ShooterStates;
 
 public class ButtonConfig {
     public static CommandXboxController driverController = new CommandXboxController(0);
-    // public static CommandXboxController coDriverController = new
-    // CommandXboxController(1);
+    public static CommandXboxController coDriverController = new CommandXboxController(1);
     public Superstructure superstructure = Superstructure.getInstance();
 
     public void initTeleop() {
-        // SmartDashboard.putBoolean("A button", false);
+        SmartDashboard.putBoolean("A button", false);
+
+        
+        driverController.leftTrigger().onTrue(new SetIntakeStateIntaking()).onFalse(new SetIntakeStateSafe());
+
+        driverController.leftBumper().onTrue(new SetIntakeStateReverse()).onFalse(new SetIntakeStateSafe());
+
+        driverController.y().onTrue(new InstantCommand(() ->
+        {SwerveSubsystem.getInstance().io.zeroGyro();}));
+
+        // Climb currently not implemented
+        // driverController.b().onTrue(new SetStateClimbL3()); //TODO - implement climb functions
+        // driverController.a().onTrue(new SetStateUnclimb());
+
+        driverController.rightTrigger(0.5).onTrue(new SetStateShooter());
         driverController.rightTrigger(0.5).onTrue(new InstantCommand(
                 () -> Shooter.driverOverride = true))
                 .onFalse(new InstantCommand(
                         () -> Shooter.driverOverride = false));
-        driverController.leftBumper().onTrue(new InstantCommand(
-                () -> {
-                    superstructure.wantedState = States.ZERO;
-                    // SmartDashboard.putBoolean("rightrigger", true);
-                }))
-                .onFalse(new InstantCommand(
-                        () -> {
-                            superstructure.wantedState = States.SHOOTER;
-                            // /* superstructure.setWantedState(States.SAFE); */ SmartDashboard.putBoolean("rightrigger",
-                            //         false);
-                        }));
 
-        driverController.y().onTrue(new InstantCommand(() -> {
-            SwerveSubsystem.getInstance().io.zeroGyro();
-            // SmartDashboard.putBoolean("A button", true);
-        }));//.onFalse(new InstantCommand(() -> SmartDashboard.putBoolean("A button", false)));
-
-        driverController.x().onTrue(new InstantCommand(
-                () -> {
-                    SwerveSubsystem.getInstance().wantedState = SwerveStates.ALIGNCLIMB;
-                    //SmartDashboard.putBoolean("X", true);
-                }))
+        coDriverController.b().onTrue(new SetStateManual());
+        coDriverController.leftTrigger(0.5).onTrue(new SetStateSafe());
+        coDriverController.rightBumper().onTrue(new Spit()).onFalse(new SetStateShooter());
+        driverController.rightTrigger(0.5).onTrue(new SetStateShooter());
+        coDriverController.rightTrigger().onTrue(new InstantCommand(
+                () -> Shooter.driverOverride = true))
                 .onFalse(new InstantCommand(
-                        () -> {
-                            SwerveSubsystem.getInstance().wantedState = SwerveStates.MANUAL;
-                            /* superstructure.setWantedState(States.SAFE); */ //SmartDashboard.putBoolean("X", false);
-                        }));
-        driverController.leftBumper().whileTrue(new SetIntakeStateReverse()).onFalse(new SetIntakeStateSafe());
-        driverController.leftTrigger().whileTrue(new SetIntakeStateIntaking()).onFalse(new SetIntakeStateSafe());
+                        () -> Shooter.driverOverride = false));
+
     }
 }
