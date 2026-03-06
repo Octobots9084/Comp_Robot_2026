@@ -8,24 +8,40 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.47910256410256563,
-        "y": 5.314102564102564
+        "x": 0.4679885877318113,
+        "y": 6.512753209700428
       },
       "isLocked": false,
       "linkedName": "depot bump neutral"
     },
     {
       "anchor": {
-        "x": 0.548871794873055,
-        "y": 4.848974358974361
+        "x": 0.7526390870185449,
+        "y": 5.128316690442225
       },
       "prevControl": {
-        "x": 0.6186410256437673,
-        "y": 7.232756410260915
+        "x": 0.3784347649716137,
+        "y": 5.35050050665759
+      },
+      "nextControl": {
+        "x": 1.1666761768901568,
+        "y": 4.882482168330956
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.5807132667617685,
+        "y": 5.568231098430813
+      },
+      "prevControl": {
+        "x": 1.6117219504090707,
+        "y": 5.320161629252396
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "yeah call me a bum you wont"
     }
   ],
   "rotationTargets": [],
@@ -47,7 +63,7 @@
   "reversed": false,
   "folder": null,
   "idealStartingState": {
-    "velocity": 0,
+    "velocity": 1.0,
     "rotation": -90.0
   },
   "useDefaultConstraints": true
