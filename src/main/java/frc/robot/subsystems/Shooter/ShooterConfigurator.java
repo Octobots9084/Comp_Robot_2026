@@ -36,14 +36,17 @@ public class ShooterConfigurator {
         // create PID gains
         flyWheelRightConfig.Slot0.kP = 2.5;
         flyWheelRightConfig.Slot0.kI = 0.0;
-        flyWheelRightConfig.Slot0.kD = 0.001;
+        flyWheelRightConfig.Slot0.kD = 0.0;
         flyWheelRightConfig.Slot0.kA = 0.0;
         flyWheelRightConfig.Slot0.kV = 0.6;
         flyWheelRightConfig.Slot0.kS = 0.0;
         flyWheelRightConfig.Slot0.kG = 0.0;
 
         flyWheelRightConfig.MotionMagic.MotionMagicAcceleration = 100;
+        flyWheelRightConfig.MotionMagic.MotionMagicJerk = 100;
+        flyWheelRightConfig.MotionMagic.MotionMagicCruiseVelocity = 1000;
 
+        
         // turret config
         turretConfig.CurrentLimits.SupplyCurrentLimit = 20;
         turretConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
