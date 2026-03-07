@@ -12,5 +12,6 @@ public enum States {
     ZERO,
     AUTO,
     AUTONONFIRE,
-    FIXEDFIRE
+    FIXEDFIRE,
+    UNJAM
 }

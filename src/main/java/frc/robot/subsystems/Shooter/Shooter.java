@@ -68,6 +68,10 @@ public class Shooter extends SubsystemBase {
     public boolean isAimedAtHub;
     public double shooterCalculatorVelocity;
     public int flywheelDebouncer = 0;
+    public double hubBallSpeed = 6.7;
+    public double hubFlywheelSpeed = 10;
+    public double ferryBallSpeed = 6.7;
+    public double ferryFlywheelSpeed = 10;
 
     public Shooter(FeederIO fIO, FlywheelIO fwIO, TurretIO tIO, ShooterIO sIO) {
         this.fIO = fIO;
@@ -117,11 +121,15 @@ public class Shooter extends SubsystemBase {
                 // joystick controlls turret
                 // tIO.setTurretPosition(getTurretPosFromJoystick());
                 // tIO.setHoodPosition(getHoodPosFromJoystick());
+                break;
+            case UNJAM:
+                flywheel.setFlywheelVelocity(0);
+                feeder.setFeederVelocity(FeederStates.UNJAM);
             case FERRY:
-                isAimedAtHub = aimFerry();
+                isAimedAtHub = aimFerry(ferryBallSpeed);
                 if(!swerve.isInAllianceZone() && !swerve.onRamp(0,5)){
                     if(driverOverride){
-                        flywheel.setFlywheelVelocity(FlywheelStates.HUB);
+                        flywheel.setFlywheelVelocity(ferryFlywheelSpeed);
                         if(isAimedAtHub && flywheel.FlywheelInTolerance(18)){
                             feeder.setFeederVelocity(FeederStates.SCORING);
                         }else{
@@ -137,7 +145,7 @@ public class Shooter extends SubsystemBase {
                 }
                 break;
             case HUB:
-                isAimedAtHub = isAimedAtHub(6.7);
+                isAimedAtHub = isAimedAtHub(hubBallSpeed);
                 // isAimedAtHub = true;
                 // turret.setTurretPosition(-90.0/360.0);
                 // turret.setHoodPosition(75/360.0);
@@ -146,7 +154,7 @@ public class Shooter extends SubsystemBase {
                     if(driverOverride){
                         // flywheel.setFlywheelVelocity(7.098+1.34*((getDistanceToHub()-1.237)/(5.476-1.237)));
                         // flywheel.setFlywheelVelocity(10+2*((getDistanceToHub()-1.237)/(5.476-1.237)));
-                        flywheel.setFlywheelVelocity(11);
+                        flywheel.setFlywheelVelocity(hubFlywheelSpeed);
                         // flywheel.setFlywheelVelocity(FlywheelStates.HUB);
                         if(isAimedAtHub){
                             if(flywheel.FlywheelInTolerance(1)){
@@ -170,9 +178,9 @@ public class Shooter extends SubsystemBase {
                 }
                 break;
             case AUTOFERRY:
-                isAimedAtHub = aimFerry();
+                isAimedAtHub = aimFerry(ferryBallSpeed);
                 if(!swerve.isInAllianceZone() && !swerve.onRamp(0,5)){
-                        flywheel.setFlywheelVelocity(FlywheelStates.HUB);
+                        flywheel.setFlywheelVelocity(ferryFlywheelSpeed);
                         if(isAimedAtHub && flywheel.FlywheelInTolerance(18)){
                             feeder.setFeederVelocity(FeederStates.SCORING);
                         }else{
@@ -184,8 +192,8 @@ public class Shooter extends SubsystemBase {
                 }
                 break;
             case AUTOHUB:
-               isAimedAtHub = isAimedAtHub(8.5);
-               flywheel.setFlywheelVelocity(12);
+               isAimedAtHub = isAimedAtHub(hubBallSpeed);
+               flywheel.setFlywheelVelocity(hubFlywheelSpeed);
                 // flywheel.setFlywheelVelocity(37+10*((getDistanceToHub()-1.237)/(5.476-1.237)));
                 // flywheel.setFlywheelVelocity(FlywheelStates.HUB);
                 
@@ -278,6 +286,10 @@ public class Shooter extends SubsystemBase {
                 break;
             case SPIT:
                 currentShooterState = ShooterStates.SPIT;
+                break;
+            case UNJAM:
+                currentShooterState = ShooterStates.UNJAM;
+                break;
             default:
                 break;
         }
@@ -332,26 +344,27 @@ public class Shooter extends SubsystemBase {
         double XToHub;
         double YToHub;
         if(Constants.isBlueAlliance){
-            YToHub = getYToHub(hubPoseBlue.getY());
-            XToHub =  getXToHub(hubPoseBlue.getX());
+            YToHub = getYToTarget(hubPoseBlue.getY());
+            XToHub =  getXToTarget(hubPoseBlue.getX());
         } else {
-            YToHub = getYToHub(hubPoseRed.getY());
-            XToHub =  getXToHub(hubPoseRed.getX());
+            YToHub = getYToTarget(hubPoseRed.getY());
+            XToHub =  getXToTarget(hubPoseRed.getX());
         }
         return Math.sqrt(YToHub*YToHub+XToHub*XToHub);
     }
 
-    public double getYToHub(double hubPoseY){
-        return hubPoseY - (swerve.io.getPose2d().getY()
+    public double getYToTarget(double poseY){
+        return poseY - (swerve.io.getPose2d().getY()
              + Constants.TurretDistFromCenter
                 * Math.sin(((swerve.io.getPose2d().getRotation().getRadians())) + Constants.TurretAngleFromCenter));
     }
 
-    public double getXToHub(double hubPoseX){
-        return hubPoseX - (swerve.io.getPose2d().getX()
+    public double getXToTarget(double poseX){
+        return poseX - (swerve.io.getPose2d().getX()
             + Constants.TurretDistFromCenter
                 * Math.cos(((swerve.io.getPose2d().getRotation().getRadians())) + Constants.TurretAngleFromCenter));
     }
+
 
     public double getY(double hubPoseY){
         
@@ -371,14 +384,14 @@ public class Shooter extends SubsystemBase {
         double YToHub;
         double XToHub;
         if (Constants.isBlueAlliance) {
-            YToHub = getYToHub(hubPoseBlue.getY());
-            XToHub = getXToHub(hubPoseBlue.getX());
+            YToHub = getYToTarget(hubPoseBlue.getY());
+            XToHub = getXToTarget(hubPoseBlue.getX());
         } else {
-            YToHub = getYToHub(hubPoseRed.getY());
-            XToHub = getXToHub(hubPoseRed.getX());
+            YToHub = getYToTarget(hubPoseRed.getY());
+            XToHub = getXToTarget(hubPoseRed.getX());
         }
 
-        Logger.recordOutput("ToHub",new Translation2d(getXToHub(hubPoseRed.getX()),getYToHub(hubPoseRed.getY())));
+        Logger.recordOutput("ToHub",new Translation2d(getXToTarget(hubPoseRed.getX()),getYToTarget(hubPoseRed.getY())));
 
         shooterAngle = ShooterAngleCalculator.getShooterAngleToHub(
                     swerve.io.getChassisSpeeds().vxMetersPerSecond,
@@ -453,35 +466,40 @@ public class Shooter extends SubsystemBase {
 
 
 
-    public boolean aimFerry() {
-        Translation2d target;
+    public boolean aimFerry(double flywheelSpeedSetpoint) {
+        double YToHub;
+        double XToHub;
         if(!Constants.isBlueAlliance){
             double redFerryDepotDistance = Math.sqrt(Math.pow(redFerryDepot.getX() - swerve.io.getPose2d().getX(),2)+Math.pow((redFerryDepot.getY() - swerve.io.getPose2d().getY()),2));
             double redFerryOutpostDistance = Math.sqrt(Math.pow(redFerryOutpost.getX() - swerve.io.getPose2d().getX(),2)+Math.pow((redFerryOutpost.getY() - swerve.io.getPose2d().getY()),2));
             if(redFerryDepotDistance <= redFerryOutpostDistance){
-                target = redFerryDepot;
+                XToHub = getXToTarget(redFerryDepot.getX());
+                YToHub = getYToTarget(redFerryDepot.getY());
             }else{
-                target = redFerryOutpost;
+                XToHub = getXToTarget(redFerryOutpost.getX());
+                YToHub = getYToTarget(redFerryOutpost.getY());
             }
         }else{
             double blueFerryDepotDistance = Math.sqrt(Math.pow(blueFerryDepot.getX() - swerve.io.getPose2d().getX(),2)+Math.pow((blueFerryDepot.getY() - swerve.io.getPose2d().getY()),2));
             double blueFerryOutpostDistance = Math.sqrt(Math.pow(blueFerryOutpost.getX() - swerve.io.getPose2d().getX(),2)+Math.pow((blueFerryOutpost.getY() - swerve.io.getPose2d().getY()),2));
             if(blueFerryDepotDistance <= blueFerryOutpostDistance){
-                target = blueFerryDepot;
+                XToHub = getXToTarget(blueFerryDepot.getX());
+                YToHub = getYToTarget(blueFerryDepot.getY());
             }else{
-                target = blueFerryOutpost;
+                XToHub = getXToTarget(blueFerryOutpost.getX());
+                YToHub = getYToTarget(blueFerryOutpost.getY());
             }
         }
-        shooterAngle = ShooterAngleCalculator.getShooterAngleToFerry(
+
+        Logger.recordOutput("ToHub",new Translation2d(getXToTarget(hubPoseRed.getX()),getYToTarget(hubPoseRed.getY())));
+
+        shooterAngle = ShooterAngleCalculator.getShooterAngleToHub(
                     swerve.io.getChassisSpeeds().vxMetersPerSecond,
-                    swerve.io.getChassisSpeeds().vxMetersPerSecond,
-                    target.getX() - swerve.io.getPose2d().getX()
-                            + Constants.TurretDistFromCenter
-                                    * Math.cos((Math.PI * (swerve.io.getGyro() / 180)) + (Math.PI * 3) / 4),
-                    target.getY() - swerve.io.getPose2d().getY()
-                            + Constants.TurretDistFromCenter
-                                    * Math.sin((Math.PI * (swerve.io.getGyro() / 180)) + (Math.PI * 3) / 4),
-                    7.77);
+                    swerve.io.getChassisSpeeds().vyMetersPerSecond,
+                    XToHub,
+                    YToHub,
+                    flywheelSpeedSetpoint
+            );
 
         if (shooterAngle != null) {
             pastShooterAngle = shooterAngle;
@@ -489,30 +507,61 @@ public class Shooter extends SubsystemBase {
         // SmartDashboard.putNumber("shooterHoodAngle", pastShooterAngle.hoodRotation);
         // SmartDashboard.putNumber("shooterAngle", pastShooterAngle.turretRotation);
 
-        double rotation = SwerveSubsystem.getInstance().getRobotPose().getRotation().getDegrees();
-        rotation = rotation % 360;
-        rotation = 360 - rotation;
+        double rotation = SwerveSubsystem.getInstance().getRobotPose().getRotation().getRadians();
 
-        // Invert gyro direction BEFORE scaling
-        // double offset = 190;//pastShooterAngle.turretRotation * (180.0 / Math.PI);
-        double alphabotJankboticsOffset = 0;
-        double offset = pastShooterAngle.turretRotation * (180.0 / Math.PI) + alphabotJankboticsOffset;
-        rotation += offset + 255; //maybe 255
-        rotation = rotation % 360;
+        rotation = rotation-Math.PI/2;
 
-        double turretAngle = -(rotation / 360.0);
+        double proposedAngle = (((pastShooterAngle.turretRotation - rotation) + Math.PI) % (2*Math.PI) - Math.PI);
+        Logger.recordOutput("ProposedAngle", 180*proposedAngle/(Math.PI));
+
+        if (
+            (proposedAngle - 2*Math.PI) > Constants.minTurretAngle
+            &&
+            Math.abs(tIO.getTurretPosition()-(proposedAngle - 2*Math.PI)) < Math.abs(tIO.getTurretPosition()-proposedAngle)
+            )
+        {
+            proposedAngle = proposedAngle - 2*Math.PI;
+        }
+        else if (
+            (proposedAngle + 2*Math.PI) < Constants.maxTurretAngle
+            &&
+            Math.abs(tIO.getTurretPosition()-(proposedAngle + 2*Math.PI)) < Math.abs(tIO.getTurretPosition()-proposedAngle)
+            )
+        {
+            proposedAngle = proposedAngle + 2*Math.PI;
+        }
+
+        turret.setTurretPosition(proposedAngle/(2*Math.PI));
+        // turret.setTurretPosition(-0.25);
+        
+        
+        Logger.recordOutput("CalculatedCorrectedTurretAngle", 180*proposedAngle/(Math.PI));
+
+
+        // double rotation = -180;
+        // rotation = rotation % 360;
+        // rotation = 360 - rotation;
+
+        // // Invert gyro direction BEFORE scaling
+        // // double offset = 190;//pastShooterAngle.turretRotation * (180.0 / Math.PI);
+        // double offset = (pastShooterAngle.turretRotation * (180.0 / Math.PI));// + alphabotJankboticsOffset;
+        // rotation += offset + 255; //maybe 255
+        // rotation = rotation % 360;
+        // double turretAngle = -(rotation / 360.0);
 
         // turret.setTurretPosition(turretAngle);
+        // double hoodInverted = 85 - (pastShooterAngle.hoodRotation * 180) / Math.PI;
+        // // double hoodInverted = 85-(67);
+        // double hoodRelative = hoodInverted / 360;
 
-        double hoodInverted = 85 - (pastShooterAngle.hoodRotation * 180) / Math.PI;
-        // double hoodInverted = 40;
-        double hoodRelative = hoodInverted / 360;
-        // turret.setHoodPosition(hoodRelative);
 
-        if (turret.hoodInTolerance(.05) && turret.turretInTolerance(0.05)) {
-            return true;
-        }
-        return false;
+        turret.setHoodPosition(pastShooterAngle.hoodRotation/(2.0*Math.PI));
+        // turret.setHoodPosition(75/360.0);
+
+        Logger.recordOutput("CalculatedHoodAngle", pastShooterAngle.hoodRotation/(2*Math.PI));
+
+        return true;
+        // return (turret.hoodInTolerance(.05) && turret.turretInTolerance(0.05));
     }
 
     // public boolean aimFerry(){}

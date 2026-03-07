@@ -168,6 +168,7 @@ public class Robot extends LoggedRobot {
     setAllianceColor();
     autonomousCommand = robotContainer.getAutonomousCommand();
     Superstructure.getInstance().wantedState = States.ZERO;
+    Intake.getInstance().wantedState = IntakeStates.EXTENDED;
 
     // schedule the autonomous command (example)
     if (autonomousCommand != null) {
@@ -187,6 +188,7 @@ public class Robot extends LoggedRobot {
     //only automaticly zeros if we havent already zeroed while still allowing a zero button
     Superstructure.getInstance().wantedState = States.ZERO;
     swerve.wantedState = SwerveStates.MANUAL;
+    Intake.getInstance().wantedState = IntakeStates.EXTENDED;
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove

@@ -3,8 +3,10 @@ package frc.robot;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.auto.runIntake;
+import frc.robot.commands.auto.runIntakeReverse;
 import frc.robot.commands.auto.ControllerInputs.Spit;
 import frc.robot.commands.auto.StateChange.*;
+import frc.robot.subsystems.States;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Drive.SwerveSubsystem;
 import frc.robot.subsystems.Shooter.Shooter;
@@ -19,15 +21,21 @@ public class ButtonConfig {
         
         // driverController.leftTrigger().onTrue(new SetIntakeStateIntaking()).onFalse(new SetIntakeStateSafe());
 
-        driverController.leftBumper().whileTrue(new SetIntakeStateReverse()).toggleOnFalse(new SetIntakeStateExtended());
-
+        driverController.leftBumper().whileTrue(new runIntakeReverse());
         driverController.leftTrigger().whileTrue(new runIntake());
+
+
+        driverController.rightBumper().onTrue(new InstantCommand(() -> {
+                superstructure.wantedState = States.UNJAM;
+        })).onFalse(new InstantCommand(() -> {
+                superstructure.wantedState = States.SHOOTER;
+        }));
 
         driverController.y().onTrue(new InstantCommand(() ->
         {SwerveSubsystem.getInstance().io.zeroGyro();}));
 
         // Climb currently not implemented
-        // driverController.b().onTrue(new SetStateClimbL3()); //TODO - implement climb functions
+        // driverController.b().onTrue(new SetStateClimbL3()); //remove climb
         // driverController.a().onTrue(new SetStateUnclimb());
 
         driverController.rightTrigger(0.5).onTrue(new SetStateShooter());

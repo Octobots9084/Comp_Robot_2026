@@ -2,6 +2,7 @@ package frc.robot.subsystems.Intake;
 
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
@@ -16,12 +17,11 @@ public class IntakeIOTalonFX implements IntakeIO {
      public IntakeConfigurator config;
      public TalonFX pivot;
      public TalonFX roller;
-     private MotionMagicVelocityVoltage rollerRequest = new MotionMagicVelocityVoltage(0);
+     private VelocityVoltage rollerRequest = new VelocityVoltage(0);
      private MotionMagicVoltage pivotRequest = new MotionMagicVoltage(0);
 
      public IntakeIOTalonFX() {
           config = new IntakeConfigurator();
-
           roller = new TalonFX(Constants.intakeRollerID, Constants.krakenBus);
           pivot = new TalonFX(Constants.intakePivotID, Constants.krakenBus);
           roller.setNeutralMode(NeutralModeValue.Coast);
@@ -41,7 +41,7 @@ public class IntakeIOTalonFX implements IntakeIO {
      public void setIntakeState(IntakeStates states) {
           // pivotRequest.Position = states.intakePosition;
           pivot.setControl(pivotRequest.withPosition(states.intakePosition));
-          roller.setVoltage(states.rollerVoltage);
+          roller.setControl(rollerRequest.withVelocity(states.rollerRPS));
      }
 
      @Override
@@ -63,7 +63,7 @@ public class IntakeIOTalonFX implements IntakeIO {
           roller.setControl(rollerRequest.withVelocity(rps));
      }
 
-     public boolean isZeroingSwitchPressed() {// GAS_D
+     public boolean isZeroingSwitchPressed() {
           return zeroingSwitch.get();
      }
 

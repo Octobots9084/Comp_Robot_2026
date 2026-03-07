@@ -67,7 +67,7 @@ public class ShooterConfigurator {
 
         turretConfig.MotionMagic.MotionMagicAcceleration = 10;
         turretConfig.MotionMagic.MotionMagicJerk = 100;
-        turretConfig.MotionMagic.MotionMagicCruiseVelocity = 2.75;
+        turretConfig.MotionMagic.MotionMagicCruiseVelocity = 2.75;//TODO lower this to reduce overshoot when wrapping
 
         // hood config
         hoodConfig.CurrentLimits.SupplyCurrentLimit = 20;

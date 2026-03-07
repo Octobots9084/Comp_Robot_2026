@@ -7,12 +7,12 @@ public enum IntakeStates {
     REVERSEINTAKING(-5, 0.3),
     ZERO(0, 0);
 
-    public final float rollerVoltage;
+    public final double rollerRPS;
     public final double intakePosition;
 
-    private IntakeStates(float rollerVoltage, double intakePosition) {
+    private IntakeStates(double rollerRPS, double intakePosition) {
 
-        this.rollerVoltage = rollerVoltage;
+        this.rollerRPS = rollerRPS;
         this.intakePosition = intakePosition;
     }
 }

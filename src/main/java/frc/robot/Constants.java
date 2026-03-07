@@ -55,10 +55,16 @@ public final class Constants {
   private static final double camPitch = Units.degreesToRadians(20);
   //-20 -26.57
   public static final Transform3d robotToCamFrontRight = new Transform3d(new Translation3d(-0.31,-0.16,0.245),
-      new Rotation3d(0,0,Math.PI).plus(new Rotation3d(0, (-20/180.0)*Math.PI, 0).plus(new Rotation3d(0, 0, (-26.57/180.0)*Math.PI))));
+      new Rotation3d(0, 0, (-26.57/180.0)*Math.PI).plus(
+      new Rotation3d(0, (-20/180.0)*Math.PI, 0).plus(
+      new Rotation3d(0,0,Math.PI)
+  )));
   //-20 +30
   public static final Transform3d robotToCamFrontLeft = new Transform3d(new Translation3d(-0.31,-0.16,0.185),
-      new Rotation3d(0,0,Math.PI).plus(new Rotation3d(0, (-20/180.0)*Math.PI, 0).plus(new Rotation3d(0, 0, (30/180.0)*Math.PI))));
+      new Rotation3d(0, 0, (30/180.0)*Math.PI).plus(
+      new Rotation3d(0, (-20/180.0)*Math.PI, 0).plus(
+      new Rotation3d(0,0,Math.PI)
+  )));
   public static final Transform3d robotToCamRight = new Transform3d(new Translation3d(-0.09, 0.37, .30),
       new Rotation3d(0, -camPitch, Math.PI/2));
   public static final Transform3d robotToCamLeft = new Transform3d(new Translation3d(-0.12,-0.37, 0.20),

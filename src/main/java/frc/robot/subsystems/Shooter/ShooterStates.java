@@ -10,4 +10,5 @@ public enum ShooterStates {
     SPIT,
     ZERO,
     MANUAL,
+    UNJAM,
 }

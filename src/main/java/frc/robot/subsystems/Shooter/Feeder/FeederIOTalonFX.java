@@ -1,6 +1,7 @@
 package frc.robot.subsystems.Shooter.Feeder;
 
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import frc.robot.Constants;
@@ -15,16 +16,16 @@ public class FeederIOTalonFX implements FeederIO {
     public TalonFX spindexerMotor;
     public TalonFX verticalFeederMotor;
     public ShooterConfigurator shooterConfigs;
-    private MotionMagicVelocityVoltage spindexerRequest;
-    private MotionMagicVelocityVoltage verticalFeederRequest;
+    private VelocityVoltage spindexerRequest = new VelocityVoltage(0);
+    private VelocityVoltage verticalFeederRequest = new VelocityVoltage(0);
 
     public FeederIOTalonFX() {
         shooterConfigs = new ShooterConfigurator();
         spindexerMotor = new TalonFX(Constants.spindexerID, Constants.krakenBus);
         verticalFeederMotor = new TalonFX(Constants.verticalFeederID, Constants.krakenBus);
 
-        // spindexerMotor.getConfigurator().apply(shooterConfigs.spindexerConfig);
-        // verticalFeederMotor.getConfigurator().apply(shooterConfigs.verticalFeederConfig);
+        spindexerMotor.getConfigurator().apply(shooterConfigs.spindexerConfig);
+        verticalFeederMotor.getConfigurator().apply(shooterConfigs.verticalFeederConfig);
     }
 
     public void updateInputs(FeederIOInputs inputs) {
@@ -38,12 +39,10 @@ public class FeederIOTalonFX implements FeederIO {
 
     @Override
     public void setFeederVelocity(FeederStates state) {
-        // spindexerRequest.Velocity = state.spindexerRPS;
-        // verticalFeederRequest.Velocity = state.feederRPS;
-        // spindexerMotor.setControl(spindexerRequest);
-        // verticalFeederMotor.setControl(verticalFeederRequest);
-        spindexerMotor.setVoltage(state.spindexerRPS);
-        verticalFeederMotor.setVoltage(state.feederRPS);
+        spindexerMotor.setControl(spindexerRequest.withVelocity(state.spindexerRPS));
+        verticalFeederMotor.setControl(verticalFeederRequest.withVelocity(state.feederRPS));
+        // spindexerMotor.setVoltage(state.spindexerRPS);
+        // verticalFeederMotor.setVoltage(state.feederRPS);
     }
 
     @Override

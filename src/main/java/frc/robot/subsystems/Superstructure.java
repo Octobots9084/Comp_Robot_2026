@@ -116,7 +116,10 @@ public class Superstructure extends SubsystemBase {
                 if(DriverStation.isAutonomous()){
                     this.currentState = States.AUTONONFIRE;
                 }
-            break;
+                break;
+            case UNJAM:
+                this.currentState = States.UNJAM;
+                break;
             default:
                 break; // do nothing
         }
@@ -155,6 +158,9 @@ public class Superstructure extends SubsystemBase {
             case AUTO:
                 swerve.wantedState = SwerveStates.IDLE;
                 shooter.wantedShooterState = ShooterStates.AUTOHUB;
+                break;
+            case UNJAM:
+                stateUnJam();
                 break;
             default:
                 // throw an exception
@@ -202,9 +208,12 @@ public class Superstructure extends SubsystemBase {
         //     prevState = States.SHOOTER;
 
         // }
-        shooter.wantedShooterState = ShooterStates.HUB;
+        shooter.wantedShooterState = ShooterStates.HUB;  
+    }
 
-        
+    private void stateUnJam(){
+        swerve.wantedState = SwerveStates.MANUAL;
+        shooter.wantedShooterState = ShooterStates.UNJAM;
     }
 
     private boolean stateZERO(){
