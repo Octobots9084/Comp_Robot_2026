@@ -7,29 +7,34 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Start depot rush"
+            "pathName": "Rush To Center Bottom"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "collect mid"
+            "pathName": "End Rush From Bottom"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "move to depot"
+            "pathName": "Shoot From Center Rush (bottom)"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StartShoot"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "collect depot"
+            "pathName": "Shoot To Outpost"
           }
         }
       ]
-
     }
   },
   "resetOdom": true,
