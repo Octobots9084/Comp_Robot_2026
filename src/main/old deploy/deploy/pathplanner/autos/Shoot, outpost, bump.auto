@@ -5,45 +5,39 @@
     "data": {
       "commands": [
         {
-          "type": "path",
-          "data": {
-            "pathName": "bump to outpost"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 4.0
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "outpost to mid"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "StartShoot"
           }
         },
         {
+          "type": "path",
+          "data": {
+            "pathName": "Bump to outpost"
+          }
+        },
+        {
           "type": "wait",
           "data": {
-            "waitTime": 4.0
+            "waitTime": 3.5
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "mid to out of way"
+            "pathName": "outpost to bump"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopShoot"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Regular Autos",
   "choreoAuto": false
 }

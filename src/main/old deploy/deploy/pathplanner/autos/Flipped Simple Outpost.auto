@@ -7,19 +7,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "bump to outpost"
+            "pathName": "Outpost"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 4.0
+            "waitTime": 3.0
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "outpost to mid"
+            "pathName": "Outpost to Shoot"
           }
         },
         {
@@ -27,23 +27,11 @@
           "data": {
             "name": "StartShoot"
           }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 4.0
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "mid to out of way"
-          }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Flipped Autos",
   "choreoAuto": false
 }

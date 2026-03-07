@@ -5,24 +5,6 @@
     "data": {
       "commands": [
         {
-          "type": "path",
-          "data": {
-            "pathName": "bump to outpost"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 4.0
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "outpost to mid"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "StartShoot"
@@ -31,13 +13,37 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 4.0
+            "waitTime": 3.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopShoot"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "mid to out of way"
+            "pathName": "Prepare Reverse Sweep"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Big Sweep (reversed)"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Return After Reverse Sweeop"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StartShoot"
           }
         }
       ]

@@ -4,28 +4,28 @@
     {
       "anchor": {
         "x": 0.548871794873055,
-        "y": 7.058333333337325
+        "y": 5.16055421686747
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.4679885877318113,
-        "y": 6.512753209700428
+        "x": 1.548871794873055,
+        "y": 5.160554216867471
       },
       "isLocked": false,
-      "linkedName": "depot bump neutral"
+      "linkedName": "depot bottom"
     },
     {
       "anchor": {
-        "x": 0.548871794873055,
-        "y": 5.16055421686747
+        "x": 3.351269230769232,
+        "y": 5.32573076923077
       },
       "prevControl": {
-        "x": 0.5798804785203573,
-        "y": 4.912484747689053
+        "x": 2.351269230769231,
+        "y": 5.32573076923077
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "depot bottom"
+      "linkedName": "Start Top Bump"
     }
   ],
   "rotationTargets": [],
@@ -41,14 +41,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0.0,
-    "rotation": -89.42286423221921
+    "velocity": 1.0,
+    "rotation": 135.0
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 1.0,
-    "rotation": -90.0
+    "rotation": -89.42286423221921
   },
   "useDefaultConstraints": true
 }

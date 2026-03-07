@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.548871794873055,
-        "y": 7.058333333337325
+        "x": 3.2869638554216865,
+        "y": 2.4395542168674704
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.4679885877318113,
-        "y": 6.512753209700428
+        "x": 1.757084337349397,
+        "y": 2.0352289156626515
       },
       "isLocked": false,
-      "linkedName": "depot bump neutral"
+      "linkedName": "Rush Center From bottom To Shoot"
     },
     {
       "anchor": {
-        "x": 0.548871794873055,
-        "y": 5.16055421686747
+        "x": 0.4679885877318113,
+        "y": 0.5997860199714706
       },
       "prevControl": {
-        "x": 0.5798804785203573,
-        "y": 4.912484747689053
+        "x": 0.6780100756355434,
+        "y": 1.4216817448463224
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "depot bottom"
+      "linkedName": "Outpost park"
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0.0,
-    "rotation": -89.42286423221921
+    "rotation": 180.0
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 1.0,
-    "rotation": -90.0
+    "rotation": 146.97613244420342
   },
   "useDefaultConstraints": true
 }

@@ -7,19 +7,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "bump to outpost"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 4.0
+            "pathName": "start neutral wipe"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "outpost to mid"
+            "pathName": "Neutral Wipe"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Finish Neutral Wipe freak"
           }
         },
         {
@@ -31,19 +31,37 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 4.0
+            "waitTime": 3.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopShoot"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "mid to out of way"
+            "pathName": "Move to depot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "collect depot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StartShoot"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Regular Autos",
   "choreoAuto": false
 }

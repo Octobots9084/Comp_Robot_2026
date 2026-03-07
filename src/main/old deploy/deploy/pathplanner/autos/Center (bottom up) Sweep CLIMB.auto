@@ -5,45 +5,51 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "bump to outpost"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 4.0
+            "name": "DriveOverBumpFromAlliance"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "outpost to mid"
+            "pathName": "Bump 2 TL start sweep"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Bottom Up Sweep"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Finish Up Sweep"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "StartShoot"
+            "name": "DriveOverBumpToAlliance"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 4.0
+            "waitTime": 0.0
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "mid to out of way"
+            "pathName": "Center Top Climb"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "not needed",
   "choreoAuto": false
 }

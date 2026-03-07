@@ -7,19 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "bump to outpost"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 4.0
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "outpost to mid"
+            "pathName": "Prepare Big Wipe"
           }
         },
         {
@@ -31,13 +19,37 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 4.0
+            "waitTime": 2.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopShoot"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "mid to out of way"
+            "pathName": "BIG SWEEP"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Return After Big Sweep"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StartShoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Big Sweep Back To Shoot"
           }
         }
       ]

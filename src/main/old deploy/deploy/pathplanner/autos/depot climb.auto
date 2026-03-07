@@ -7,31 +7,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Start To Depot"
+            "pathName": "M Start 1 to Depot top"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "collect depot"
+            "pathName": "M Depot top to Depot bottom (out)"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Depot To Bump"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StartShoot"
+            "pathName": "M Depot bottom (out) to Climb"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "not needed",
   "choreoAuto": false
 }

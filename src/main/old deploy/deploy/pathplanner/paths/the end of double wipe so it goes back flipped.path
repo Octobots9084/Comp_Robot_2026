@@ -1,0 +1,59 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 5.7340228245363765,
+        "y": 5.412967189728959
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 5.066883999048977,
+        "y": 5.393925796481219
+      },
+      "isLocked": false,
+      "linkedName": "the end of netrl wupe 2"
+    },
+    {
+      "anchor": {
+        "x": 3.443880171184022,
+        "y": 5.59410841654779
+      },
+      "prevControl": {
+        "x": 4.414279600570614,
+        "y": 5.549189705183074
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.2907075873827781,
+      "rotationDegrees": 124.91316594448286
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 720.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 3.0,
+    "rotation": 133.58738095986774
+  },
+  "reversed": false,
+  "folder": "flipped paths",
+  "idealStartingState": {
+    "velocity": 6.0,
+    "rotation": 136.66833744829333
+  },
+  "useDefaultConstraints": true
+}

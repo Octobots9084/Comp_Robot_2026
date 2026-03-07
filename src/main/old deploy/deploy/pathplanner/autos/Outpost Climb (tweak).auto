@@ -1,0 +1,79 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Outpost"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Outpost to Shoot"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Outpost Shoot to Bump"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "DriveOverBumpFromAlliance"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Fix Outpost Bump Alignment"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Neutral 4 to Neutral 3(aura)"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Fix outpost #3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "DriveOverBumpToAlliance"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Outpost Climb"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Regular Autos",
+  "choreoAuto": false
+}

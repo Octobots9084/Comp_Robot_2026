@@ -7,19 +7,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "bump to outpost"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 4.0
+            "pathName": "Bump 1 to Depot"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "outpost to mid"
+            "pathName": "M Depot top to Depot bottom (out)"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Shoot From Depot"
           }
         },
         {
@@ -27,23 +27,11 @@
           "data": {
             "name": "StartShoot"
           }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 4.0
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "mid to out of way"
-          }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Flipped Autos",
   "choreoAuto": false
 }

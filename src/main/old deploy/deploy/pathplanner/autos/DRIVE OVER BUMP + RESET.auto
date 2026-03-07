@@ -5,33 +5,27 @@
     "data": {
       "commands": [
         {
-          "type": "path",
-          "data": {
-            "pathName": "Start To Depot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "collect depot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Depot To Bump"
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "StartShoot"
+            "name": "DriveOverBump"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "TESTING (reset)"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "not needed",
   "choreoAuto": false
 }

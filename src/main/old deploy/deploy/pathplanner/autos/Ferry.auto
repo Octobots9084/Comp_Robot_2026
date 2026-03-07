@@ -5,45 +5,45 @@
     "data": {
       "commands": [
         {
-          "type": "path",
-          "data": {
-            "pathName": "bump to outpost"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 4.0
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "outpost to mid"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "StartShoot"
           }
         },
         {
-          "type": "wait",
+          "type": "path",
           "data": {
-            "waitTime": 4.0
+            "pathName": "bump to neutral67"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "mid to out of way"
+            "pathName": "neutral sweep1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "neutral sweep2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Neutral Sweep3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "finish ferry"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Regular Autos",
   "choreoAuto": false
 }

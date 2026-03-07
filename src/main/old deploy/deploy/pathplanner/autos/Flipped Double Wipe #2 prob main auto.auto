@@ -1,0 +1,97 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "StartShoot"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 2.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopShoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "start neutral wipe"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Neutral Wipe"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Finish Neutral Wipe"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StartShoot"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.25
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Prepare for double wipe"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopShoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "start double wipe"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Neutral Wipe 2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "the end of double wipe so it goes back"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StartShoot"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Flipped Autos",
+  "choreoAuto": false
+}
