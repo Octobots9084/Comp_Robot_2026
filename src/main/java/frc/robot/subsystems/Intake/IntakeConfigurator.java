@@ -27,7 +27,7 @@ public class IntakeConfigurator {
         intakeRollerConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
         // create PID gains
-        intakeRollerConfig.Slot0.kP = 1;
+        intakeRollerConfig.Slot0.kP = 0.3;
         intakeRollerConfig.Slot0.kI = 0.0;
         intakeRollerConfig.Slot0.kD = 0.0;
         intakeRollerConfig.Slot0.kA = 0.0;
