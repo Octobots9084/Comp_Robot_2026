@@ -23,6 +23,7 @@ import frc.robot.subsystems.Intake.Intake;
 import frc.robot.subsystems.Intake.IntakeStates;
 import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.ShooterStates;
+import frc.robot.subsystems.Shooter.Turret.Turret;
 
 import java.util.Optional;
 
@@ -183,6 +184,11 @@ public class Robot extends LoggedRobot {
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
+    // if (!shooter.turretAlreadyZeroed){
+    //   SmartDashboard.putNumber("hubBallSpeed", 6.7);
+    //   SmartDashboard.putNumber("hubFlywheelSpeed", 9.5);
+    // }
+    
     setAllianceColor();
     //only automaticly zeros if we havent already zeroed while still allowing a zero button
     Superstructure.getInstance().wantedState = States.ZERO;

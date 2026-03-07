@@ -127,14 +127,16 @@ public class Shooter extends SubsystemBase {
                 flywheel.setFlywheelVelocity(0);
                 feeder.setFeederVelocity(FeederStates.UNJAM);
             case FERRY:
-                hubBallSpeed = 6.7 +(8.13-6.7)*(getDistanceToHub()/4.18532579377);
+                // hubBallSpeed = 6.7 +(8.13-6.7)*(getDistanceToHub()/4.18532579377);
+                hubBallSpeed = 8;
                 isAimedAtFerry = aimFerry(hubBallSpeed);
-                hubFlywheelSpeed = (hubBallSpeed-0.0482494)/0.673537;
+                // hubFlywheelSpeed = (hubBallSpeed-0.0482494)/0.673537;
+                hubFlywheelSpeed = 11;
                 // isAimedAtHub = true;
                 // turret.setTurretPosition(-90.0/360.0);
                 // turret.setHoodPosition(75/360.0);
                 
-                if(swerve.isInAllianceZone()){
+                if(!swerve.isInAllianceZone()){
                     if(driverOverride){
                         // flywheel.setFlywheelVelocity(7.098+1.34*((getDistanceToHub()-1.237)/(5.476-1.237)));
                         // flywheel.setFlywheelVelocity(10+2*((getDistanceToHub()-1.237)/(5.476-1.237)));
@@ -162,10 +164,16 @@ public class Shooter extends SubsystemBase {
                 }
                 break;
             case HUB:
-                hubBallSpeed = 8;//7.05 +(8.13-6.7)*(getDistanceToHub()/4.18532579377);
+                // hubBallSpeed = 
+                // SmartDashboard.getNumber("hubBallSpeed", 8);
+                hubBallSpeed = 6.7
+                ;//7.05 +(8.13-6.7)*(getDistanceToHub()/4.18532579377);
                 isAimedAtHub = isAimedAtHub(hubBallSpeed);
                 // hubFlywheelSpeed = (hubBallSpeed-0.0482494)/0.673537;
-                hubFlywheelSpeed = 11;
+                // hubFlywheelSpeed = SmartDashboard.getNumber("hubFlywheelSpeed", 10.5);
+                hubFlywheelSpeed = 9.5;
+
+
                 // isAimedAtHub = true;
                 // turret.setTurretPosition(-90.0/360.0);
                 // turret.setHoodPosition(75/360.0);

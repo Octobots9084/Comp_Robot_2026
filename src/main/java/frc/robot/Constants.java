@@ -71,7 +71,7 @@ public final class Constants {
       new Rotation3d(0, -camPitch, 3.0*Math.PI/2.0));
   // The standard deviations of our vision estimated poses, which affect
   // correction rate
-  // (Fake values. Experiment and determine estimation noise on an actual robot.)
+  // (Fake values. Experiment anl;y   y y    +        u'  d determine estimation noise on an actual robot.)
   public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
   public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
 
@@ -117,7 +117,7 @@ public final class Constants {
   public static int verticalFeederID = 15;
 
   public static double maximumHoodPosition = 85/360.0;
-  public static double minimumHoodPosition = 45/360.0;
+  public static double minimumHoodPosition = 60/360.0;
   public static double maximumTurretPosition = 0.8; // TODO set this to an actual value so sinjin doesnt cry
 
   public static double turretGearRatio = (60 / 14.0) * (156 / 20.0); //it is flipped to allign turret and gyro yaw rotation

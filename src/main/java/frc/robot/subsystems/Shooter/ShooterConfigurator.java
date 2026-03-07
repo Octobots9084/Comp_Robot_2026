@@ -121,11 +121,11 @@ public class ShooterConfigurator {
         // set break mode and inversion
         verticalFeederConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
         // create PID gains
-        verticalFeederConfig.Slot0.kP = 0.3;
+        verticalFeederConfig.Slot0.kP = 0.1;
         verticalFeederConfig.Slot0.kI = 0.0;
         verticalFeederConfig.Slot0.kD = 0.0;
         verticalFeederConfig.Slot0.kA = 0.0;
-        verticalFeederConfig.Slot0.kV = 0.0;
+        verticalFeederConfig.Slot0.kV = 0.14;
         verticalFeederConfig.Slot0.kS = 0.0;
         verticalFeederConfig.Slot0.kG = 0.0;
 

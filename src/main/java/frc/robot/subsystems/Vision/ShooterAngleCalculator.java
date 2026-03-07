@@ -109,7 +109,7 @@ public class ShooterAngleCalculator {
                 R = Math.sqrt((phxAim * phxAim) + (phyAim * phyAim));
 
                 theta = Math.atan(((s*s) + Math.sqrt((s*s*s*s) - (g*g) * (R*R) - 2 * phz * g * (s*s))) / (g * R));
-
+                Logger.recordOutput("hasSolution", false);
                 return null;
             }
             newtons_method_results[newtonsMethodIterations] = f;
@@ -140,12 +140,14 @@ public class ShooterAngleCalculator {
             } else {
                 phi = Math.atan(phyAim / phxAim)+Math.PI;
             }
-            //TODO needs be concerted to turret and hood relative values   
+            //TODO needs be concerted to turret and hood relative values 
+            Logger.recordOutput("hasSolution", true);  
             return new ShooterAngle(phi, theta);
             //phi is the angle of the turrent with respect to the field
             //theta is the angle of elevation of the hood
         }
         else
+            Logger.recordOutput("hasSolution", false);
             return null;
     }
 
