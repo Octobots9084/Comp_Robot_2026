@@ -22,7 +22,7 @@ public class ShooterConfigurator {
         hoodConfig = new TalonFXConfiguration()
                 .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(Constants.hoodGearRatio));
         spindexerConfig = new TalonFXConfiguration();
-        verticalFeederConfig = new TalonFXConfiguration();
+        verticalFeederConfig = new TalonFXConfiguration().withFeedback(new FeedbackConfigs().withSensorToMechanismRatio((1)/(2*Math.PI*Constants.feederGearRatio*Constants.feederWheelRadius)));
         // fly wheel right config
         flyWheelRightConfig.CurrentLimits.SupplyCurrentLimit = 20;
         flyWheelRightConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
@@ -67,7 +67,7 @@ public class ShooterConfigurator {
 
         turretConfig.MotionMagic.MotionMagicAcceleration = 10;
         turretConfig.MotionMagic.MotionMagicJerk = 100;
-        turretConfig.MotionMagic.MotionMagicCruiseVelocity = 2.75;//TODO lower this to reduce overshoot when wrapping
+        turretConfig.MotionMagic.MotionMagicCruiseVelocity = 2.75;
 
         // hood config
         hoodConfig.CurrentLimits.SupplyCurrentLimit = 20;

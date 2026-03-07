@@ -127,6 +127,9 @@ public final class Constants {
   public static double flywheelRadius = 0.0508;
   public static double topRollerRadius = 0.0254;
 
+  public static double feederGearRatio = 12/33;
+  public static double feederWheelRadius = 0.0381;
+
   public static double rotateGearRatio = 12;// TODO fix this gear ratio
 
   public static double intakePivotGearRatio = 25;
