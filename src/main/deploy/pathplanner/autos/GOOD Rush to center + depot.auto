@@ -5,21 +5,27 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Outpost"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.75
+            "name": "StartIntake"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Outpost to Shoot"
+            "pathName": "Rush to center"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "rush back to shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopIntake"
           }
         },
         {
@@ -31,7 +37,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 2.0
+            "waitTime": 5.0
           }
         },
         {
@@ -43,31 +49,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Copy of start neutral wipe"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Copy of Neutral Wipe"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Copy of Finish Neutral Wipe"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 8.0
+            "pathName": "outpost side to outpost"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "StopShoot"
+            "name": "StartShoot"
           }
         }
       ]

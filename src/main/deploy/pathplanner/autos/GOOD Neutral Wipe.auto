@@ -11,15 +11,21 @@
           }
         },
         {
-          "type": "path",
+          "type": "wait",
           "data": {
-            "pathName": "mid to bump"
+            "waitTime": 2.0
           }
         },
         {
           "type": "named",
           "data": {
             "name": "StopShoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StartIntake"
           }
         },
         {
@@ -35,45 +41,15 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "StopIntake"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Finish Neutral Wipe"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StartShoot"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 4.0
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StopShoot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "left bump to neutral"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "left neutral wipe"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "neutral to mid"
           }
         },
         {

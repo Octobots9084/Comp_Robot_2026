@@ -34,6 +34,8 @@ import frc.robot.commands.auto.NoPoseBump.DriveOverBumpToAlliance;
 import frc.robot.subsystems.Vision.VisionIOSystem;
 import frc.robot.subsystems.States;
 import frc.robot.subsystems.Superstructure;
+import frc.robot.subsystems.Intake.Intake;
+import frc.robot.subsystems.Intake.IntakeStates;
 import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.ShooterStates;
 
@@ -156,7 +158,9 @@ public class SwerveSubsystem extends SubsystemBase {
       NamedCommands.registerCommand("StartShoot", new InstantCommand(() -> {Superstructure.getInstance().wantedState = States.AUTO;}));
       NamedCommands.registerCommand("StopShoot", new InstantCommand(() -> {Superstructure.getInstance().wantedState = States.AUTONONFIRE;}));
         
-
+      NamedCommands.registerCommand("StartIntake", new InstantCommand(() -> {Intake.getInstance().wantedState = IntakeStates.INTAKING;}));
+      NamedCommands.registerCommand("StopIntake", new InstantCommand(() -> {Intake.getInstance().wantedState = IntakeStates.SAFE;}));
+        
 
     //   SmartDashboard.putBoolean("FinishedDriveForwardUntilLevel", false);
 

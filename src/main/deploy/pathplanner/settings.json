@@ -3,7 +3,8 @@
   "robotLength": 0.686,
   "holonomicMode": true,
   "pathFolders": [
-    "DELETE ME (NOT YET THO)"
+    "DELETE ME (NOT YET THO)",
+    "hueneme cahnges"
   ],
   "autoFolders": [],
   "defaultMaxVel": 3.0,

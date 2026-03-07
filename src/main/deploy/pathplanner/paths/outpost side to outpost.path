@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.5508968460648154,
-        "y": 2.586122612847222
+        "x": 3.4826961483594863,
+        "y": 2.5535235378031382
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.9218391653976012,
-        "y": 2.6337105825097153
+        "x": 3.853638467692272,
+        "y": 2.6011115074656317
       },
       "isLocked": false,
       "linkedName": "starting for bump"
@@ -31,20 +31,7 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "StopShoot",
-      "waypointRelativePos": 0.32459960937500015,
-      "endWaypointRelativePos": null,
-      "command": null
-    },
-    {
-      "name": "StartShoot",
-      "waypointRelativePos": 0.7076171874999998,
-      "endWaypointRelativePos": null,
-      "command": null
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -60,7 +47,7 @@
   "reversed": false,
   "folder": null,
   "idealStartingState": {
-    "velocity": 3.0,
+    "velocity": 0.0,
     "rotation": -135.0
   },
   "useDefaultConstraints": true

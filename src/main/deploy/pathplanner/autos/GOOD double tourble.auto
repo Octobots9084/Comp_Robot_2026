@@ -5,6 +5,24 @@
     "data": {
       "commands": [
         {
+          "type": "path",
+          "data": {
+            "pathName": "Outpost"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.75
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Outpost to Shoot"
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "StartShoot"
@@ -23,51 +41,33 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "start neutral wipe"
+            "name": "StartIntake"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Neutral Wipe"
+            "pathName": "Copy of start neutral wipe"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Finish Neutral Wipe"
+            "pathName": "Copy of Neutral Wipe"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "StartShoot"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.25
+            "name": "StopIntake"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Prepare for double wipe"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "start double wipe"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Double Wipe"
+            "pathName": "Copy of Finish Neutral Wipe"
           }
         }
       ]

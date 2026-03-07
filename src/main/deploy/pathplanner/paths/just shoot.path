@@ -3,37 +3,32 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.803683333333334,
-        "y": 1.8733166666666659
+        "x": 3.6250213980028523,
+        "y": 2.7605420827389446
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.174041666666667,
-        "y": 2.772758333333334
+        "x": 3.366248216833095,
+        "y": 2.7605420827389446
       },
       "isLocked": false,
-      "linkedName": "Double Wipe Start Pos"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.805983333333334,
-        "y": 5.289683333333333
+        "x": 3.1721683309557767,
+        "y": 2.7605420827389446
       },
       "prevControl": {
-        "x": 6.486233333333335,
-        "y": 4.805949999999999
+        "x": 3.4956348074179737,
+        "y": 2.747603423680457
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "top bump right"
+      "linkedName": null
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.5,
-      "rotationDegrees": 100.0
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -46,14 +41,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 4.0,
-    "rotation": 130.27502652302354
+    "velocity": 0,
+    "rotation": 0.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "hueneme cahnges",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 100.0
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }

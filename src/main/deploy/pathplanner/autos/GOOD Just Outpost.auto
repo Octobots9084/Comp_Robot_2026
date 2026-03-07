@@ -7,31 +7,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Rush to center"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "rush back to shoot"
+            "pathName": "Outpost"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 3.0
+            "waitTime": 4.0
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "outpost side to outpost"
+            "pathName": "Outpost to Shoot"
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 8.53
+            "name": "StartShoot"
           }
         }
       ]
