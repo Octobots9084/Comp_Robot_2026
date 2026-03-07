@@ -16,12 +16,21 @@
     },
     {
       "anchor": {
+<<<<<<< HEAD:src/main/old deploy/deploy/pathplanner/paths/Rush to center flipped.path
         "x": 7.855962910128387,
         "y": 1.4149215406562063
       },
       "prevControl": {
         "x": 5.262324775786876,
         "y": 1.6874022423194053
+=======
+        "x": 3.4826961483594863,
+        "y": 2.5535235378031382
+      },
+      "prevControl": {
+        "x": 5.868163885628005,
+        "y": 2.0697770823633235
+>>>>>>> 1710e78ae3dc99ea053d0a8897e7b5dfb613830c:src/main/deploy/pathplanner/paths/rush back to shoot.path
       },
       "nextControl": null,
       "isLocked": false,
@@ -38,8 +47,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 1.0,
+    "maxAcceleration": 1.0,
     "maxAngularVelocity": 720.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -55,5 +64,5 @@
     "velocity": 0.0,
     "rotation": 92.08256527973087
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

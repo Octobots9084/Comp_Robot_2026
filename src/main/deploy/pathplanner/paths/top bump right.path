@@ -3,38 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.63796005706134,
-        "y": 0.5868473609129818
+        "x": 5.805983333333334,
+        "y": 5.289683333333333
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.6842225392296717,
-        "y": 0.5997860199714709
+        "x": 4.181383737517831,
+        "y": 5.904636233951498
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "top bump right"
     },
     {
       "anchor": {
-<<<<<<< HEAD:src/main/old deploy/deploy/pathplanner/paths/Outpost flipped.path
-        "x": 0.3903566333808842,
-        "y": 0.6903566333808839
+        "x": 2.628744650499286,
+        "y": 5.632924393723252
       },
       "prevControl": {
-        "x": 1.5936519258202564,
-        "y": 0.7550499286733225
-=======
-        "x": 3.4826961483594863,
-        "y": 2.5535235378031382
-      },
-      "prevControl": {
-        "x": 2.7396118110100893,
-        "y": 2.1273428149115716
->>>>>>> 1710e78ae3dc99ea053d0a8897e7b5dfb613830c:src/main/deploy/pathplanner/paths/Outpost to Shoot.path
+        "x": 3.5732667617689007,
+        "y": 5.594108416547789
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Outpost"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -51,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 136.33221985386962
   },
   "reversed": false,
-  "folder": "flipped paths",
+  "folder": "hueneme cahnges",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 130.27502652302354
   },
   "useDefaultConstraints": true
 }

@@ -77,6 +77,7 @@ public class TurretIOTalonFX implements TurretIO {
         // hoodAngle*=360.0;
         // hoodAngle = (0.4383*hoodAngle) + 49.696883356;
         // hoodAngle /=360.0;
+        
         hoodAngle = Math.max(hoodAngle, Constants.minimumHoodPosition);
         hoodAngle = Math.min(hoodAngle, Constants.maximumHoodPosition);
         hoodMotor.setControl(hoodRequest.withPosition(hoodAngle));

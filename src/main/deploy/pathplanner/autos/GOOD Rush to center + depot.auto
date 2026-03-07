@@ -5,21 +5,27 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "bump to outpost"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 4.0
+            "name": "StartIntake"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "outpost to mid"
+            "pathName": "Rush to center"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "rush back to shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopIntake"
           }
         },
         {
@@ -31,19 +37,31 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 4.0
+            "waitTime": 5.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopShoot"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "mid to out of way"
+            "pathName": "outpost side to outpost"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StartShoot"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Regular Autos",
   "choreoAuto": false
 }

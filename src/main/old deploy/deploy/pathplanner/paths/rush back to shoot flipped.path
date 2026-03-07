@@ -3,6 +3,7 @@
   "waypoints": [
     {
       "anchor": {
+<<<<<<< HEAD:src/main/old deploy/deploy/pathplanner/paths/rush back to shoot flipped.path
         "x": 7.855962910128387,
         "y": 1.4149215406562063
       },
@@ -10,6 +11,15 @@
       "nextControl": {
         "x": 7.985349500713266,
         "y": 5.154194008559203
+=======
+        "x": 3.4826961483594863,
+        "y": 2.5535235378031382
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.211897464910413,
+        "y": 2.725423132710546
+>>>>>>> 1710e78ae3dc99ea053d0a8897e7b5dfb613830c:src/main/deploy/pathplanner/paths/Copy of start neutral wipe.path
       },
       "isLocked": false,
       "linkedName": "center quick swipe"

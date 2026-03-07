@@ -11,9 +11,9 @@
           }
         },
         {
-          "type": "wait",
+          "type": "path",
           "data": {
-            "waitTime": 2.0
+            "pathName": "mid to bump"
           }
         },
         {
@@ -61,43 +61,34 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.25
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Prepare for double wipe"
+            "waitTime": 4.0
           }
         },
         {
           "type": "named",
           "data": {
-<<<<<<<< HEAD:src/main/old deploy/deploy/pathplanner/autos/Double Wipe.auto
             "name": "StopShoot"
-========
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "StartIntake"
->>>>>>>> 1710e78ae3dc99ea053d0a8897e7b5dfb613830c:src/main/deploy/pathplanner/autos/GOOD Double Wipe.auto
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "start double wipe"
+            "pathName": "left bump to neutral"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Double Wipe"
+            "pathName": "left neutral wipe"
           }
         },
         {
-<<<<<<<< HEAD:src/main/old deploy/deploy/pathplanner/autos/Double Wipe.auto
-          "type": "path",
-          "data": {
-            "pathName": "the end of double wipe so it goes back"
-========
           "type": "named",
           "data": {
             "name": "StopIntake"
@@ -106,14 +97,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "top bump right"
->>>>>>>> 1710e78ae3dc99ea053d0a8897e7b5dfb613830c:src/main/deploy/pathplanner/autos/GOOD Double Wipe.auto
+            "pathName": "neutral to mid"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StartShoot"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "Regular Autos",
+  "folder": null,
   "choreoAuto": false
 }

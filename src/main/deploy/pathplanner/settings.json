@@ -2,9 +2,15 @@
   "robotWidth": 0.927,
   "robotLength": 0.813,
   "holonomicMode": true,
+<<<<<<< HEAD
   "pathFolders": [],
   "autoFolders": [
     "New Folder"
+=======
+  "pathFolders": [
+    "DELETE ME (NOT YET THO)",
+    "hueneme cahnges"
+>>>>>>> 1710e78ae3dc99ea053d0a8897e7b5dfb613830c
   ],
   "defaultMaxVel": 1.0,
   "defaultMaxAccel": 1.0,

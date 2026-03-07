@@ -25,7 +25,11 @@
       },
       "nextControl": null,
       "isLocked": false,
+<<<<<<< HEAD:src/main/old deploy/deploy/pathplanner/paths/Double Wipe.path
       "linkedName": "the end of the double wipe 1"
+=======
+      "linkedName": "top bump right"
+>>>>>>> 1710e78ae3dc99ea053d0a8897e7b5dfb613830c:src/main/deploy/pathplanner/paths/Double Wipe.path
     }
   ],
   "rotationTargets": [
@@ -47,7 +51,7 @@
   },
   "goalEndState": {
     "velocity": 4.0,
-    "rotation": 180.0
+    "rotation": 130.27502652302354
   },
   "reversed": false,
   "folder": "NORMAL PATHS!",

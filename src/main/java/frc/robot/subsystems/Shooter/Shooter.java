@@ -127,14 +127,16 @@ public class Shooter extends SubsystemBase {
                 flywheel.setFlywheelVelocity(0);
                 feeder.setFeederVelocity(FeederStates.UNJAM);
             case FERRY:
-                hubBallSpeed = 6.7 +(8.13-6.7)*(getDistanceToHub()/4.18532579377);
+                // hubBallSpeed = 6.7 +(8.13-6.7)*(getDistanceToHub()/4.18532579377);
+                hubBallSpeed = 8;
                 isAimedAtFerry = aimFerry(hubBallSpeed);
-                hubFlywheelSpeed = (hubBallSpeed-0.0482494)/0.673537;
-                // isAimedAtHub = true;
+                // hubFlywheelSpeed = (hubBallSpeed-0.0482494)/0.673537;
+                hubBallSpeed = 11;
+                // isAimedAtHub = true;s
                 // turret.setTurretPosition(-90.0/360.0);
                 // turret.setHoodPosition(75/360.0);
                 
-                if(swerve.isInAllianceZone()){
+                if(!swerve.isInAllianceZone()){
                     if(driverOverride){
                         // flywheel.setFlywheelVelocity(7.098+1.34*((getDistanceToHub()-1.237)/(5.476-1.237)));
                         // flywheel.setFlywheelVelocity(10+2*((getDistanceToHub()-1.237)/(5.476-1.237)));
@@ -198,10 +200,12 @@ public class Shooter extends SubsystemBase {
                 }
                 break;
             case AUTOFERRY:
-                ferryBallSpeed = 6.7 +(8.13-6.7)*(getDistanceToHub()/4.18532579377);
+                // ferryBallSpeed = 6.7 +(8.13-6.7)*(getDistanceToHub()/4.18532579377);
+                ferryBallSpeed = 8;
                 isAimedAtHub = isAimedAtHub(hubBallSpeed);
-                ferryFlywheelSpeed = (ferryBallSpeed-0.0482494)/0.673537;
-                if(swerve.isInAllianceZone()){
+                // ferryFlywheelSpeed = (ferryBallSpeed-0.0482494)/0.673537;
+                ferryFlywheelSpeed = 11;
+                if(!swerve.isInAllianceZone()){
                         flywheel.setFlywheelVelocity(ferryFlywheelSpeed);
                         if(isAimedAtHub){
                             if(flywheel.FlywheelInTolerance(1)){
