@@ -9,7 +9,10 @@ import frc.robot.commands.auto.StateChange.*;
 import frc.robot.subsystems.States;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Drive.SwerveSubsystem;
+import frc.robot.subsystems.Intake.Intake;
+import frc.robot.subsystems.Intake.IntakeStates;
 import frc.robot.subsystems.Shooter.Shooter;
+import frc.robot.subsystems.Shooter.ShooterStates;
 
 public class ButtonConfig {
     public static CommandXboxController driverController = new CommandXboxController(0);
@@ -44,14 +47,27 @@ public class ButtonConfig {
                 .onFalse(new InstantCommand(
                         () -> Shooter.driverOverride = false));
 
-        coDriverController.b().onTrue(new SetStateManual());
+        // coDriverController.b().onTrue(new SetStateManual());
         // coDriverController.leftTrigger(0.5).onTrue(new SetStateSafe());
-        coDriverController.rightBumper().onTrue(new Spit());
-        coDriverController.rightTrigger(0.5).onTrue(new SetStateShooter());
-        coDriverController.rightTrigger().onTrue(new InstantCommand(
-                () -> Shooter.driverOverride = true))
-                .onFalse(new InstantCommand(
-                        () -> Shooter.driverOverride = false));
+        driverController.a().onTrue(new Spit());
+        // coDriverController.rightTrigger(0.5).onTrue(new SetStateShooter());
+        // coDriverController.rightTrigger().onTrue(new InstantCommand(
+        //         () -> Shooter.driverOverride = true))
+        //         .onFalse(new InstantCommand(
+        //                 () -> Shooter.driverOverride = false));
+
+        driverController.b().onTrue(new InstantCommand(
+        () -> Superstructure.getInstance().wantedState = States.FIXEDFIRE))
+        .onFalse(new InstantCommand(
+                () -> Superstructure.getInstance().wantedState = States.SHOOTER));
+        //X : TODO add unstuck
+        driverController.rightBumper().onTrue(new InstantCommand(
+        () -> Intake.getInstance().wantedState = IntakeStates.ELEPHANTIASISPART2))
+        .onFalse(new InstantCommand(
+                () -> Intake.getInstance().wantedState = IntakeStates.EXTENDED));
+        //X : TODO add unstuck
+
+        //LB : TODO add Reverse Intake
 
     }
 }

@@ -14,6 +14,7 @@ public class Intake extends SubsystemBase {
     public static Intake instance;
     public boolean alreadyZeroed = false;
     public IntakeIOInputsAutoLogged inputs = new IntakeIOInputsAutoLogged();
+    public int elephantiaissTimer = 0;
 
     public Intake(IntakeIO io) {
         this.io = io;
@@ -64,6 +65,10 @@ public class Intake extends SubsystemBase {
             case ZERO:
                     currentState = IntakeStates.ZERO;
                 break;
+            case ELEPHANTIASISPART2:
+                    currentState = IntakeStates.ELEPHANTIASISPART2;
+                    elephantiaissTimer = 0;
+                break;
             default:
                 currentState = IntakeStates.SAFE;
                 break;
@@ -102,7 +107,17 @@ public class Intake extends SubsystemBase {
                     alreadyZeroed = false;
                 }
                 break;
-
+            case ELEPHANTIASISPART2:
+                if (elephantiaissTimer>0){
+                    io.setIntakeState(IntakeStates.INTAKING);
+                } else {
+                    io.setIntakeState(IntakeStates.PARTIALEXTENTION);
+                }
+                elephantiaissTimer ++;
+                if (elephantiaissTimer > 20){
+                    elephantiaissTimer = -20;
+                }
+                break;
         default:
             io.setIntakeState(currentState);    
             break;

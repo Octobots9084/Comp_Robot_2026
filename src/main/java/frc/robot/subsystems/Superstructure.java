@@ -1,25 +1,12 @@
 package frc.robot.subsystems;
 
-import java.security.spec.ECPublicKeySpec;
-
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-import frc.robot.commands.auto.StateChange.SetIntakeStateSafe;
-import frc.robot.subsystems.*; // WHY DID WE HAVE SO MANY IMPORTS FROM THIS THING JUST IMPORT IT ALL
-import frc.robot.subsystems.Climb.*; //I don't know why we need this
 import frc.robot.subsystems.Drive.SwerveStates;
 import frc.robot.subsystems.Drive.SwerveSubsystem;
 import frc.robot.subsystems.Intake.*;//same
 import frc.robot.subsystems.Shooter.*;//same here
-import frc.robot.subsystems.Shooter.Feeder.Feeder;
-import frc.robot.subsystems.Shooter.Flywheel.*;
-import frc.robot.subsystems.Shooter.Turret.Turret;
-
 import org.littletonrobotics.junction.Logger;
-
-import com.ctre.phoenix6.swerve.SwerveDrivetrain.SwerveControlParameters;
 
 public class Superstructure extends SubsystemBase {
     public States currentState = States.SAFE;
@@ -120,6 +107,9 @@ public class Superstructure extends SubsystemBase {
             case UNJAM:
                 this.currentState = States.UNJAM;
                 break;
+            case FIXEDFIRE:
+                this.currentState=States.FIXEDFIRE;
+            break;
             default:
                 break; // do nothing
         }
@@ -159,6 +149,10 @@ public class Superstructure extends SubsystemBase {
                 swerve.wantedState = SwerveStates.IDLE;
                 shooter.wantedShooterState = ShooterStates.AUTOHUB;
                 break;
+            case FIXEDFIRE:
+                swerve.wantedState = SwerveStates.IDLE;
+                shooter.wantedShooterState = ShooterStates.FIXEDFIRE;
+            break;
             case UNJAM:
                 stateUnJam();
                 break;

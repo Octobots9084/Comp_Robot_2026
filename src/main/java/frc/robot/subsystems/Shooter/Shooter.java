@@ -226,7 +226,12 @@ public class Shooter extends SubsystemBase {
                 turret.setHoodPosition(turret.spitTurrentHood);
                 turret.setTurretPosition(turretAim);
                 break;
-
+            case FIXEDFIRE:
+                feeder.setFeederVelocity(FeederStates.SPITTING);
+                flywheel.setFlywheelVelocity(FlywheelStates.SPIT);
+                turret.setHoodPosition(80/360.0);
+                turret.setTurretPosition(0.25);
+                break;
             case ZERO:
                 // TODO add hood zeroing
                 if (turret.io.turretZeroed()) {
@@ -322,7 +327,7 @@ public class Shooter extends SubsystemBase {
     // }
 
     public boolean shootHub() {
-        if (isAimedAtHub(8.5) /*&& isHubActive()*/) {
+        if (isAimedAtHub(6.9 +(8.5-6.9)*(getDistanceToHub()/4.18532579377)) /*&& isHubActive()*/) {
             // TODO ACTIVELY NEEDS TO BE FIXED
             if(swerve.isInAllianceZone() && !swerve.onRamp(0, 0.3)){
                 // if (driverOverride) {
