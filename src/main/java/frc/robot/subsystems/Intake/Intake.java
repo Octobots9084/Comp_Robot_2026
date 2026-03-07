@@ -102,7 +102,7 @@ public class Intake extends SubsystemBase {
             case ZERO:
                 if (io.zeroIntake()) {
                     alreadyZeroed = true;
-                    wantedState = IntakeStates.Extended;
+                    wantedState = IntakeStates.EXTENDED;
                 }else{
                     alreadyZeroed = false;
                 }

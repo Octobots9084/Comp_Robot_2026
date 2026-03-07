@@ -61,10 +61,10 @@ public class ButtonConfig {
         .onFalse(new InstantCommand(
                 () -> Superstructure.getInstance().wantedState = States.SHOOTER));
         //X : TODO add unstuck
-        driverController.rightBumper().onTrue(new InstantCommand(
-        () -> Intake.getInstance().wantedState = IntakeStates.ELEPHANTIASISPART2))
-        .onFalse(new InstantCommand(
-                () -> Intake.getInstance().wantedState = IntakeStates.EXTENDED));
+        // driverController.rightBumper().onTrue(new InstantCommand(
+        // () -> Intake.getInstance().wantedState = IntakeStates.ELEPHANTIASISPART2))
+        // .onFalse(new InstantCommand(
+        //         () -> Intake.getInstance().wantedState = IntakeStates.EXTENDED));
         //X : TODO add unstuck
 
         //LB : TODO add Reverse Intake

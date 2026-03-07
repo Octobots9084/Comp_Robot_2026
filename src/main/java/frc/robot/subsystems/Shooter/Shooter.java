@@ -162,9 +162,10 @@ public class Shooter extends SubsystemBase {
                 }
                 break;
             case HUB:
-                hubBallSpeed = 6.7 +(8.13-6.7)*(getDistanceToHub()/4.18532579377);
+                hubBallSpeed = 8;//7.05 +(8.13-6.7)*(getDistanceToHub()/4.18532579377);
                 isAimedAtHub = isAimedAtHub(hubBallSpeed);
-                hubFlywheelSpeed = (hubBallSpeed-0.0482494)/0.673537;
+                // hubFlywheelSpeed = (hubBallSpeed-0.0482494)/0.673537;
+                hubFlywheelSpeed = 11;
                 // isAimedAtHub = true;
                 // turret.setTurretPosition(-90.0/360.0);
                 // turret.setHoodPosition(75/360.0);
@@ -219,9 +220,11 @@ public class Shooter extends SubsystemBase {
                 }
                 break;
             case AUTOHUB:
-               hubBallSpeed = 6.7 +(8.13-6.7)*(getDistanceToHub()/4.18532579377);
+            //    hubBallSpeed = 6.7 +(8.13-6.7)*(getDistanceToHub()/4.18532579377);
+                hubBallSpeed = 8;
                 isAimedAtHub = isAimedAtHub(hubBallSpeed);
-                hubFlywheelSpeed = (hubBallSpeed-0.0482494)/0.673537;
+                // hubFlywheelSpeed = (hubBallSpeed-0.0482494)/0.673537;
+                hubFlywheelSpeed = 11;
                 // isAimedAtHub = true;
                 // turret.setTurretPosition(-90.0/360.0);
                 // turret.setHoodPosition(75/360.0);
@@ -274,6 +277,7 @@ public class Shooter extends SubsystemBase {
                 break;
             case ZERO:
                 // TODO add hood zeroing
+                turret.setHoodPosition(85/360.0);
                 if (turret.io.turretZeroed()) {
                         wantedShooterState = ShooterStates.HUB;
                 }

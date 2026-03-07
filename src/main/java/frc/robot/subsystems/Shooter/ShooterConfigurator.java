@@ -34,7 +34,7 @@ public class ShooterConfigurator {
         flyWheelRightConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
         // create PID gains
-        flyWheelRightConfig.Slot0.kP = 2.5;
+        flyWheelRightConfig.Slot0.kP = 2;
         flyWheelRightConfig.Slot0.kI = 0.0;
         flyWheelRightConfig.Slot0.kD = 0.0;
         flyWheelRightConfig.Slot0.kA = 0.0;
@@ -100,7 +100,7 @@ public class ShooterConfigurator {
         // set break mode and inversion
         spindexerConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
         // create PID gains
-        spindexerConfig.Slot0.kP = 1;
+        spindexerConfig.Slot0.kP = 0.3;
         spindexerConfig.Slot0.kI = 0.0;
         spindexerConfig.Slot0.kD = 0.0;
         spindexerConfig.Slot0.kA = 0.0;
@@ -121,7 +121,7 @@ public class ShooterConfigurator {
         // set break mode and inversion
         verticalFeederConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
         // create PID gains
-        verticalFeederConfig.Slot0.kP = 1;
+        verticalFeederConfig.Slot0.kP = 0.3;
         verticalFeederConfig.Slot0.kI = 0.0;
         verticalFeederConfig.Slot0.kD = 0.0;
         verticalFeederConfig.Slot0.kA = 0.0;
