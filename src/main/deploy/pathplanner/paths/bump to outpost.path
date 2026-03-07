@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.351269230769232,
-        "y": 5.32573076923077
+        "x": 3.3861538461538476,
+        "y": 1.965179487179487
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.107658333333333,
-        "y": 5.1989833333333335
+        "x": 2.5489230769230784,
+        "y": 1.4767948717948718
       },
       "isLocked": false,
-      "linkedName": "Start Top Bump"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.351825,
-        "y": 3.6117333333333335
+        "x": 0.5721282051282062,
+        "y": 0.6744487179487191
       },
       "prevControl": {
-        "x": 2.4878750000000003,
-        "y": 4.465825
+        "x": 2.118679487179488,
+        "y": 1.3605128205128199
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Center Shoot Pos"
+      "linkedName": "oupost"
     }
   ],
   "rotationTargets": [],
@@ -48,7 +48,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 135.0
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

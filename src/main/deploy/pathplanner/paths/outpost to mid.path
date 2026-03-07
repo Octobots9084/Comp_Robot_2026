@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.4679885877318113,
-        "y": 0.5997860199714706
+        "x": 0.5721282051282062,
+        "y": 0.6744487179487191
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.3022555575632546,
-        "y": 1.3526550380190137
+        "x": 2.4326410256410265,
+        "y": 2.895435897435898
       },
       "isLocked": false,
-      "linkedName": "Outpost park"
+      "linkedName": "oupost"
     },
     {
       "anchor": {
-        "x": 3.3533095577746077,
-        "y": 2.5405848787446508
+        "x": 2.68846153846154,
+        "y": 3.3954487179487183
       },
       "prevControl": {
-        "x": 2.3533095577746073,
-        "y": 2.5405848787446508
+        "x": 1.362846153846155,
+        "y": 1.5465641025641024
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Start Bottom Bump"
+      "linkedName": "center"
     }
   ],
   "rotationTargets": [],
@@ -41,8 +41,8 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 1.0,
-    "rotation": -135.0
+    "velocity": 0,
+    "rotation": -90.0
   },
   "reversed": false,
   "folder": null,
