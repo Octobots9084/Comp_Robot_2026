@@ -33,30 +33,6 @@
           "data": {
             "name": "StartShoot"
           }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 5.0
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StopShoot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "outpost side to outpost"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StartShoot"
-          }
         }
       ]
     }

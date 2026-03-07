@@ -176,4 +176,5 @@ public final class Constants {
   }
 
   public static CANBus krakenBus = new CANBus("krakenbus");
+  public static Alliance allianceCOLOR;
 }
