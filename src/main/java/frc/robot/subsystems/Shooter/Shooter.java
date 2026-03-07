@@ -66,6 +66,7 @@ public class Shooter extends SubsystemBase {
     private Translation2d blueFerryDepot = new Translation2d(4.6239 - 2,6.03);
     private Translation2d redFerryDepot = new Translation2d(11.917 + 2,2.011);
     public boolean isAimedAtHub;
+    public boolean isAimedAtFerry;
     public double shooterCalculatorVelocity;
     public int flywheelDebouncer = 0;
     public double hubBallSpeed = 6.7;
@@ -126,26 +127,44 @@ public class Shooter extends SubsystemBase {
                 flywheel.setFlywheelVelocity(0);
                 feeder.setFeederVelocity(FeederStates.UNJAM);
             case FERRY:
-                isAimedAtHub = aimFerry(ferryBallSpeed);
-                if(!swerve.isInAllianceZone() && !swerve.onRamp(0,5)){
+                hubBallSpeed = 6.7 +(8.13-6.7)*(getDistanceToHub()/4.18532579377);
+                isAimedAtFerry = aimFerry(hubBallSpeed);
+                hubFlywheelSpeed = (hubBallSpeed-0.0482494)/0.673537;
+                // isAimedAtHub = true;
+                // turret.setTurretPosition(-90.0/360.0);
+                // turret.setHoodPosition(75/360.0);
+                
+                if(swerve.isInAllianceZone()){
                     if(driverOverride){
-                        flywheel.setFlywheelVelocity(ferryFlywheelSpeed);
-                        if(isAimedAtHub && flywheel.FlywheelInTolerance(18)){
-                            feeder.setFeederVelocity(FeederStates.SCORING);
-                        }else{
-                            feeder.setFeederVelocity(FeederStates.OFF);
+                        // flywheel.setFlywheelVelocity(7.098+1.34*((getDistanceToHub()-1.237)/(5.476-1.237)));
+                        // flywheel.setFlywheelVelocity(10+2*((getDistanceToHub()-1.237)/(5.476-1.237)));
+                        flywheel.setFlywheelVelocity(hubFlywheelSpeed);
+                        // flywheel.setFlywheelVelocity(FlywheelStates.HUB);
+                        if(isAimedAtFerry){
+                            if(flywheel.FlywheelInTolerance(1)){
+                                feeder.setFeederVelocity(FeederStates.SCORING);
+                                flywheelDebouncer = 0;
+                            }else if (flywheelDebouncer<10){
+                                flywheelDebouncer ++;
+                                feeder.setFeederVelocity(FeederStates.SCORING);
+                            }
+                            else{
+                                feeder.setFeederVelocity(FeederStates.OFF);
+                            }
                         }
+                        
                     }else{
                         feeder.setFeederVelocity(FeederStates.OFF);
                         flywheel.setFlywheelVelocity(FlywheelStates.SAFE);
                     }
-                }
-                else {
+                }else{
                     wantedShooterState = ShooterStates.BUMP;
                 }
                 break;
             case HUB:
+                hubBallSpeed = 6.7 +(8.13-6.7)*(getDistanceToHub()/4.18532579377);
                 isAimedAtHub = isAimedAtHub(hubBallSpeed);
+                hubFlywheelSpeed = (hubBallSpeed-0.0482494)/0.673537;
                 // isAimedAtHub = true;
                 // turret.setTurretPosition(-90.0/360.0);
                 // turret.setHoodPosition(75/360.0);
@@ -178,31 +197,52 @@ public class Shooter extends SubsystemBase {
                 }
                 break;
             case AUTOFERRY:
-                isAimedAtHub = aimFerry(ferryBallSpeed);
-                if(!swerve.isInAllianceZone() && !swerve.onRamp(0,5)){
+                ferryBallSpeed = 6.7 +(8.13-6.7)*(getDistanceToHub()/4.18532579377);
+                isAimedAtHub = isAimedAtHub(hubBallSpeed);
+                ferryFlywheelSpeed = (ferryBallSpeed-0.0482494)/0.673537;
+                if(swerve.isInAllianceZone()){
                         flywheel.setFlywheelVelocity(ferryFlywheelSpeed);
-                        if(isAimedAtHub && flywheel.FlywheelInTolerance(18)){
-                            feeder.setFeederVelocity(FeederStates.SCORING);
-                        }else{
-                            feeder.setFeederVelocity(FeederStates.OFF);
-                        } 
-                }
-                else {
+                        if(isAimedAtHub){
+                            if(flywheel.FlywheelInTolerance(1)){
+                                feeder.setFeederVelocity(FeederStates.SCORING);
+                                flywheelDebouncer = 0;
+                            }else if (flywheelDebouncer<10){
+                                flywheelDebouncer ++;
+                                feeder.setFeederVelocity(FeederStates.SCORING);
+                            }
+                            else{
+                                feeder.setFeederVelocity(FeederStates.OFF);
+                            }
+                        }
+                }else{
                     wantedShooterState = ShooterStates.BUMP;
                 }
                 break;
             case AUTOHUB:
-               isAimedAtHub = isAimedAtHub(hubBallSpeed);
-               flywheel.setFlywheelVelocity(hubFlywheelSpeed);
-                // flywheel.setFlywheelVelocity(37+10*((getDistanceToHub()-1.237)/(5.476-1.237)));
-                // flywheel.setFlywheelVelocity(FlywheelStates.HUB);
+               hubBallSpeed = 6.7 +(8.13-6.7)*(getDistanceToHub()/4.18532579377);
+                isAimedAtHub = isAimedAtHub(hubBallSpeed);
+                hubFlywheelSpeed = (hubBallSpeed-0.0482494)/0.673537;
+                // isAimedAtHub = true;
+                // turret.setTurretPosition(-90.0/360.0);
+                // turret.setHoodPosition(75/360.0);
                 
-                if(isAimedAtHub && flywheel.FlywheelInTolerance(8)){
-                    feeder.setFeederVelocity(FeederStates.SCORING);
+                if(swerve.isInAllianceZone()){
+                        flywheel.setFlywheelVelocity(hubFlywheelSpeed);
+                        if(isAimedAtHub){
+                            if(flywheel.FlywheelInTolerance(1)){
+                                feeder.setFeederVelocity(FeederStates.SCORING);
+                                flywheelDebouncer = 0;
+                            }else if (flywheelDebouncer<10){
+                                flywheelDebouncer ++;
+                                feeder.setFeederVelocity(FeederStates.SCORING);
+                            }
+                            else{
+                                feeder.setFeederVelocity(FeederStates.OFF);
+                            }
+                        }
                 }else{
-                    feeder.setFeederVelocity(FeederStates.OFF);
+                    wantedShooterState = ShooterStates.BUMP;
                 }
-                break;
             case BUMP:
                 if (!swerve.onRamp(0, 5)) {
                     if (swerve.isInAllianceZone()) {
@@ -227,8 +267,8 @@ public class Shooter extends SubsystemBase {
                 turret.setTurretPosition(turretAim);
                 break;
             case FIXEDFIRE:
-                feeder.setFeederVelocity(FeederStates.SPITTING);
-                flywheel.setFlywheelVelocity(FlywheelStates.SPIT);
+                feeder.setFeederVelocity(FeederStates.SCORING);
+                flywheel.setFlywheelVelocity(FlywheelStates.HUB);
                 turret.setHoodPosition(80/360.0);
                 turret.setTurretPosition(0.25);
                 break;
@@ -246,7 +286,7 @@ public class Shooter extends SubsystemBase {
 
     // state transitions for spit and manual needed
     public void handleStateTransitions() {
-        if (wantedShooterState != ShooterStates.HUB && currentShooterState == ShooterStates.HUB){
+        if ((wantedShooterState != ShooterStates.HUB && currentShooterState == ShooterStates.HUB)|| (wantedShooterState != ShooterStates.FERRY && currentShooterState == ShooterStates.FERRY)){
             flywheelDebouncer = 0;
         }
         switch (wantedShooterState) {
@@ -326,24 +366,24 @@ public class Shooter extends SubsystemBase {
     //     return false;
     // }
 
-    public boolean shootHub() {
-        if (isAimedAtHub(6.9 +(8.5-6.9)*(getDistanceToHub()/4.18532579377)) /*&& isHubActive()*/) {
-            // TODO ACTIVELY NEEDS TO BE FIXED
-            if(swerve.isInAllianceZone() && !swerve.onRamp(0, 0.3)){
-                // if (driverOverride) {
-                    flywheel.setFlywheelVelocity(FlywheelStates.HUB);
-                    if (flywheel.FlywheelInTolerance(12)) {
-                        feeder.setFeederVelocity(FeederStates.SCORING);
-                    }
-                // } else {
-                //     feeder.setFeederVelocity(FeederStates.AGITATION);
-                // }
-            }else{
-                return true;
-            }
-        }
-        return false;
-    }
+    // public boolean shootHub() {
+    //     if (isAimedAtHub(6.9 +(8.5-6.9)*(getDistanceToHub()/4.18532579377)) /*&& isHubActive()*/) {
+    //         // TODO ACTIVELY NEEDS TO BE FIXED
+    //         if(swerve.isInAllianceZone() && !swerve.onRamp(0, 0.3)){
+    //             // if (driverOverride) {
+    //                 flywheel.setFlywheelVelocity(FlywheelStates.HUB);
+    //                 if (flywheel.FlywheelInTolerance(12)) {
+    //                     feeder.setFeederVelocity(FeederStates.SCORING);
+    //                 }
+    //             // } else {
+    //             //     feeder.setFeederVelocity(FeederStates.AGITATION);
+    //             // }
+    //         }else{
+    //             return true;
+    //         }
+    //     }
+    //     return false;
+    // }
 
     public double getDistanceToHub(){
         double XToHub;

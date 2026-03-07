@@ -5,7 +5,7 @@ public enum FeederStates {
     FERRYING(6, -4),
     OFF(0, 0),
     UNJAM(-2,2),
-    SPITTING(5, -3);
+    SPITTING(2, -5);
 
     public double spindexerRPS;
     public double feederRPS;

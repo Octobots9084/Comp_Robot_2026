@@ -28,13 +28,13 @@ public class ButtonConfig {
         driverController.leftTrigger().whileTrue(new runIntake());
 
 
-        driverController.rightBumper().onTrue(new InstantCommand(() -> {
+        driverController.x().onTrue(new InstantCommand(() -> {
                 superstructure.wantedState = States.UNJAM;
         })).onFalse(new InstantCommand(() -> {
                 superstructure.wantedState = States.SHOOTER;
         }));
 
-        driverController.y().onTrue(new InstantCommand(() ->
+        coDriverController.a().onTrue(new InstantCommand(() ->
         {SwerveSubsystem.getInstance().io.zeroGyro();}));
 
         // Climb currently not implemented
