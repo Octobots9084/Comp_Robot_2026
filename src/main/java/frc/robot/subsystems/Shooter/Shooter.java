@@ -235,10 +235,12 @@ public class Shooter extends SubsystemBase {
                 break;
             case AUTOHUB:
             //    hubBallSpeed = 6.7 +(8.13-6.7)*(getDistanceToHub()/4.18532579377);
-                hubBallSpeed = 6.7;
+                hubBallSpeed = 0.5*(getDistanceToHub())+6;//8;//12;//6.5361+ 0.96897 * (getDistanceToHub()); // first change
+                hubFlywheelSpeed = 1.333333*getDistanceToHub()+5.133333;//7;//8.5;//6.3677 + 0.56653 * (getDistanceToHub()); // second change
+                Logger.recordOutput("hubBallSpeed",hubBallSpeed);
+                Logger.recordOutput("hubFlywheelSpeed",hubFlywheelSpeed);
                 isAimedAtHub = isAimedAtHub(hubBallSpeed);
                 // hubFlywheelSpeed = (hubBallSpeed-0.0482494)/0.673537;
-                hubFlywheelSpeed = 9.5;
                 // isAimedAtHub = true;
                 // turret.setTurretPosition(-90.0/360.0);
                 // turret.setHoodPosition(75/360.0);
