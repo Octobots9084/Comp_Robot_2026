@@ -3,12 +3,14 @@ package frc.robot.subsystems.Shooter;
 import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.hardware.CANrange;
+import com.ctre.phoenix6.swerve.SwerveRequest.SwerveDriveBrake;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
@@ -167,7 +169,11 @@ public class Shooter extends SubsystemBase {
                 // hubBallSpeed = 
                 // SmartDashboard.getNumber("hubBallSpeed", 8);
                 // hubBallSpeed = 6.7
-                ;//7.05 +(8.13-6.7)*(getDistanceToHub()/4.18532579377);
+                //7.05 +(8.13-6.7)*(getDistanceToHub()/4.18532579377);
+                hubBallSpeed = 0.5*(getDistanceToHub())+6;//8;//12;//6.5361+ 0.96897 * (getDistanceToHub()); // first change
+                hubFlywheelSpeed = 1.333333*getDistanceToHub()+5.133333;//7;//8.5;//6.3677 + 0.56653 * (getDistanceToHub()); // second change
+                Logger.recordOutput("hubBallSpeed",hubBallSpeed);
+                Logger.recordOutput("hubFlywheelSpeed",hubFlywheelSpeed);
                 isAimedAtHub = isAimedAtHub(hubBallSpeed);
                 // hubFlywheelSpeed = (hubBallSpeed-0.0482494)/0.673537;
                 // hubFlywheelSpeed = SmartDashboard.getNumber("hubFlywheelSpeed", 10.5);
@@ -448,10 +454,12 @@ public class Shooter extends SubsystemBase {
         }
 
         Logger.recordOutput("ToHub",new Translation2d(getXToTarget(hubPoseRed.getX()),getYToTarget(hubPoseRed.getY())));
+        ChassisSpeeds fieldRelative = ChassisSpeeds.fromRobotRelativeSpeeds(swerve.io.getChassisSpeeds(), swerve.io.getPose2d().getRotation());
+
 
         shooterAngle = ShooterAngleCalculator.getShooterAngleToHub(
-                    swerve.io.getChassisSpeeds().vxMetersPerSecond,
-                    swerve.io.getChassisSpeeds().vyMetersPerSecond,
+                    fieldRelative.vxMetersPerSecond,
+                    fieldRelative.vyMetersPerSecond,
                     XToHub,
                     YToHub,
                     flywheelSpeedSetpoint
@@ -549,9 +557,12 @@ public class Shooter extends SubsystemBase {
 
         Logger.recordOutput("ToHub",new Translation2d(getXToTarget(hubPoseRed.getX()),getYToTarget(hubPoseRed.getY())));
 
-        shooterAngle = ShooterAngleCalculator.getShooterAngleToHub(
-                    swerve.io.getChassisSpeeds().vxMetersPerSecond,
-                    swerve.io.getChassisSpeeds().vyMetersPerSecond,
+        ChassisSpeeds fieldRelative = ChassisSpeeds.fromRobotRelativeSpeeds(swerve.io.getChassisSpeeds(), swerve.io.getPose2d().getRotation());
+
+
+        shooterAngle = ShooterAngleCalculator.getShooterAngleToFerry(
+                    fieldRelative.vxMetersPerSecond,
+                    fieldRelative.vyMetersPerSecond,
                     XToHub,
                     YToHub,
                     flywheelSpeedSetpoint

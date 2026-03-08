@@ -8,10 +8,10 @@ public class ShooterAngleCalculator {
     
     //contants
     private static final double g = 9.81; // gravity
-    private static final double hubHeight = 1.8288; // hub height
+    private static final double hubHeight = 1.52; // hub height
     private static final double ferryHeight = 0.5; // hub height
     private static final double minHoodAngle = 1.012; // 58 deg
-    private static final double shooterHeight = 0.54; // shooter height
+    private static final double shooterHeight = 0.53; // shooter height
     private static final double hubRadius = 1.27; // radius of the hub
     private static final int maxNewtonsMethodIterations = 30; // prevents an ifinate loop 
     
