@@ -230,10 +230,10 @@ public class SwerveSubsystem extends SubsystemBase {
         double xMagnitude = MathUtil.applyDeadband(driverController.getLeftY(), Constants.leftXDeadband);
         double angularMagnitude = -MathUtil.applyDeadband(driverController.getRightX(), Constants.rightXDeadband);
         angularMagnitude = Math.copySign(angularMagnitude * angularMagnitude, angularMagnitude);
-        double xVelocity = xMagnitude * maxVelocity* Constants.maxTelopVelocity;
-        double yVelocity = yMagnitude * maxVelocity* Constants.maxTelopVelocity;
+        double xVelocity = xMagnitude * maxVelocity;
+        double yVelocity = yMagnitude * maxVelocity;
 
-        double angularVelocity = angularMagnitude * maxAngularVelocity * Constants.maxTelopAngularVelocity;
+        double angularVelocity = angularMagnitude * maxAngularVelocity;
 
         if (Constants.allianceColor == Alliance.Blue) {   
             return new ChassisSpeeds(-xVelocity, -yVelocity, angularVelocity);

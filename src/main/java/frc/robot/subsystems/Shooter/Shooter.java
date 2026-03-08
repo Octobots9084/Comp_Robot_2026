@@ -166,12 +166,12 @@ public class Shooter extends SubsystemBase {
             case HUB:
                 // hubBallSpeed = 
                 // SmartDashboard.getNumber("hubBallSpeed", 8);
-                hubBallSpeed = 6.7
+                // hubBallSpeed = 6.7
                 ;//7.05 +(8.13-6.7)*(getDistanceToHub()/4.18532579377);
                 isAimedAtHub = isAimedAtHub(hubBallSpeed);
                 // hubFlywheelSpeed = (hubBallSpeed-0.0482494)/0.673537;
                 // hubFlywheelSpeed = SmartDashboard.getNumber("hubFlywheelSpeed", 10.5);
-                hubFlywheelSpeed = 9.5;
+                // hubFlywheelSpeed = 9.5;
 
 
                 // isAimedAtHub = true;

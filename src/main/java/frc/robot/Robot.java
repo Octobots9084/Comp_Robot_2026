@@ -184,10 +184,10 @@ public class Robot extends LoggedRobot {
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
-    // if (!shooter.turretAlreadyZeroed){
+    // // if (!shooter.turretAlreadyZeroed){
     //   SmartDashboard.putNumber("hubBallSpeed", 6.7);
-    //   SmartDashboard.putNumber("hubFlywheelSpeed", 9.5);
-    // }
+    // //   SmartDashboard.putNumber("hubFlywheelSpeed", 9.5);
+    // // }
     
     setAllianceColor();
     //only automaticly zeros if we havent already zeroed while still allowing a zero button
