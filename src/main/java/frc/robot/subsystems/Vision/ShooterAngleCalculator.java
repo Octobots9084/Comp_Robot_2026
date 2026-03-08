@@ -31,14 +31,14 @@ public class ShooterAngleCalculator {
         Logger.recordOutput("hood Ferry", theta);
 
         // // then estimate t
-        double T = R / (s * Math.cos(theta));
+        double T = 0;//R / (s * Math.cos(theta));
 
         // double T = 0.3;
 
         // Newton's method
         double f = Integer.MAX_VALUE;
         int newtonsMethodIterations = 0;
-        while (Math.abs(f) > 1e-6){
+        while (Math.abs(f) > 0.1){
             f = quarticFunction(T, vx, vy, pfx, pfy, pfz, s);
             T = T - f / quarticDerivative(T, vx, vy, pfx, pfy, pfz, s);
             newtonsMethodIterations = newtonsMethodIterations + 1;
