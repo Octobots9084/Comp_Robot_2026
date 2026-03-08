@@ -18,7 +18,7 @@ public class DriveForwardUntilLevel extends Command {
 
     @Override
     public void execute() {
-        if (Constants.allianceColor == Alliance.Blue) {
+        if (Constants.isBlueAlliance) {
             swerve.io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(0, -2, 0))
                     .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
         } else {

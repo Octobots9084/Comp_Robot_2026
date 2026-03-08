@@ -26,7 +26,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
-import frc.robot.FieldConstants;
 import frc.robot.commands.auto.DriveBack;
 import frc.robot.commands.auto.DriveOverBump;
 import frc.robot.commands.auto.NoPoseBump.DriveOverBumpFromAlliance;
@@ -235,7 +234,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
         double angularVelocity = angularMagnitude * maxAngularVelocity;
 
-        if (Constants.allianceColor == Alliance.Blue) {   
+        if (Constants.isBlueAlliance) {   
             return new ChassisSpeeds(-xVelocity, -yVelocity, angularVelocity);
         }
         return new ChassisSpeeds(xVelocity, yVelocity, angularVelocity);

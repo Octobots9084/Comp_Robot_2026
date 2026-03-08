@@ -2,6 +2,8 @@ package frc.robot.subsystems.Shooter.Turret;
 
 import org.littletonrobotics.junction.AutoLog;
 
+import com.ctre.phoenix6.hardware.TalonFX;
+
 public interface TurretIO {
     @AutoLog
     public static class TurretIOInputs {
@@ -54,4 +56,6 @@ public interface TurretIO {
     public default boolean hoodZeroed() {
         return false;
     }
+
+    public default void zeroHoodMotor(){}
 }

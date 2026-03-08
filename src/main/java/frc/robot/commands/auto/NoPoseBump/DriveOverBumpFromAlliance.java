@@ -83,7 +83,7 @@ public class DriveOverBumpFromAlliance extends Command {
     }
 
     public void move () {
-        if (Constants.allianceColor == Alliance.Blue) {
+        if (Constants.isBlueAlliance) {
             swerve.io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(2, 0, 0))
                 .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
         } else {

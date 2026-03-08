@@ -133,6 +133,7 @@ public class Robot extends LoggedRobot {
     // This must be called from the robot's periodic block in order for anything in
     // the Command-based framework to work.
     CommandScheduler.getInstance().run();
+    Logger.recordOutput("IsBlueAlliance",Constants.isBlueAlliance);
 
     // Return to non-RT thread priority (do not modify the first argument)
     // Threads.setCurrentThreadPriority(false, 10);
@@ -141,6 +142,15 @@ public class Robot extends LoggedRobot {
   /** This function is called once when the robot is disabled. */
   @Override
   public void disabledInit() {
+    
+    Superstructure.getInstance().wantedState = States.SAFE;
+    // SmartDashboard.putBoolean("IsBlueAlliance", Constants.isBlueAlliance);
+    ButtonConfig.driverController.setRumble(RumbleType.kBothRumble, 0);
+  }
+
+  /** This function is called periodically when disabled. */
+  @Override
+  public void disabledPeriodic() {
     Optional<Alliance> ally = DriverStation.getAlliance();
     if (ally.isPresent()) {
       if (ally.get() == Alliance.Red) {
@@ -150,14 +160,6 @@ public class Robot extends LoggedRobot {
         Constants.isBlueAlliance = true;
       }
     }
-    Superstructure.getInstance().wantedState = States.SAFE;
-    // SmartDashboard.putBoolean("IsBlueAlliance", Constants.isBlueAlliance);
-    ButtonConfig.driverController.setRumble(RumbleType.kBothRumble, 0);
-  }
-
-  /** This function is called periodically when disabled. */
-  @Override
-  public void disabledPeriodic() {
   }
 
   /**

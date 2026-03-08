@@ -78,7 +78,6 @@ public final class Constants {
   public static final Mode simMode = Mode.SIM;
   public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;
   public static boolean isBlueAlliance = true;
-  public static Alliance allianceColor = DriverStation.getAlliance().orElse(Alliance.Blue);
   public static Timer timer = new Timer();
   public static int NUM_LEDS;
 
@@ -116,7 +115,7 @@ public final class Constants {
   public static int spindexerID = 18;
   public static int verticalFeederID = 15;
 
-  public static double maximumHoodPosition = 85/360.0;
+  public static double maximumHoodPosition = 90/360.0;
   public static double minimumHoodPosition = 60/360.0;
   public static double maximumTurretPosition = 0.8; // TODO set this to an actual value so sinjin doesnt cry
 

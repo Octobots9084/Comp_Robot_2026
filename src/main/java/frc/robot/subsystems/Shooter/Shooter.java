@@ -284,9 +284,9 @@ public class Shooter extends SubsystemBase {
                 break;
             case ZERO:
                 // TODO add hood zeroing
-                turret.setHoodPosition(85/360.0);
+                turret.io.zeroHoodMotor();
                 if (turret.io.turretZeroed()) {
-                        wantedShooterState = ShooterStates.HUB;
+                    wantedShooterState = ShooterStates.HUB;
                 }
                 break;
             default:

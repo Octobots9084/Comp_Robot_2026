@@ -32,7 +32,6 @@ public class TurretIOTalonFX implements TurretIO {
         turretMotor = new TalonFX(Constants.turretID, Constants.krakenBus);
         turretMotor.setPosition(0);
         hoodMotor.getConfigurator().apply(shooterConfigs.hoodConfig);
-        hoodMotor.setPosition(90/360.0);
         turretMotor.getConfigurator().apply(shooterConfigs.turretConfig);
         
     }
@@ -103,6 +102,12 @@ public class TurretIOTalonFX implements TurretIO {
     public boolean turretInTolerance(double tolerance) {
         return MathUtil.isNear(turretRequest.getPositionMeasure().in(Units.Revolution), this.getTurretPosition(),
                 tolerance);
+    }
+
+    @Override
+    public void zeroHoodMotor(){
+        hoodMotor.setVoltage(0.1);
+        hoodMotor.setPosition(90/360.0);
     }
 
     /** loop this if it is being used */
