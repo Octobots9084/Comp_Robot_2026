@@ -323,10 +323,6 @@ public class SwerveIOSystem extends TunerSwerveDrivetrain implements Subsystem, 
     public void resetRobotTranslation(Translation2d translation2d) {
     }
 
-    public Rotation2d getGyroYaw() {
-        return this.getPigeon2().getRotation2d();
-    }
-
     public SwerveModulePosition[] getModulePositions() {
         return new SwerveModulePosition[] {
                 getModule(0).getPosition(false), // set refresh to false but not shure if i should -rui
@@ -340,14 +336,6 @@ public class SwerveIOSystem extends TunerSwerveDrivetrain implements Subsystem, 
         return this.getPigeon2().getRotation2d();
     }
 
-    public SwerveModulePosition[] getModulePositions() {
-        return new SwerveModulePosition[] {
-            getModule(0).getPosition(false),//set refresh to false but not shure if i should -rui
-            getModule(1).getPosition(false),
-            getModule(2).getPosition(false),
-            getModule(3).getPosition(false)
-        };
-    }
 
     private double wrapToPie(double angle) {
         angle = (angle + Math.PI) % (2 * Math.PI);

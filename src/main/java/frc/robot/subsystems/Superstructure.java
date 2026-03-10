@@ -183,24 +183,6 @@ public class Superstructure extends SubsystemBase {
         // climb.setClimbState(ClimbStates.CLIMBEDL3);
         boolean climbAligned = true; //TODO when rui finishes alignment put this when it finishes
 
-<<<<<<< HEAD
-    private void stateCLIMB() {
-        Intake.getInstance().setCurrentState(IntakeStates.SAFE);
-
-        if(climb.climbL3){
-            climb.setClimbState(ClimbStates.DEPLOYEDL3);
-            // TODO align to bar(use button before alignment)
-            climb.setClimbState(ClimbStates.ENGAGEDL3);
-            //TODO align to vertical pole(button before alignment)
-            climb.setClimbState(ClimbStates.CLIMBEDL3);
-        }else{
-            climb.setClimbState(ClimbStates.DEPLOYEDL1);
-            //TODO align to bar(button before alignment)
-            climb.setClimbState(ClimbStates.CLIMBEDL1);
-        }
-       
-=======
->>>>>>> pre-auto-crashing
     }
     private void stateCLIMBL1() {
         stowForClimb();

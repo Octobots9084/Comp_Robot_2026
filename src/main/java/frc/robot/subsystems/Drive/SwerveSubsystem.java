@@ -60,21 +60,21 @@ public class SwerveSubsystem extends SubsystemBase {
         this.maxAngularVelocity = maxAngularVelocity;
         this.maxVelocity = maxVelocity;
 
-        // var stateStdDevs = VecBuilder.fill(0.1, 0.1, 0.1);
-        // var visionStdDevs = VecBuilder.fill(1, 1, 1);
-        // poseEstimator =
-        // new SwerveDrivePoseEstimator(
-        // new SwerveDriveKinematics(
-        // Constants.swerveModuleOneOffset,
-        // Constants.swerveModuleTwoOffset,
-        // Constants.swerveModuleThreeOffset,
-        // Constants.swerveModuleFourOffset),
-        // io.getGyroYaw(),
-        // io.getModulePositions(),
-        // new Pose2d(),
-        // stateStdDevs,
-        // visionStdDevs
-        // );
+        var stateStdDevs = VecBuilder.fill(0.1, 0.1, 0.1);///i uncommented all this and maybe it broke it idk
+        var visionStdDevs = VecBuilder.fill(1, 1, 1);
+        poseEstimator =
+        new SwerveDrivePoseEstimator(
+        new SwerveDriveKinematics(
+        Constants.swerveModuleOneOffset,
+        Constants.swerveModuleTwoOffset,
+        Constants.swerveModuleThreeOffset,
+        Constants.swerveModuleFourOffset),
+        io.getGyroYaw(),
+        io.getModulePositions(),
+        new Pose2d(),
+        stateStdDevs,
+        visionStdDevs
+        );
         instance = this;
         registerNamedCommands();
     }
