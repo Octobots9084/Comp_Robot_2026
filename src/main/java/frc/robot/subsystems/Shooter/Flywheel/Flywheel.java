@@ -3,41 +3,51 @@ package frc.robot.subsystems.Shooter.Flywheel;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Shooter.Flywheel.Flywheel;
 
-public class Flywheel extends SubsystemBase{
-     public static final double flywheelRadius = 0.1; // in Meters
+public class Flywheel extends SubsystemBase {
+    private FlywheelStates currentState = FlywheelStates.SAFE;
+    public static final double flywheelRadius = 0.1; // in Meters
     public static Flywheel currentFlywheelInstance = null;
 
     public FlywheelIO io = new FlywheelIOTalonFX();
-    
-    public Flywheel(){
+
+    public Flywheel() {
         currentFlywheelInstance = this;
     }
 
-    public static Flywheel getInstance(){
+    public static Flywheel getInstance() {
         return currentFlywheelInstance;
     }
 
-    public static void setInstance(Flywheel instance){
+    public static void setInstance(Flywheel instance) {
         currentFlywheelInstance = instance;
     }
 
-    public void setFlywheelVelocity(FlywheelStates currentState){
-        io.setFlywheelVelocity(currentState.FlywheelRightRPS);
+    public FlywheelStates getCurrentState() {
+        return this.currentState;
     }
 
-    public double[] getFlywheelVelocity(){
+    public void setFlywheelVelocity(FlywheelStates currentState) {
+        this.currentState = currentState;
+        io.setFlywheelVelocity(currentState);
+    }
+
+    public void setFlywheelVelocity(double rps) {
+        io.setFlywheelVelocity(rps);
+    }
+
+    public double[] getFlywheelVelocity() {
         return io.getFlywheelVelocity();
     }
 
-    public double getLeftMotorVelocity(){
+    public double getLeftMotorVelocity() {
         return io.getLeftMotorVelocity();
     }
 
-    public double getRightMotorVelocity(){
+    public double getRightMotorVelocity() {
         return io.getRightMotorVelocity();
     }
 
-    public boolean FlywheelInTolerance(double tolerance){
+    public boolean FlywheelInTolerance(double tolerance) {
         return io.FlywheelInTolerance(tolerance);
     }
 }

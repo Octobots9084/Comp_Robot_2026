@@ -21,15 +21,15 @@ public class DriveOverBumpToAlliance extends Command {
     boolean onRamp;
     boolean hasBeenOnRamp;
 
-    public DriveOverBumpToAlliance () {
+    public DriveOverBumpToAlliance() {
         swerve = SwerveSubsystem.getInstance();
         onRamp = false;
         hasBeenOnRamp = false;
     }
-    
+
     @Override
     public void execute() {
-        onRamp = swerve.onRamp(0, 0.1);
+        onRamp = swerve.onRamp(0, 0.3);
         move();
         if (onRamp && !hasBeenOnRamp) {
             hasBeenOnRamp = true;
@@ -37,26 +37,25 @@ public class DriveOverBumpToAlliance extends Command {
     }
 
     @Override
-    public boolean isFinished () {
+    public boolean isFinished() {
         return (!onRamp && hasBeenOnRamp);
         // return false;
     }
-    
+
     @Override
     public void end(boolean interrupted) {
         onRamp = false;
         hasBeenOnRamp = false;
     }
 
-    public void move () {
-        if (Constants.allianceColor != Alliance.Blue) {
-            swerve.io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(0, -2, 0))
-                .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
+    public void move() {
+        if (Constants.isBlueAlliance) {
+            swerve.io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(-6, 0, 0))
+                    .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
         } else {
-            swerve.io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(0, 2, 0))
-                .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
+            swerve.io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(6, 0, 0))
+                    .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
         }
     }
 
 }
-

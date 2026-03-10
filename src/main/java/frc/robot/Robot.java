@@ -4,15 +4,26 @@
 // Use of this source code is governed by a BSD
 // license that can be found in the LICENSE file
 // at the root directory of this project.
-
 package frc.robot;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.States;
+import frc.robot.subsystems.Superstructure;
+import frc.robot.subsystems.Climb.Climb;
+import frc.robot.subsystems.Climb.ClimbStates;
+import frc.robot.subsystems.Drive.SwerveStates;
 import frc.robot.subsystems.Drive.SwerveSubsystem;
+import frc.robot.subsystems.Intake.Intake;
+import frc.robot.subsystems.Intake.IntakeStates;
+import frc.robot.subsystems.Shooter.Shooter;
+import frc.robot.subsystems.Shooter.ShooterStates;
+import frc.robot.subsystems.Shooter.Turret.Turret;
 
 import java.util.Optional;
 
@@ -26,14 +37,22 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import choreo.trajectory.SwerveSample;
 
 /**
- * The VM is configured to automatically run this class, and to call the functions corresponding to
- * each mode, as described in the TimedRobot documentation. If you change the name of this class or
- * the package after creating this project, you must also update the build.gradle file in the
+ * The VM is configured to automatically run this class, and to call the
+ * functions corresponding to
+ * each mode, as described in the TimedRobot documentation. If you change the
+ * name of this class or
+ * the package after creating this project, you must also update the
+ * build.gradle file in the
  * project.
  */
 public class Robot extends LoggedRobot {
   private Command autonomousCommand;
   private RobotContainer robotContainer;
+  public Shooter shooter;
+  public Climb climb;
+  public Intake intake;
+
+  private boolean lastHubPeriod = false;
 
   public Robot() {
     // Set up data receivers & replay source
@@ -57,7 +76,7 @@ public class Robot extends LoggedRobot {
         Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim")));
         break;
     }
-        // Record metadata
+    // Record metadata
     Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
     Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
     Logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA);
@@ -78,28 +97,32 @@ public class Robot extends LoggedRobot {
 
     Logger.recordMetadata("GitDirty", gitDirty);
 
-
     // Start AdvantageKit logger
     Logger.start();
     
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our autonomous chooser on the dashboard.
     robotContainer = new RobotContainer();
+    // shooter = Shooter.getInstance();
+    swerve = SwerveSubsystem.getInstance();
+    // climb = Climb.getInstance();
+    // intake = Intake.getInstance();
   }
 
   /** This function is called periodically during all modes. */
   @Override
   public void robotPeriodic() {
+    // robotContainer.vision.periodic();
     // Optional<Alliance> ally = DriverStation.getAlliance();
-    //     if (ally.isPresent()) {
-    //         if (ally.get() == Alliance.Red) {
-    //             Constants.isBlueAlliance = false;
-    //         }
-    //         if (ally.get() == Alliance.Blue) {
-    //             Constants.isBlueAlliance = true;
-    //         }
-    //     }
-    //     SmartDashboard.putBoolean("IsBlueAlliance", Constants.isBlueAlliance);
+    // if (ally.isPresent()) {
+    // if (ally.get() == Alliance.Red) {
+    // Constants.isBlueAlliance = false;
+    // }
+    // if (ally.get() == Alliance.Blue) {
+    // Constants.isBlueAlliance = true;
+    // }
+    // }
+    // SmartDashboard.putBoolean("IsBlueAlliance", Constants.isBlueAlliance);
     // Optionally switch the thread to high priority to improve loop
     // timing (see the template project documentation for details)
     // Threads.setCurrentThreadPriority(true, 99);
@@ -110,6 +133,7 @@ public class Robot extends LoggedRobot {
     // This must be called from the robot's periodic block in order for anything in
     // the Command-based framework to work.
     CommandScheduler.getInstance().run();
+    Logger.recordOutput("IsBlueAlliance",Constants.isBlueAlliance);
 
     // Return to non-RT thread priority (do not modify the first argument)
     // Threads.setCurrentThreadPriority(false, 10);
@@ -117,44 +141,60 @@ public class Robot extends LoggedRobot {
 
   /** This function is called once when the robot is disabled. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    
+    Superstructure.getInstance().wantedState = States.SAFE;
+    // SmartDashboard.putBoolean("IsBlueAlliance", Constants.isBlueAlliance);
+    ButtonConfig.driverController.setRumble(RumbleType.kBothRumble, 0);
+  }
 
   /** This function is called periodically when disabled. */
   @Override
   public void disabledPeriodic() {
     Optional<Alliance> ally = DriverStation.getAlliance();
-        if (ally.isPresent()) {
-            if (ally.get() == Alliance.Red) {
-                Constants.isBlueAlliance = false;
-            }
-            if (ally.get() == Alliance.Blue) {
-                Constants.isBlueAlliance = true;
-            }
-        }
-        SmartDashboard.putBoolean("IsBlueAlliance", Constants.isBlueAlliance);
-  
+    if (ally.isPresent()) {
+      if (ally.get() == Alliance.Red) {
+        Constants.isBlueAlliance = false;
+      }
+      if (ally.get() == Alliance.Blue) {
+        Constants.isBlueAlliance = true;
+      }
+    }
   }
 
-  /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
+  /**
+   * This autonomous runs the autonomous command selected by your
+   * {@link RobotContainer} class.
+   */
   @Override
   public void autonomousInit() {
+    setAllianceColor();
     autonomousCommand = robotContainer.getAutonomousCommand();
-    SwerveSubsystem.getInstance().io.zeroGyro();
+    Superstructure.getInstance().wantedState = States.ZERO;
 
-        Logger.recordOutput("EXECUTING!!!!", false);
     // schedule the autonomous command (example)
     if (autonomousCommand != null) {
-      CommandScheduler.getInstance().schedule(autonomousCommand);//TODO: not command
+      CommandScheduler.getInstance().schedule(autonomousCommand);// TODO: not command
     }
   }
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+  }
 
   /** This function is called once when teleop is enabled. */
   @Override
-  public void teleopInit(){
+  public void teleopInit() {
+    // // if (!shooter.turretAlreadyZeroed){
+    //   SmartDashboard.putNumber("hubBallSpeed", 6.7);
+    // //   SmartDashboard.putNumber("hubFlywheelSpeed", 9.5);
+    // // }
+    
+    setAllianceColor();
+    //only automaticly zeros if we havent already zeroed while still allowing a zero button
+    Superstructure.getInstance().wantedState = States.ZERO;
+    swerve.wantedState = SwerveStates.MANUAL;
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
@@ -164,35 +204,113 @@ public class Robot extends LoggedRobot {
     if (autonomousCommand != null) {
       CommandScheduler.getInstance().cancel(autonomousCommand);
     }
+    Constants.timer.reset();
+    Constants.timer.start();
   }
-
+  int rumbleTimer;
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    // runs the vision periodic
-    robotContainer.vision.periodic();
-    robotContainer.shooter.periodic();
+    if (lastHubPeriod != Shooter.getInstance().isHubActive()) {
+      ButtonConfig.driverController.setRumble(RumbleType.kBothRumble, 1);
+      rumbleTimer = 0;
+    }
+    else
+    {
+      rumbleTimer ++;
+      if (rumbleTimer == 50)
+        ButtonConfig.driverController.setRumble(RumbleType.kBothRumble, 0);
+    }
+    lastHubPeriod = Shooter.getInstance().isHubActive();
   }
 
   /** This function is called once when test mode is enabled. */
   @Override
   public void testInit() {
     // Cancels all running commands at the start of test mode.
+    Shooter.getInstance().wantedShooterState = ShooterStates.ZERO;
+    // Climb.getInstance().wantedState = ClimbStates.ZERO;
+    // Intake.getInstance().wantedState = IntakeStates.ZERO;
     CommandScheduler.getInstance().cancelAll();
   }
 
   /** This function is called periodically during test mode. */
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+  }
 
   /** This function is called once when the robot is first started up. */
+    SwerveSubsystem swerve;
+    boolean onRamp;
+    boolean hasBeenOnRamp;
+    boolean hasBeenTilted;
+    boolean precon;
+    double tilt;
   @Override
-  public void simulationInit() {}
+  public void simulationInit() {
+        onRamp = false;
+        hasBeenOnRamp = false;
+        precon = false;
+        tilt = 0;
+        hasBeenTilted = false;
+        // SmartDashboard.putBoolean("autotest/onRamp", onRamp);
+        // SmartDashboard.putBoolean("autotest/precon", precon);
+        // SmartDashboard.putNumber("autotest/tilt", tilt);
+        // SmartDashboard.putBoolean("autotest/hasBeenOnRamp", hasBeenOnRamp);
+        // SmartDashboard.putBoolean("autotest/hasBeenTilted", hasBeenTilted);
+        // SmartDashboard.putBoolean("autotest/Reset Test", false);
+        // SmartDashboard.putNumber("autotest/TILT INPUT", 0);
+        // SmartDashboard.putBoolean("autotest/done w auto", false);
+  }
 
   /** This function is called periodically whilst in simulation. */
   @Override
   public void simulationPeriodic() {
     robotContainer.vision.periodic();
     robotContainer.shooter.periodic();
+
+
+        onRamp = onRamp(0, 3);
+        tilt = SmartDashboard.getNumber("autotest/TILT INPUT", 0);
+        if (onRamp && !hasBeenOnRamp) {
+            hasBeenOnRamp = true;
+        }
+        if (!onRamp && hasBeenOnRamp) {
+            precon = true;
+        }
+        if (precon && (tilt > 1)) {
+            hasBeenTilted = true;
+        }
+
+        // SmartDashboard.putBoolean("autotest/onRamp", onRamp);
+        // SmartDashboard.putBoolean("autotest/precon", precon);
+        // SmartDashboard.putNumber("autotest/tilt", tilt);
+        // SmartDashboard.putBoolean("autotest/hasBeenOnRamp", hasBeenOnRamp);
+        // SmartDashboard.putBoolean("autotest/hasBeenTilted", hasBeenTilted);
+        // SmartDashboard.putBoolean("autotest/done w auto", (!onRamp && hasBeenOnRamp && hasBeenTilted && tilt < 1));
+
+        if (SmartDashboard.getBoolean("autotest/Reset Test", false)) {
+          onRamp = false;
+          precon = false;
+          hasBeenOnRamp = false;
+          hasBeenTilted = false;
+          tilt = 0;
+        // SmartDashboard.putBoolean("autotest/Reset Test", false);
+        }
+
+  }
+
+  boolean onRamp (double wanted, double tolerance) { /////////////////////
+      boolean inTolerance = false;
+      tolerance = Units.degreesToRadians(tolerance);
+      double tilt = SmartDashboard.getNumber("autotest/TILT INPUT", tolerance);
+      if (tilt <= (wanted + tolerance) && tilt >= (wanted - tolerance)) {
+        inTolerance = true;
+      }
+      return !inTolerance;
+    }
+
+  public void setAllianceColor() {
+    SwerveSubsystem.getInstance().io.setAllianceColor();
   }
 }

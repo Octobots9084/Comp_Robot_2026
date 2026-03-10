@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.6903523035230354,
+        "y": 2.3021138211382106
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.4171595324386983,
+        "y": 2.4208367127044754
+      },
+      "isLocked": false,
+      "linkedName": "Shoot After Outpost Sweep"
+    },
+    {
+      "anchor": {
+        "x": 1.5807132667617685,
+        "y": 3.7180028530670475
+      },
+      "prevControl": {
+        "x": 1.7927128427630408,
+        "y": 3.585503118066253
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "climb"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 1.0,
+    "maxAcceleration": 1.0,
+    "maxAngularVelocity": 720.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 90.0
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 90.0
+  },
+  "useDefaultConstraints": true
+}

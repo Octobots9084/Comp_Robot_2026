@@ -5,24 +5,39 @@ import org.littletonrobotics.junction.AutoLog;
 //import com.revrobotics.
 
 public interface IntakeIO {
-@AutoLog
-public static class IntakeIOInputs {
-    public double rollerRPS = 0.0;
-    public double intakePosition = 0.0;
-    public double rollerTemp = 0.0;
-    public double pivotTemp = 0.0;
+    @AutoLog
+    public static class IntakeIOInputs {
+        public double rollerRPS = 0.0;
+        public double intakePosition = 0.0;
+        public double rollerTemp = 0.0;
+        public double pivotTemp = 0.0;
+        public double rollerCurrent = 0.0;
+        public double pivotCurrent = 0.0;
+        public double pivotRequest = 0.0;
+        public boolean pivotLimitSwitch = false;
+    }
+
+    public default void updateInputs(IntakeIOInputs inputs) {
+    }
+
+    public default void setIntakeState(IntakeStates states) {
+    }
+    public default void setRollerSpeed(double rps){}
+
+    public default double getRollerRPS() {
+        return 0;
+    }
+
+    public default double getIntakePosition() {
+        return 0;
+    }
+    
+    public default void setRotateVoltage(double volts){}
+
+    public default boolean isZeroingSwitchPressed() {// GAS_D
+        return false;
+    }
+    public default boolean zeroIntake(){
+        return false;
+    }
 }
-public default void updateInputs(IntakeIOInputs inputs){}
-
-public default void setIntakeState(IntakeStates states){}
-
-public default double getRollerRPS(){
-    return 0;
-}
-
-public default double getIntakePosition(){
-    return 0;
-}
-
-}
-

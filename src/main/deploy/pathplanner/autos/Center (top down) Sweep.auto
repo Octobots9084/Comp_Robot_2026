@@ -5,15 +5,45 @@
     "data": {
       "commands": [
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "DriveOverBumpFromAlliance"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "Bump 1 BL"
+            "pathName": "bump alignment to center (top center)"
           }
         },
         {
           "type": "path",
           "data": {
             "pathName": "Top Down Neutral Sweep"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "fix bump alignment bottom"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "DriveOverBumpToAlliance"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0
           }
         }
       ]

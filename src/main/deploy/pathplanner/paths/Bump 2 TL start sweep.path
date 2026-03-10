@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 5.7019879518072285,
+        "y": 2.9
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.1718795180722905,
+        "y": 3.1294819277108443
+      },
+      "isLocked": false,
+      "linkedName": "Bump 2 TR"
+    },
+    {
+      "anchor": {
+        "x": 6.882180722891565,
+        "y": 3.5213975903614454
+      },
+      "prevControl": {
+        "x": 6.357650602409638,
+        "y": 3.2700602409638555
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Start Bottom Up Sweep"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 1.0,
+    "maxAcceleration": 1.0,
+    "maxAngularVelocity": 720.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 8.0,
+    "rotation": 0.0
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 8.0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": true
+}

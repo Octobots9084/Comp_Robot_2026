@@ -1,6 +1,7 @@
 package frc.robot.subsystems.Drive;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.ctre.phoenix6.swerve.SwerveDrivetrain.SwerveDriveState;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import org.littletonrobotics.junction.Logger;
@@ -12,6 +13,7 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.numbers.N1;
@@ -19,28 +21,29 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
-import frc.robot.FieldConstants;
 import frc.robot.commands.auto.DriveBack;
-import frc.robot.commands.auto.DriveForwardUntilLevel;
 import frc.robot.commands.auto.DriveOverBump;
 import frc.robot.commands.auto.NoPoseBump.DriveOverBumpFromAlliance;
 import frc.robot.commands.auto.NoPoseBump.DriveOverBumpToAlliance;
+import frc.robot.subsystems.Vision.VisionIOSystem;
+import frc.robot.subsystems.States;
+import frc.robot.subsystems.Superstructure;
+import frc.robot.subsystems.Intake.Intake;
+import frc.robot.subsystems.Intake.IntakeStates;
+import frc.robot.subsystems.Shooter.Shooter;
+import frc.robot.subsystems.Shooter.ShooterStates;
 
-public class SwerveSubsystem extends SubsystemBase{
-    public enum SystemState {
-        MANUAL,
-        IDLE,
-        ROTATION_LOCK,
-        REVERSE,
-        ALIGN
-    }
+public class SwerveSubsystem extends SubsystemBase {
+
+
     private static SwerveSubsystem instance;
-    public SystemState wantedState = SystemState.MANUAL;
-    public SystemState systemState = SystemState.IDLE;
+    public SwerveStates wantedState = SwerveStates.MANUAL;
+    private SwerveStates currentState = SwerveStates.IDLE;
     public SwerveIO io;
     public CommandXboxController driverController;
     public double maxVelocity;
@@ -51,124 +54,165 @@ public class SwerveSubsystem extends SubsystemBase{
     private final SwerveIOInputsAutoLogged inputs = new SwerveIOInputsAutoLogged();
 
     public SwerveSubsystem(
-        SwerveIO io, CommandXboxController driverController, double maxAngularVelocity, double maxVelocity
-    ){
+            SwerveIO io, CommandXboxController driverController, double maxAngularVelocity, double maxVelocity) {
         this.io = io;
         this.driverController = driverController;
         this.maxAngularVelocity = maxAngularVelocity;
         this.maxVelocity = maxVelocity;
 
-        var stateStdDevs = VecBuilder.fill(0.1, 0.1, 0.1);
-        var visionStdDevs = VecBuilder.fill(1, 1, 1);
-        poseEstimator =
-            new SwerveDrivePoseEstimator(
-                new SwerveDriveKinematics(
-                    Constants.swerveModuleOneOffset,
-                    Constants.swerveModuleTwoOffset,
-                    Constants.swerveModuleThreeOffset,
-                    Constants.swerveModuleFourOffset),
-                io.getGyroYaw(),
-                io.getModulePositions(),
-                new Pose2d(),
-                stateStdDevs,
-                visionStdDevs
-            );
+        // var stateStdDevs = VecBuilder.fill(0.1, 0.1, 0.1);
+        // var visionStdDevs = VecBuilder.fill(1, 1, 1);
+        // poseEstimator =
+        // new SwerveDrivePoseEstimator(
+        // new SwerveDriveKinematics(
+        // Constants.swerveModuleOneOffset,
+        // Constants.swerveModuleTwoOffset,
+        // Constants.swerveModuleThreeOffset,
+        // Constants.swerveModuleFourOffset),
+        // io.getGyroYaw(),
+        // io.getModulePositions(),
+        // new Pose2d(),
+        // stateStdDevs,
+        // visionStdDevs
+        // );
         instance = this;
         registerNamedCommands();
     }
 
     public static SwerveSubsystem getInstance() {
-        if(instance == null)
+        if (instance == null)
             throw new IllegalStateException("Swerve instance not set");
         else
             return instance;
     }
 
-    public static SwerveSubsystem setInstance(SwerveIO io, CommandXboxController driverController, double maxAngularVelocity, double maxVelocity) {
-        SwerveSubsystem instance = new SwerveSubsystem(io,driverController,maxAngularVelocity,maxVelocity);
+    public static SwerveSubsystem setInstance(SwerveIO io, CommandXboxController driverController,
+            double maxAngularVelocity, double maxVelocity) {
+        SwerveSubsystem instance = new SwerveSubsystem(io, driverController, maxAngularVelocity, maxVelocity);
         instance.registerNamedCommands();
         return instance;
+    }
+
+    public Pose2d getRobotPose() {
+        return io.getPose2d();
+    }
+
+    public boolean isInAllianceZone() {
+        Pose2d currentPose = this.getRobotPose();
+        if (Constants.isBlueAlliance) {
+            if (currentPose.getX() <= 3.67) {// x boundary for blue alliance zone
+                return true;
+            }
+            return false;
+        } else {
+            if (currentPose.getX() >= 12.95) {// x boundary for red alliance zone
+                return true;
+            }
+            return false;
+        }
     }
 
     @Override
     public void periodic() {
         this.io.updateInputs(inputs);
         Logger.processInputs("Swerve", inputs);
-        systemState = handleStateTransition();
+        currentState = handleStateTransition();
         // Logger.recordOutput("Xrot", this.io.getRotation3d().getX());
         // Logger.recordOutput("Yrot", this.io.getRotation3d().getY());
         // Logger.recordOutput("Zrot", this.io.getRotation3d().getZ());
-        // Logger.recordOutput("Tilt", Math.acos(this.io.getRotation3d().toMatrix().get(2, 2)));
-        SmartDashboard.putBoolean("onRamp", onRamp(0, 3));
+        // Logger.recordOutput("Tilt",
+        // Math.acos(this.io.getRotation3d().toMatrix().get(2, 2)));
+        // SmartDashboard.putBoolean("onRamp", onRamp(0, 3));
         applyStates();
-        Logger.recordOutput("front left absolute", io.getAbsoluteEncoderPositions(0));
-        Logger.recordOutput("front right absolute", io.getAbsoluteEncoderPositions(1));
-        Logger.recordOutput("back left absolute", io.getAbsoluteEncoderPositions(2));
-        Logger.recordOutput("back right absolute", io.getAbsoluteEncoderPositions(3));
+        // Logger.recordOutput("front left absolute", io.getAbsoluteEncoderPositions(0));
+        // Logger.recordOutput("front right absolute", io.getAbsoluteEncoderPositions(1));
+        // Logger.recordOutput("back left absolute", io.getAbsoluteEncoderPositions(2));
+        // Logger.recordOutput("back right absolute", io.getAbsoluteEncoderPositions(3));
     }
-    
-    //TODO: move somewhere important
-    public boolean onRamp (double wanted, double tolerance) { /////////////////////
-      boolean inTolerance = true;
-      tolerance = Units.degreesToRadians(tolerance);
-      double tilt = Math.acos(this.io.getRotation3d().toMatrix().get(2, 2)) - 0.015;
-      SmartDashboard.putNumber("Tilt", Units.radiansToDegrees(tilt));
-      if (tilt <= (wanted + tolerance) && tilt >= (wanted - tolerance)) {
-        inTolerance = false;
-      }
-      return inTolerance;
+
+    // TODO: move somewhere important
+    public boolean onRamp(double wanted, double tolerance) { /////////////////////
+        boolean inTolerance = false;
+        tolerance = Units.degreesToRadians(tolerance);
+        Rotation3d gyroRotation = this.io.getRotation3d();
+        Matrix<N3,N3> gyroMatrix = gyroRotation.toMatrix();
+        double tilt = Math.acos(gyroMatrix.get(2, 2)) - 0.015 - Math.PI; // gyro mounted upside down so subtact PI radians out
+        // SmartDashboard.putNumber("Tilt", Units.radiansToDegrees(tilt));
+        if (tilt <= (wanted + tolerance) && tilt >= (wanted - tolerance)) {
+            inTolerance = true;
+        }
+        return !inTolerance;
     }
 
     public void registerNamedCommands () {
       NamedCommands.registerCommand("DriveOverBump",
-                  new DriveOverBump());//.andThen(new DriveForwardUntilLevel()));
+                  new DriveOverBump());
+                  /////////////////////
       NamedCommands.registerCommand("DriveOverBumpFromAlliance",
-                  new DriveOverBumpFromAlliance());//.andThen(new DriveForwardUntilLevel()));
+                  new DriveOverBumpFromAlliance());
       NamedCommands.registerCommand("DriveOverBumpToAlliance",
-                  new DriveOverBumpToAlliance());//.andThen(new DriveForwardUntilLevel()));
-      
+                  new DriveOverBumpToAlliance());
+                  //////////////////////////
       NamedCommands.registerCommand("DriveBack",
                   new DriveBack().withTimeout(3));
-        SmartDashboard.putBoolean("FinishedDriveForwardUntilLevel", false);
+
+      NamedCommands.registerCommand("StartShoot", new InstantCommand(() -> {Superstructure.getInstance().wantedState = States.AUTO;}));
+      NamedCommands.registerCommand("StopShoot", new InstantCommand(() -> {Superstructure.getInstance().wantedState = States.AUTONONFIRE;}));
+        
+
+      NamedCommands.registerCommand("StartIntake", new InstantCommand(() -> {Intake.getInstance().wantedState = IntakeStates.INTAKING;}));
+      NamedCommands.registerCommand("StopIntake", new InstantCommand(() -> {Intake.getInstance().wantedState = IntakeStates.SAFE;}));
+        
+
+
+    //   SmartDashboard.putBoolean("FinishedDriveForwardUntilLevel", false);
+
+    //     SmartDashboard.putNumber("tilt", Math.acos(this.io.getRotation3d().toMatrix().get(2, 2)) - 0.015);
+    //     SmartDashboard.putBoolean("hasBeenTilted", false);
+    //     SmartDashboard.putBoolean("done w/ auto", false);
+    //     SmartDashboard.putBoolean("precon", false);
     }
 
-    private SystemState handleStateTransition() {
-        switch (wantedState){
+    private SwerveStates handleStateTransition() {
+        switch (wantedState) {
             case MANUAL:
-                return SystemState.MANUAL;
+                return SwerveStates.MANUAL;
             case IDLE:
-                return SystemState.IDLE;
+                return SwerveStates.IDLE;
             case ROTATION_LOCK:
-                return SystemState.ROTATION_LOCK;
+                return SwerveStates.ROTATION_LOCK;
             case REVERSE:
-                return SystemState.REVERSE;
-            case ALIGN:
-                return SystemState.ALIGN;
+                return SwerveStates.REVERSE;
+            case ALIGNCLIMB:
+                if (this.currentState != SwerveStates.ALIGNCLIMB)
+                    VisionIOSystem.climbAlignStage = 0;
+                return SwerveStates.ALIGNCLIMB;
             default:
-                return this.systemState;
+                return this.currentState;
 
         }
     }
 
-    public void applyStates(){
-        switch (systemState){
+    public void applyStates() {
+        switch (currentState) {
             case MANUAL:
                 io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds()
-                    .withSpeeds(calculateSpeedsBasedOnJoystickInputs())
-                    .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
+                        .withSpeeds(calculateSpeedsBasedOnJoystickInputs())
+                        .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
                 break;
             case IDLE:
-                
+
                 break;
             case ROTATION_LOCK:
-                
+
                 break;
             case REVERSE:
                 io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(-0.3, 0, 0))
-                .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
+                        .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
                 break;
-            case ALIGN:
-                
+            case ALIGNCLIMB:
+                io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(VisionIOSystem.allignClimb(getRobotPose()))
+                        .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
                 break;
             default:
                 break;
@@ -176,34 +220,45 @@ public class SwerveSubsystem extends SubsystemBase{
         }
     }
 
-    public ChassisSpeeds calculateSpeedsBasedOnJoystickInputs(){
-        // double yMagnitude = MathUtil.applyDeadband(driverLeft.getRawAxis(0), Constants.leftYDeadband);
-        // double xMagnitude = -MathUtil.applyDeadband(driverLeft.getRawAxis(1), Constants.leftXDeadband);
-        // double angularMagnitude = -MathUtil.applyDeadband(driverRight.getRawAxis(0), Constants.rightXDeadband);
-        double yMagnitude = MathUtil.applyDeadband(driverController.getLeftY(), Constants.leftYDeadband);
-        double xMagnitude = MathUtil.applyDeadband(driverController.getLeftX(), Constants.leftXDeadband);
+    public ChassisSpeeds calculateSpeedsBasedOnJoystickInputs() {
+        // double yMagnitude = MathUtil.applyDeadband(driverLeft.getRawAxis(0),
+        // Constants.leftYDeadband);
+        // double xMagnitude = -MathUtil.applyDeadband(driverLeft.getRawAxis(1),
+        // Constants.leftXDeadband);
+        // double angularMagnitude = -MathUtil.applyDeadband(driverRight.getRawAxis(0),
+        // Constants.rightXDeadband);
+        double yMagnitude = MathUtil.applyDeadband(driverController.getLeftX(), Constants.leftYDeadband);
+        double xMagnitude = MathUtil.applyDeadband(driverController.getLeftY(), Constants.leftXDeadband);
         double angularMagnitude = -MathUtil.applyDeadband(driverController.getRightX(), Constants.rightXDeadband);
         angularMagnitude = Math.copySign(angularMagnitude * angularMagnitude, angularMagnitude);
-        double xVelocity = (FieldConstants.isBlueAlliance() ? -xMagnitude * maxVelocity : xMagnitude * maxVelocity)
-                * Constants.maxTelopVelocity;
-        double yVelocity = (FieldConstants.isBlueAlliance() ? yMagnitude * maxVelocity : -yMagnitude * maxVelocity)
-                * Constants.maxTelopVelocity;
+        double xVelocity = xMagnitude * maxVelocity;
+        double yVelocity = yMagnitude * maxVelocity;
 
-        double angularVelocity = angularMagnitude * maxAngularVelocity * Constants.maxTelopAngularVelocity;
+        double angularVelocity = angularMagnitude * maxAngularVelocity;
 
-        if (Constants.allianceColor == Alliance.Blue) {
-            return new ChassisSpeeds(xVelocity, yVelocity, angularVelocity);
+        if (Constants.isBlueAlliance) {   
+            return new ChassisSpeeds(-xVelocity, -yVelocity, angularVelocity);
         }
-        return new ChassisSpeeds(-xVelocity, -yVelocity, angularVelocity);
+        return new ChassisSpeeds(xVelocity, yVelocity, angularVelocity);
     }
 
     public void driveFieldRelative(ChassisSpeeds fieldRelativeSpeeds) {
         this.io.driveFieldRelative(fieldRelativeSpeeds);
     }
 
-    /** See {@link SwerveDrivePoseEstimator#addVisionMeasurement(Pose2d, double, Matrix)}. */
+    /**
+     * See
+     * {@link SwerveDrivePoseEstimator#addVisionMeasurement(Pose2d, double, Matrix)}.
+     */
     public void addVisionMeasurement(
             Pose2d visionMeasurement, double timestampSeconds, Matrix<N3, N1> stdDevs) {
-        poseEstimator.addVisionMeasurement(visionMeasurement, timestampSeconds, stdDevs);
+        // SmartDashboard.putNumberArray("Vision_STDEVS", stdDevs.getData());
+        // poseEstimator.resetPose(visionMeasurement);
+
+        io.addVisionMeasurement(visionMeasurement, timestampSeconds, stdDevs);
+    }
+
+    public SwerveStates getCurrentState() {
+        return this.currentState;
     }
 }

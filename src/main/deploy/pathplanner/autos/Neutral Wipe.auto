@@ -5,51 +5,45 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "M Start 1 to Depot top"
+            "name": "StartShoot"
           }
         },
         {
-          "type": "path",
+          "type": "wait",
           "data": {
-            "pathName": "M Depot top to Depot bottom (out)"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "M Depot bottom (out) to Ramp 1 BL"
+            "waitTime": 2.0
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "DriveOverBump"
+            "name": "StopShoot"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "M Ramp 1 BR to Neutral 2"
+            "pathName": "start neutral wipe"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "I Neutral 2 to Neutral 1"
+            "pathName": "Neutral Wipe"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "M Neutral 1 to Ramp 1 TL"
+            "pathName": "Finish Neutral Wipe"
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "MS Ramp 1 TL to Ramp 1 TL (shoot)"
+            "name": "StartShoot"
           }
         }
       ]

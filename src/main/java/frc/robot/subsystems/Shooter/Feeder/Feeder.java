@@ -1,40 +1,47 @@
 package frc.robot.subsystems.Shooter.Feeder;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-public class Feeder extends SubsystemBase{
+
+public class Feeder extends SubsystemBase {
     public static Feeder currentInstance = null;
+    private FeederStates currentState = FeederStates.OFF;
 
     public FeederIO io = new FeederIOTalonFX();
-    
-    public Feeder(){
+
+    public Feeder() {
         currentInstance = this;
     }
 
-    public static Feeder getInstance(){
+    public static Feeder getInstance() {
         return currentInstance;
     }
 
-    public static void setInstance(Feeder instance){
+    public static void setInstance(Feeder instance) {
         currentInstance = instance;
     }
 
-    public void setFeederVelocity(FeederStates currentState){
-        io.setFeederVelocity(currentState.multiFeederRPS,currentState.singleFeederRPS);
+    public void setFeederVelocity(FeederStates currentState) {
+        this.currentState = currentState;
+        io.setFeederVelocity(currentState);
     }
 
-    public double[] getFeederVelocity(){
+    public FeederStates getCurrentState() {
+        return this.currentState;
+    }
+
+    public double[] getFeederVelocity() {
         return io.getFeederVelocity();
     }
 
-    public double getSingleFeederVelocity(){
+    public double getSingleFeederVelocity() {
         return io.getVerticalFeederVelocity();
     }
 
-    public double getMultiFeederVelocity(){
+    public double getMultiFeederVelocity() {
         return io.getSpindexerVelocity();
     }
 
-    public boolean feederInTolerance(double tolerance){
+    public boolean feederInTolerance(double tolerance) {
         return io.feederInTolerance(tolerance);
     }
 }
