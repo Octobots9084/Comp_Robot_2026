@@ -7,7 +7,15 @@ import frc.robot.subsystems.Lights.LightAnimations;
 
 // import frc.robot.subsystems.Lights;
 public class Intake extends SubsystemBase {
-    //
+    /**
+   * Tells the robot to intake during autonomous.
+   *
+   * @param True Sets the wantedState to INTAKING
+   * @param False Does nothing
+   */
+    // public boolean autonomousIntake = false;
+    // public IntakeStates autoToTeleopState = IntakeStates.SAFE;
+
     public IntakeStates currentState = IntakeStates.SAFE;
     public IntakeStates wantedState = IntakeStates.ZERO;
     public IntakeIO io;
@@ -31,15 +39,11 @@ public class Intake extends SubsystemBase {
         // if (autonomousIntake) {
         //     wantedState = IntakeStates.INTAKING;
         // }only if it intake auto doesnt work
-        // if (autonomousIntake) {
-        //     wantedState = IntakeStates.INTAKING;
-        // }only if it intake auto doesnt work
         // This will handle changing between states at the user's request.
         handleStateTransitions();
 
         // this is where states actually take effect.
         applyStates();
-        
         
         io.updateInputs(inputs);
         Logger.processInputs("Intake", inputs);

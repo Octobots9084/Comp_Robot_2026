@@ -145,32 +145,23 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public void registerNamedCommands () {
-      NamedCommands.registerCommand("DriveOverBump",
-                  new DriveOverBump());
-                  /////////////////////
-      NamedCommands.registerCommand("DriveOverBumpFromAlliance",
-                  new DriveOverBumpFromAlliance());
-      NamedCommands.registerCommand("DriveOverBumpToAlliance",
-                  new DriveOverBumpToAlliance());
-                  //////////////////////////
-      NamedCommands.registerCommand("DriveBack",
-                  new DriveBack().withTimeout(3));
 
       NamedCommands.registerCommand("StartShoot", new InstantCommand(() -> {Superstructure.getInstance().wantedState = States.AUTO;}));
       NamedCommands.registerCommand("StopShoot", new InstantCommand(() -> {Superstructure.getInstance().wantedState = States.AUTONONFIRE;}));
         
 
-      NamedCommands.registerCommand("StartIntake", new InstantCommand(() -> {Intake.getInstance().wantedState = IntakeStates.INTAKING;}));
-      NamedCommands.registerCommand("StopIntake", new InstantCommand(() -> {Intake.getInstance().wantedState = IntakeStates.SAFE;}));
-        
-
-
-    //   SmartDashboard.putBoolean("FinishedDriveForwardUntilLevel", false);
-
-    //     SmartDashboard.putNumber("tilt", Math.acos(this.io.getRotation3d().toMatrix().get(2, 2)) - 0.015);
-    //     SmartDashboard.putBoolean("hasBeenTilted", false);
-    //     SmartDashboard.putBoolean("done w/ auto", false);
-    //     SmartDashboard.putBoolean("precon", false);
+      NamedCommands.registerCommand("StartIntake", new InstantCommand(
+        () -> {
+            if (Intake.getInstance().currentState == IntakeStates.SAFE) {
+                Intake.getInstance().currentState = IntakeStates.EXTENDED;
+            }
+            Intake.getInstance().wantedState = IntakeStates.INTAKING;
+        }));
+      NamedCommands.registerCommand("StopIntake", new InstantCommand(() -> {Intake.getInstance().wantedState = IntakeStates.EXTENDED;}));
+    //   NamedCommands.registerCommand("StartIntake", new InstantCommand(() -> {Intake.getInstance().autonomousIntake = true;}));
+    //   NamedCommands.registerCommand("StopIntake", new InstantCommand(() -> {Intake.getInstance().autonomousIntake = false;}));
+        //TODO: i want to be ablel to just set the intake state to intaking, but it difnt work the first time, not confident it has to be done like this tho
+        //(it does a loop instead of 1 set state)
     }
 
     private SwerveStates handleStateTransition() {
