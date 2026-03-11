@@ -26,10 +26,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
-import frc.robot.commands.auto.DriveBack;
-import frc.robot.commands.auto.DriveOverBump;
-import frc.robot.commands.auto.NoPoseBump.DriveOverBumpFromAlliance;
-import frc.robot.commands.auto.NoPoseBump.DriveOverBumpToAlliance;
 import frc.robot.subsystems.Vision.VisionIOSystem;
 import frc.robot.subsystems.States;
 import frc.robot.subsystems.Superstructure;
@@ -42,7 +38,19 @@ public class SwerveSubsystem extends SubsystemBase {
 
 
     private static SwerveSubsystem instance;
+    /**
+   * The wanted state of the swerve, which the subsystem attempts to set the {@link #currentState} to
+   *
+   * <br></br><b>Default State</b> - {@link frc.robot.subsystems.Drive.SwerveStates#MANUAL MANUAL}
+   * @param SwerveStates The swerve states contain no information - {@link frc.robot.subsystems.Drive.SwerveStates SwerveStates}
+   */
     public SwerveStates wantedState = SwerveStates.MANUAL;
+    /**
+   * The current state of the swerve, which determines how the robot drives
+   *
+   * <br></br><b>Default State</b> - {@link frc.robot.subsystems.Drive.SwerveStates#IDLE IDLE}
+   * @param SwerveStates The swerve states contain no information - {@link frc.robot.subsystems.Drive.SwerveStates SwerveStates}
+   */
     private SwerveStates currentState = SwerveStates.IDLE;
     public SwerveIO io;
     public CommandXboxController driverController;

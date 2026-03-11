@@ -8,7 +8,19 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 //import things to check in handleStateTransitions()
 
 public class Climb extends SubsystemBase {
+/**
+   * The current state of the climb, which determines what the climb does
+   *
+   * <br></br><b>Default State</b> - {@link frc.robot.subsystems.Climb.ClimbStates#IDLE IDLE}
+   * @param ClimbStates The climb states contain climb position - {@link frc.robot.subsystems.Climb.ClimbStates ClimbStates}
+   */
     public ClimbStates currentState = ClimbStates.IDLE;
+     /**
+   * The wanted state of the climb, which the subsystem attempts to set the {@link #currentState} to
+   *
+   * <br></br><b>Default State</b> - {@link frc.robot.subsystems.Climb.ClimbStates#IDLE IDLE}
+   * @param ClimbStates The climb states contain climb position - {@link frc.robot.subsystems.Climb.ClimbStates ClimbStates}
+   */
     public ClimbStates wantedState = ClimbStates.IDLE;
     public ClimbIO io;
     public boolean latched = false;

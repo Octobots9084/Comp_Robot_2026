@@ -1,5 +1,19 @@
 package frc.robot.subsystems.Intake;
 
+   /**
+   * The premade roller speed and intake positions for {@link frc.robot.subsystems.Intake.Intake Intake}
+   * <br></br>
+   * <b>Roller RPS and Position</b>
+   * <ul>
+   * <li>INTAKING - 45 - 0.34</li>
+   * <li>EXTENDED - 0 - 0.34</li>
+   * <li>PARTIALEXTENTION - 45 - 0.28</li>
+   * <li>SAFE - 0 - 0</li>
+   * <li>REVERSEINTAKING - (-30) - 0.3</li>
+   * <li>ZERO - 0 - 0</li>
+   * <li>ELEPHANTIASISPART2 - 45 - 0.34</li>
+   * </ul>
+   */
 public enum IntakeStates {
     INTAKING(45, 0.34),
     EXTENDED(0, 0.34),
@@ -9,7 +23,14 @@ public enum IntakeStates {
     ZERO(0, 0),
     ELEPHANTIASISPART2(45,0.34);
 
+    
+   /**
+   * The roller speed
+   */
     public final double rollerRPS;
+    /**
+   * The intake position, like inside or outside the robot
+   */
     public final double intakePosition;
 
     private IntakeStates(double rollerRPS, double intakePosition) {

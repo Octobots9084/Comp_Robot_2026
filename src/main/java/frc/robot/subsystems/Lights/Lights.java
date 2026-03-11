@@ -1,7 +1,20 @@
 package frc.robot.subsystems.Lights;
 
 public class Lights {
+/**
+   * The current state of the lights, which determines the color of the lights
+   *
+   * <br></br><b>Default State</b> - {@link frc.robot.subsystems.Lights.LightAnimations#DEFAULT DEFAULT}
+   * @param LightAnimations The light states contain color and strobe settings - {@link frc.robot.subsystems.Lights.LightAnimations LightAnimations}
+   */
     public LightAnimations lightsCurrentState = LightAnimations.DEFAULT;
+  /**
+   * The wanted state of the lights, which the subsystem attempts to set the {@link #lightsCurrentState} to
+   *
+   * <br></br><b>Default State</b> - {@link frc.robot.subsystems.Lights.LightAnimations#DEFAULT DEFAULT}
+   * @param LightAnimations The light states contain color and strobe settings - {@link frc.robot.subsystems.Lights.LightAnimations LightAnimations}
+   *
+   */
     public LightAnimations lightsWantedState = LightAnimations.DEFAULT;
     public static Lights currentLightInstance;
 

@@ -15,8 +15,20 @@ public class Intake extends SubsystemBase {
    */
     // public boolean autonomousIntake = false;
     // public IntakeStates autoToTeleopState = IntakeStates.SAFE;
-
+ /**
+   * The current state of the intake, which determines what the intake does
+   *
+   * <br></br><b>Default State</b> - {@link frc.robot.subsystems.Intake.IntakeStates#SAFE SAFE}
+   * @param IntakeStates The intake states contain roller speed and intake position - {@link frc.robot.subsystems.Intake.IntakeStates IntakeStates}
+   */
+  
     public IntakeStates currentState = IntakeStates.SAFE;
+     /**
+   * The wanted state of the intake, which the subsystem attempts to set the {@link #currentState} to
+   *
+   * <br></br><b>Default State</b> - {@link frc.robot.subsystems.Intake.IntakeStates#ZERO ZERO}
+   * @param IntakeStates The intake states contain roller speed and intake position - {@link frc.robot.subsystems.Intake.IntakeStates IntakeStates}
+   */
     public IntakeStates wantedState = IntakeStates.ZERO;
     public IntakeIO io;
     public static Intake instance;

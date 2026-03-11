@@ -6,6 +6,19 @@ import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.Constants;
 import com.ctre.phoenix6.controls.StrobeAnimation;
 
+   /**
+   * The premade color and strobe settings for {@link frc.robot.subsystems.Lights.Lights Lights}
+   * <br></br>
+   * <b>Colors</b>
+   * <ul>
+   * <li>DEFAULT - Yellow</li>
+   * <li>CANTSHOOT - Orange</li>
+   * <li>INTAKING - Blue</li>
+   * <li>REVERSEINTAKING - Pink</li>
+   * <li>SHOOTREADYMANUAL - Green</li>
+   * <li>SHOOTREADYCONTINIOUS - Teal</li>
+   * </ul>
+   */
 public enum LightAnimations {
     DEFAULT(new StrobeAnimation(0, 0).withColor(new RGBWColor(255, 255, 0, 0)), 0), // Yellow
     CANTSHOOT(new StrobeAnimation(0, 0).withColor(new RGBWColor(255, 120, 0, 0)), 0), // Orange
@@ -14,7 +27,15 @@ public enum LightAnimations {
     SHOOTREADYMANUAL(new StrobeAnimation(0, 0).withColor(new RGBWColor(0, 255, 100, 0)), 0), // Green
     SHOOTREADYCONTINIOUS(new StrobeAnimation(0, 0).withColor(new RGBWColor(0, 200, 255, 0)), 0); // Teal
 
+    
+   /**
+   * The strobe animation
+   */
     private StrobeAnimation animation;
+    
+   /**
+   * The time
+   */
     public double time;
 
     private LightAnimations(StrobeAnimation animation, double time) {
