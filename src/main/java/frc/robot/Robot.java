@@ -153,7 +153,7 @@ public class Robot extends LoggedRobot {
   @Override
   public void disabledPeriodic() {
     Optional<Alliance> ally = DriverStation.getAlliance();
-   if(Turret.getInstance().getLimitSwitchPressed()){
+   if(!Turret.getInstance().getLimitSwitchPressed()){
       Shooter.getInstance().turretAlreadyZeroed = true;   
       Turret.getInstance().zeroTurretPosition();
       }
@@ -176,7 +176,7 @@ public class Robot extends LoggedRobot {
     setAllianceColor();
     autonomousCommand = robotContainer.getAutonomousCommand();
     Superstructure.getInstance().wantedState = States.ZERO;
-    swerve.wantedState = SwerveStates.MANUAL;
+    swerve.wantedState = SwerveStates.IDLE;
 
     // schedule the autonomous command (example)
     if (autonomousCommand != null) {
