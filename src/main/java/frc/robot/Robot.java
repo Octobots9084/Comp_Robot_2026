@@ -24,6 +24,7 @@ import frc.robot.subsystems.Intake.IntakeStates;
 import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.ShooterStates;
 import frc.robot.subsystems.Shooter.Turret.Turret;
+import frc.robot.subsystems.Shooter.Turret.TurretIO;
 
 import java.util.Optional;
 
@@ -152,6 +153,10 @@ public class Robot extends LoggedRobot {
   @Override
   public void disabledPeriodic() {
     Optional<Alliance> ally = DriverStation.getAlliance();
+   if(Turret.getInstance().getLimitSwitchPressed()){
+      Shooter.getInstance().turretAlreadyZeroed = true;   
+      Turret.getInstance().zeroTurretPosition();
+      }
     if (ally.isPresent()) {
       if (ally.get() == Alliance.Red) {
         Constants.isBlueAlliance = false;

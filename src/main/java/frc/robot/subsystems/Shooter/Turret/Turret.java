@@ -20,6 +20,9 @@ public class Turret extends SubsystemBase {
     public static Turret getInstance() {
         return currentInstance;
     }
+    public boolean getLimitSwitchPressed() {
+        return io.getMagnetBreakValue();
+    }
 
     public static void setInstance(Turret instance) {
         currentInstance = instance;
@@ -47,5 +50,8 @@ public class Turret extends SubsystemBase {
 
     public boolean turretInTolerance(double tolerance) {
         return io.turretInTolerance(tolerance);
+    }
+
+    public void zeroTurretPosition() {
     }
 }

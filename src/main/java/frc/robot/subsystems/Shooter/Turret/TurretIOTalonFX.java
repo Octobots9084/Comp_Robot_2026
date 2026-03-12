@@ -86,6 +86,9 @@ public class TurretIOTalonFX implements TurretIO {
         return hoodMotor.getPosition().getValueAsDouble();
         
     }
+    public boolean getMagnetBreakValue(){
+            return turretMagnetBreak.get();
+    }
 
     @Override
     public double getTurretPosition() {
@@ -108,6 +111,10 @@ public class TurretIOTalonFX implements TurretIO {
     public void zeroHoodMotor(){
         hoodMotor.setVoltage(0.1);
         hoodMotor.setPosition(90/360.0);
+    }
+    @Override
+    public void zeroTurretPosition() {
+        turretMotor.setPosition(192/360.0);
     }
 
     /** loop this if it is being used */

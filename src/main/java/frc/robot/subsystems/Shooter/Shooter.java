@@ -111,6 +111,8 @@ public class Shooter extends SubsystemBase {
         sIO.updateInputs(shooterInputs);
         Logger.processInputs("Shooter/Shooter", shooterInputs);
         // SmartDashboard.putBoolean("HubAcivity", isHubActive());
+        Logger.recordOutput("turretAlreadyZeroed", Shooter.getInstance().turretAlreadyZeroed);
+
     }
 
     public void ApplyStates() {
