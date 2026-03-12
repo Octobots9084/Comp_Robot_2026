@@ -142,7 +142,7 @@ public class ShooterAngleCalculator {
             }
             //TODO needs be concerted to turret and hood relative values 
             Logger.recordOutput("hasSolution", true);  
-            return new ShooterAngle(phi, theta);
+             return new ShooterAngle(phi, theta);
             //phi is the angle of the turrent with respect to the field
             //theta is the angle of elevation of the hood
         }

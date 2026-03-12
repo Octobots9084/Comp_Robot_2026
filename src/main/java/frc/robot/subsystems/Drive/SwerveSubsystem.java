@@ -171,7 +171,7 @@ public class SwerveSubsystem extends SubsystemBase {
             // () -> Intake.getInstance().currentState == IntakeStates.ZERO
             // )
             new SequentialCommandGroup(
-                new WaitUntilCommand(() -> Intake.getInstance().currentState == IntakeStates.EXTENDED),
+                new WaitUntilCommand(() -> Intake.getInstance().currentState == IntakeStates.EXTENDED),//so it doedsnt override auto init wanted=zero
                 new InstantCommand(() -> Intake.getInstance().wantedState = IntakeStates.INTAKING)//,
             ).withTimeout(5)
       );

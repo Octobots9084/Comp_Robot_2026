@@ -92,9 +92,9 @@ public class ShooterConfigurator {
         hoodConfig.MotionMagic.MotionMagicCruiseVelocity = 4;
 
         // spindexer config(four lane highway)
-        spindexerConfig.CurrentLimits.SupplyCurrentLimit = 20;
+        spindexerConfig.CurrentLimits.SupplyCurrentLimit = 60;
         spindexerConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-        spindexerConfig.CurrentLimits.StatorCurrentLimit = 40;
+        spindexerConfig.CurrentLimits.StatorCurrentLimit = 60;
         spindexerConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 
         // set break mode and inversion

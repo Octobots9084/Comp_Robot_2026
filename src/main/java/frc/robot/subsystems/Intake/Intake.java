@@ -70,8 +70,10 @@ public class Intake extends SubsystemBase {
                 break;
 
             case INTAKING:
+            if (currentState != IntakeStates.ZERO || alreadyZeroed == true) {
                 // only works if not climbing
                 currentState = IntakeStates.INTAKING;
+            }
                 // Lights.getLightInstance().lightsWantedState = LightAnimations.INTAKING;
                 break;
 
