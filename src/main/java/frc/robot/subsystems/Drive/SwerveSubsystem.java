@@ -21,8 +21,12 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
@@ -44,7 +48,7 @@ public class SwerveSubsystem extends SubsystemBase {
    * <br></br><b>Default State</b> - {@link frc.robot.subsystems.Drive.SwerveStates#MANUAL MANUAL}
    * @param SwerveStates The swerve states contain no information - {@link frc.robot.subsystems.Drive.SwerveStates SwerveStates}
    */
-    public SwerveStates wantedState = SwerveStates.MANUAL;
+    public SwerveStates wantedState = SwerveStates.IDLE;
     /**
    * The current state of the swerve, which determines how the robot drives
    *
@@ -158,13 +162,20 @@ public class SwerveSubsystem extends SubsystemBase {
       NamedCommands.registerCommand("StopShoot", new InstantCommand(() -> {Superstructure.getInstance().wantedState = States.AUTONONFIRE;}));
         
 
-      NamedCommands.registerCommand("StartIntake", new InstantCommand(
-        () -> {
-            if (Intake.getInstance().currentState == IntakeStates.SAFE) {
-                Intake.getInstance().currentState = IntakeStates.EXTENDED;
-            }
-            Intake.getInstance().wantedState = IntakeStates.INTAKING;
-        }));
+      NamedCommands.registerCommand("StartIntake", 
+            // new ConditionalCommand(
+            //     new SequentialCommandGroup(
+            //         new WaitCommand(5),
+            //         new InstantCommand(() -> Intake.getInstance().wantedState = IntakeStates.INTAKING)
+            //     ),
+            // () -> Intake.getInstance().currentState == IntakeStates.ZERO
+            // )
+            new SequentialCommandGroup(
+                new WaitUntilCommand(() -> Intake.getInstance().currentState == IntakeStates.EXTENDED),
+                new InstantCommand(() -> Intake.getInstance().wantedState = IntakeStates.INTAKING)//,
+            ).withTimeout(5)
+      );
+
       NamedCommands.registerCommand("StopIntake", new InstantCommand(() -> {Intake.getInstance().wantedState = IntakeStates.EXTENDED;}));
     //   NamedCommands.registerCommand("StartIntake", new InstantCommand(() -> {Intake.getInstance().autonomousIntake = true;}));
     //   NamedCommands.registerCommand("StopIntake", new InstantCommand(() -> {Intake.getInstance().autonomousIntake = false;}));

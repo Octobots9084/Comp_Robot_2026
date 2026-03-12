@@ -171,6 +171,7 @@ public class Robot extends LoggedRobot {
     setAllianceColor();
     autonomousCommand = robotContainer.getAutonomousCommand();
     Superstructure.getInstance().wantedState = States.ZERO;
+    swerve.wantedState = SwerveStates.MANUAL;
 
     // schedule the autonomous command (example)
     if (autonomousCommand != null) {

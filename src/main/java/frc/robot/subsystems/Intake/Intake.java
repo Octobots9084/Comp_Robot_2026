@@ -2,6 +2,7 @@ package frc.robot.subsystems.Intake;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Lights.LightAnimations;
 
@@ -126,7 +127,9 @@ public class Intake extends SubsystemBase {
             case ZERO:
                 if (io.zeroIntake()) {
                     alreadyZeroed = true;
-                    wantedState = IntakeStates.EXTENDED;
+                    // if (!DriverStation.isAutonomousEnabled()) {
+                        wantedState = IntakeStates.EXTENDED;
+                    // }
                 }else{
                     alreadyZeroed = false;
                 }
