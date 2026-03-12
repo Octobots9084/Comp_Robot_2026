@@ -172,7 +172,7 @@ public class Superstructure extends SubsystemBase {
     private void stateMANUAL() {
         // TODO map buttons to direct inputs
         // turn off intake when starting
-        // turn off shooter when starting
+        // turn off shooter when starting        
     }
     private void stateCLIMBL3() {
         stowForClimb();

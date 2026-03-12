@@ -185,18 +185,19 @@ public class SwerveSubsystem extends SubsystemBase {
 
     private SwerveStates handleStateTransition() {
         switch (wantedState) {
-            case MANUAL:
-                return SwerveStates.MANUAL;
-            case IDLE:
-                return SwerveStates.IDLE;
-            case ROTATION_LOCK:
-                return SwerveStates.ROTATION_LOCK;
-            case REVERSE:
-                return SwerveStates.REVERSE;
+            //redid how we handle the states that we switch to without modifications
+            case MANUAL, IDLE, ROTATION_LOCK, REVERSE: 
+                return wantedState;
+             
+            case SLOW:
+                if (currentState != SwerveStates.IDLE)
+                    return wantedState;
+                
             case ALIGNCLIMB:
                 if (this.currentState != SwerveStates.ALIGNCLIMB)
                     VisionIOSystem.climbAlignStage = 0;
                 return SwerveStates.ALIGNCLIMB;
+
             default:
                 return this.currentState;
 
@@ -209,7 +210,17 @@ public class SwerveSubsystem extends SubsystemBase {
                 io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds()
                         .withSpeeds(calculateSpeedsBasedOnJoystickInputs())
                         .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
+
+                if (Shooter.driverOverride) 
+                    wantedState = SwerveStates.SLOW;
                 break;
+            case SLOW:
+                io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds()
+                        .withSpeeds(calculateSpeedsBasedOnJoystickInputs().div(2))
+                        .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
+
+                if (!Shooter.driverOverride) 
+                    wantedState = SwerveStates.MANUAL;
             case IDLE:
 
                 break;
