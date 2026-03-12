@@ -17,5 +17,6 @@ public enum SwerveStates {
         IDLE,
         ROTATION_LOCK,
         REVERSE,
-        ALIGNCLIMB
+        ALIGNCLIMB,
+        SLOW
 }
