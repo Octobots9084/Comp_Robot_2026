@@ -47,14 +47,14 @@ public class ButtonConfig {
                 .onFalse(new InstantCommand(
                         () -> Shooter.driverOverride = false));
 
-        // coDriverController.b().onTrue(new SetStateManual());
-        // coDriverController.leftTrigger(0.5).onTrue(new SetStateSafe());
+        coDriverController.b().onTrue(new SetStateManual());
+        //coDriverController.leftTrigger(0.5).onTrue(new SetStateSafe());
         driverController.a().onTrue(new Spit());
-        // coDriverController.rightTrigger(0.5).onTrue(new SetStateShooter());
-        // coDriverController.rightTrigger().onTrue(new InstantCommand(
-        //         () -> Shooter.driverOverride = true))
-        //         .onFalse(new InstantCommand(
-        //                 () -> Shooter.driverOverride = false));
+        coDriverController.rightTrigger(0.5).onTrue(new SetStateShooter());
+        coDriverController.rightTrigger().onTrue(new InstantCommand(
+                () -> Shooter.driverOverride = true))
+                 .onFalse(new InstantCommand(
+                         () -> Shooter.driverOverride = false));
 
         driverController.b().onTrue(new InstantCommand(
         () -> Superstructure.getInstance().wantedState = States.FIXEDFIRE))
