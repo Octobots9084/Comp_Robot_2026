@@ -13,13 +13,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Rush to center (deopt)"
+            "pathName": "Rush to center"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "rush back to shoot (deopt)"
+            "pathName": "rush back to shoot"
           }
         },
         {
@@ -49,19 +49,19 @@
         {
           "type": "named",
           "data": {
-            "name": "StartIntake"
+            "name": "StartShoot"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "shoot to depot"
+            "pathName": "outpost side to outpost"
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "StartShoot"
+            "pathName": "ram into outpost"
           }
         }
       ]

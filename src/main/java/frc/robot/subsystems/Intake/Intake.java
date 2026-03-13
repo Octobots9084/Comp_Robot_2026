@@ -36,6 +36,7 @@ public class Intake extends SubsystemBase {
     public boolean alreadyZeroed = false;
     public IntakeIOInputsAutoLogged inputs = new IntakeIOInputsAutoLogged();
     public int elephantiaissTimer = 0;
+    public boolean autoIntaked = false;
 
     public Intake(IntakeIO io) {
         this.io = io;

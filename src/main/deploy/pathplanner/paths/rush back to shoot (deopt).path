@@ -3,35 +3,35 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.091520572450806,
-        "y": 1.008962432915921
+        "x": 8.156422182468695,
+        "y": 6.655402504472272
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.491180679785332,
-        "y": 2.9235599284436495
+        "x": 7.637209302325582,
+        "y": 4.724579606440071
       },
       "isLocked": false,
-      "linkedName": "center quick swipe"
+      "linkedName": "center (depot)"
     },
     {
       "anchor": {
-        "x": 2.834490161001789,
-        "y": 2.50169946332737
+        "x": 3.029194991055456,
+        "y": 5.649427549194991
       },
       "prevControl": {
-        "x": 6.404078711985688,
-        "y": 2.2096422182468687
+        "x": 6.777262969588551,
+        "y": 5.7305545617173514
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "starting for bump"
+      "linkedName": "shoot (depot)"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.8344988344988346,
-      "rotationDegrees": 135.0
+      "waypointRelativePos": 0.8438228438228438,
+      "rotationDegrees": -135.0
     }
   ],
   "constraintZones": [
@@ -61,13 +61,13 @@
   },
   "goalEndState": {
     "velocity": 0.0,
-    "rotation": -177.7093899573614
+    "rotation": -156.03751102542174
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
-    "velocity": 0.5,
-    "rotation": 100.0
+    "velocity": 3.0,
+    "rotation": -110.55604521958348
   },
   "useDefaultConstraints": false
 }
