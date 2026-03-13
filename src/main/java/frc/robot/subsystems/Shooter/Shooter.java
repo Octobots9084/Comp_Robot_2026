@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
+import frc.robot.DriverCommunications;
 import frc.robot.subsystems.Vision.ShooterAngle;
 import frc.robot.subsystems.Vision.ShooterAngleCalculator;
 import frc.robot.subsystems.Drive.SwerveSubsystem;
@@ -654,6 +655,7 @@ public class Shooter extends SubsystemBase {
             switch (gameData.charAt(0)) {
                 case 'B':
                     if (Constants.isBlueAlliance) {
+                        DriverCommunications.WonAuto = false;
                         return (timer <= 10 || (timer >= (35 - prefire) && timer <= 60)
                                 || (timer >= (85 - prefire)));
                     } else {
@@ -662,6 +664,7 @@ public class Shooter extends SubsystemBase {
                     }
                 case 'R':
                     if (!Constants.isBlueAlliance) {
+                        DriverCommunications.WonAuto = true;
                         return (timer <= 35) || (timer >= (60 - prefire) && timer <= 85)
                                 || (timer >= (110 - prefire));
                     } else {
