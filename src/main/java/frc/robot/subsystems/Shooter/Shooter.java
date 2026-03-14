@@ -194,7 +194,7 @@ public class Shooter extends SubsystemBase {
                 // turret.setTurretPosition(-90.0/360.0);
                 // turret.setHoodPosition(75/360.0);
                 
-                if(swerve.isInAllianceZone() || (isHubActive())){
+                if(swerve.isInAllianceZone() && (isHubActive())){
                     if(driverOverride){
                         // flywheel.setFlywheelVelocity(7.098+1.34*((getDistanceToHub()-1.237)/(5.476-1.237)));
                         // flywheel.setFlywheelVelocity(10+2*((getDistanceToHub()-1.237)/(5.476-1.237)));

@@ -27,7 +27,7 @@ public class DriverCommunications {
                         NextPhaseIndication = "Opposing Shift";
     
                     }
-                }else if ((Constants.timer.get() >= 105) || (Constants.timer.get() < 130)) {
+                }else if ((Constants.timer.get() >= 105) && (Constants.timer.get() < 130)) {
                    NextPhaseIndication = "Endgame";
                 }
             }
