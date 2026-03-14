@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
 import frc.robot.DriverCommunications;
+import frc.robot.Robot;
 import frc.robot.subsystems.Vision.ShooterAngle;
 import frc.robot.subsystems.Vision.ShooterAngleCalculator;
 import frc.robot.subsystems.Drive.SwerveSubsystem;
@@ -58,7 +59,6 @@ public class Shooter extends SubsystemBase {
     public Flywheel flywheel = new Flywheel();
     public final double prefire = 1;
     public static boolean driverOverride = false;
-    private String gameData;
     private double lemonDetectionTimestamp;
     public double turretAim = -0.1;
     private ShooterAngle shooterAngle;
@@ -187,7 +187,7 @@ public class Shooter extends SubsystemBase {
                 // turret.setTurretPosition(-90.0/360.0);
                 // turret.setHoodPosition(75/360.0);
                 
-                if(swerve.isInAllianceZone()){
+                if(swerve.isInAllianceZone() || (isHubActive())){
                     if(driverOverride){
                         // flywheel.setFlywheelVelocity(7.098+1.34*((getDistanceToHub()-1.237)/(5.476-1.237)));
                         // flywheel.setFlywheelVelocity(10+2*((getDistanceToHub()-1.237)/(5.476-1.237)));
@@ -650,34 +650,12 @@ public class Shooter extends SubsystemBase {
 
     public boolean isHubActive() {
         double timer = Constants.timer.get();
-        gameData = DriverStation.getGameSpecificMessage();
-        if (gameData.length() > 0) {
-            switch (gameData.charAt(0)) {
-                case 'B':
-                    if (Constants.isBlueAlliance) {
-                        DriverCommunications.WonAuto = false;
-                        return (timer <= 10 || (timer >= (35 - prefire) && timer <= 60)
-                                || (timer >= (85 - prefire)));
-                    } else {
-                        return (timer <= 35) || (timer >= (60 - prefire) && timer <= 85)
+        if (Robot.WonAuto()) {
+                        return (timer <= 35) || ((timer >= (60 - prefire) && timer <= 85))
                                 || (timer >= (110 - prefire));
+                    }else{
+                        return (timer <= 10) || ((timer >= (35 - prefire) && timer <= 60))
+                                || (timer >= (85 - prefire));
                     }
-                case 'R':
-                    if (!Constants.isBlueAlliance) {
-                        DriverCommunications.WonAuto = true;
-                        return (timer <= 35) || (timer >= (60 - prefire) && timer <= 85)
-                                || (timer >= (110 - prefire));
-                    } else {
-                        return (timer <= 10 || (timer >= (35 - prefire) && timer <= 60)
-                                || (timer >= (85 - prefire)));
-                    }
-
-                default:
-                    return true;
-            }
-        } else {
-            return true;
-        }
     }
-
 }
