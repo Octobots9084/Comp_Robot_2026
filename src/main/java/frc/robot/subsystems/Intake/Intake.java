@@ -125,7 +125,7 @@ public class Intake extends SubsystemBase {
             break;
 
             case REVERSEINTAKING:
-            //motors reverse intake out
+            io.setIntakeState(currentState);
             break;
             case ZERO:
                 if (io.zeroIntake()) {

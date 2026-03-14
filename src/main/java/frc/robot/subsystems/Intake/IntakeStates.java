@@ -19,7 +19,7 @@ public enum IntakeStates {
     EXTENDED(0, 0.34),
     PARTIALEXTENTION(45,0.28),
     SAFE(0, 0),
-    REVERSEINTAKING(-30, 0.3),
+    REVERSEINTAKING(-45, 0.34),
     ZERO(0, 0),
     ELEPHANTIASISPART2(45,0.34);
 
