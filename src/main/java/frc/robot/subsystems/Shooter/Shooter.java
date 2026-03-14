@@ -131,6 +131,13 @@ public class Shooter extends SubsystemBase {
             case UNJAM:
                 flywheel.setFlywheelVelocity(0);
                 feeder.setFeederVelocity(FeederStates.UNJAM);
+                break;
+            case SHOOTTOCONTAINER:
+                feeder.setFeederVelocity(FeederStates.SPITTING);
+                flywheel.setFlywheelVelocity(FlywheelStates.SPITTOCONTAINER);
+                turret.setHoodPosition(85);
+                turret.setTurretPosition(0);
+                break;
             case FERRY:
                 // hubBallSpeed = 6.7 +(8.13-6.7)*(getDistanceToHub()/4.18532579377);
                 hubBallSpeed = 8;
