@@ -34,8 +34,16 @@ public class ButtonConfig {
                 superstructure.wantedState = States.SHOOTER;
         }));
 
+        // coDriverController.a().onTrue(new InstantCommand(() ->
+        // {SwerveSubsystem.getInstance().io.zeroGyro();}));
         coDriverController.a().onTrue(new InstantCommand(() ->
-        {SwerveSubsystem.getInstance().io.zeroGyro();}));
+        {Shooter.getInstance().manuelHood+=0.5;}));
+        coDriverController.b().onTrue(new InstantCommand(() ->
+        {Shooter.getInstance().manuelHood-=0.5;}));
+        coDriverController.x().onTrue(new InstantCommand(() ->
+        {Shooter.getInstance().manuelFlywheel+=0.1;}));
+        coDriverController.y().onTrue(new InstantCommand(() ->
+        {Shooter.getInstance().manuelFlywheel-=0.1;}));
 
         // Climb currently not implemented
         // driverController.b().onTrue(new SetStateClimbL3()); //remove climb
