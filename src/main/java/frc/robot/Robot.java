@@ -184,6 +184,11 @@ public class Robot extends LoggedRobot {
     if (autonomousCommand != null) {
       CommandScheduler.getInstance().schedule(autonomousCommand);// TODO: not command
     }
+    Constants.timer.reset();
+    Constants.timer.start();
+    DriverCommunications.PhaseCountdown.reset();
+    DriverCommunications.PhaseCountdown.start();
+
   }
 
   /** This function is called periodically during autonomous. */
@@ -215,8 +220,7 @@ public class Robot extends LoggedRobot {
     if (autonomousCommand != null) {
       CommandScheduler.getInstance().cancel(autonomousCommand);
     }
-    Constants.timer.reset();
-    Constants.timer.start();
+  
   }
   int rumbleTimer;
   /** This function is called periodically during operator control. */

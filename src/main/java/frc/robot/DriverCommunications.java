@@ -10,31 +10,32 @@ import frc.robot.subsystems.Shooter.Shooter;
 public class DriverCommunications {
     static boolean CurrentHubState = Shooter.getInstance().isHubActive();
     static String NextPhaseIndication = "Transition Period";
-    public static void pushToElastic() {
-
-        double PhaseTime = 0;
-        Timer PhaseCountdown = new Timer();
-        // If the hub state changes, reset the phase shift timer and change
-        // currentHUbSTate
-        if (!Shooter.getInstance().isHubActive() == CurrentHubState) {
-            CurrentHubState = Shooter.getInstance().isHubActive();
-            PhaseCountdown.restart();
-            if ((Constants.timer.get() >= 30) || (Constants.timer.get() < 105)) {
-                if (NextPhaseIndication == "Opposing Shift"){
-                    NextPhaseIndication = "Our Shift";
-                }else{
-                    NextPhaseIndication = "Opposing Shift";
-
+    static double PhaseTime = 0;
+        static Timer PhaseCountdown = new Timer();
+        public static void pushToElastic() {
+    
+    
+            // If the hub state changes, reset the phase shift timer and change
+            // currentHUbSTate
+            if (!Shooter.getInstance().isHubActive() == CurrentHubState) {
+                CurrentHubState = Shooter.getInstance().isHubActive();
+                PhaseCountdown.restart();
+                if ((Constants.timer.get() >= 30) && (Constants.timer.get() < 105)) {
+                    if (NextPhaseIndication == "Opposing Shift"){
+                        NextPhaseIndication = "Our Shift";
+                    }else{
+                        NextPhaseIndication = "Opposing Shift";
+    
+                    }
+                }else if ((Constants.timer.get() >= 105) || (Constants.timer.get() < 130)) {
+                   NextPhaseIndication = "Endgame";
                 }
-            }else if ((Constants.timer.get() >= 105) || (Constants.timer.get() < 130)) {
-               NextPhaseIndication = "Endgame";
             }
-        }
-
-
-        if ((Constants.timer.get() <= 20)) {
-            PhaseTime = 20;
-        } else if ((Constants.timer.get() > 20) || (Constants.timer.get() <= 30)) {
+    
+    
+            if ((Constants.timer.get() <= 20)) {
+                PhaseTime = 20;
+        } else if ((Constants.timer.get() > 20) && (Constants.timer.get() <= 30)) {
             PhaseTime = 10;
             //Changing the "Next phase" indicator based on who won auto
             if (Robot.WonAuto()){
@@ -42,7 +43,7 @@ public class DriverCommunications {
             }else{
                 NextPhaseIndication = "Our Shift";
             }
-        } else if ((Constants.timer.get() >= 30) || (Constants.timer.get() < 130)) {
+        } else if ((Constants.timer.get() >= 30) && (Constants.timer.get() < 130)) {
             PhaseTime = 25;
 
         }else if ((Constants.timer.get() >= 130)){
