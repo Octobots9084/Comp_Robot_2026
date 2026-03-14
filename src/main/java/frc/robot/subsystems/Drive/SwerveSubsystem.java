@@ -217,6 +217,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
                 if (!Shooter.driverOverride) 
                     wantedState = SwerveStates.MANUAL;
+                break;
             case IDLE:
 
                 break;

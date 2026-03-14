@@ -196,7 +196,6 @@ public class Superstructure extends SubsystemBase {
         // if (userRequestedIntakeState != Intake.getInstance().currentState) {
         //     Intake.getInstance().wantedState = userRequestedIntakeState;
         // }
-        swerve.wantedState = SwerveStates.MANUAL;
         // if(prevState != States.SHOOTER){
         //     shooter.wantedShooterState = ShooterStates.HUB;
         //     prevState = States.SHOOTER;
@@ -206,12 +205,10 @@ public class Superstructure extends SubsystemBase {
     }
 
     private void stateUnJam(){
-        swerve.wantedState = SwerveStates.MANUAL;
         shooter.wantedShooterState = ShooterStates.UNJAM;
     }
 
     private boolean stateZERO(){
-        swerve.wantedState = SwerveStates.MANUAL;
         shooter.wantedShooterState = ShooterStates.ZERO;
         
         intake.wantedState = IntakeStates.ZERO; 
