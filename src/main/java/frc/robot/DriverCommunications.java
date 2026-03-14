@@ -20,14 +20,14 @@ public class DriverCommunications {
             if (!Shooter.getInstance().isHubActive() == CurrentHubState) {
                 CurrentHubState = Shooter.getInstance().isHubActive();
                 PhaseCountdown.restart();
-                if ((Constants.timer.get() >= 30) && (Constants.timer.get() < 105)) {
+                if ((Constants.timer.get() >= 28) && (Constants.timer.get() < 103)) {
                     if (NextPhaseIndication == "Opposing Shift"){
                         NextPhaseIndication = "Our Shift";
                     }else{
                         NextPhaseIndication = "Opposing Shift";
     
                     }
-                }else if ((Constants.timer.get() >= 105) && (Constants.timer.get() < 130)) {
+                }else if ((Constants.timer.get() >= 103) && (Constants.timer.get() < 128)) {
                    NextPhaseIndication = "Endgame";
                 }
             }
