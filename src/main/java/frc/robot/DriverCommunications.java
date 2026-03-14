@@ -10,7 +10,6 @@ import frc.robot.subsystems.Shooter.Shooter;
 public class DriverCommunications {
     static boolean CurrentHubState = Shooter.getInstance().isHubActive();
     static String NextPhaseIndication = "Transition Period";
-    public static boolean WonAuto = false;
     public static void pushToElastic() {
 
         double PhaseTime = 0;
@@ -38,7 +37,7 @@ public class DriverCommunications {
         } else if ((Constants.timer.get() > 20) || (Constants.timer.get() <= 30)) {
             PhaseTime = 10;
             //Changing the "Next phase" indicator based on who won auto
-            if (WonAuto == true){
+            if (Robot.WonAuto()){
                 NextPhaseIndication = "Opposing Shift";
             }else{
                 NextPhaseIndication = "Our Shift";

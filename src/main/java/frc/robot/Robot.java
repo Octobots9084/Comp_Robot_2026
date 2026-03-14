@@ -52,7 +52,8 @@ public class Robot extends LoggedRobot {
   public Shooter shooter;
   public Climb climb;
   public Intake intake;
-
+  double timer = Constants.timer.get();
+  private static String gameData;
   private boolean lastHubPeriod = false;
 
   public Robot() {
@@ -232,7 +233,35 @@ public class Robot extends LoggedRobot {
         ButtonConfig.driverController.setRumble(RumbleType.kBothRumble, 0);
     }
     lastHubPeriod = Shooter.getInstance().isHubActive();
+    WonAuto();
+   
+
+      
   }
+  public static boolean WonAuto(){
+      gameData = DriverStation.getGameSpecificMessage();
+        if (gameData.length() > 0) {
+            switch (gameData.charAt(0)) {
+                case 'B':
+                    if (Constants.isBlueAlliance) {
+                      return false;
+                    }else{
+                      return true;
+                    }
+                case 'R':
+                    if (!Constants.isBlueAlliance) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+
+                default:
+                    return true;
+            }
+        } else {
+            return true;
+        }
+      }
 
   /** This function is called once when test mode is enabled. */
   @Override
