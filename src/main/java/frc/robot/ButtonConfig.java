@@ -41,9 +41,9 @@ public class ButtonConfig {
         coDriverController.b().onTrue(new InstantCommand(() ->
         {Shooter.getInstance().manuelHood-=0.5;}));
         coDriverController.x().onTrue(new InstantCommand(() ->
-        {Shooter.getInstance().manuelFlywheel+=0.1;}));
+        {Shooter.getInstance().manuelFlywheel+=0.05;}));
         coDriverController.y().onTrue(new InstantCommand(() ->
-        {Shooter.getInstance().manuelFlywheel-=0.1;}));
+        {Shooter.getInstance().manuelFlywheel-=0.05;}));
 
         // Climb currently not implemented
         // driverController.b().onTrue(new SetStateClimbL3()); //remove climb

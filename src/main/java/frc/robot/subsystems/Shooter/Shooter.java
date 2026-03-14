@@ -49,7 +49,7 @@ public class Shooter extends SubsystemBase {
     public final TurretIO tIO;
     public final ShooterIO sIO;
     public SwerveSubsystem swerve = SwerveSubsystem.getInstance();
-    public final CommandXboxController coDriverController;
+    // public final CommandXboxController coDriverController;
     public Feeder feeder = new Feeder();
     public Turret turret;
     public boolean turretAlreadyZeroed = false;
@@ -76,8 +76,8 @@ public class Shooter extends SubsystemBase {
     public double ferryBallSpeed = 6.7;
     public double ferryFlywheelSpeed = 10;
 
-    public double manuelHood = 0; 
-    public double manuelFlywheel = 0; //0 to 1
+    public double manuelHood = 90; 
+    public double manuelFlywheel = 12; //0 to 1
 
     public Shooter(FeederIO fIO, FlywheelIO fwIO, TurretIO tIO, ShooterIO sIO) {
         this.fIO = fIO;
@@ -125,8 +125,8 @@ public class Shooter extends SubsystemBase {
                 break;
             case MANUAL:
                 // joystick controlls turret and hood
-                tIO.setTurretPosition(getTurretPosFromJoystick());
-                tIO.setHoodPosition(getHoodPosFromJoystick());
+                // tIO.setTurretPosition(getTurretPosFromJoystick());
+                // tIO.setHoodPosition(getHoodPosFromJoystick());
                 break;
             case UNJAM:
                 //unjams the shooter
@@ -215,8 +215,10 @@ public class Shooter extends SubsystemBase {
             case HUB:
                 Logger.recordOutput("manuel hood position", manuelHood);
                 Logger.recordOutput("manuel flywheel position", manuelFlywheel);
-                turret.setTurretPosition(-90.0/360.0);
-                turret.setHoodPosition(manuelHood);
+                isAimedAtHub(30);
+                turret.setHoodPosition(manuelHood/360.0);
+
+                
 
                     if(driverOverride){
                         flywheel.setFlywheelVelocity(manuelFlywheel);
@@ -611,15 +613,15 @@ public class Shooter extends SubsystemBase {
         // return (turret.hoodInTolerance(.05) && turret.turretInTolerance(0.05));
     }
 
-    public double getTurretPosFromJoystick() {
-        return tIO.getTurretPosition()
-                 + 0.05 * MathUtil.applyDeadband(coDriverController.getLeftX(), Constants.leftYDeadband);
-    }
+    // public double getTurretPosFromJoystick() {
+    //     return tIO.getTurretPosition()
+    //              + 0.05 * MathUtil.applyDeadband(coDriverController.getLeftX(), Constants.leftYDeadband);
+    // }
 
-    public double getHoodPosFromJoystick() {
-         return tIO.getHoodPosition()
-                 + 0.05 * -MathUtil.applyDeadband(coDriverController.getLeftY(), Constants.leftXDeadband);
-    }
+    // public double getHoodPosFromJoystick() {
+    //      return tIO.getHoodPosition()
+    //              + 0.05 * -MathUtil.applyDeadband(coDriverController.getLeftY(), Constants.leftXDeadband);
+    // }
 
     public boolean isHubActive() {
         double timer = Constants.timer.get();
