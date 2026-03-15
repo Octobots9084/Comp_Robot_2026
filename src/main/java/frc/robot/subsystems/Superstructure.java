@@ -21,7 +21,6 @@ public class Superstructure extends SubsystemBase {
     // public Climb climb = Climb.getInstance();
     public Shooter shooter = Shooter.getInstance();
     public Intake intake = Intake.getInstance();
-    public boolean BUTTON_TEST = false;
 
     @Override
     public void periodic() {
@@ -30,7 +29,6 @@ public class Superstructure extends SubsystemBase {
         Logger.recordOutput("currentState", this.currentState);
         Logger.recordOutput("wantedState", this.wantedState);
         Logger.recordOutput("climbDescending", this.climbDescending);
-        Logger.recordOutput("buttonTest", BUTTON_TEST);
         handleStateTransitions();
         applyStates();
     }
