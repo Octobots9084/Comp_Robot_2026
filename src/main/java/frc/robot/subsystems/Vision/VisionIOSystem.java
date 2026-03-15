@@ -11,6 +11,7 @@ import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
+import org.photonvision.targeting.proto.PhotonTrackedTargetProto;
 
 import com.ctre.phoenix6.Utils;
 
@@ -73,82 +74,375 @@ public class VisionIOSystem implements VisionIO {
         inputs.leftCameraConected = leftCamera.isConnected();
     }
 
+
+    /*
+     * the periodic seaches all cameras for a hub mutitag pose and if found uses only that pose however if it is not found it adds togeter all the other tag poses to get a sutable estimate.
+    */
     @Override
     public void periodic() {
-        boolean hadGoodPose = false;
         double startTime = Timer.getFPGATimestamp();
+        //determines of a mutlitag hub pose was found
+        boolean foundSutableMultiTagPoseOnCamRight = false;
+
+        //multitag hub visionmesurment for the right camera
+        Optional<EstimatedRobotPose> rightHubMultiTagResult = Optional.empty();
+        //multitag hub targets for the visionmesurment for the right camera
+        Optional<List<PhotonTrackedTarget>> rightHubMultiTagTargets = Optional.empty();
+        //list of all single tag visionmesurments for the right camera
+        ArrayList<Optional<EstimatedRobotPose>> rightResults = new ArrayList<Optional<EstimatedRobotPose>>();
+        //list of all lists of single tag targets per visionmesurment for the right camera
+        ArrayList<List<PhotonTrackedTarget>> rightTargets = new ArrayList<List<PhotonTrackedTarget>>();
+
+        //determines of a mutlitag hub pose was found
+        boolean foundSutableMultiTagPoseOnCamLeft = false;
+
+        //multitag hub visionmesurment for the right camera
+        Optional<EstimatedRobotPose> leftHubMultiTagResult = Optional.empty();
+        //multitag hub targets for the visionmesurment for the right camera
+        Optional<List<PhotonTrackedTarget>> leftHubMultiTagTargets = Optional.empty();
+        //list of all single tag visionmesurments for the right camera
+        ArrayList<Optional<EstimatedRobotPose>> leftResults = new ArrayList<Optional<EstimatedRobotPose>>();
+        //list of all lists of single tag targets per visionmesurment for the right camera
+        ArrayList<List<PhotonTrackedTarget>> leftTargets = new ArrayList<List<PhotonTrackedTarget>>();
+        
+        //determines of a mutlitag hub pose was found
+        boolean foundSutableMultiTagPoseOnCamFrontRight = false;
+
+        //multitag hub visionmesurment for the right camera
+        Optional<EstimatedRobotPose> frontRightHubMultiTagResult = Optional.empty();
+        //multitag hub targets for the visionmesurment for the right camera
+        Optional<List<PhotonTrackedTarget>> frontRightHubMultiTagTargets = Optional.empty();
+        //list of all single tag visionmesurments for the right camera
+        ArrayList<Optional<EstimatedRobotPose>> frontRightResults = new ArrayList<Optional<EstimatedRobotPose>>();
+        //list of all lists of single tag targets per visionmesurment for the right camera
+        ArrayList<List<PhotonTrackedTarget>> frontRightTargets = new ArrayList<List<PhotonTrackedTarget>>();
+
+        //determines of a mutlitag hub pose was found
+        boolean foundSutableMultiTagPoseOnCamFrontLeft = false;
+
+        //multitag hub visionmesurment for the right camera
+        Optional<EstimatedRobotPose> frontLeftHubMultiTagResult = Optional.empty();
+        //multitag hub targets for the visionmesurment for the right camera
+        Optional<List<PhotonTrackedTarget>> frontLeftHubMultiTagTargets = Optional.empty();
+        //list of all single tag visionmesurments for the right camera
+        ArrayList<Optional<EstimatedRobotPose>> frontLeftResults = new ArrayList<Optional<EstimatedRobotPose>>();
+        //list of all lists of single tag targets per visionmesurment for the right camera
+        ArrayList<List<PhotonTrackedTarget>> frontLeftTargets = new ArrayList<List<PhotonTrackedTarget>>();
+
+        //creates an optionavl variable to store the camera vision estemation
         Optional<EstimatedRobotPose> visionEst = Optional.empty();
-        for (var result : rightCamera.getAllUnreadResults()) {
-            if(result.hasTargets()) {
-                result.targets = removeAmbigousTargets(result.targets);
-                visionEst = photonEstimatorRight.estimateCoprocMultiTagPose(result);
-                if (visionEst.isEmpty()) {
-                    visionEst = photonEstimatorRight.estimateLowestAmbiguityPose(result);
-                }
-                updateEstimationStdDevs(visionEst, result.getTargets());
-
-                visionEst.ifPresent(
-                        est -> {
-                            // Change our trust in the measurement based on the tags we can see
-                            var estStdDevs = getEstimationStdDevs();
-                            estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
-                        });
-                }
-        }
-        for (var result : leftCamera.getAllUnreadResults()) {
-            if(result.hasTargets()) {
-                    result.targets = removeAmbigousTargets(result.targets);
-                    visionEst = photonEstimatorLeft.estimateCoprocMultiTagPose(result);
-                    if (visionEst.isEmpty()) {
-                        visionEst = photonEstimatorLeft.estimateLowestAmbiguityPose(result);
-                    }
-                updateEstimationStdDevs(visionEst, result.getTargets());
-
-                visionEst.ifPresent(
-                        est -> {
-                            // Change our trust in the measurement based on the tags we can see
-                            var estStdDevs = getEstimationStdDevs();
-                            estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
-                        });
-            }
-        }
-    
-        for (var result : frontRightCamera.getAllUnreadResults()) {
-            if(result.hasTargets()) {
-                result.targets = removeAmbigousTargets(result.targets);
-                visionEst = photonEstimatorFrontRight.estimateCoprocMultiTagPose(result);
-                if (visionEst.isEmpty()) {
-                    visionEst = photonEstimatorFrontRight.estimateLowestAmbiguityPose(result);
-                }
-                updateEstimationStdDevs(visionEst, result.getTargets());
-
-                visionEst.ifPresent(
-                        est -> {
-                            // Change our trust in the measurement based on the tags we can see
-                            var estStdDevs = getEstimationStdDevs();
-
-                            estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
-                        });
-                }
-        }
+        boolean addedGoodMultiTagReslt = false;
+        //loops through all camera results for each caemra and checkes for a hub multitage result if one is found then no other cameras a cheaked
+        //while cheaking this it adds the camera targets and results to the privios arraylists for later processing
         for (var result : frontLeftCamera.getAllUnreadResults()) {
             if(result.hasTargets()) {
                 result.targets = removeAmbigousTargets(result.targets);
+
                 visionEst = photonEstimatorFrontLeft.estimateCoprocMultiTagPose(result);
                 if (visionEst.isEmpty()) {
                     visionEst = photonEstimatorFrontLeft.estimateLowestAmbiguityPose(result);
+                    if(!visionEst.isEmpty()) {
+                        frontLeftResults.add(visionEst);
+                    }
+                } else {
+                    int numberOfHubTags = 0;
+                    for(int i = 0; i < result.getTargets().size(); i++)
+                        if(
+                            Constants.isBlueAlliance && (
+                                result.getTargets().get(i).getFiducialId() == 18
+                                || result.getTargets().get(i).getFiducialId() == 19
+                                || result.getTargets().get(i).getFiducialId() == 20
+                                || result.getTargets().get(i).getFiducialId() == 21
+                                || result.getTargets().get(i).getFiducialId() == 24
+                                || result.getTargets().get(i).getFiducialId() == 27
+                            )
+                            ||
+                            !Constants.isBlueAlliance && (
+                                result.getTargets().get(i).getFiducialId() == 8
+                                || result.getTargets().get(i).getFiducialId() == 9
+                                || result.getTargets().get(i).getFiducialId() == 10
+                                || result.getTargets().get(i).getFiducialId() == 11
+                                || result.getTargets().get(i).getFiducialId() == 2
+                                || result.getTargets().get(i).getFiducialId() == 5
+                            )
+                            ){
+                            numberOfHubTags++;
+                        }
+                    if (numberOfHubTags>=2){
+                        frontLeftHubMultiTagResult = visionEst;
+                        frontLeftHubMultiTagTargets = Optional.of(result.getTargets());
+                        foundSutableMultiTagPoseOnCamFrontLeft = true;
+                        addedGoodMultiTagReslt = true;
+                        break;
+                    }
+                    else{
+                        frontLeftResults.add(visionEst);
+                    }
+                    
                 }
-                updateEstimationStdDevs(visionEst, result.getTargets());
+                frontLeftTargets.add(result.getTargets());
+            }
+        }
+        if (!addedGoodMultiTagReslt)
+            for (var result : frontRightCamera.getAllUnreadResults()) {
+            if(result.hasTargets()) {
+                result.targets = removeAmbigousTargets(result.targets);
 
-                visionEst.ifPresent(
+                visionEst = photonEstimatorFrontRight.estimateCoprocMultiTagPose(result);
+                if (visionEst.isEmpty()) {
+                    visionEst = photonEstimatorFrontRight.estimateLowestAmbiguityPose(result);
+                    if(!visionEst.isEmpty()) {
+                        frontRightResults.add(visionEst);
+                    }
+                } else {
+                    int numberOfHubTags = 0;
+                    for(int i = 0; i < result.getTargets().size(); i++)
+                        if(
+                            Constants.isBlueAlliance && (
+                                result.getTargets().get(i).getFiducialId() == 18
+                                || result.getTargets().get(i).getFiducialId() == 19
+                                || result.getTargets().get(i).getFiducialId() == 20
+                                || result.getTargets().get(i).getFiducialId() == 21
+                                || result.getTargets().get(i).getFiducialId() == 24
+                                || result.getTargets().get(i).getFiducialId() == 27
+                            )
+                            ||
+                            !Constants.isBlueAlliance && (
+                                result.getTargets().get(i).getFiducialId() == 8
+                                || result.getTargets().get(i).getFiducialId() == 9
+                                || result.getTargets().get(i).getFiducialId() == 10
+                                || result.getTargets().get(i).getFiducialId() == 11
+                                || result.getTargets().get(i).getFiducialId() == 2
+                                || result.getTargets().get(i).getFiducialId() == 5
+                            )
+                            ){
+                            numberOfHubTags++;
+                        }
+                    if (numberOfHubTags>=2){
+                        frontRightHubMultiTagResult = visionEst;
+                        frontRightHubMultiTagTargets = Optional.of(result.getTargets());
+                        foundSutableMultiTagPoseOnCamFrontRight = true;
+                        addedGoodMultiTagReslt = true;
+                        break;
+                    }
+                    else{
+                        frontRightResults.add(visionEst);
+                    }
+                    
+                }
+                frontRightTargets.add(result.getTargets());
+            }
+        }
+        if (!addedGoodMultiTagReslt)
+            for (var result : rightCamera.getAllUnreadResults()) {
+            if(result.hasTargets()) {
+                result.targets = removeAmbigousTargets(result.targets);
+
+                visionEst = photonEstimatorRight.estimateCoprocMultiTagPose(result);
+                if (visionEst.isEmpty()) {
+                    visionEst = photonEstimatorRight.estimateLowestAmbiguityPose(result);
+                    if(!visionEst.isEmpty()) {
+                        rightResults.add(visionEst);
+                    }
+                } else {
+                    int numberOfHubTags = 0;
+                    for(int i = 0; i < result.getTargets().size(); i++)
+                        if(
+                            Constants.isBlueAlliance && (
+                                result.getTargets().get(i).getFiducialId() == 18
+                                || result.getTargets().get(i).getFiducialId() == 19
+                                || result.getTargets().get(i).getFiducialId() == 20
+                                || result.getTargets().get(i).getFiducialId() == 21
+                                || result.getTargets().get(i).getFiducialId() == 24
+                                || result.getTargets().get(i).getFiducialId() == 27
+                            )
+                            ||
+                            !Constants.isBlueAlliance && (
+                                result.getTargets().get(i).getFiducialId() == 8
+                                || result.getTargets().get(i).getFiducialId() == 9
+                                || result.getTargets().get(i).getFiducialId() == 10
+                                || result.getTargets().get(i).getFiducialId() == 11
+                                || result.getTargets().get(i).getFiducialId() == 2
+                                || result.getTargets().get(i).getFiducialId() == 5
+                            )
+                            ){
+                            numberOfHubTags++;
+                        }
+                    if (numberOfHubTags>=2){
+                        rightHubMultiTagResult = visionEst;
+                        rightHubMultiTagTargets = Optional.of(result.getTargets());
+                        foundSutableMultiTagPoseOnCamRight = true;
+                        addedGoodMultiTagReslt = true;
+                        break;
+                    }
+                    else{
+                        rightResults.add(visionEst);
+                    }
+                    
+                }
+                rightTargets.add(result.getTargets());
+            }
+        }
+        if (!addedGoodMultiTagReslt)
+            for (var result : leftCamera.getAllUnreadResults()) {
+            if(result.hasTargets()) {
+                result.targets = removeAmbigousTargets(result.targets);
+
+                visionEst = photonEstimatorLeft.estimateCoprocMultiTagPose(result);
+                if (visionEst.isEmpty()) {
+                    visionEst = photonEstimatorLeft.estimateLowestAmbiguityPose(result);
+                    if(!visionEst.isEmpty()) {
+                        leftResults.add(visionEst);
+                    }
+                } else {
+                    int numberOfHubTags = 0;
+                    for(int i = 0; i < result.getTargets().size(); i++)
+                        if(
+                            Constants.isBlueAlliance && (
+                                result.getTargets().get(i).getFiducialId() == 18
+                                || result.getTargets().get(i).getFiducialId() == 19
+                                || result.getTargets().get(i).getFiducialId() == 20
+                                || result.getTargets().get(i).getFiducialId() == 21
+                                || result.getTargets().get(i).getFiducialId() == 24
+                                || result.getTargets().get(i).getFiducialId() == 27
+                            )
+                            ||
+                            !Constants.isBlueAlliance && (
+                                result.getTargets().get(i).getFiducialId() == 8
+                                || result.getTargets().get(i).getFiducialId() == 9
+                                || result.getTargets().get(i).getFiducialId() == 10
+                                || result.getTargets().get(i).getFiducialId() == 11
+                                || result.getTargets().get(i).getFiducialId() == 2
+                                || result.getTargets().get(i).getFiducialId() == 5
+                            )
+                            ){
+                            numberOfHubTags++;
+                        }
+                    if (numberOfHubTags>=2){
+                        leftHubMultiTagResult = visionEst;
+                        leftHubMultiTagTargets = Optional.of(result.getTargets());
+                        foundSutableMultiTagPoseOnCamLeft = true;
+                        addedGoodMultiTagReslt = true;
+                        break;
+                    }
+                    else{
+                        leftResults.add(visionEst);
+                    }
+                    
+                }
+                leftTargets.add(result.getTargets());
+            }
+        }
+
+        //loops thouhg all saved camera results and adds them to pose unless the last section found a hub multi tag pose in witch case that is the only pose added
+        if (foundSutableMultiTagPoseOnCamRight){
+            Logger.recordOutput("useing Cam Right",true);
+            Logger.recordOutput("useing Cam Left",false);
+            Logger.recordOutput("useing Cam Front Right",false);
+            Logger.recordOutput("useing Cam Front Left",false);
+            updateEstimationStdDevs(rightHubMultiTagResult, rightHubMultiTagTargets.get());
+
+            rightHubMultiTagResult.ifPresent(
+                    est -> {
+                        // Change our trust in the measurement based on the tags we can see
+                        var estStdDevs = getEstimationStdDevs();
+                        estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+                    });
+        }
+        else if (!addedGoodMultiTagReslt && !rightResults.isEmpty()){
+            for(int i = 0; i<rightResults.size();i++){
+                updateEstimationStdDevs(rightResults.get(i), rightTargets.get(i));
+
+                rightResults.get(i).ifPresent(
                         est -> {
                             // Change our trust in the measurement based on the tags we can see
                             var estStdDevs = getEstimationStdDevs();
-
                             estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
                         });
             }
         }
+
+        if (foundSutableMultiTagPoseOnCamLeft){
+            Logger.recordOutput("useing Cam Right",false);
+            Logger.recordOutput("useing Cam Left",true);
+            Logger.recordOutput("useing Cam Front Right",false);
+            Logger.recordOutput("useing Cam Front Left",false);
+            updateEstimationStdDevs(leftHubMultiTagResult, leftHubMultiTagTargets.get());
+
+            leftHubMultiTagResult.ifPresent(
+                    est -> {
+                        // Change our trust in the measurement based on the tags we can see
+                        var estStdDevs = getEstimationStdDevs();
+                        estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+                    });
+        }
+        else if (!addedGoodMultiTagReslt && !leftResults.isEmpty()){
+            for(int i = 0; i<leftResults.size();i++){
+                updateEstimationStdDevs(leftResults.get(i), leftTargets.get(i));
+
+                leftResults.get(i).ifPresent(
+                        est -> {
+                            // Change our trust in the measurement based on the tags we can see
+                            var estStdDevs = getEstimationStdDevs();
+                            estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+                        });
+            }
+        }
+
+        if (foundSutableMultiTagPoseOnCamFrontRight){
+            Logger.recordOutput("useing Cam Right",false);
+            Logger.recordOutput("useing Cam Left",false);
+            Logger.recordOutput("useing Cam Front Right",true);
+            Logger.recordOutput("useing Cam Front Left",false);
+            updateEstimationStdDevs(frontRightHubMultiTagResult, frontRightHubMultiTagTargets.get());
+
+            frontRightHubMultiTagResult.ifPresent(
+                    est -> {
+                        // Change our trust in the measurement based on the tags we can see
+                        var estStdDevs = getEstimationStdDevs();
+                        estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+                    });
+        }
+        else if (!addedGoodMultiTagReslt && !frontRightResults.isEmpty()){
+            for(int i = 0; i<frontRightResults.size();i++){
+                updateEstimationStdDevs(frontRightResults.get(i), frontRightTargets.get(i));
+
+                frontRightResults.get(i).ifPresent(
+                        est -> {
+                            // Change our trust in the measurement based on the tags we can see
+                            var estStdDevs = getEstimationStdDevs();
+                            estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+                        });
+            }
+        }
+
+        if (foundSutableMultiTagPoseOnCamFrontLeft){
+            Logger.recordOutput("useing Cam Right",false);
+            Logger.recordOutput("useing Cam Left",false);
+            Logger.recordOutput("useing Cam Front Right",false);
+            Logger.recordOutput("useing Cam Front Left",true);
+            updateEstimationStdDevs(frontLeftHubMultiTagResult, frontLeftHubMultiTagTargets.get());
+
+            frontLeftHubMultiTagResult.ifPresent(
+                    est -> {
+                        // Change our trust in the measurement based on the tags we can see
+                        var estStdDevs = getEstimationStdDevs();
+                        estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+                    });
+        }
+        else if (!addedGoodMultiTagReslt  && !frontLeftResults.isEmpty()){
+            for(int i = 0; i<frontLeftResults.size();i++){
+                updateEstimationStdDevs(frontLeftResults.get(i), frontLeftTargets.get(i));
+
+                frontLeftResults.get(i).ifPresent(
+                        est -> {
+                            // Change our trust in the measurement based on the tags we can see
+                            var estStdDevs = getEstimationStdDevs();
+                            estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+                        });
+            }
+        }
+
         this.visonCycleTime = Timer.getFPGATimestamp()-startTime;
     }
 
