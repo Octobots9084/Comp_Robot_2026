@@ -171,7 +171,7 @@ public class VisionIOSystem implements VisionIO {
                     if (numberOfHubTags>=2){
                         frontLeftHubMultiTagResult = visionEst;
                         frontLeftHubMultiTagTargets = Optional.of(result.getTargets());
-                        foundSutableMultiTagPoseOnCamLeft = true;
+                        foundSutableMultiTagPoseOnCamFrontLeft = true;
                         addedGoodMultiTagReslt = true;
                         break;
                     }
@@ -221,7 +221,7 @@ public class VisionIOSystem implements VisionIO {
                     if (numberOfHubTags>=2){
                         frontRightHubMultiTagResult = visionEst;
                         frontRightHubMultiTagTargets = Optional.of(result.getTargets());
-                        foundSutableMultiTagPoseOnCamRight = true;
+                        foundSutableMultiTagPoseOnCamFrontRight = true;
                         addedGoodMultiTagReslt = true;
                         break;
                     }
@@ -349,7 +349,7 @@ public class VisionIOSystem implements VisionIO {
                         estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
                     });
         }
-        else if (!addedGoodMultiTagReslt){
+        else if (!addedGoodMultiTagReslt && !rightResults.isEmpty()){
             for(int i = 0; i<rightResults.size();i++){
                 updateEstimationStdDevs(rightResults.get(i), rightTargets.get(i));
 
@@ -376,7 +376,7 @@ public class VisionIOSystem implements VisionIO {
                         estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
                     });
         }
-        else if (!addedGoodMultiTagReslt){
+        else if (!addedGoodMultiTagReslt && !leftResults.isEmpty()){
             for(int i = 0; i<leftResults.size();i++){
                 updateEstimationStdDevs(leftResults.get(i), leftTargets.get(i));
 
@@ -403,7 +403,7 @@ public class VisionIOSystem implements VisionIO {
                         estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
                     });
         }
-        else if (!addedGoodMultiTagReslt){
+        else if (!addedGoodMultiTagReslt && !frontRightResults.isEmpty()){
             for(int i = 0; i<frontRightResults.size();i++){
                 updateEstimationStdDevs(frontRightResults.get(i), frontRightTargets.get(i));
 
@@ -430,7 +430,7 @@ public class VisionIOSystem implements VisionIO {
                         estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
                     });
         }
-        else if (!addedGoodMultiTagReslt){
+        else if (!addedGoodMultiTagReslt  && !frontLeftResults.isEmpty()){
             for(int i = 0; i<frontLeftResults.size();i++){
                 updateEstimationStdDevs(frontLeftResults.get(i), frontLeftTargets.get(i));
 
