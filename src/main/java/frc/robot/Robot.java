@@ -248,15 +248,15 @@ public class Robot extends LoggedRobot {
             switch (gameData.charAt(0)) {
                 case 'B':
                     if (Constants.isBlueAlliance) {
-                      return false;
-                    }else{
                       return true;
+                    }else{
+                      return false;
                     }
                 case 'R':
                     if (!Constants.isBlueAlliance) {
-                        return true;
-                    } else {
                         return false;
+                    } else {
+                        return true;
                     }
 
                 default:

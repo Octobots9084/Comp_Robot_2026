@@ -31,19 +31,28 @@ public class DriverCommunications {
                    NextPhaseIndication = "Endgame";
                 }
             }
-    
-    
+
+            if ((Constants.timer.get() >= 130) && (Constants.timer.get() <= 130.5)) {
+                PhaseTime = 30;
+                PhaseCountdown.restart();
+            }
+            if (((Constants.timer.get() >= 20) && (Constants.timer.get() <= 20.5))) {
+                PhaseCountdown.restart();
+                PhaseTime = 10;
+
+            }
             if ((Constants.timer.get() <= 20)) {
                 PhaseTime = 20;
+                NextPhaseIndication = "Transition Period";
         } else if ((Constants.timer.get() > 20) && (Constants.timer.get() <= 30)) {
-            PhaseTime = 10;
-            //Changing the "Next phase" indicator based on who won auto
-            if (Robot.WonAuto()){
-                NextPhaseIndication = "Opposing Shift";
-            }else{
-                NextPhaseIndication = "Our Shift";
-            }
-        } else if ((Constants.timer.get() >= 30) && (Constants.timer.get() < 130)) {
+                PhaseTime = 10;
+                //Changing the "Next phase" indicator based on who won auto
+                 if (Robot.WonAuto()){
+                    NextPhaseIndication = "Opposing Shift";
+                 }else{
+                    NextPhaseIndication = "Our Shift";
+             }
+        } else if ((Constants.timer.get() > 30) && (Constants.timer.get() < 130)) {
             PhaseTime = 25;
 
         }else if ((Constants.timer.get() >= 130)){
@@ -56,6 +65,7 @@ public class DriverCommunications {
         double PhaseClock = (PhaseTime - PhaseCountdown.get());
         SmartDashboard.putString("Next Phase", NextPhaseIndication);
         SmartDashboard.putNumber("Phase Shift Countdown", PhaseClock);
+        SmartDashboard.putNumber("Timer", Constants.timer.get());
         SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime());
         SmartDashboard.putBoolean("Is Hub Active?", Shooter.getInstance().isHubActive());
         //SmartDashboard.putBoolean("In Manual?", Superstructure.getInstance().getCurrentState() == States.MANUAL);
