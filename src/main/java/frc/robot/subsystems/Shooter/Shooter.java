@@ -135,8 +135,8 @@ public class Shooter extends SubsystemBase {
             case SPITTOCONTAINER:
                 feeder.setFeederVelocity(FeederStates.SPITTING);
                 flywheel.setFlywheelVelocity(FlywheelStates.SPITTOCONTAINER);
-                turret.setHoodPosition(75/360.0);
-                turret.setTurretPosition(-90/360.0);
+                turret.setHoodPosition(85);
+                turret.setTurretPosition(0);
                 break;
             case FERRY:
                 // hubBallSpeed = 6.7 +(8.13-6.7)*(getDistanceToHub()/4.18532579377);
@@ -177,12 +177,12 @@ public class Shooter extends SubsystemBase {
                 break;
             case HUB:
                 // hubBallSpeed = 0.5*(getDistanceToHub())+6;//8;//12;//6.5361+ 0.96897 * (getDistanceToHub()); // first change
-                hubFlywheelSpeed = (0.458687*getDistanceToHub()) + 10.19436;//7;//8.5;//6.3677 + 0.56653 * (getDistanceToHub()); // second change
+                hubFlywheelSpeed = 0.458687*(getDistanceToHub() + 10.19436);//7;//8.5;//6.3677 + 0.56653 * (getDistanceToHub()); // second change
                 hubBallSpeed = 9;
                 Logger.recordOutput("hubBallSpeed",hubBallSpeed);
                 Logger.recordOutput("hubFlywheelSpeed",hubFlywheelSpeed);
                 isAimedAtHub = isAimedAtHub(hubBallSpeed);
-                // turret.setHoodPosition((-4.45537*getDistanceToHub())+89.48911);
+                turret.setHoodPosition(-4.45537*(getDistanceToHub())+89.48911);
                 
                 if(swerve.isInAllianceZone() && (isHubActive())){
                     if(driverOverride){
@@ -354,9 +354,6 @@ public class Shooter extends SubsystemBase {
             case UNJAM:
                 currentShooterState = ShooterStates.UNJAM;
                 break;
-            case SPITTOCONTAINER:
-                currentShooterState = ShooterStates.SPITTOCONTAINER;
-                break;
             default:
                 break;
         }
@@ -524,8 +521,7 @@ public class Shooter extends SubsystemBase {
         // double hoodRelative = hoodInverted / 360;
 
 
-        // turret.setHoodPosition(pastShooterAngle.hoodRotation/(2.0*Math.PI));
-        turret.setHoodPosition(((-4.45537*getDistanceToHub())+89.48911)/360.0);
+        turret.setHoodPosition(pastShooterAngle.hoodRotation/(2.0*Math.PI));
         // turret.setHoodPosition(75/360.0);
 
         Logger.recordOutput("CalculatedHoodAngle", pastShooterAngle.hoodRotation/(2*Math.PI));
@@ -652,10 +648,10 @@ public class Shooter extends SubsystemBase {
     public boolean isHubActive() {
         double timer = Constants.timer.get();
         if (Robot.WonAuto()) {
-                        return (timer <= 55) || ((timer >= (80 - prefire) && timer <= 105))
+                        return (timer <= 35) || ((timer >= (60 - prefire) && timer <= 85))
                                 || (timer >= (110 - prefire));
                     }else{
-                        return (timer <= 30) || ((timer >= (55 - prefire) && timer <= 80))
+                        return (timer <= 10) || ((timer >= (35 - prefire) && timer <= 60))
                                 || (timer >= (85 - prefire));
                     }
     }
