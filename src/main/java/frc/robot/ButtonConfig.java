@@ -27,11 +27,6 @@ public class ButtonConfig {
         driverController.leftBumper().whileTrue(new runIntakeReverse());
         driverController.leftTrigger().whileTrue(new runIntake());
 
-        driverController.povUp().onTrue(new InstantCommand(() -> {
-                Shooter.getInstance().wantedShooterState = ShooterStates.SHOOTTOCONTAINER;
-        })).onFalse(new InstantCommand(() -> {
-                Shooter.getInstance().wantedShooterState = ShooterStates.SAFE;
-        }));
 
         driverController.x().onTrue(new InstantCommand(() -> {
                 superstructure.wantedState = States.UNJAM;
@@ -72,6 +67,13 @@ public class ButtonConfig {
         //         () -> Intake.getInstance().wantedState = IntakeStates.EXTENDED));
         //X : TODO add unstuck
 
+        driverController.rightBumper().whileTrue(new InstantCommand(() -> {
+                superstructure.wantedState = States.SPITTOCONTAINER;
+                superstructure.BUTTON_TEST = true;
+        })).onFalse(new InstantCommand(() -> {
+                superstructure.wantedState = States.SHOOTER;
+                superstructure.BUTTON_TEST = false;
+        }));
 
     }
 }

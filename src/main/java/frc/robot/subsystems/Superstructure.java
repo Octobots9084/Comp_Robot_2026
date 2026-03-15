@@ -21,6 +21,7 @@ public class Superstructure extends SubsystemBase {
     // public Climb climb = Climb.getInstance();
     public Shooter shooter = Shooter.getInstance();
     public Intake intake = Intake.getInstance();
+    public boolean BUTTON_TEST = false;
 
     @Override
     public void periodic() {
@@ -29,6 +30,7 @@ public class Superstructure extends SubsystemBase {
         Logger.recordOutput("currentState", this.currentState);
         Logger.recordOutput("wantedState", this.wantedState);
         Logger.recordOutput("climbDescending", this.climbDescending);
+        Logger.recordOutput("buttonTest", BUTTON_TEST);
         handleStateTransitions();
         applyStates();
     }
@@ -110,6 +112,8 @@ public class Superstructure extends SubsystemBase {
             case FIXEDFIRE:
                 this.currentState=States.FIXEDFIRE;
             break;
+            case SPITTOCONTAINER:
+                this.currentState = States.SPITTOCONTAINER;
             default:
                 break; // do nothing
         }
@@ -152,9 +156,13 @@ public class Superstructure extends SubsystemBase {
             case FIXEDFIRE:
                 swerve.wantedState = SwerveStates.IDLE;
                 shooter.wantedShooterState = ShooterStates.FIXEDFIRE;
-            break;
+                break;
             case UNJAM:
                 stateUnJam();
+                break;
+            case SPITTOCONTAINER:
+                swerve.wantedState = SwerveStates.IDLE;
+                shooter.wantedShooterState = ShooterStates.SPITTOCONTAINER;
                 break;
             default:
                 // throw an exception
