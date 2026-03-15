@@ -12,4 +12,5 @@ public enum ShooterStates {
     MANUAL,
     FIXEDFIRE,
     UNJAM,
+    SPITTOCONTAINER
 }

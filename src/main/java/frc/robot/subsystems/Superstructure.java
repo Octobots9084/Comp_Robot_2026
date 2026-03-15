@@ -110,6 +110,8 @@ public class Superstructure extends SubsystemBase {
             case FIXEDFIRE:
                 this.currentState=States.FIXEDFIRE;
             break;
+            case SPITTOCONTAINER:
+                this.currentState = States.SPITTOCONTAINER;
             default:
                 break; // do nothing
         }
@@ -152,9 +154,13 @@ public class Superstructure extends SubsystemBase {
             case FIXEDFIRE:
                 swerve.wantedState = SwerveStates.IDLE;
                 shooter.wantedShooterState = ShooterStates.FIXEDFIRE;
-            break;
+                break;
             case UNJAM:
                 stateUnJam();
+                break;
+            case SPITTOCONTAINER:
+                swerve.wantedState = SwerveStates.IDLE;
+                shooter.wantedShooterState = ShooterStates.SPITTOCONTAINER;
                 break;
             default:
                 // throw an exception

@@ -13,5 +13,6 @@ public enum States {
     AUTO,
     AUTONONFIRE,
     FIXEDFIRE,
-    UNJAM
+    UNJAM,
+    SPITTOCONTAINER
 }

@@ -75,6 +75,11 @@ public class ButtonConfig {
         //         () -> Intake.getInstance().wantedState = IntakeStates.EXTENDED));
         //X : TODO add unstuck
 
+        driverController.rightBumper().whileTrue(new InstantCommand(() -> {
+                superstructure.wantedState = States.SPITTOCONTAINER;
+        })).onFalse(new InstantCommand(() -> {
+                superstructure.wantedState = States.SHOOTER;
+        }));
         //LB : TODO add Reverse Intake
 
     }
