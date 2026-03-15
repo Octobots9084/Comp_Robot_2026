@@ -49,7 +49,7 @@ public class Shooter extends SubsystemBase {
     public final TurretIO tIO;
     public final ShooterIO sIO;
     public SwerveSubsystem swerve = SwerveSubsystem.getInstance();
-    public final CommandXboxController coDriverController;
+    // public final CommandXboxController coDriverController;
     public Feeder feeder = new Feeder();
     public Turret turret;
     public boolean turretAlreadyZeroed = false;
@@ -114,23 +114,21 @@ public class Shooter extends SubsystemBase {
     }
 
     public void ApplyStates() {
-        switch (currentShooterState){
+        switch (currentShooterState) {
             case SAFE:
-                // stops the flywheel
+                // stop the flywheel
                 feeder.setFeederVelocity(FeederStates.OFF);
                 flywheel.setFlywheelVelocity(FlywheelStates.SAFE);
                 break;
             case MANUAL:
-                // joystick controlls turret and hood
-                tIO.setTurretPosition(getTurretPosFromJoystick());
-                tIO.setHoodPosition(getHoodPosFromJoystick());
+                // joystick controlls turret
+                // tIO.setTurretPosition(getTurretPosFromJoystick());
+                // tIO.setHoodPosition(getHoodPosFromJoystick());
                 break;
             case UNJAM:
-                //unjams the shooter
                 flywheel.setFlywheelVelocity(0);
                 feeder.setFeederVelocity(FeederStates.UNJAM);
             case FERRY:
-                //Shoots balls from mid
                 // hubBallSpeed = 6.7 +(8.13-6.7)*(getDistanceToHub()/4.18532579377);
                 hubBallSpeed = 8;
                 isAimedAtFerry = aimFerry(hubBallSpeed);
@@ -204,7 +202,6 @@ public class Shooter extends SubsystemBase {
                                 feeder.setFeederVelocity(FeederStates.OFF);
                             }
                         }
-                        
                     }else{
                         feeder.setFeederVelocity(FeederStates.OFF);
                         flywheel.setFlywheelVelocity(FlywheelStates.SAFE);
@@ -236,18 +233,22 @@ public class Shooter extends SubsystemBase {
                 }
                 break;
             case AUTOHUB:
-                //hubBallSpeed = 6.7 +(8.13-6.7)*(getDistanceToHub()/4.18532579377);
+            //    hubBallSpeed = 6.7 +(8.13-6.7)*(getDistanceToHub()/4.18532579377);
                 hubBallSpeed = 0.5*(getDistanceToHub())+6;//8;//12;//6.5361+ 0.96897 * (getDistanceToHub()); // first change
                 hubFlywheelSpeed = 1.333333*getDistanceToHub()+5.133333;//7;//8.5;//6.3677 + 0.56653 * (getDistanceToHub()); // second change
                 Logger.recordOutput("hubBallSpeed",hubBallSpeed);
                 Logger.recordOutput("hubFlywheelSpeed",hubFlywheelSpeed);
                 isAimedAtHub = isAimedAtHub(hubBallSpeed);
+                // hubFlywheelSpeed = (hubBallSpeed-0.0482494)/0.673537;
+                // isAimedAtHub = true;
+                // turret.setTurretPosition(-90.0/360.0);
+                // turret.setHoodPosition(75/360.0);
                 if(swerve.isInAllianceZone()){
-                    flywheel.setFlywheelVelocity(hubFlywheelSpeed);
-                    if(isAimedAtHub){
-                        if(flywheel.FlywheelInTolerance(1)){
-                            feeder.setFeederVelocity(FeederStates.SCORING);
-                            flywheelDebouncer = 0;
+                        flywheel.setFlywheelVelocity(hubFlywheelSpeed);
+                        if(isAimedAtHub){
+                            if(flywheel.FlywheelInTolerance(1)){
+                                feeder.setFeederVelocity(FeederStates.SCORING);
+                                flywheelDebouncer = 0;
                             }else if (flywheelDebouncer<10){
                                 flywheelDebouncer ++;
                                 feeder.setFeederVelocity(FeederStates.SCORING);
@@ -289,6 +290,7 @@ public class Shooter extends SubsystemBase {
                 turret.setTurretPosition(0.25);
                 break;
             case ZERO:
+                // TODO add hood zeroing
                 turret.io.zeroHoodMotor();
                 if (turret.io.turretZeroed()) {
                     wantedShooterState = ShooterStates.HUB;
@@ -300,6 +302,7 @@ public class Shooter extends SubsystemBase {
 
     }
 
+    // state transitions for spit and manual needed
     public void handleStateTransitions() {
         if ((wantedShooterState != ShooterStates.HUB && currentShooterState == ShooterStates.HUB)|| (wantedShooterState != ShooterStates.FERRY && currentShooterState == ShooterStates.FERRY)){
             flywheelDebouncer = 0;
@@ -330,12 +333,12 @@ public class Shooter extends SubsystemBase {
                 break;
 
             case BUMP:
-                // if we're on the bump
+                // if we're on the bump (SHOCKING!!!)
                 currentShooterState = ShooterStates.BUMP;
                 break;
 
             case SAFE:
-                // driver input
+                // driver input (presumably)
                 currentShooterState = ShooterStates.SAFE;
                 break;
             case ZERO:
@@ -355,7 +358,17 @@ public class Shooter extends SubsystemBase {
         }
         ;
     }
-    
+
+    public boolean Shootable() {
+        if (!swerve.isTilted(1, 0.3) && ((swerve.isInAllianceZone() && isHubActive())
+                || (!swerve.isInAllianceZone()))) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
     public double getDistanceToHub(){
         double XToHub;
         double YToHub;
@@ -451,28 +464,9 @@ public class Shooter extends SubsystemBase {
 
         turret.setTurretPosition(proposedAngle/(2*Math.PI));
         // turret.setTurretPosition(-0.25);
-                
+        
+        
         Logger.recordOutput("CalculatedCorrectedTurretAngle", 180*proposedAngle/(Math.PI));
-
-
-        /* Angle Compensator??, TODO ask rui why the **** this is commented
-
-            double rotation = -180;
-            rotation = rotation % 360;
-            rotation = 360 - rotation;
-
-            // Invert gyro direction BEFORE scaling
-            double offset = 190;//pastShooterAngle.turretRotation * (180.0 / Math.PI);
-            double offset = (pastShooterAngle.turretRotation * (180.0 / Math.PI));// + alphabotJankboticsOffset;
-            rotation += offset + 255; //maybe 255
-            rotation = rotation % 360;
-            double turretAngle = -(rotation / 360.0);
-
-            turret.setTurretPosition(turretAngle);
-            double hoodInverted = 85 - (pastShooterAngle.hoodRotation * 180) / Math.PI;
-            double hoodInverted = 85-(67);
-            double hoodRelative = hoodInverted / 360;
-        */
 
         turret.setHoodPosition(pastShooterAngle.hoodRotation/(2.0*Math.PI));
         // turret.setHoodPosition(75/360.0);
@@ -559,24 +553,7 @@ public class Shooter extends SubsystemBase {
         
         Logger.recordOutput("CalculatedCorrectedTurretAngle", 180*proposedAngle/(Math.PI));
 
-         /* Angle Compensator?? why is it here too!!??, TODO ask rui why the **** this is commented
 
-            double rotation = -180;
-            rotation = rotation % 360;
-            rotation = 360 - rotation;
-
-            // Invert gyro direction BEFORE scaling
-            double offset = 190;//pastShooterAngle.turretRotation * (180.0 / Math.PI);
-            double offset = (pastShooterAngle.turretRotation * (180.0 / Math.PI));// + alphabotJankboticsOffset;
-            rotation += offset + 255; //maybe 255
-            rotation = rotation % 360;
-            double turretAngle = -(rotation / 360.0);
-
-            turret.setTurretPosition(turretAngle);
-            double hoodInverted = 85 - (pastShooterAngle.hoodRotation * 180) / Math.PI;
-            double hoodInverted = 85-(67);
-            double hoodRelative = hoodInverted / 360;
-        */
 
         turret.setHoodPosition(pastShooterAngle.hoodRotation/(2.0*Math.PI));
         // turret.setHoodPosition(75/360.0);
@@ -587,15 +564,15 @@ public class Shooter extends SubsystemBase {
         // return (turret.hoodInTolerance(.05) && turret.turretInTolerance(0.05));
     }
 
-    public double getTurretPosFromJoystick() {
-        return tIO.getTurretPosition()
-                 + 0.05 * MathUtil.applyDeadband(coDriverController.getLeftX(), Constants.leftYDeadband);
-    }
+    // public double getTurretPosFromJoystick() {
+    //     return tIO.getTurretPosition()
+    //             + 0.05 * MathUtil.applyDeadband(coDriverController.getLeftX(), Constants.leftYDeadband);
+    // }
 
-    public double getHoodPosFromJoystick() {
-         return tIO.getHoodPosition()
-                 + 0.05 * -MathUtil.applyDeadband(coDriverController.getLeftY(), Constants.leftXDeadband);
-    }
+    // public double getHoodPosFromJoystick() {
+    //     return tIO.getHoodPosition()
+    //             + 0.05 * -MathUtil.applyDeadband(coDriverController.getLeftY(), Constants.leftXDeadband);
+    // }
 
     public boolean isHubActive() {
         double timer = Constants.timer.get();
