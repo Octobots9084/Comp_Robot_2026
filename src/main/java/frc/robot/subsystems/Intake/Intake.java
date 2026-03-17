@@ -143,9 +143,10 @@ public class Intake extends SubsystemBase {
                 } else {
                     io.setIntakeState(IntakeStates.PARTIALEXTENTION);
                 }
-                elephantiaissTimer ++;
-                if (elephantiaissTimer > 20){
-                    elephantiaissTimer = -20;
+
+                elephantiaissTimer++;
+                if (elephantiaissTimer > 60){
+                    elephantiaissTimer = -60;
                 }
                 break;
         default:
