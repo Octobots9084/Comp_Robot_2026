@@ -69,10 +69,8 @@ public class ButtonConfig {
 
         driverController.rightBumper().whileTrue(new InstantCommand(() -> {
                 superstructure.wantedState = States.SPITTOCONTAINER;
-                superstructure.BUTTON_TEST = true;
         })).onFalse(new InstantCommand(() -> {
                 superstructure.wantedState = States.SHOOTER;
-                superstructure.BUTTON_TEST = false;
         }));
 
     }
