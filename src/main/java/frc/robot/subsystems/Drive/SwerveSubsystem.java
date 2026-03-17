@@ -143,7 +143,7 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     // TODO: move somewhere important
-    public boolean onRamp(double wanted, double tolerance) { /////////////////////
+    public boolean isTilted(double wanted, double tolerance) { /////////////////////
         boolean inTolerance = false;
         tolerance = Units.degreesToRadians(tolerance);
         Rotation3d gyroRotation = this.io.getRotation3d();
