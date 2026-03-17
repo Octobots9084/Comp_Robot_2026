@@ -177,12 +177,11 @@ public class Shooter extends SubsystemBase {
                 break;
             case HUB:
                 // hubBallSpeed = 0.5*(getDistanceToHub())+6;//8;//12;//6.5361+ 0.96897 * (getDistanceToHub()); // first change
-                hubFlywheelSpeed = 0.458687*(getDistanceToHub() + 10.19436);//7;//8.5;//6.3677 + 0.56653 * (getDistanceToHub()); // second change
-                hubBallSpeed = 9;
+                hubFlywheelSpeed = (0.458687*getDistanceToHub()) + 10.19436;//7;//8.5;//6.3677 + 0.56653 * (getDistanceToHub()); // second change
+                hubBallSpeed = 25;
                 Logger.recordOutput("hubBallSpeed",hubBallSpeed);
                 Logger.recordOutput("hubFlywheelSpeed",hubFlywheelSpeed);
                 isAimedAtHub = isAimedAtHub(hubBallSpeed);
-                turret.setHoodPosition(-4.45537*(getDistanceToHub())+89.48911);
                 
                 if(swerve.isInAllianceZone() && (isHubActive())){
                     if(driverOverride){
@@ -521,8 +520,9 @@ public class Shooter extends SubsystemBase {
         // double hoodRelative = hoodInverted / 360;
 
 
-        turret.setHoodPosition(pastShooterAngle.hoodRotation/(2.0*Math.PI));
+        // turret.setHoodPosition(pastShooterAngle.hoodRotation/(2.0*Math.PI));
         // turret.setHoodPosition(75/360.0);
+        turret.setHoodPosition((-4.45537*(getDistanceToHub())+89.48911)/360.0);
 
         Logger.recordOutput("CalculatedHoodAngle", pastShooterAngle.hoodRotation/(2*Math.PI));
 
