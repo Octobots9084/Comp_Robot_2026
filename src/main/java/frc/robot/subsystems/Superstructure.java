@@ -114,8 +114,7 @@ public class Superstructure extends SubsystemBase {
             break;
             case SPITTOCONTAINER:
                 this.currentState = States.SPITTOCONTAINER;
-            case SPITTOCONTAINER:
-                this.currentState = States.SPITTOCONTAINER;
+                break;
             default:
                 break; // do nothing
         }
