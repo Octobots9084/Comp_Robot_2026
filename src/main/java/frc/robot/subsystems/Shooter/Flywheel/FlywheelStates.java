@@ -6,7 +6,9 @@ public enum FlywheelStates {
     BUMP(0),
     SPIT(8), // todo: find out what this should be
     HUB(10),
-    SPITTOCONTAINER(3);
+    SPITTOCONTAINER(3),
+    FIXEDFIRE(10)
+    ;
 
     public double FlywheelRightRPS;
 

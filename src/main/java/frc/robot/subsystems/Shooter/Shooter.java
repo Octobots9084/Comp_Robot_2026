@@ -18,8 +18,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 import frc.robot.Constants;
-import frc.robot.DriverCommunications;
-import frc.robot.Robot;
 import frc.robot.subsystems.Vision.ShooterAngle;
 import frc.robot.subsystems.Vision.ShooterAngleCalculator;
 import frc.robot.subsystems.Drive.SwerveSubsystem;
@@ -113,8 +111,6 @@ public class Shooter extends SubsystemBase {
         sIO.updateInputs(shooterInputs);
         Logger.processInputs("Shooter/Shooter", shooterInputs);
         // SmartDashboard.putBoolean("HubAcivity", isHubActive());
-        Logger.recordOutput("turretAlreadyZeroed", Shooter.getInstance().turretAlreadyZeroed);
-
     }
 
     public void ApplyStates() {
@@ -134,13 +130,6 @@ public class Shooter extends SubsystemBase {
                 //stops the flywheel
                 flywheel.setFlywheelVelocity(0);
                 feeder.setFeederVelocity(FeederStates.UNJAM);
-                break;
-            case SPITTOCONTAINER:
-                feeder.setFeederVelocity(FeederStates.SPITTING);
-                flywheel.setFlywheelVelocity(FlywheelStates.SPITTOCONTAINER);
-                turret.setHoodPosition(85);
-                turret.setTurretPosition(0);
-                break;
             case FERRY:
                 //shoots balls from neutral to our zone
                 hubBallSpeed = 8;
@@ -165,8 +154,7 @@ public class Shooter extends SubsystemBase {
                 //shoots to the hub if aimed 
                 scaleFlywheel();
                 isAimedAtHub = isAimedAtHub(hubBallSpeed);
-                
-                if(swerve.isInAllianceZone() && (isHubActive())){
+                if(swerve.isInAllianceZone()){
                     if(driverOverride){
                         flywheel.setFlywheelVelocity(hubFlywheelSpeed);
                         if(isAimedAtHub){
@@ -233,12 +221,11 @@ public class Shooter extends SubsystemBase {
                 turret.setTurretPosition(turretAim);
                 break;
             case FIXEDFIRE:
-                //if main controller pushes b than the turret won't aim and will only shoot from
-                //a fixed positon, used if something breaks
-                feeder.setFeederVelocity(FeederStates.SCORING);
-                flywheel.setFlywheelVelocity(FlywheelStates.HUB);
-                turret.setHoodPosition(80/360.0);
-                turret.setTurretPosition(0.25);
+                //second button that shoots the same shot everytime
+                feeder.setFeederVelocity(FeederStates.FIXEDFIRE);
+                flywheel.setFlywheelVelocity(FlywheelStates.FIXEDFIRE);
+                turret.setHoodPosition(85);
+                turret.setTurretPosition(10);
                 break;
             case ZERO:
                 //makes the turret figure out where it is
@@ -258,7 +245,7 @@ public class Shooter extends SubsystemBase {
         switch (wantedShooterState) {
             case HUB:
                 // if we're on our side of the field
-                if (!swerve.isTilted(0, 5) && swerve.isInAllianceZone()) {// !tilted and in alliance
+                if (!swerve.isTilted(1, 0.3) && swerve.isInAllianceZone()) {// !tilted and in alliance
                     currentShooterState = ShooterStates.HUB;
                 }else{
                     currentShooterState = ShooterStates.FERRY;
@@ -266,14 +253,14 @@ public class Shooter extends SubsystemBase {
                 break;
             case AUTOHUB:
                 // if we're on our side of the field
-                if (!swerve.isTilted(0, 5) && swerve.isInAllianceZone()) {
+                if (!swerve.isTilted(1, 0.3) && swerve.isInAllianceZone()) {
                     currentShooterState = ShooterStates.AUTOHUB;
                 }
                 break;
 
             case FERRY:
                 // if we're in neutral or enemy zone
-                if (!swerve.isInAllianceZone() && !swerve.isTilted(0, 5)) {
+                if (!swerve.isInAllianceZone() && !swerve.isTilted(1, 0.3)) {
                     currentShooterState = ShooterStates.FERRY;
                 }else{
                     currentShooterState = ShooterStates.HUB;
@@ -307,7 +294,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public boolean Shootable() {
-        if (!swerve.isTilted(0, 5) && ((swerve.isInAllianceZone() && isHubActive())
+        if (!swerve.isTilted(1, 0.3) && ((swerve.isInAllianceZone() && isHubActive())
                 || (!swerve.isInAllianceZone()))) {
             return true;
         } else {
@@ -328,7 +315,7 @@ public class Shooter extends SubsystemBase {
     //used in hub and autohub for logging and setting the ball and flywheel speed
     public void scaleFlywheel(){
         hubBallSpeed = 0.5*(getDistanceToHub())+6;//8;//12;//6.5361+ 0.96897 * (getDistanceToHub()); // first change
-        hubFlywheelSpeed = (0.458687*getDistanceToHub()) + 10.19436;//7;//8.5;//6.3677 + 0.56653 * (getDistanceToHub()); // second change
+        hubFlywheelSpeed = 1.333333*getDistanceToHub()+5.133333;//7;//8.5;//6.3677 + 0.56653 * (getDistanceToHub()); // second change
         Logger.recordOutput("hubBallSpeed",hubBallSpeed);
         Logger.recordOutput("hubFlywheelSpeed",hubFlywheelSpeed);
     }
@@ -430,9 +417,8 @@ public class Shooter extends SubsystemBase {
         
         Logger.recordOutput("CalculatedCorrectedTurretAngle", 180*proposedAngle/(Math.PI));
 
-        // turret.setHoodPosition(pastShooterAngle.hoodRotation/(2.0*Math.PI));
+        turret.setHoodPosition(pastShooterAngle.hoodRotation/(2.0*Math.PI));
         // turret.setHoodPosition(75/360.0);
-        turret.setHoodPosition((-4.45537*(getDistanceToHub())+89.48911)/360.0);
 
         Logger.recordOutput("CalculatedHoodAngle", pastShooterAngle.hoodRotation/(2*Math.PI));
 
@@ -534,12 +520,32 @@ public class Shooter extends SubsystemBase {
 
     public boolean isHubActive() {
         double timer = Constants.timer.get();
-        if (Robot.WonAuto()) {
-                        return (timer <= 35) || ((timer >= (60 - prefire) && timer <= 85))
+        gameData = DriverStation.getGameSpecificMessage();
+        if (gameData.length() > 0) {
+            switch (gameData.charAt(0)) {
+                case 'B':
+                    if (Constants.isBlueAlliance) {
+                        return (timer <= 10 || (timer >= (35 - prefire) && timer <= 60)
+                                || (timer >= (85 - prefire)));
+                    } else {
+                        return (timer <= 35) || (timer >= (60 - prefire) && timer <= 85)
                                 || (timer >= (110 - prefire));
-                    }else{
-                        return (timer <= 10) || ((timer >= (35 - prefire) && timer <= 60))
-                                || (timer >= (85 - prefire));
                     }
+                case 'R':
+                    if (!Constants.isBlueAlliance) {
+                        return (timer <= 35) || (timer >= (60 - prefire) && timer <= 85)
+                                || (timer >= (110 - prefire));
+                    } else {
+                        return (timer <= 10 || (timer >= (35 - prefire) && timer <= 60)
+                                || (timer >= (85 - prefire)));
+                    }
+
+                default:
+                    return true;
+            }
+        } else {
+            return true;
+        }
     }
+
 }
