@@ -1,5 +1,7 @@
 package frc.robot.subsystems.Shooter.Flywheel;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 
@@ -23,6 +25,7 @@ public class FlywheelIOTalonFX implements FlywheelIO {
 
     private Follower follow = new Follower(Constants.flyWheelRightID, MotorAlignmentValue.Opposed);
 
+    
     public FlywheelIOTalonFX() {
         shooterConfigs = new ShooterConfigurator();
         FlywheelLeftMotor = new TalonFX(Constants.flyWheelLeftID, Constants.krakenBus);
@@ -43,11 +46,13 @@ public class FlywheelIOTalonFX implements FlywheelIO {
 
     @Override
     public void setFlywheelVelocity(FlywheelStates state) {
+        Logger.recordOutput("flywheelWantedSpeed_", state.FlywheelRightRPS);
         FlywheelRightMotor.setControl(FlywheelRightMotorRequest.withVelocity(state.FlywheelRightRPS));
         FlywheelLeftMotor.setControl(follow);
     }
     @Override
     public void setFlywheelVelocity(double rps) {
+        Logger.recordOutput("flywheelWantedSpeed_", rps);
         FlywheelRightMotor.setControl(FlywheelRightMotorRequest.withVelocity(rps));
         FlywheelLeftMotor.setControl(follow);
     }
