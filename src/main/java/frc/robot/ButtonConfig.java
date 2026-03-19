@@ -37,9 +37,9 @@ public class ButtonConfig {
         // coDriverController.a().onTrue(new InstantCommand(() ->
         // {SwerveSubsystem.getInstance().io.zeroGyro();}));
         coDriverController.a().onTrue(new InstantCommand(() ->
-        {Shooter.getInstance().manuelHood+=0.5;}));
+        {Shooter.getInstance().manuelHood+=0.25;}));
         coDriverController.b().onTrue(new InstantCommand(() ->
-        {Shooter.getInstance().manuelHood-=0.5;}));
+        {Shooter.getInstance().manuelHood-=0.25;}));
         coDriverController.x().onTrue(new InstantCommand(() ->
         {Shooter.getInstance().manuelFlywheel+=0.05;}));
         coDriverController.y().onTrue(new InstantCommand(() ->

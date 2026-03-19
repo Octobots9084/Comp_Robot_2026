@@ -34,7 +34,7 @@ public class ShooterConfigurator {
         flyWheelRightConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
         // create PID gains
-        flyWheelRightConfig.Slot0.kP = 2;
+        flyWheelRightConfig.Slot0.kP = 1.5;
         flyWheelRightConfig.Slot0.kI = 0.0;
         flyWheelRightConfig.Slot0.kD = 0.0;
         flyWheelRightConfig.Slot0.kA = 0.0;
@@ -115,7 +115,7 @@ public class ShooterConfigurator {
         // vertical Feeder config(rural road)
         verticalFeederConfig.CurrentLimits.SupplyCurrentLimit = 20;
         verticalFeederConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-        verticalFeederConfig.CurrentLimits.StatorCurrentLimit = 60;
+        verticalFeederConfig.CurrentLimits.StatorCurrentLimit = 80;
         verticalFeederConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 
         // set break mode and inversion

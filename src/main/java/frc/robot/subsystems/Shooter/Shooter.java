@@ -70,7 +70,7 @@ public class Shooter extends SubsystemBase {
     public boolean isAimedAtHub;
     public boolean isAimedAtFerry;
     public double shooterCalculatorVelocity;
-    public int flywheelDebouncer = 0;
+    public int flywheelDebouncer = 10;
     public double hubBallSpeed = 6.7;
     public double hubFlywheelSpeed = 10;
     public double ferryBallSpeed = 6.7;
@@ -222,14 +222,15 @@ public class Shooter extends SubsystemBase {
             case HUB:
                 Logger.recordOutput("manuel hood position", manuelHood);
                 Logger.recordOutput("manuel flywheel position", manuelFlywheel);
-                isAimedAtHub(30);
+                isAimedAtHub = isAimedAtHub(30);
                 turret.setHoodPosition(manuelHood/360.0);
-
+                // turret.setHoodPosition(manuelHood/360.0);
                 
 
                     if(driverOverride){
                         flywheel.setFlywheelVelocity(manuelFlywheel);
-                        if(flywheel.FlywheelInTolerance(1)){
+                        if(isAimedAtHub){
+                            if(flywheel.FlywheelInTolerance(1)){
                                 feeder.setFeederVelocity(FeederStates.SCORING);
                                 flywheelDebouncer = 0;
                             }else if (flywheelDebouncer<10){
@@ -239,6 +240,7 @@ public class Shooter extends SubsystemBase {
                             else{
                                 feeder.setFeederVelocity(FeederStates.OFF);
                             }
+                        }
 
                         
                     }else{
@@ -318,7 +320,7 @@ public class Shooter extends SubsystemBase {
             case FIXEDFIRE:
                 feeder.setFeederVelocity(FeederStates.SCORING);
                 flywheel.setFlywheelVelocity(FlywheelStates.HUB);
-                turret.setHoodPosition(80/360.0);
+                turret.setHoodPosition(65/360.0);
                 turret.setTurretPosition(0.25);
                 break;
             case ZERO:
@@ -335,7 +337,7 @@ public class Shooter extends SubsystemBase {
 
     public void handleStateTransitions() {
         if ((wantedShooterState != ShooterStates.HUB && currentShooterState == ShooterStates.HUB)|| (wantedShooterState != ShooterStates.FERRY && currentShooterState == ShooterStates.FERRY)){
-            flywheelDebouncer = 0;
+            flywheelDebouncer = 10;
         }
         switch (wantedShooterState) {
             case HUB:
@@ -382,6 +384,9 @@ public class Shooter extends SubsystemBase {
                 break;
             case UNJAM:
                 currentShooterState = ShooterStates.UNJAM;
+                break;
+            case SPITTOCONTAINER:
+                currentShooterState = ShooterStates.SPITTOCONTAINER;
                 break;
             default:
                 break;
