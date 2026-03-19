@@ -1,5 +1,9 @@
 package frc.robot.subsystems.Lights;
 
+import com.ctre.phoenix6.configs.LEDConfigs;
+import com.ctre.phoenix6.controls.ColorFlowAnimation;
+import com.ctre.phoenix6.controls.SolidColor;
+
 public class Lights {
 /**
    * The current state of the lights, which determines the color of the lights
@@ -16,14 +20,18 @@ public class Lights {
    *
    */
     public LightAnimations lightsWantedState = LightAnimations.DEFAULT;
+    public LightAnimations lastState = lightsCurrentState;
     public static Lights currentLightInstance;
+    public static LightsIOSystem device;
 
     public void periodic() {
         lightStateTransitions();
+        applyStates();
     }
 
     public Lights() {
         currentLightInstance = this;
+        device = new LightsIOSystem();
     }
 
     public static Lights getLightInstance() {
@@ -51,11 +59,11 @@ public class Lights {
             case CANTSHOOT:
                 lightsCurrentState = LightAnimations.CANTSHOOT;
                 break;
-            case SHOOTREADYCONTINIOUS:
-                lightsCurrentState = LightAnimations.SHOOTREADYCONTINIOUS;
+            case SHOOTHUB:
+                lightsCurrentState = LightAnimations.SHOOTHUB;
                 break;
-            case SHOOTREADYMANUAL:
-                lightsCurrentState = LightAnimations.SHOOTREADYMANUAL;
+            case SHOOTFERRY:
+                lightsCurrentState = LightAnimations.SHOOTFERRY;
                 break;
         }
     }
@@ -64,4 +72,9 @@ public class Lights {
         return this.lightsWantedState;
     }
 
+    public void applyStates() {
+        if (lightsWantedState != lastState)
+            device.candle.setControl(lightsCurrentState.animation);
+        lastState = lightsWantedState;
+    }
 }

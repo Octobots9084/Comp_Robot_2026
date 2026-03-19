@@ -5,6 +5,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Drive.SwerveStates;
 import frc.robot.subsystems.Drive.SwerveSubsystem;
 import frc.robot.subsystems.Intake.*;//same
+import frc.robot.subsystems.Lights.LightAnimations;
+import frc.robot.subsystems.Lights.Lights;
 import frc.robot.subsystems.Shooter.*;//same here
 import org.littletonrobotics.junction.Logger;
 
@@ -163,9 +165,15 @@ public class Superstructure extends SubsystemBase {
                 shooter.wantedShooterState = ShooterStates.SPITTOCONTAINER;
                 break;
             default:
-                // throw an exception
-                break;
+                throw new RuntimeException("Superstructure state is invalid! : " + currentState.toString());
         }
+        if (Shooter.getInstance().isAimedAtHub)
+            Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTFERRY;
+        if (Shooter.getInstance().isAimedAtFerry)
+            Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTHUB;
+
+
+
     }
 
     private void stateSAFE() {
