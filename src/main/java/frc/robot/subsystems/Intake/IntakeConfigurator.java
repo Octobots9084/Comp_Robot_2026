@@ -12,7 +12,8 @@ public class IntakeConfigurator {
     public TalonFXConfiguration intakePivotConfig;
 
     public IntakeConfigurator() {
-        intakeRollerConfig = new TalonFXConfiguration();
+        intakeRollerConfig = new TalonFXConfiguration()
+                .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(Constants.intakeRollerGearRatio));
         intakePivotConfig = new TalonFXConfiguration()
                 .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(Constants.intakePivotGearRatio));
 
