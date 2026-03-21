@@ -258,7 +258,7 @@ public class Shooter extends SubsystemBase {
         switch (wantedShooterState) {
             case HUB:
                 // if we're on our side of the field
-                if (!swerve.isTilted(0, 5) && swerve.isInAllianceZone()) {// !tilted and in alliance
+                if (!swerve.isTilted(0, 3) && swerve.isInAllianceZone()) {// !tilted and in alliance
                     currentShooterState = ShooterStates.HUB;
                 }else{
                     currentShooterState = ShooterStates.FERRY;
@@ -266,14 +266,14 @@ public class Shooter extends SubsystemBase {
                 break;
             case AUTOHUB:
                 // if we're on our side of the field
-                if (!swerve.isTilted(0, 5) && swerve.isInAllianceZone()) {
+                if (!swerve.isTilted(0, 3) && swerve.isInAllianceZone()) {
                     currentShooterState = ShooterStates.AUTOHUB;
                 }
                 break;
 
             case FERRY:
                 // if we're in neutral or enemy zone
-                if (!swerve.isInAllianceZone() && !swerve.isTilted(0, 5)) {
+                if (!swerve.isInAllianceZone() && !swerve.isTilted(0, 3)) {
                     currentShooterState = ShooterStates.FERRY;
                 }else{
                     currentShooterState = ShooterStates.HUB;
@@ -307,7 +307,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public boolean Shootable() {
-        if (!swerve.isTilted(0, 5) && ((swerve.isInAllianceZone() && isHubActive())
+        if (!swerve.isTilted(0, 3) && ((swerve.isInAllianceZone() && isHubActive())
                 || (!swerve.isInAllianceZone()))) {
             return true;
         } else {
