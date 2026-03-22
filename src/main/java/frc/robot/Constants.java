@@ -43,13 +43,14 @@ public final class Constants {
   public static final double VisionAllignRotationTollerance = 0.2;
   public static final double VisionAllignspeed = 1;
   public static final double VisionAllignRotspeed = 3;
-  public static final double FlywheelDiamiter = 0.1016;
+  public static final double FlywheelDiamiter = 4*0.0254;
   public static final double TurretDistFromCenter = 0.21841;
   public static final double TurretAngleFromCenter = -2.1524498;
   public static final String frontRightCameraName = "FrontRightCamera";
   public static final String frontleftCameraName = "FrontLeftCamera";
   public static final String rightCameraName = "RightCamera";
   public static final String leftCameraName = "LeftCamera";
+
   // public static final String intakeCameraName = "IntakeCamera";
   public static final AprilTagFieldLayout kTagLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded);
   private static final double camPitch = Units.degreesToRadians(20);
@@ -120,21 +121,28 @@ public final class Constants {
   public static double maximumTurretPosition = 0.8; // TODO set this to an actual value so sinjin doesnt cry
 
   public static double turretGearRatio = (60 / 14.0) * (156 / 20.0); //it is flipped to allign turret and gyro yaw rotation
-  public static double hoodGearRatio = 19/12.0 *(18/0.9);
+  public static double hoodGearRatio = 23/738 *((23/41)*(1/18));
+
   public static double flywheelGearRatio = 29/33.0;
-  public static double flywheelToTopRollerRatio = 24/18.0;
+  public static double flywheelToTopRollerRatio = 28/21.0;
   public static double flywheelRadius = 0.0508;
   public static double topRollerRadius = 0.0254;
 
-  public static double feederGearRatio = 12/33;
-  public static double feederWheelRadius = 0.0381;
+  public static double feederGearRatio = 21/34;
+  public static double feederWheelRadius = 1.5*0.0254;
 
-  public static double rotateGearRatio = 12;// TODO fix this gear ratio
+  public static double spindexerRadius = 3*0.0254;
+  public static double spindexerGearRatio = 4/1;
 
-  public static double intakePivotGearRatio = 25;
+  public static double rotateGearRatio = 12.0;// TODO fix this gear ratio
+
+  public static double intakePivotGearRatio = 25; 
+  public static double intakeRollerGearRatio = 25/25;
+  public static int intakePivotFollowerID = 22;
+  public static int intakeRollerFollowerID = 23;
 
   public static int intakePivotID = 20;
-  public static int intakeRollerID = 19;
+  public static int intakeRollerID = 24;
 
   public static int climbRotateControlledID = 14;
 

@@ -34,11 +34,11 @@ public class ShooterConfigurator {
         flyWheelRightConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
         // create PID gains
-        flyWheelRightConfig.Slot0.kP = 1.5;
+        flyWheelRightConfig.Slot0.kP = 0.5;
         flyWheelRightConfig.Slot0.kI = 0.0;
         flyWheelRightConfig.Slot0.kD = 0.0;
         flyWheelRightConfig.Slot0.kA = 0.0;
-        flyWheelRightConfig.Slot0.kV = 0.6;
+        flyWheelRightConfig.Slot0.kV = 1.0;
         flyWheelRightConfig.Slot0.kS = 0.0;
         flyWheelRightConfig.Slot0.kG = 0.0;
 
@@ -79,13 +79,13 @@ public class ShooterConfigurator {
         hoodConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
         hoodConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
         // create PID gains
-        hoodConfig.Slot0.kP = 125;//5;
+        hoodConfig.Slot0.kP = 500;//5;
         hoodConfig.Slot0.kI = 0.0;
         hoodConfig.Slot0.kD = 0.0;
         hoodConfig.Slot0.kA = 0.0;
         hoodConfig.Slot0.kV = 0.0;
         hoodConfig.Slot0.kS = 0.0;
-        hoodConfig.Slot0.kG = -0.3;
+        hoodConfig.Slot0.kG = 0.0;
 
         hoodConfig.MotionMagic.MotionMagicAcceleration = 10;
         hoodConfig.MotionMagic.MotionMagicJerk = 100;
@@ -104,7 +104,7 @@ public class ShooterConfigurator {
         spindexerConfig.Slot0.kI = 0.0;
         spindexerConfig.Slot0.kD = 0.0;
         spindexerConfig.Slot0.kA = 0.0;
-        spindexerConfig.Slot0.kV = 0.0;
+        spindexerConfig.Slot0.kV = 0.1;
         spindexerConfig.Slot0.kS = 0.0;
         spindexerConfig.Slot0.kG = 0.0;
 
@@ -121,11 +121,11 @@ public class ShooterConfigurator {
         // set break mode and inversion
         verticalFeederConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
         // create PID gains
-        verticalFeederConfig.Slot0.kP = 0.1;
+        verticalFeederConfig.Slot0.kP = 0.0;
         verticalFeederConfig.Slot0.kI = 0.0;
         verticalFeederConfig.Slot0.kD = 0.0;
         verticalFeederConfig.Slot0.kA = 0.0;
-        verticalFeederConfig.Slot0.kV = 0.14;
+        verticalFeederConfig.Slot0.kV = 0.1;
         verticalFeederConfig.Slot0.kS = 0.0;
         verticalFeederConfig.Slot0.kG = 0.0;
 

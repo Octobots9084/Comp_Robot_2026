@@ -1,14 +1,13 @@
 package frc.robot.subsystems.Intake;
 
-import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
+import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.units.Units;
 import frc.robot.Constants;
 
@@ -17,14 +16,25 @@ public class IntakeIOTalonFX implements IntakeIO {
      public IntakeConfigurator config;
      public TalonFX pivot;
      public TalonFX roller;
+     public TalonFX pivotfollower;
+     public TalonFX rollerfollower;
      private VelocityVoltage rollerRequest = new VelocityVoltage(0);
      private MotionMagicVoltage pivotRequest = new MotionMagicVoltage(0);
 
+     private Follower followPivot = new Follower(Constants.intakePivotID, MotorAlignmentValue.Opposed);
+     private Follower followRoller = new Follower(Constants.intakeRollerID, MotorAlignmentValue.Opposed);
+
      public IntakeIOTalonFX() {
           config = new IntakeConfigurator();
+          
           roller = new TalonFX(Constants.intakeRollerID, Constants.krakenBus);
           pivot = new TalonFX(Constants.intakePivotID, Constants.krakenBus);
+
+          rollerfollower = new TalonFX(Constants.intakeRollerFollowerID, Constants.krakenBus);
+          pivotfollower = new TalonFX(Constants.intakePivotFollowerID, Constants.krakenBus);
+
           roller.setNeutralMode(NeutralModeValue.Coast);
+
           roller.getConfigurator().apply(config.intakeRollerConfig);
           pivot.getConfigurator().apply(config.intakePivotConfig);
      }
@@ -34,6 +44,7 @@ public class IntakeIOTalonFX implements IntakeIO {
           inputs.rollerRPS = roller.getVelocity().getValueAsDouble();
           inputs.pivotRequest = pivotRequest.getPositionMeasure().in(Units.Rotations);
           // inputs.pivotCurrent = pivot.getStatorCurrent().getValueAsDouble();
+
           inputs.pivotLimitSwitch = this.isZeroingSwitchPressed();
      }
 
@@ -42,6 +53,10 @@ public class IntakeIOTalonFX implements IntakeIO {
           // pivotRequest.Position = states.intakePosition;
           pivot.setControl(pivotRequest.withPosition(states.intakePosition));
           roller.setControl(rollerRequest.withVelocity(states.rollerRPS));
+
+          pivotfollower.setControl(followPivot);
+          rollerfollower.setControl(followRoller);
+
      }
 
      @Override
