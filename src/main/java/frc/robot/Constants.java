@@ -136,10 +136,13 @@ public final class Constants {
 
   public static double rotateGearRatio = 12.0;// TODO fix this gear ratio
 
-  public static double intakePivotGearRatio = 25.0;
+  public static double intakePivotGearRatio = 25; 
+  public static double intakeRollerGearRatio = 25/25;
+  public static int intakePivotFollowerID = 22;
+  public static int intakeRollerFollowerID = 23;
 
   public static int intakePivotID = 20;
-  public static int intakeRollerID = 19;
+  public static int intakeRollerID = 24;
 
   public static int climbRotateControlledID = 14;
 
