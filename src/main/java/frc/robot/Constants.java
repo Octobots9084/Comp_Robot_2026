@@ -124,8 +124,8 @@ public final class Constants {
   public static double hoodGearRatio = 23/738 *((23/41)*(1/18));
 
   public static double flywheelGearRatio = 29/33.0;
-  public static double flywheelToTopRollerRatio = 24/18.0;
-  public static double flywheelRadius = 2*0.0254;
+  public static double flywheelToTopRollerRatio = 28/21.0;
+  public static double flywheelRadius = 0.0508;
   public static double topRollerRadius = 0.0254;
 
   public static double feederGearRatio = 21/34;
@@ -134,10 +134,9 @@ public final class Constants {
   public static double spindexerRadius = 3*0.0254;
   public static double spindexerGearRatio = 4/1;
 
-  public static double rotateGearRatio = 12;// TODO fix this gear ratio
+  public static double rotateGearRatio = 12.0;// TODO fix this gear ratio
 
-  public static double intakePivotGearRatio = 25/24; 
-  public static double intakeRollerGearRatio = 25/24;
+  public static double intakePivotGearRatio = 25.0;
 
   public static int intakePivotID = 20;
   public static int intakeRollerID = 19;
