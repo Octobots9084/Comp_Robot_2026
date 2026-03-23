@@ -32,11 +32,15 @@ public class IntakeIOTalonFX implements IntakeIO {
 
           rollerfollower = new TalonFX(Constants.intakeRollerFollowerID, Constants.krakenBus);
           pivotfollower = new TalonFX(Constants.intakePivotFollowerID, Constants.krakenBus);
+          pivotfollower.setNeutralMode(NeutralModeValue.Brake);
 
           roller.setNeutralMode(NeutralModeValue.Coast);
 
           roller.getConfigurator().apply(config.intakeRollerConfig);
           pivot.getConfigurator().apply(config.intakePivotConfig);
+
+          rollerfollower.setControl(followRoller);
+          pivotfollower.setControl(followPivot);
      }
 
      public void updateInputs(IntakeIOInputs inputs) {
@@ -53,9 +57,6 @@ public class IntakeIOTalonFX implements IntakeIO {
           // pivotRequest.Position = states.intakePosition;
           pivot.setControl(pivotRequest.withPosition(states.intakePosition));
           roller.setControl(rollerRequest.withVelocity(states.rollerRPS));
-
-          pivotfollower.setControl(followPivot);
-          rollerfollower.setControl(followRoller);
 
      }
 

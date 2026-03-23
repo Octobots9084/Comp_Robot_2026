@@ -56,7 +56,7 @@ public class IntakeConfigurator {
         intakePivotConfig.Slot0.kS = 0.0;
         intakePivotConfig.Slot0.kG = 0.0;
 
-        intakePivotConfig.MotionMagic.MotionMagicAcceleration = 40;
-        intakePivotConfig.MotionMagic.MotionMagicCruiseVelocity = 300;
+        intakePivotConfig.MotionMagic.MotionMagicAcceleration = 2;
+        intakePivotConfig.MotionMagic.MotionMagicCruiseVelocity = 1;
     }
 }

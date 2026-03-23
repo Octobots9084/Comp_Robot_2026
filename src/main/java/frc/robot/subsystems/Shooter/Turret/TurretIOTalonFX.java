@@ -3,6 +3,7 @@ package frc.robot.subsystems.Shooter.Turret;
 import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.MathUtil;
@@ -17,7 +18,7 @@ public class TurretIOTalonFX implements TurretIO {
     public TalonFX turretMotor;
     public double zeroTurret;
     private MotionMagicVoltage turretRequest = new MotionMagicVoltage(0);
-    private MotionMagicVoltage hoodRequest = new MotionMagicVoltage(0);
+    private PositionVoltage hoodRequest = new PositionVoltage(0);
     public DigitalInput turretMagnetBreak = new DigitalInput(1);
     public double deadZoneTolerance = 0.1;
     public double wrapPoint = 0;
@@ -30,7 +31,6 @@ public class TurretIOTalonFX implements TurretIO {
         shooterConfigs = new ShooterConfigurator();
         hoodMotor = new TalonFX(Constants.hoodID, Constants.krakenBus);
         turretMotor = new TalonFX(Constants.turretID, Constants.krakenBus);
-        turretMotor.setPosition(0);
         hoodMotor.getConfigurator().apply(shooterConfigs.hoodConfig);
         turretMotor.getConfigurator().apply(shooterConfigs.turretConfig);
         
@@ -105,12 +105,12 @@ public class TurretIOTalonFX implements TurretIO {
 
     @Override
     public void zeroHoodMotor(){
-        hoodMotor.setVoltage(0.1);
-        hoodMotor.setPosition(90/360.0);
+        hoodMotor.setVoltage(0.5);
+        hoodMotor.setPosition(Constants.maximumHoodPosition);
     }
     @Override
     public void zeroTurretPosition() {
-        turretMotor.setPosition(209/360.0);
+        turretMotor.setPosition(Constants.turretZeroPosition);
     }
 
     /** loop this if it is being used */
@@ -123,12 +123,12 @@ public class TurretIOTalonFX implements TurretIO {
     }
 
     @Override
-    public boolean turretZeroed() {
+    public void zeroTurret() {
         Logger.recordOutput("turretAlreadyZeroed", Shooter.getInstance().turretAlreadyZeroed);
         if(!Shooter.getInstance().turretAlreadyZeroed){
             if (!turretMagnetBreak.get()) {
                 turretMotor.setVoltage(0);
-                turretMotor.setPosition(192/360.0);
+                turretMotor.setPosition(Constants.turretZeroPosition);
                 this.setTurretPosition(0);
                 Shooter.getInstance().turretAlreadyZeroed = true;
             } else {
@@ -136,8 +136,7 @@ public class TurretIOTalonFX implements TurretIO {
 
                 Shooter.getInstance().turretAlreadyZeroed = false;
             }
-        }    
-        return Shooter.getInstance().turretAlreadyZeroed;
+        }
     }
 
     // TODO add later gravity zeroing is fine for now

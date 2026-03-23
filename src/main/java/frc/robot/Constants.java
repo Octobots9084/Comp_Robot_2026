@@ -55,20 +55,14 @@ public final class Constants {
   public static final AprilTagFieldLayout kTagLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded);
   private static final double camPitch = Units.degreesToRadians(20);
   //-20 -26.57
-  public static final Transform3d robotToCamFrontRight = new Transform3d(new Translation3d(-0.31,-0.16,0.245),
-      new Rotation3d(0, 0, (-26.57/180.0)*Math.PI).plus(
-      new Rotation3d(0, (-20/180.0)*Math.PI, 0).plus(
-      new Rotation3d(0,0,Math.PI)
-  )));
+  public static final Transform3d robotToCamFrontRight = new Transform3d(new Translation3d(-0.28,0.195,0.19),
+      new Rotation3d(0, (-20/180.0)*Math.PI, (-26.57/180.0)*Math.PI+Math.PI));
   //-20 +30
-  public static final Transform3d robotToCamFrontLeft = new Transform3d(new Translation3d(-0.31,-0.16,0.185),
-      new Rotation3d(0, 0, (30/180.0)*Math.PI).plus(
-      new Rotation3d(0, (-20/180.0)*Math.PI, 0).plus(
-      new Rotation3d(0,0,Math.PI)
-  )));
-  public static final Transform3d robotToCamRight = new Transform3d(new Translation3d(-0.09, 0.37, .30),
+  public static final Transform3d robotToCamFrontLeft = new Transform3d(new Translation3d(-0.28,-0.13,0.19),
+      new Rotation3d(0, (-20/180.0)*Math.PI, (30/180.0)*Math.PI + Math.PI));
+  public static final Transform3d robotToCamRight = new Transform3d(new Translation3d(-0.087, 0.36, .31),
       new Rotation3d(0, -camPitch, Math.PI/2));
-  public static final Transform3d robotToCamLeft = new Transform3d(new Translation3d(-0.12,-0.37, 0.20),
+  public static final Transform3d robotToCamLeft = new Transform3d(new Translation3d(-0.035,-0.36, 0.246),
       new Rotation3d(0, -camPitch, 3.0*Math.PI/2.0));
   // The standard deviations of our vision estimated poses, which affect
   // correction rate
@@ -116,12 +110,13 @@ public final class Constants {
   public static int spindexerID = 18;
   public static int verticalFeederID = 15;
 
-  public static double maximumHoodPosition = 90/360.0;
+  public static double turretZeroPosition = 180/360.0;
+  public static double maximumHoodPosition = 74/360.0;
   public static double minimumHoodPosition = 58/360.0;
   public static double maximumTurretPosition = 0.8; // TODO set this to an actual value so sinjin doesnt cry
 
   public static double turretGearRatio = (60 / 14.0) * (156 / 20.0); //it is flipped to allign turret and gyro yaw rotation
-  public static double hoodGearRatio = 23/738 *((23/41)*(1/18));
+  public static double hoodGearRatio = 738/23.0;
 
   public static double flywheelGearRatio = 29/33.0;
   public static double flywheelToTopRollerRatio = 28/21.0;
@@ -137,11 +132,11 @@ public final class Constants {
   public static double rotateGearRatio = 12.0;// TODO fix this gear ratio
 
   public static double intakePivotGearRatio = 25; 
-  public static double intakeRollerGearRatio = 25/25;
+  public static double intakeRollerGearRatio = 1;
   public static int intakePivotFollowerID = 22;
   public static int intakeRollerFollowerID = 23;
 
-  public static int intakePivotID = 20;
+  public static int intakePivotID = 19;
   public static int intakeRollerID = 24;
 
   public static int climbRotateControlledID = 14;

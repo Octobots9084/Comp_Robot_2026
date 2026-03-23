@@ -78,7 +78,7 @@ public class Shooter extends SubsystemBase {
     public double ferryBallSpeed = 6.7;
     public double ferryFlywheelSpeed = 10;
 
-    public double manuelHood = 90; 
+    public double manuelHood = 74; 
     public double manuelFlywheel = 12; //0 to 1
 
     public Shooter(FeederIO fIO, FlywheelIO fwIO, TurretIO tIO, ShooterIO sIO) {
@@ -150,6 +150,7 @@ public class Shooter extends SubsystemBase {
 
                 if(!swerve.isInAllianceZone()){
                     if(driverOverride){
+                        flywheel.setFlywheelVelocity(5);
                         if(isAimedAtFerry){
                             activateFeeder();
                         }
@@ -209,12 +210,13 @@ public class Shooter extends SubsystemBase {
                 Logger.recordOutput("manuel flywheel position", manuelFlywheel);
                 isAimedAtHub = isAimedAtHub(30);
                 turret.setHoodPosition(manuelHood/360.0);
-                // turret.setHoodPosition(manuelHood/360.0);
-                scaleFlywheel();
+                // scaleFlywheel();
+                flywheel.setFlywheelVelocity(5);
                 isAimedAtHub = isAimedAtHub(hubBallSpeed);
                 if(swerve.isInAllianceZone()){
                     if(driverOverride){
-                        flywheel.setFlywheelVelocity(manuelFlywheel);
+                        // flywheel.setFlywheelVelocity(manuelFlywheel);
+                        flywheel.setFlywheelVelocity(5);
                         if(isAimedAtHub){
                             if(flywheel.FlywheelInTolerance(1)){
                                 feeder.setFeederVelocity(FeederStates.SCORING);
@@ -301,9 +303,7 @@ public class Shooter extends SubsystemBase {
             case ZERO:
                 //makes the turret figure out where it is
                 turret.io.zeroHoodMotor();
-                if (turret.io.turretZeroed()) {
-                    wantedShooterState = ShooterStates.HUB;
-                }
+                turret.io.zeroTurret();
                 break;
             default:
                 break;
@@ -494,7 +494,7 @@ public class Shooter extends SubsystemBase {
         
         Logger.recordOutput("CalculatedCorrectedTurretAngle", 180*proposedAngle/(Math.PI));
 
-        turret.setHoodPosition(pastShooterAngle.hoodRotation/(2.0*Math.PI));
+        // turret.setHoodPosition(pastShooterAngle.hoodRotation/(2.0*Math.PI));
         // turret.setHoodPosition(75/360.0);
 
         Logger.recordOutput("CalculatedHoodAngle", pastShooterAngle.hoodRotation/(2*Math.PI));
@@ -576,7 +576,7 @@ public class Shooter extends SubsystemBase {
         
         Logger.recordOutput("CalculatedCorrectedTurretAngle", 180*proposedAngle/(Math.PI));
 
-        turret.setHoodPosition(pastShooterAngle.hoodRotation/(2.0*Math.PI));
+        // turret.setHoodPosition(pastShooterAngle.hoodRotation/(2.0*Math.PI));
         // turret.setHoodPosition(75/360.0);
 
         Logger.recordOutput("CalculatedHoodAngle", pastShooterAngle.hoodRotation/(2*Math.PI));
