@@ -162,7 +162,6 @@ public class Shooter extends SubsystemBase {
                 break;
             case HUB:
                 isAimedAtHub = isAimedAtHub();
-                hubFlywheelSpeed = 9.5;
                 
                 if(swerve.isInAllianceZone()){
                     if(driverOverride){
@@ -201,8 +200,7 @@ public class Shooter extends SubsystemBase {
                 break;
             case AUTOHUB:
                 isAimedAtHub = isAimedAtHub();
-                hubFlywheelSpeed = 9.5;
-                
+
                 if(swerve.isInAllianceZone()){
 
                     flywheel.setFlywheelVelocity(hubFlywheelSpeed);
@@ -368,15 +366,37 @@ public class Shooter extends SubsystemBase {
     }
 
     public double getYToTarget(double poseY){
+        ChassisSpeeds fieldRelative = ChassisSpeeds.fromRobotRelativeSpeeds(swerve.io.getChassisSpeeds(), swerve.io.getPose2d().getRotation());
         return poseY - (swerve.io.getPose2d().getY()
-             + Constants.TurretDistFromCenter
-                * Math.sin(((swerve.io.getPose2d().getRotation().getRadians())) + Constants.TurretAngleFromCenter));
+            + Constants.TurretDistFromCenter
+                * Math.sin(((swerve.io.getPose2d().getRotation().getRadians()) + fieldRelative.omegaRadiansPerSecond * ShooterAngleCalculator.lagTime) + Constants.TurretAngleFromCenter)) + fieldRelative.vyMetersPerSecond * ShooterAngleCalculator.lagTime;
     }
 
     public double getXToTarget(double poseX){
+        ChassisSpeeds fieldRelative = ChassisSpeeds.fromRobotRelativeSpeeds(swerve.io.getChassisSpeeds(), swerve.io.getPose2d().getRotation());
         return poseX - (swerve.io.getPose2d().getX()
             + Constants.TurretDistFromCenter
-                * Math.cos(((swerve.io.getPose2d().getRotation().getRadians())) + Constants.TurretAngleFromCenter));
+                * Math.cos(((swerve.io.getPose2d().getRotation().getRadians()) + fieldRelative.omegaRadiansPerSecond * ShooterAngleCalculator.lagTime) + Constants.TurretAngleFromCenter)) + fieldRelative.vxMetersPerSecond * ShooterAngleCalculator.lagTime;
+    }
+
+    public double getVXOfRobot(ChassisSpeeds fieldRelative){
+        return fieldRelative.vxMetersPerSecond +
+            Math.sin(
+                Constants.TurretAngleFromCenter 
+                + swerve.getRobotPose().getRotation().getRadians() 
+                + fieldRelative.omegaRadiansPerSecond * ShooterAngleCalculator.lagTime
+            )
+            * fieldRelative.omegaRadiansPerSecond * Constants.TurretDistFromCenter;
+    }
+
+    public double getVYOfRobot(ChassisSpeeds fieldRelative){
+        return fieldRelative.vyMetersPerSecond +
+            Math.cos(
+                Constants.TurretAngleFromCenter 
+                + swerve.getRobotPose().getRotation().getRadians() 
+                + fieldRelative.omegaRadiansPerSecond * ShooterAngleCalculator.lagTime
+            )
+            * fieldRelative.omegaRadiansPerSecond * Constants.TurretDistFromCenter;
     }
 
     public double getY(double hubPoseY){
@@ -408,10 +428,8 @@ public class Shooter extends SubsystemBase {
         ChassisSpeeds fieldRelative = ChassisSpeeds.fromRobotRelativeSpeeds(swerve.io.getChassisSpeeds(), swerve.io.getPose2d().getRotation());
 
         shooterAngle = ShooterAngleCalculator.getShooterAngle(
-                            fieldRelative.vxMetersPerSecond +
-                                Math.cos(Constants.TurretAngleFromCenter + swerve.getRobotPose().getRotation().getRadians()) * fieldRelative.omegaRadiansPerSecond * Constants.TurretDistFromCenter,
-                            fieldRelative.vyMetersPerSecond +
-                                Math.sin(Constants.TurretAngleFromCenter + swerve.getRobotPose().getRotation().getRadians()) * fieldRelative.omegaRadiansPerSecond * Constants.TurretDistFromCenter,
+                            getVXOfRobot(fieldRelative),
+                            getVYOfRobot(fieldRelative),
                             XToHub,
                             YToHub,
                     ShooterAngleCalculator.flywheelSpeedMapHub,
@@ -419,10 +437,26 @@ public class Shooter extends SubsystemBase {
                     ShooterAngleCalculator.hoodAngleMapHub
                         );
 
-        // if (shooterAngle != null) { // implement passing null when the input is oustisde the bounds of the lookuptable
-        //     pastShooterAngle = shooterAngle;
-        // }
+        if (shooterAngle != null) { // implement passing null when the input is oustisde the bounds of the lookuptable
+            pastShooterAngle = shooterAngle;
+        }
 
+        double proposedAngle = GetProposedAngle();
+
+        turret.setTurretPosition(proposedAngle/(2*Math.PI));
+        // turret.setTurretPosition(-0.25);
+        
+        Logger.recordOutput("CalculatedCorrectedTurretAngle", 180*proposedAngle/(Math.PI));
+
+        turret.setHoodPosition(pastShooterAngle.hoodRotation/(2.0*Math.PI));
+
+        Logger.recordOutput("CalculatedHoodAngle", pastShooterAngle.hoodRotation/(2*Math.PI));
+
+        // return true;
+        return (turret.hoodInTolerance(.05) && turret.turretInTolerance(0.05));
+    }
+
+    public double GetProposedAngle(){
         double rotation = SwerveSubsystem.getInstance().getRobotPose().getRotation().getRadians();
 
         rotation = rotation-Math.PI/2;
@@ -446,18 +480,7 @@ public class Shooter extends SubsystemBase {
         {
             proposedAngle = proposedAngle + 2*Math.PI;
         }
-
-        turret.setTurretPosition(proposedAngle/(2*Math.PI));
-        // turret.setTurretPosition(-0.25);
-        
-        Logger.recordOutput("CalculatedCorrectedTurretAngle", 180*proposedAngle/(Math.PI));
-
-        turret.setHoodPosition(pastShooterAngle.hoodRotation/(2.0*Math.PI));
-
-        Logger.recordOutput("CalculatedHoodAngle", pastShooterAngle.hoodRotation/(2*Math.PI));
-
-        // return true;
-        return (turret.hoodInTolerance(.05) && turret.turretInTolerance(0.05));
+        return proposedAngle;
     }
 
     public boolean aimFerry() {
@@ -490,59 +513,24 @@ public class Shooter extends SubsystemBase {
         ChassisSpeeds fieldRelative = ChassisSpeeds.fromRobotRelativeSpeeds(swerve.io.getChassisSpeeds(), swerve.io.getPose2d().getRotation());
 
         shooterAngle = ShooterAngleCalculator.getShooterAngle(
-                    fieldRelative.vxMetersPerSecond +
-                                Math.cos(Constants.TurretAngleFromCenter + swerve.getRobotPose().getRotation().getRadians()) * fieldRelative.omegaRadiansPerSecond * Constants.TurretDistFromCenter,
-                    fieldRelative.vyMetersPerSecond +
-                        Math.sin(Constants.TurretAngleFromCenter + swerve.getRobotPose().getRotation().getRadians()) * fieldRelative.omegaRadiansPerSecond * Constants.TurretDistFromCenter,
+                    getVXOfRobot(fieldRelative),
+                    getVYOfRobot(fieldRelative),
                     XToHub,
                     YToHub,
                     ShooterAngleCalculator.flywheelSpeedMapFerry,
                     ShooterAngleCalculator.timeOfFlightMapFerry,
                     ShooterAngleCalculator.hoodAngleMapFerry
-            );
+        );
 
         if (shooterAngle != null) {
             pastShooterAngle = shooterAngle;
         }
-        // SmartDashboard.putNumber("shooterHoodAngle", pastShooterAngle.hoodRotation);
-        // SmartDashboard.putNumber("shooterAngle", pastShooterAngle.turretRotation);
 
-        double rotation = SwerveSubsystem.getInstance().getRobotPose().getRotation().getRadians();
-
-        rotation = rotation-Math.PI/2;
-
-        double proposedAngle = (((pastShooterAngle.turretRotation - rotation) + Math.PI) % (2*Math.PI) - Math.PI);
-        Logger.recordOutput("ProposedAngle", 180*proposedAngle/(Math.PI));
-
-        if (
-            (proposedAngle - 2*Math.PI) > Constants.minTurretAngle
-            &&
-            Math.abs(tIO.getTurretPosition()-(proposedAngle - 2*Math.PI)) < Math.abs(tIO.getTurretPosition()-proposedAngle)
-            )
-        {
-            proposedAngle = proposedAngle - 2*Math.PI;
-        }
-        else if (
-            (proposedAngle + 2*Math.PI) < Constants.maxTurretAngle
-            &&
-            Math.abs(tIO.getTurretPosition()-(proposedAngle + 2*Math.PI)) < Math.abs(tIO.getTurretPosition()-proposedAngle)
-            )
-        {
-            proposedAngle = proposedAngle + 2*Math.PI;
-        }
+        double proposedAngle = GetProposedAngle();
 
         turret.setTurretPosition(proposedAngle/(2*Math.PI));
-        // turret.setTurretPosition(-0.25);
-        
-        
-        Logger.recordOutput("CalculatedCorrectedTurretAngle", 180*proposedAngle/(Math.PI));
-
         turret.setHoodPosition(pastShooterAngle.hoodRotation/(2.0*Math.PI));
-        // turret.setHoodPosition(75/360.0);
 
-        Logger.recordOutput("CalculatedHoodAngle", pastShooterAngle.hoodRotation/(2*Math.PI));
-
-        // return true;
         return (turret.hoodInTolerance(.05) && turret.turretInTolerance(0.05));
     }
 
