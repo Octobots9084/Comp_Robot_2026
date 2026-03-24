@@ -65,6 +65,11 @@ public class Lights {
             case SHOOTFERRY:
                 lightsCurrentState = LightAnimations.SHOOTFERRY;
                 break;
+            case INTAKEZEROED:
+                lightsCurrentState = LightAnimations.INTAKEZEROED;
+            break;
+            case  TURRETZEROED:
+                lightsCurrentState = LightAnimations.TURRETZEROED;
         }
     }
 

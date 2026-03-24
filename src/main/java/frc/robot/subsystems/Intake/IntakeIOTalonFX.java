@@ -10,6 +10,8 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.units.Units;
 import frc.robot.Constants;
+import frc.robot.subsystems.Lights.LightAnimations;
+import frc.robot.subsystems.Lights.Lights;
 
 public class IntakeIOTalonFX implements IntakeIO {
      public DigitalInput zeroingSwitch = new DigitalInput(0);
@@ -92,6 +94,7 @@ public class IntakeIOTalonFX implements IntakeIO {
         } else {
           setRotateVoltage(-2);
           Intake.getInstance().alreadyZeroed = false;
+          Lights.getLightInstance().lightsCurrentState = LightAnimations.TURRETZEROED;
         }
         return !pressed;
     }
