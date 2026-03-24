@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.Intake.Intake;
 import frc.robot.subsystems.Intake.IntakeIOTalonFX;
+import frc.robot.subsystems.Lights.Lights;
 import frc.robot.Constants.RobotTypes;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Climb.Climb;
@@ -39,6 +40,7 @@ public class RobotContainer {
   public Intake intake;
   public Climb climb;
   public Vision vision;
+  public Lights lights;
   private SwerveSubsystem swerve;
   private Superstructure superstructure;
   private ButtonConfig buttons;
@@ -76,6 +78,7 @@ public class RobotContainer {
               new TurretIOTalonFX(),
               new ShooterIOSystem(shooter));
           intake = new Intake(new IntakeIOTalonFX());
+          lights = new Lights();
           // climb = new Climb(new ClimbIOTalonFX());
           superstructure = new Superstructure();
           buttons = new ButtonConfig();
