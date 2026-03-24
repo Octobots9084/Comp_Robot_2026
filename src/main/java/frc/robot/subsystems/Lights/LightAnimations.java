@@ -26,8 +26,7 @@ public enum LightAnimations {
     REVERSEINTAKING(new StrobeAnimation(0, 0).withColor(new RGBWColor(255, 0, 255, 0)), 0), // The hottest pink
     SHOOTFERRY(new StrobeAnimation(0, 0).withColor(new RGBWColor(0, 255, 100, 0)), 0), // Green
     SHOOTHUB(new StrobeAnimation(0, 0).withColor(new RGBWColor(0, 200, 255, 0)), 0), // Teal
-    INTAKEZEROED(new StrobeAnimation(0,0).withColor(new RGBWColor(250, 0, 0, 100)), 3),//Pink?
-    TURRETZEROED(new StrobeAnimation(0, 0).withColor(new RGBWColor(0, 0, 250, 100)), 3);//Light Blue?
+    ZEROED(new StrobeAnimation(0,0).withColor(new RGBWColor(250, 0, 0, 100)), 3);//Pink?
    /**
    * The strobe animation
    */

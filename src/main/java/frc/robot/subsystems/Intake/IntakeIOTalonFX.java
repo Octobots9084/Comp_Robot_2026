@@ -94,7 +94,6 @@ public class IntakeIOTalonFX implements IntakeIO {
         } else {
           setRotateVoltage(-2);
           Intake.getInstance().alreadyZeroed = false;
-          Lights.getLightInstance().lightsCurrentState = LightAnimations.TURRETZEROED;
         }
         return !pressed;
     }
