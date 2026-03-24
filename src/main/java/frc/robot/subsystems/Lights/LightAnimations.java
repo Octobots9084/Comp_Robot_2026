@@ -25,9 +25,9 @@ public enum LightAnimations {
     INTAKING(new StrobeAnimation(0, 0).withColor(new RGBWColor(0, 55, 255, 0)), 0), // Blue
     REVERSEINTAKING(new StrobeAnimation(0, 0).withColor(new RGBWColor(255, 0, 255, 0)), 0), // The hottest pink
     SHOOTFERRY(new StrobeAnimation(0, 0).withColor(new RGBWColor(0, 255, 100, 0)), 0), // Green
-    SHOOTHUB(new StrobeAnimation(0, 0).withColor(new RGBWColor(0, 200, 255, 0)), 0); // Teal
-
-    
+    SHOOTHUB(new StrobeAnimation(0, 0).withColor(new RGBWColor(0, 200, 255, 0)), 0), // Teal
+    ZEROED(new StrobeAnimation(0,0).withColor(new RGBWColor(250, 0, 0, 100)), 3),//Pink?
+    DISABLED(new StrobeAnimation(0,0).withColor(new RGBWColor(0, 0, 0, 100)), 0);
    /**
    * The strobe animation
    */

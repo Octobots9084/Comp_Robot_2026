@@ -15,12 +15,15 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.States;
 import frc.robot.subsystems.Superstructure;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.Climb.Climb;
 import frc.robot.subsystems.Climb.ClimbStates;
 import frc.robot.subsystems.Drive.SwerveStates;
 import frc.robot.subsystems.Drive.SwerveSubsystem;
 import frc.robot.subsystems.Intake.Intake;
 import frc.robot.subsystems.Intake.IntakeStates;
+import frc.robot.subsystems.Lights.LightAnimations;
+import frc.robot.subsystems.Lights.Lights;
 import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.ShooterStates;
 import frc.robot.subsystems.Shooter.Turret.Turret;
@@ -156,6 +159,7 @@ public class Robot extends LoggedRobot {
   @Override
   public void disabledPeriodic() {
     Optional<Alliance> ally = DriverStation.getAlliance();
+    Lights.getLightInstance().lightsWantedState = LightAnimations.DISABLED;
    if(!Turret.getInstance().getLimitSwitchPressed()){
       Shooter.getInstance().turretAlreadyZeroed = true;   
       Turret.getInstance().zeroTurretPosition();

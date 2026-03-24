@@ -1,10 +1,14 @@
 package frc.robot.subsystems.Lights;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.configs.LEDConfigs;
 import com.ctre.phoenix6.controls.ColorFlowAnimation;
 import com.ctre.phoenix6.controls.SolidColor;
 
-public class Lights {
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+public class Lights extends SubsystemBase{
 /**
    * The current state of the lights, which determines the color of the lights
    *
@@ -25,6 +29,7 @@ public class Lights {
     public static LightsIOSystem device;
 
     public void periodic() {
+        Logger.recordOutput("lightCurrentState", this.lightsCurrentState);
         lightStateTransitions();
         applyStates();
     }
@@ -65,6 +70,11 @@ public class Lights {
             case SHOOTFERRY:
                 lightsCurrentState = LightAnimations.SHOOTFERRY;
                 break;
+            case ZEROED:
+                lightsCurrentState = LightAnimations.ZEROED;
+            case DISABLED:
+                lightsCurrentState = LightAnimations.DISABLED;
+            break;
         }
     }
 
@@ -73,8 +83,8 @@ public class Lights {
     }
 
     public void applyStates() {
-        if (lightsWantedState != lastState)
+        //if (lightsWantedState != lastState)
             device.candle.setControl(lightsCurrentState.animation);
-        lastState = lightsWantedState;
+        //lastState = lightsWantedState;
     }
 }

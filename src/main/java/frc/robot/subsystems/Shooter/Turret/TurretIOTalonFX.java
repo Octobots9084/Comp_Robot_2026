@@ -10,6 +10,8 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Constants;
+import frc.robot.subsystems.Lights.LightAnimations;
+import frc.robot.subsystems.Lights.Lights;
 import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.ShooterConfigurator;
 

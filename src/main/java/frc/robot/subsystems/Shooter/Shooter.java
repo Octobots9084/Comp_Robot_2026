@@ -79,7 +79,7 @@ public class Shooter extends SubsystemBase {
     public double ferryFlywheelSpeed = 10;
 
     public double manuelHood = 74; 
-    public double manuelFlywheel = 12; //0 to 1
+    public double manuelFlywheel = 40; //0 to 1
 
     public Shooter(FeederIO fIO, FlywheelIO fwIO, TurretIO tIO, ShooterIO sIO) {
         this.fIO = fIO;

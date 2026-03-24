@@ -138,6 +138,7 @@ public class Superstructure extends SubsystemBase {
                 stateSHOOTER();
                 break;
             case ZERO:
+                Lights.getLightInstance().lightsWantedState = LightAnimations.ZEROED;
                 if(stateZERO()){
                     if(DriverStation.isAutonomousEnabled()){
                         wantedState = States.AUTONONFIRE;
