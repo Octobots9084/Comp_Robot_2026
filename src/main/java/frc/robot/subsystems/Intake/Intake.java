@@ -94,8 +94,10 @@ public class Intake extends SubsystemBase {
                     currentState = IntakeStates.ZERO;
                 break;
             case ELEPHANTIASISPART2:
-                    currentState = IntakeStates.ELEPHANTIASISPART2;
-                    elephantiaissTimer = 0;
+                    if (currentState!=IntakeStates.ELEPHANTIASISPART2){
+                        elephantiaissTimer = 0;
+                        currentState = IntakeStates.ELEPHANTIASISPART2;
+                    }
                 break;
             default:
                 currentState = IntakeStates.SAFE;
@@ -138,15 +140,16 @@ public class Intake extends SubsystemBase {
                 }
                 break;
             case ELEPHANTIASISPART2:
-                if (elephantiaissTimer>0){
+                if (elephantiaissTimer<0){
                     io.setIntakeState(IntakeStates.INTAKING);
                 } else {
                     io.setIntakeState(IntakeStates.PARTIALEXTENTION);
                 }
 
+
                 elephantiaissTimer++;
-                if (elephantiaissTimer > 60){
-                    elephantiaissTimer = -60;
+                if (elephantiaissTimer > 20){
+                    elephantiaissTimer = -20;
                 }
                 break;
         default:

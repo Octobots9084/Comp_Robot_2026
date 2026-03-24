@@ -31,7 +31,7 @@ public class ShooterConfigurator {
 
         // set break mode and inversion
         flyWheelRightConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-        flyWheelRightConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+        flyWheelRightConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
         // create PID gains
         flyWheelRightConfig.Slot0.kP = 0.5;
@@ -70,26 +70,26 @@ public class ShooterConfigurator {
         turretConfig.MotionMagic.MotionMagicCruiseVelocity = 2.75;
 
         // hood config
-        hoodConfig.CurrentLimits.SupplyCurrentLimit = 20;
+        hoodConfig.CurrentLimits.SupplyCurrentLimit = 40;
         hoodConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-        hoodConfig.CurrentLimits.StatorCurrentLimit = 20;
+        hoodConfig.CurrentLimits.StatorCurrentLimit = 60;
         hoodConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 
         // set break mode and inversion
         hoodConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-        hoodConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+        hoodConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
         // create PID gains
-        hoodConfig.Slot0.kP = 500;//5;
-        hoodConfig.Slot0.kI = 0.0;
+        hoodConfig.Slot0.kP = 1000;//100
+        hoodConfig.Slot0.kI = 0;
         hoodConfig.Slot0.kD = 0.0;
         hoodConfig.Slot0.kA = 0.0;
         hoodConfig.Slot0.kV = 0.0;
         hoodConfig.Slot0.kS = 0.0;
         hoodConfig.Slot0.kG = 0.0;
 
-        hoodConfig.MotionMagic.MotionMagicAcceleration = 10;
-        hoodConfig.MotionMagic.MotionMagicJerk = 100;
-        hoodConfig.MotionMagic.MotionMagicCruiseVelocity = 4;
+        // hoodConfig.MotionMagic.MotionMagicAcceleration = 100;
+        // hoodConfig.MotionMagic.MotionMagicJerk = 0;
+        // hoodConfig.MotionMagic.MotionMagicCruiseVelocity = 100;
 
         // spindexer config(four lane highway)
         spindexerConfig.CurrentLimits.SupplyCurrentLimit = 60;

@@ -78,7 +78,7 @@ public class Shooter extends SubsystemBase {
     public double ferryBallSpeed = 6.7;
     public double ferryFlywheelSpeed = 10;
 
-    public double manuelHood = 90; 
+    public double manuelHood = 74; 
     public double manuelFlywheel = 12; //0 to 1
 
     public Shooter(FeederIO fIO, FlywheelIO fwIO, TurretIO tIO, ShooterIO sIO) {
@@ -148,6 +148,7 @@ public class Shooter extends SubsystemBase {
 
                 if(!swerve.isInAllianceZone()){
                     if(driverOverride){
+                        flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);;
                         if(isAimedAtFerry){
                             activateFeeder();
                         }
@@ -165,7 +166,7 @@ public class Shooter extends SubsystemBase {
                 
                 if(swerve.isInAllianceZone()){
                     if(driverOverride){
-                        flywheel.setFlywheelVelocity(hubFlywheelSpeed);
+                        flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
                         if(isAimedAtHub){
                             if(flywheel.FlywheelInTolerance(1)){
                                 feeder.setFeederVelocity(FeederStates.SCORING);
@@ -203,7 +204,7 @@ public class Shooter extends SubsystemBase {
 
                 if(swerve.isInAllianceZone()){
 
-                    flywheel.setFlywheelVelocity(hubFlywheelSpeed);
+                    flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
                     if(isAimedAtHub){
                         if(flywheel.FlywheelInTolerance(1)){
                             feeder.setFeederVelocity(FeederStates.SCORING);
@@ -256,9 +257,7 @@ public class Shooter extends SubsystemBase {
             case ZERO:
                 //makes the turret figure out where it is
                 turret.io.zeroHoodMotor();
-                if (turret.io.turretZeroed()) {
-                    wantedShooterState = ShooterStates.HUB;
-                }
+                turret.io.zeroTurret();
                 break;
             default:
                 break;

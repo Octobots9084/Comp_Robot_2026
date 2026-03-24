@@ -23,7 +23,7 @@ public class FlywheelIOTalonFX implements FlywheelIO {
     private MotionMagicVelocityVoltage FlywheelRightMotorRequest = new MotionMagicVelocityVoltage(0)
             .withAcceleration(100).withSlot(0);
 
-    private Follower follow = new Follower(Constants.flyWheelRightID, MotorAlignmentValue.Opposed);
+    private Follower follow = new Follower(Constants.flyWheelRightID, MotorAlignmentValue.Aligned);
 
     
     public FlywheelIOTalonFX() {
@@ -32,6 +32,8 @@ public class FlywheelIOTalonFX implements FlywheelIO {
         FlywheelRightMotor = new TalonFX(Constants.flyWheelRightID, Constants.krakenBus);
 
         FlywheelRightMotor.getConfigurator().apply(shooterConfigs.flyWheelRightConfig);
+
+        FlywheelLeftMotor.setControl(follow);
     }
 
     @Override
@@ -48,13 +50,11 @@ public class FlywheelIOTalonFX implements FlywheelIO {
     public void setFlywheelVelocity(FlywheelStates state) {
         Logger.recordOutput("flywheelWantedSpeed_", state.FlywheelRightRPS);
         FlywheelRightMotor.setControl(FlywheelRightMotorRequest.withVelocity(state.FlywheelRightRPS));
-        FlywheelLeftMotor.setControl(follow);
     }
     @Override
     public void setFlywheelVelocity(double rps) {
         Logger.recordOutput("flywheelWantedSpeed_", rps);
         FlywheelRightMotor.setControl(FlywheelRightMotorRequest.withVelocity(rps));
-        FlywheelLeftMotor.setControl(follow);
     }
 
     public double getRightMotorVelocity() {

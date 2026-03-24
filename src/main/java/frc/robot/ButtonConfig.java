@@ -86,7 +86,6 @@ public class ButtonConfig {
 
         driverController.povUp().whileTrue(new InstantCommand(() -> {
                 Intake.getInstance().setWantedState(IntakeStates.ELEPHANTIASISPART2);
-
         })).onFalse(new InstantCommand(() -> {
                         Intake.getInstance().setWantedState(IntakeStates.EXTENDED);
 
