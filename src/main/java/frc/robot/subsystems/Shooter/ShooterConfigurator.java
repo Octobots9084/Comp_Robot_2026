@@ -16,7 +16,7 @@ public class ShooterConfigurator {
     public TalonFXConfiguration topRollerConfig;
 
     public ShooterConfigurator() {
-        flyWheelRightConfig = new TalonFXConfiguration().withFeedback(new FeedbackConfigs().withSensorToMechanismRatio((1)/((Constants.flywheelRadius*Constants.flywheelGearRatio+Constants.topRollerRadius*Constants.flywheelGearRatio*Constants.flywheelToTopRollerRatio)*Math.PI)));
+        flyWheelRightConfig = new TalonFXConfiguration().withFeedback(new FeedbackConfigs().withSensorToMechanismRatio((1)));
         turretConfig = new TalonFXConfiguration()
                 .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(Constants.turretGearRatio));
         hoodConfig = new TalonFXConfiguration()
@@ -34,11 +34,11 @@ public class ShooterConfigurator {
         flyWheelRightConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
         // create PID gains
-        flyWheelRightConfig.Slot0.kP = 0.5;
+        flyWheelRightConfig.Slot0.kP = 0.65;
         flyWheelRightConfig.Slot0.kI = 0.0;
         flyWheelRightConfig.Slot0.kD = 0.0;
         flyWheelRightConfig.Slot0.kA = 0.0;
-        flyWheelRightConfig.Slot0.kV = 1.0;
+        flyWheelRightConfig.Slot0.kV = 0.12;
         flyWheelRightConfig.Slot0.kS = 0.0;
         flyWheelRightConfig.Slot0.kG = 0.0;
 
