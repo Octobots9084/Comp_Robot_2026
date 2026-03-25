@@ -13,13 +13,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Rush to center"
+            "pathName": "Rush to center (deopt)"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "rush back to shoot"
+            "pathName": "rush back to shoot (deopt)"
           }
         },
         {
@@ -33,11 +33,23 @@
           "data": {
             "name": "StartShoot"
           }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 3.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopShoot"
+          }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "good",
   "choreoAuto": false
 }

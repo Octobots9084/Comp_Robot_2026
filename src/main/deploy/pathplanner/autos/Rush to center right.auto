@@ -7,37 +7,37 @@
         {
           "type": "named",
           "data": {
-            "name": "StartShoot"
+            "name": "StartIntake"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Bump to outpost"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 3.5
+            "pathName": "Rush to center"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "outpost to bump"
+            "pathName": "rush back to shoot"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "StopShoot"
+            "name": "StopIntake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StartShoot"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "bad",
+  "folder": "good",
   "choreoAuto": false
 }
