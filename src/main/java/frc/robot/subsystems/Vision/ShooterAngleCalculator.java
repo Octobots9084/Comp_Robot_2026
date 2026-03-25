@@ -13,7 +13,7 @@ public class ShooterAngleCalculator {
     
     //contants
     private static final int maxNewtonsMethodIterations = 30; // prevents an ifinate loop 
-    public static final double lagTime = 0.01;
+    public static final double lagTime = 0.03;
     
     // Hub LOTs
     public static final InterpolatingTreeMap<Double, Rotation2d> hoodAngleMapHub =
@@ -34,7 +34,7 @@ public class ShooterAngleCalculator {
     static {
         //distance, hoodangle
         hoodAngleMapHub.put(1.593281206,new Rotation2d(74.0*Math.PI/180.0));
-        hoodAngleMapHub.put(2.051194774,new Rotation2d(72.0*Math.PI/180.0));
+        hoodAngleMapHub.put(2.051194774,new Rotation2d(72.5*Math.PI/180.0));
         hoodAngleMapHub.put(2.550176464,new Rotation2d(71.0*Math.PI/180.0));
         hoodAngleMapHub.put(3.034000659,new Rotation2d(69.5*Math.PI/180.0));
         hoodAngleMapHub.put(3.502676691,new Rotation2d(68.0*Math.PI/180.0));
@@ -104,17 +104,18 @@ public class ShooterAngleCalculator {
                 break;
             else
                 count++;
+            Logger.recordOutput("Newtons method iterations",count);
         }
 
-        double RealX = XToHub + vx * T;
-        double RealY = YToHub + vy * T;
+        double RealX = XToHub - vx * T;
+        double RealY = YToHub - vy * T;
         double RealD = Pythgorian(RealX, RealY);
 
         double angleToHub;
         if (XToHub> 0 )
-            angleToHub = Math.atan(RealY/RealX) % Math.PI*2;
+            angleToHub = Math.atan(RealY/RealX);
         else
-            angleToHub = (Math.atan(RealY/RealX)+ Math.PI) % Math.PI*2;
+            angleToHub = (Math.atan(RealY/RealX)+ Math.PI);
 
         return new ShooterAngle(angleToHub , hoodAngleMap.get(RealD).getRadians(), flywheelSpeedMap.get(RealD));
     }
@@ -125,27 +126,21 @@ public class ShooterAngleCalculator {
             return new ShooterAngle(0 , 0, 0);
         double angleToHub;
         if (XToHub> 0 )
-            angleToHub = Math.atan(YToHub/XToHub) % Math.PI*2;
+            angleToHub = Math.atan(YToHub/XToHub);
         else
-            angleToHub = (Math.atan(YToHub/XToHub)+ Math.PI) % Math.PI*2;
+            angleToHub = (Math.atan(YToHub/XToHub)+ Math.PI);
         
         return new ShooterAngle(angleToHub , hoodAngleMapHub.get(d).getRadians(), flywheelSpeedMapHub.get(d));
     }
 
 
     public static double getTOFError(double t,double x,double y,double vx,double vy, InterpolatingDoubleTreeMap timeOfFlightMap){
-        double predDist = Pythgorian(x+vx*t,y+vy*t);
+        double predDist = Pythgorian(x-vx*t,y-vy*t);
         double predTime = timeOfFlightMap.get(predDist);
         double error = t - predTime;
         return error;
     }
 
-    public static double getTOFErrorFerry(double t,double x,double y,double vx,double vy, InterpolatingDoubleTreeMap timeOfFlightMap){
-        double predDist = Pythgorian(x+vx*t,y+vy*t);
-        double predTime = timeOfFlightMap.get(predDist);
-        double error = t - predTime;
-        return error;
-    }
 
     public static double getTOFErrorDerivative(double t,double x,double y,double vx,double vy){
         double d = Pythgorian(x, y);

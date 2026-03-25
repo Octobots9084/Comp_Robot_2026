@@ -368,18 +368,18 @@ public class Shooter extends SubsystemBase {
         ChassisSpeeds fieldRelative = ChassisSpeeds.fromRobotRelativeSpeeds(swerve.io.getChassisSpeeds(), swerve.io.getPose2d().getRotation());
         return poseY - (swerve.io.getPose2d().getY()
             + Constants.TurretDistFromCenter
-                * Math.sin(((swerve.io.getPose2d().getRotation().getRadians()) + fieldRelative.omegaRadiansPerSecond * ShooterAngleCalculator.lagTime) + Constants.TurretAngleFromCenter)) + fieldRelative.vyMetersPerSecond * ShooterAngleCalculator.lagTime;
+                * Math.sin(((swerve.io.getPose2d().getRotation().getRadians() + fieldRelative.omegaRadiansPerSecond * ShooterAngleCalculator.lagTime) + Constants.TurretAngleFromCenter)) + fieldRelative.vyMetersPerSecond * ShooterAngleCalculator.lagTime);
     }
 
     public double getXToTarget(double poseX){
         ChassisSpeeds fieldRelative = ChassisSpeeds.fromRobotRelativeSpeeds(swerve.io.getChassisSpeeds(), swerve.io.getPose2d().getRotation());
         return poseX - (swerve.io.getPose2d().getX()
             + Constants.TurretDistFromCenter
-                * Math.cos(((swerve.io.getPose2d().getRotation().getRadians()) + fieldRelative.omegaRadiansPerSecond * ShooterAngleCalculator.lagTime) + Constants.TurretAngleFromCenter)) + fieldRelative.vxMetersPerSecond * ShooterAngleCalculator.lagTime;
+                * Math.cos(((swerve.io.getPose2d().getRotation().getRadians() + fieldRelative.omegaRadiansPerSecond * ShooterAngleCalculator.lagTime) + Constants.TurretAngleFromCenter)) + fieldRelative.vxMetersPerSecond * ShooterAngleCalculator.lagTime);
     }
 
     public double getVXOfRobot(ChassisSpeeds fieldRelative){
-        return fieldRelative.vxMetersPerSecond +
+        return fieldRelative.vxMetersPerSecond -
             Math.sin(
                 Constants.TurretAngleFromCenter 
                 + swerve.getRobotPose().getRotation().getRadians() 
