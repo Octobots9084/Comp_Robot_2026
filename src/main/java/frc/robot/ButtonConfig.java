@@ -93,17 +93,17 @@ public class ButtonConfig {
 
 
         //TODO remove this after testing
-        driverController.y().onTrue(new InstantCommand(() -> {
-                LightAnimations anim = Lights.getLightInstance().lightsCurrentState;
-                LightAnimations target = LightAnimations.INTAKING;
+        // driverController.y().onTrue(new InstantCommand(() -> {
+        //         LightAnimations anim = Lights.getLightInstance().lightsCurrentState;
+        //         LightAnimations target = LightAnimations.INTAKING;
 
-                if (anim == LightAnimations.INTAKING) target = LightAnimations.CANTSHOOT;
-                if (anim == LightAnimations.CANTSHOOT) target = LightAnimations.SHOOTFERRY;
-                if (anim == LightAnimations.SHOOTFERRY) target = LightAnimations.SHOOTHUB;
-                if (anim == LightAnimations.SHOOTHUB) target = LightAnimations.INTAKING;
+        //         if (anim == LightAnimations.INTAKING) target = LightAnimations.CANTSHOOT;
+        //         if (anim == LightAnimations.CANTSHOOT) target = LightAnimations.SHOOTFERRY;
+        //         if (anim == LightAnimations.SHOOTFERRY) target = LightAnimations.SHOOTHUB;
+        //         if (anim == LightAnimations.SHOOTHUB) target = LightAnimations.INTAKING;
 
-                if (target != LightAnimations.INTAKING) Lights.getLightInstance().lightsCurrentState = target;
-        }));
+        //         if (target != LightAnimations.INTAKING) Lights.getLightInstance().lightsCurrentState = target;
+        // }));
 
     }
 }

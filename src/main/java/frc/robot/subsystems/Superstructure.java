@@ -169,11 +169,6 @@ public class Superstructure extends SubsystemBase {
             default:
                 throw new RuntimeException("Superstructure state is invalid! : " + currentState.toString());
         }
-        if (Shooter.getInstance().isAimedAtHub)
-            Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTFERRY;
-        if (Shooter.getInstance().isAimedAtFerry)
-            Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTHUB;
-
 
 
     }
