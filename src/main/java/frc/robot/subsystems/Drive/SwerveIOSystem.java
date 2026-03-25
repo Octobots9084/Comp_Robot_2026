@@ -203,6 +203,7 @@ public class SwerveIOSystem extends TunerSwerveDrivetrain implements Subsystem, 
     
     @Override
     public void periodic() {
+
         /*
          * Periodically try to apply the operator perspective.
          * If we haven't applied the operator perspective before, then we should apply

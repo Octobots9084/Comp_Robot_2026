@@ -70,7 +70,6 @@ public class Shooter extends SubsystemBase {
     private Translation2d redFerryDepot = new Translation2d(11.917 + 2,2.011);
     public boolean isAimedAtHub;
     public boolean isAimedAtFerry;
-    public double shooterCalculatorVelocity;
     public static boolean flywheelInToleranceOnce = false;
     public int flywheelDebouncer = 10;
     public double hubBallSpeed = 6.7;

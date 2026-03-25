@@ -13,7 +13,7 @@ public class ShooterAngleCalculator {
     
     //contants
     private static final int maxNewtonsMethodIterations = 30; // prevents an ifinate loop 
-    public static final double lagTime = 0.03;
+    public static final double lagTime = 0.1;
     
     // Hub LOTs
     public static final InterpolatingTreeMap<Double, Rotation2d> hoodAngleMapHub =

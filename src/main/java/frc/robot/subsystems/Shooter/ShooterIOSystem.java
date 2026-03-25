@@ -14,7 +14,6 @@ public class ShooterIOSystem implements ShooterIO {
         inputs.ShooterCurrentState = Shooter.getInstance().currentShooterState;
         inputs.ShooterWantedState = Shooter.getInstance().wantedShooterState;
         inputs.isAimedAtHub = Shooter.getInstance().isAimedAtHub;
-        inputs.flywheelCalculatorVelocity = Shooter.getInstance().shooterCalculatorVelocity;
         inputs.timer = Constants.timer.get();
     }
 
