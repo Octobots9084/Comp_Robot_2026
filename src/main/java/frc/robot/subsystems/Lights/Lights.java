@@ -7,6 +7,8 @@ import com.ctre.phoenix6.controls.ColorFlowAnimation;
 import com.ctre.phoenix6.controls.SolidColor;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.Drive.SwerveSubsystem;
+import frc.robot.subsystems.Shooter.Shooter;
 
 public class Lights extends SubsystemBase{
 /**
@@ -26,11 +28,15 @@ public class Lights extends SubsystemBase{
     public LightAnimations lightsWantedState = LightAnimations.DEFAULT;
     public LightAnimations lastState = lightsCurrentState;
     public static Lights currentLightInstance;
+    public Shooter shooter = Shooter.getInstance();
     public static LightsIOSystem device;
 
     public void periodic() {
         Logger.recordOutput("lightCurrentState", this.lightsCurrentState);
         lightStateTransitions();
+        if(shooter.cantShoot()){
+            lightsWantedState = LightAnimations.CANTSHOOT;
+        }
         applyStates();
     }
 
@@ -52,29 +58,34 @@ public class Lights extends SubsystemBase{
 
     public void lightStateTransitions() {
         switch (lightsWantedState) {
-            case DEFAULT:
-                lightsCurrentState = LightAnimations.DEFAULT;
+             case ZEROED:
+                lightsCurrentState = LightAnimations.ZEROED;//implemented
                 break;
-            case INTAKING:
-                lightsCurrentState = LightAnimations.INTAKING;
+            case DISABLED:
+                lightsCurrentState = LightAnimations.DISABLED;//ask jason
                 break;
             case REVERSEINTAKING:
-                lightsCurrentState = LightAnimations.REVERSEINTAKING;
+                lightsCurrentState = LightAnimations.REVERSEINTAKING;//implemented
                 break;
             case CANTSHOOT:
+                if(lightsWantedState != LightAnimations.REVERSEINTAKING)
                 lightsCurrentState = LightAnimations.CANTSHOOT;
                 break;
             case SHOOTHUB:
-                lightsCurrentState = LightAnimations.SHOOTHUB;
+                if(lightsWantedState != LightAnimations.REVERSEINTAKING)
+                lightsCurrentState = LightAnimations.SHOOTHUB;//implemented
                 break;
             case SHOOTFERRY:
-                lightsCurrentState = LightAnimations.SHOOTFERRY;
+                if(lightsWantedState != LightAnimations.REVERSEINTAKING)
+                lightsCurrentState = LightAnimations.SHOOTFERRY;//implemented
                 break;
-            case ZEROED:
-                lightsCurrentState = LightAnimations.ZEROED;
-            case DISABLED:
-                lightsCurrentState = LightAnimations.DISABLED;
-            break;
+             case INTAKING:
+                if(lightsWantedState != LightAnimations.REVERSEINTAKING || lightsWantedState != LightAnimations.CANTSHOOT || lightsWantedState != LightAnimations.SHOOTFERRY || lightsWantedState != LightAnimations.SHOOTHUB)
+                lightsCurrentState = LightAnimations.INTAKING;//implemented
+                break;
+             default:
+                lightsCurrentState = LightAnimations.DEFAULT;//implemented
+                break;
         }
     }
 
@@ -83,8 +94,6 @@ public class Lights extends SubsystemBase{
     }
 
     public void applyStates() {
-        //if (lightsWantedState != lastState)
-            device.candle.setControl(lightsCurrentState.animation);
-        //lastState = lightsWantedState;
+        device.candle.setControl(lightsCurrentState.animation);
     }
 }

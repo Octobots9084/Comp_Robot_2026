@@ -152,6 +152,7 @@ public class Shooter extends SubsystemBase {
                     if(driverOverride){
                         flywheel.setFlywheelVelocity(5);
                         if(isAimedAtFerry){
+                            Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTFERRY;
                             activateFeeder();
                         }
                     }else{
@@ -220,6 +221,7 @@ public class Shooter extends SubsystemBase {
                         flywheel.setFlywheelVelocity(manuelFlywheel);
                         if(isAimedAtHub){
                             if(flywheel.FlywheelInTolerance(1)){
+                                Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTHUB;
                                 feeder.setFeederVelocity(FeederStates.SCORING);
                                 flywheelDebouncer = 0;
                             }else if (flywheelDebouncer<10){
@@ -251,7 +253,8 @@ public class Shooter extends SubsystemBase {
                 if(swerve.isInAllianceZone()){
                         flywheel.setFlywheelVelocity(ferryFlywheelSpeed);
                         if(isAimedAtHub){
-                           activateFeeder();
+                            Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTFERRY;
+                            activateFeeder();
                         }
                 }else{
                     wantedShooterState = ShooterStates.BUMP;
@@ -264,6 +267,7 @@ public class Shooter extends SubsystemBase {
                 if(swerve.isInAllianceZone()){
                     flywheel.setFlywheelVelocity(hubFlywheelSpeed);
                     if(isAimedAtHub){
+                        Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTHUB;
                         activateFeeder();
                     }
                 }else{
@@ -388,6 +392,13 @@ public class Shooter extends SubsystemBase {
         else{
             feeder.setFeederVelocity(FeederStates.OFF);
         }
+    }
+
+    public boolean cantShoot(){
+        if (isAimedAtHub && swerve.isInAllianceZone() && isHubActive() && !swerve.isTilted(0, 3))
+            return false;
+        else
+            return true;
     }
 
     //used in hub and autohub for logging and setting the ball and flywheel speed
