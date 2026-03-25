@@ -5,15 +5,21 @@
     "data": {
       "commands": [
         {
-          "type": "path",
-          "data": {
-            "pathName": "just shoot right"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "StartShoot"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 67.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "just shoot right"
           }
         }
       ]

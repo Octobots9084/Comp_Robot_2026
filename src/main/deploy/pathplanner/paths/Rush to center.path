@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.5321824686940966,
-        "y": 2.436797853309481
+        "x": 3.63796005706134,
+        "y": 2.450014265335236
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.8276149170596865,
-        "y": 2.461560030086192
+        "x": 4.93339250542693,
+        "y": 2.474776442111947
       },
       "isLocked": false,
       "linkedName": null
@@ -41,35 +41,35 @@
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "center quick swipe"
+      "linkedName": "outpost sweep"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.45,
-      "rotationDegrees": 135.0
+      "waypointRelativePos": 0.4722932651321396,
+      "rotationDegrees": 0.0
     }
   ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 2.0,
-    "maxAcceleration": 2.0,
+    "maxVelocity": 6.0,
+    "maxAcceleration": 6.0,
     "maxAngularVelocity": 720.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0.5,
+    "velocity": 2.0,
     "rotation": 100.0
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0.0,
-    "rotation": 129.7049062628447
+    "rotation": -0.37333048857491274
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

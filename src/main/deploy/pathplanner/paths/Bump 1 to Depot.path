@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.5,
-        "y": 5.9
+        "x": 3.5991440798858774,
+        "y": 7.664293865905849
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.563458333333333,
-        "y": 7.375783333333334
+        "x": 2.6143363268736692,
+        "y": 7.837942043572779
       },
       "isLocked": false,
       "linkedName": "bump 1 TL"
@@ -20,21 +20,26 @@
         "y": 6.892049999999999
       },
       "prevControl": {
-        "x": 0.5290051474084643,
-        "y": 7.21651922253923
+        "x": 0.7526390870178238,
+        "y": 7.70310984308877
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "Depot top"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.398124467178174,
+      "rotationDegrees": 180.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 1.0,
-    "maxAcceleration": 1.0,
+    "maxVelocity": 6.0,
+    "maxAcceleration": 6.0,
     "maxAngularVelocity": 720.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -51,4 +56,5 @@
     "rotation": 180.0
   },
   "useDefaultConstraints": true
+}
 }

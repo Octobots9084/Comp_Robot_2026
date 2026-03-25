@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.059069767444614,
-        "y": 3.7997316636825555
+        "x": 7.7653922967189715,
+        "y": 4.093223965763196
       },
       "isLocked": false,
       "linkedName": "center (depot)"
@@ -20,8 +20,8 @@
         "y": 5.649427549194991
       },
       "prevControl": {
-        "x": 6.296744186046513,
-        "y": 6.314669051878354
+        "x": 6.665606276747503,
+        "y": 5.71055634807418
       },
       "nextControl": null,
       "isLocked": false,
@@ -44,8 +44,8 @@
       "minWaypointRelativePos": 0.0,
       "maxWaypointRelativePos": 0.27428571428571424,
       "constraints": {
-        "maxVelocity": 0.4,
-        "maxAcceleration": 0.5,
+        "maxVelocity": 2.0,
+        "maxAcceleration": 2.0,
         "maxAngularVelocity": 720.0,
         "maxAngularAcceleration": 720.0,
         "nominalVoltage": 12.0,
@@ -56,22 +56,22 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 2.0,
-    "maxAcceleration": 2.0,
+    "maxVelocity": 6.0,
+    "maxAcceleration": 6.0,
     "maxAngularVelocity": 720.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0.0,
-    "rotation": -156.03751102542174
+    "velocity": 1.0,
+    "rotation": -176.74813184157188
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
-    "velocity": 0.0,
+    "velocity": 2.0,
     "rotation": -92.20259816176588
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

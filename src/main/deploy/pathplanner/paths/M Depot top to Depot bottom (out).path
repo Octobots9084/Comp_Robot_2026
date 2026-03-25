@@ -12,7 +12,7 @@
         "y": 6.6464030856664404
       },
       "isLocked": false,
-      "linkedName": "Depot top"
+      "linkedName": null
     },
     {
       "anchor": {
@@ -20,8 +20,8 @@
         "y": 5.274566666666667
       },
       "prevControl": {
-        "x": 0.5529416666666668,
-        "y": 6.461225
+        "x": 0.40329529243937196,
+        "y": 5.839942938659058
       },
       "nextControl": null,
       "isLocked": false,

@@ -8,11 +8,11 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.5526833631484795,
+        "x": 1.5526833631484798,
         "y": 1.398372093023255
       },
       "isLocked": false,
-      "linkedName": "starting for bump"
+      "linkedName": "after sweep outpost"
     },
     {
       "anchor": {
@@ -55,14 +55,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
+    "velocity": 0.0,
     "rotation": 180.0
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
-    "velocity": 0.0,
-    "rotation": -177.7093899573614
+    "velocity": 1.0,
+    "rotation": -178.413059601992
   },
   "useDefaultConstraints": false
 }
