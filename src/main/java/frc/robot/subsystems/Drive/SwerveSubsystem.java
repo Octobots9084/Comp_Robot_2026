@@ -212,7 +212,7 @@ public class SwerveSubsystem extends SubsystemBase {
                 break;
             case SLOW:
                 io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds()
-                        .withSpeeds(calculateSpeedsBasedOnJoystickInputs().div(2))
+                        .withSpeeds(calculateSpeedsBasedOnJoystickInputs().div(1.5))
                         .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
 
                 if (!Shooter.driverOverride) 
