@@ -94,6 +94,12 @@ public class TurretIOTalonFX implements TurretIO {
     }
 
     @Override
+    public void zeroTurretAndHood(){
+        turretMotor.setPosition(0);
+        hoodMotor.setPosition(0);
+    }
+
+    @Override
     public boolean hoodInTolerance(double tolerance) {
         return MathUtil.isNear(hoodRequest.getPositionMeasure().in(Units.Revolution), this.getHoodPosition(),
                 tolerance);

@@ -55,6 +55,8 @@ public interface TurretIO {
         return false;
     }
 
+    public default void zeroTurretAndHood(){}
+
 
     public default void zeroTurret() {
     }

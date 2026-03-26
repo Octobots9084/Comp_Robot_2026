@@ -83,7 +83,9 @@ public class ButtonConfig {
         //         superstructure.wantedState = States.SHOOTER;
         // }));
 
-
+        driverController.povDownRight().onTrue(new InstantCommand(() -> {
+                Shooter.getInstance().turret.io.zeroTurretAndHood();
+        }));
         driverController.leftBumper().whileTrue(new InstantCommand(() -> {
                 Intake.getInstance().setWantedState(IntakeStates.ELEPHANTIASISPART2);
         })).onFalse(new InstantCommand(() -> {
