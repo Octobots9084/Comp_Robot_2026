@@ -9,8 +9,8 @@
     "good",
     "bad"
   ],
-  "defaultMaxVel": 6.0,
-  "defaultMaxAccel": 6.0,
+  "defaultMaxVel": 3.0,
+  "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 720.0,
   "defaultMaxAngAccel": 720.0,
   "defaultNominalVoltage": 12.0,

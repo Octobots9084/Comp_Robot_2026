@@ -7,6 +7,8 @@ import org.littletonrobotics.junction.AutoLog;
 public interface IntakeIO {
     @AutoLog
     public static class IntakeIOInputs {
+        public IntakeStates wantedState = IntakeStates.SAFE;
+        public IntakeStates currentState = IntakeStates.SAFE;
         public double rollerRPS = 0.0;
         public double intakePosition = 0.0;
         public double rollerTemp = 0.0;

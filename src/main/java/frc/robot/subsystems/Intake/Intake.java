@@ -60,6 +60,8 @@ public class Intake extends SubsystemBase {
         // this is where states actually take effect.
         applyStates();
         
+        inputs.currentState = currentState;
+        inputs.wantedState = wantedState;
         io.updateInputs(inputs);
         Logger.processInputs("Intake", inputs);
     }
@@ -135,9 +137,9 @@ public class Intake extends SubsystemBase {
             case ZERO:
                 if (io.zeroIntake()) {
                     alreadyZeroed = true;
-                    // if (!DriverStation.isAutonomousEnabled()) {
+                    if (!DriverStation.isAutonomousEnabled()) {
                         wantedState = IntakeStates.EXTENDED;
-                    // }
+                    }
                 }else{
                     alreadyZeroed = false;
                 }
