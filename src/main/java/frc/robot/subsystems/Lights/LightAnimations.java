@@ -25,29 +25,30 @@ import com.ctre.phoenix6.controls.StrobeAnimation;
    * </ul>
    */
 public enum LightAnimations {
-    DEFAULT(new StrobeAnimation(0, 65).withColor(new RGBWColor(255, 255, 0, 0)).withUpdateFreqHz(0), 0), // Yellow
-    CANTSHOOT(new StrobeAnimation(0, 65).withColor(new RGBWColor(255, 120, 0, 0)).withUpdateFreqHz(0), 0), // Orange
-    INTAKING(new StrobeAnimation(0, 65).withColor(new RGBWColor(0, 55, 255, 0)).withUpdateFreqHz(0), 0), // Blue
-    REVERSEINTAKING(new StrobeAnimation(0, 65).withColor(new RGBWColor(255, 0, 255, 0)).withUpdateFreqHz(0), 0), // The hottest pink
-    SHOOTFERRY(new StrobeAnimation(0, 65).withColor(new RGBWColor(0, 255, 100, 0)).withUpdateFreqHz(0), 0), // Green
-    SHOOTHUB(new StrobeAnimation(0, 65).withColor(new RGBWColor(0, 200, 255, 0)).withUpdateFreqHz(0), 0), // Teal
-    ZEROED(new StrobeAnimation(0,65).withColor(new RGBWColor(250, 0, 0, 100)).withUpdateFreqHz(0), 0);//light blue
+    DEFAULT(new StrobeAnimation(0, 65).withColor(new RGBWColor(255, 255, 0, 0)).withUpdateFreqHz(0)), // Yellow
+    CANTSHOOT(new StrobeAnimation(0, 65).withColor(new RGBWColor(255, 120, 0, 0)).withUpdateFreqHz(0)), // Orange
+    INTAKING(new StrobeAnimation(0, 65).withColor(new RGBWColor(0, 55, 255, 0)).withUpdateFreqHz(0)), // Blue
+    REVERSEINTAKING(new StrobeAnimation(0, 65).withColor(new RGBWColor(255, 0, 255, 0)).withUpdateFreqHz(0)), // The hottest pink
+    SHOOTFERRY(new StrobeAnimation(0, 65).withColor(new RGBWColor(0, 255, 100, 0)).withUpdateFreqHz(0)), // Green
+    SHOOTHUB(new StrobeAnimation(0, 65).withColor(new RGBWColor(0, 200, 255, 0)).withUpdateFreqHz(0)), // Teal
+    ZEROED(new StrobeAnimation(0,65).withColor(new RGBWColor(250, 0, 0, 100)).withUpdateFreqHz(0));//light blue
    /**
    * The strobe animation
    */
     protected StrobeAnimation animation;
-   /**
-   * The time
-   */
-    public double time;
-
-
-    private LightAnimations(StrobeAnimation animation, double time) {
-        this.animation = animation;
-        this.time = time;
-    }
-    public static void RainbowAnim(){
-        new RainbowAnimation(0, 65);
+    static RainbowAnimation rainbowAnim = new RainbowAnimation(0, 64);
+       /**
+       * The time
+       */
+        public double time;
+    
+    
+        private LightAnimations(StrobeAnimation animation) {
+            this.animation = animation;
+            //this.time = time;
+        }
+        public static void RainbowAnim(){
+           new RainbowAnimation(0, 65);
     }
 
 }

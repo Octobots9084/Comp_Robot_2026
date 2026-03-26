@@ -61,6 +61,7 @@ public class Lights extends SubsystemBase{
              case ZEROED:
                 lightsCurrentState = LightAnimations.ZEROED;//implemented
                 break;
+
             case REVERSEINTAKING:
                 lightsCurrentState = LightAnimations.REVERSEINTAKING;//implemented
                 break;
