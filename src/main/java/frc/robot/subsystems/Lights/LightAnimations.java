@@ -20,14 +20,14 @@ import com.ctre.phoenix6.controls.StrobeAnimation;
    * </ul>
    */
 public enum LightAnimations {
-    DEFAULT(new StrobeAnimation(0, 65).withColor(new RGBWColor(255, 255, 0, 0)).withUpdateFreqHz(0), 8), // Yellow
-    CANTSHOOT(new StrobeAnimation(0, 65).withColor(new RGBWColor(255, 120, 0, 0)).withUpdateFreqHz(0), 8), // Orange
-    INTAKING(new StrobeAnimation(0, 65).withColor(new RGBWColor(0, 55, 255, 0)).withUpdateFreqHz(0), 8), // Blue
-    REVERSEINTAKING(new StrobeAnimation(0, 65).withColor(new RGBWColor(255, 0, 255, 0)).withUpdateFreqHz(0), 8), // The hottest pink
-    SHOOTFERRY(new StrobeAnimation(0, 65).withColor(new RGBWColor(0, 255, 100, 0)).withUpdateFreqHz(0), 8), // Green
-    SHOOTHUB(new StrobeAnimation(0, 65).withColor(new RGBWColor(0, 200, 255, 0)).withUpdateFreqHz(0), 8), // Teal
-    ZEROED(new StrobeAnimation(0,65).withColor(new RGBWColor(250, 0, 0, 100)).withUpdateFreqHz(0), 8),//light blue
-    DISABLED(new StrobeAnimation(0,65).withColor(new RGBWColor(0, 0, 0, 100)).withUpdateFreqHz(0), 8);//white
+    DEFAULT(new StrobeAnimation(0, 65).withColor(new RGBWColor(255, 255, 0, 0)).withUpdateFreqHz(0), 0), // Yellow
+    CANTSHOOT(new StrobeAnimation(0, 65).withColor(new RGBWColor(255, 120, 0, 0)).withUpdateFreqHz(0), 0), // Orange
+    INTAKING(new StrobeAnimation(0, 65).withColor(new RGBWColor(0, 55, 255, 0)).withUpdateFreqHz(0), 0), // Blue
+    REVERSEINTAKING(new StrobeAnimation(0, 65).withColor(new RGBWColor(255, 0, 255, 0)).withUpdateFreqHz(0), 0), // The hottest pink
+    SHOOTFERRY(new StrobeAnimation(0, 65).withColor(new RGBWColor(0, 255, 100, 0)).withUpdateFreqHz(0), 0), // Green
+    SHOOTHUB(new StrobeAnimation(0, 65).withColor(new RGBWColor(0, 200, 255, 0)).withUpdateFreqHz(0), 0), // Teal
+    ZEROED(new StrobeAnimation(0,65).withColor(new RGBWColor(250, 0, 0, 100)).withUpdateFreqHz(0), 0),//light blue
+    DISABLED(new StrobeAnimation(0,65).withColor(new RGBWColor(0, 0, 0, 100)).withUpdateFreqHz(0), 0);//white
    /**
    * The strobe animation
    */
