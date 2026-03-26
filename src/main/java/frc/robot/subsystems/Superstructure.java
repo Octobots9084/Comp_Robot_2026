@@ -221,7 +221,9 @@ public class Superstructure extends SubsystemBase {
 
     private boolean stateZERO(){
         shooter.wantedShooterState = ShooterStates.ZERO;
-        intake.wantedState = IntakeStates.ZERO; 
+        if (!intake.alreadyZeroed) {
+            intake.wantedState = IntakeStates.ZERO; 
+        }
         return (shooter.turretAlreadyZeroed && intake.alreadyZeroed);//&& climb.alreadyZeroed);
     }
 
