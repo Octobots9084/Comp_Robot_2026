@@ -94,9 +94,9 @@ public class TurretIOTalonFX implements TurretIO {
     }
 
     @Override
-    public void zeroTurretAndHood(){
-        turretMotor.setPosition(0);
-        hoodMotor.setPosition(0);
+    public void moveTurretAndHoodToZero(){
+        this.setHoodPosition(74/360.0);
+        this.setTurretPosition(0);
     }
 
     @Override
