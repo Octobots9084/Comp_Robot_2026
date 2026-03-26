@@ -140,6 +140,7 @@ public class Robot extends LoggedRobot {
     CommandScheduler.getInstance().run();
     Logger.recordOutput("IsBlueAlliance",Constants.isBlueAlliance);
     DriverCommunications.pushToElastic();
+    LightAnimations.RainbowAnim();
     DriverCommunications.fieldPose.setRobotPose(SwerveSubsystem.getInstance().getRobotPose());
 
     // Return to non-RT thread priority (do not modify the first argument)
@@ -159,7 +160,6 @@ public class Robot extends LoggedRobot {
   @Override
   public void disabledPeriodic() {
     Optional<Alliance> ally = DriverStation.getAlliance();
-    Lights.getLightInstance().lightsWantedState = LightAnimations.DISABLED;
    if(!Turret.getInstance().getLimitSwitchPressed()){
       Shooter.getInstance().turretAlreadyZeroed = true;   
       Turret.getInstance().zeroTurretPosition();

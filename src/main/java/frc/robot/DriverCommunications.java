@@ -73,6 +73,6 @@ public class DriverCommunications {
         SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime());
         SmartDashboard.putBoolean("Is Hub Active?", Shooter.getInstance().isHubActive());
         //SmartDashboard.putBoolean("In Manual?", Superstructure.getInstance().getCurrentState() == States.MANUAL);
-        // SmartDashboard.putBoolean("Can Shoot", Shooter.getInstance().Shootable());
+        //SmartDashboard.putBoolean("Can Shoot", Shooter.getInstance().Shootable());
     }
 }
