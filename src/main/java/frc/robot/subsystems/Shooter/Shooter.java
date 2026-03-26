@@ -21,6 +21,7 @@ import frc.robot.Constants;
 import frc.robot.subsystems.Vision.ShooterAngle;
 import frc.robot.subsystems.Vision.ShooterAngleCalculator;
 import frc.robot.subsystems.Drive.SwerveSubsystem;
+import frc.robot.subsystems.Intake.Intake;
 import frc.robot.subsystems.Intake.IntakeStates;
 import frc.robot.subsystems.Lights.LightAnimations;
 import frc.robot.subsystems.Lights.Lights;
@@ -203,6 +204,7 @@ public class Shooter extends SubsystemBase {
                 break;
             case AUTOHUB:
                 isAimedAtHub = isAimedAtHub();
+                Intake.getInstance().wantedState = IntakeStates.ELEPHANTIASISPART2;
 
                 if(swerve.isInAllianceZone()){
 

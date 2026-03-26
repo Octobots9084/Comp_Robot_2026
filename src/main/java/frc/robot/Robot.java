@@ -276,9 +276,7 @@ public class Robot extends LoggedRobot {
   @Override
   public void testInit() {
     // Cancels all running commands at the start of test mode.
-    Shooter.getInstance().wantedShooterState = ShooterStates.ZERO;
-    // Climb.getInstance().wantedState = ClimbStates.ZERO;
-    // Intake.getInstance().wantedState = IntakeStates.ZERO;
+    Superstructure.getInstance().wantedState = States.ZERO;
     CommandScheduler.getInstance().cancelAll();
   }
 
