@@ -33,6 +33,12 @@
           "data": {
             "pathName": "shoot to depot"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "depot bottom to top"
+          }
         }
       ]
     }
