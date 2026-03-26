@@ -3,28 +3,28 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.62695885509839,
-        "y": 0.4
+        "x": 8.02416547788873,
+        "y": 2.6182168330955777
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.539856887298749,
-        "y": 5.032862254025044
+        "x": 6.87262482168331,
+        "y": 6.900912981455065
       },
       "isLocked": false,
-      "linkedName": "outpost sweep"
+      "linkedName": "outpost sweep 2"
     },
     {
       "anchor": {
-        "x": 6.517656529516995,
+        "x": 5.746961483594864,
         "y": 2.50169946332737
       },
       "prevControl": {
-        "x": 7.685885509838998,
+        "x": 6.9151904639168675,
         "y": 2.4854740608228973
       },
       "nextControl": {
-        "x": 5.203125141725733,
+        "x": 4.4324300958036025,
         "y": 2.5199568437133606
       },
       "isLocked": false,
@@ -41,7 +41,7 @@
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "outpost shoot"
+      "linkedName": "after sweep outpost"
     }
   ],
   "rotationTargets": [
@@ -53,8 +53,8 @@
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.10857142857142857,
-      "maxWaypointRelativePos": 0.9314285714285713,
+      "minWaypointRelativePos": 0.0,
+      "maxWaypointRelativePos": 0.43,
       "constraints": {
         "maxVelocity": 1.5,
         "maxAcceleration": 1.5,
@@ -82,7 +82,7 @@
   "reversed": false,
   "folder": null,
   "idealStartingState": {
-    "velocity": 2.0,
+    "velocity": 1.5,
     "rotation": 100.0
   },
   "useDefaultConstraints": true
