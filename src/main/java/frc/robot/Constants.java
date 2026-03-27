@@ -123,7 +123,7 @@ public final class Constants {
   public static double flywheelRadius = 0.0508;
   public static double topRollerRadius = 0.0254;
 
-  public static double feederGearRatio = 21/34;
+  public static double feederGearRatio = 21/34.0;
   public static double feederWheelRadius = 1.5*0.0254;
 
   public static double spindexerRadius = 3*0.0254;

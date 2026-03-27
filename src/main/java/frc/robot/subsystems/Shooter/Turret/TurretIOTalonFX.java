@@ -20,7 +20,7 @@ public class TurretIOTalonFX implements TurretIO {
     public TalonFX turretMotor;
     public double zeroTurret;
     private MotionMagicVoltage turretRequest = new MotionMagicVoltage(0);
-    private PositionVoltage hoodRequest = new PositionVoltage(0);
+    private MotionMagicVoltage hoodRequest = new MotionMagicVoltage(0);
     public DigitalInput turretMagnetBreak = new DigitalInput(1);
     public double deadZoneTolerance = 0.1;
     public double wrapPoint = 0;

@@ -24,8 +24,8 @@ public class FeederIOTalonFX implements FeederIO {
         spindexerMotor = new TalonFX(Constants.spindexerID, Constants.krakenBus);
         verticalFeederMotor = new TalonFX(Constants.verticalFeederID, Constants.krakenBus);
 
-        // spindexerMotor.getConfigurator().apply(shooterConfigs.spindexerConfig);
-        // verticalFeederMotor.getConfigurator().apply(shooterConfigs.verticalFeederConfig);
+        spindexerMotor.getConfigurator().apply(shooterConfigs.spindexerConfig);
+        verticalFeederMotor.getConfigurator().apply(shooterConfigs.verticalFeederConfig);
     }
 
     public void updateInputs(FeederIOInputs inputs) {

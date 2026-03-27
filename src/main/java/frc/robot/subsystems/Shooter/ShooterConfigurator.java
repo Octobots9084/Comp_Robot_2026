@@ -79,7 +79,7 @@ public class ShooterConfigurator {
         hoodConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
         hoodConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
         // create PID gains
-        hoodConfig.Slot0.kP = 1000;//100
+        hoodConfig.Slot0.kP = 800;//100
         hoodConfig.Slot0.kI = 0;
         hoodConfig.Slot0.kD = 0.0;
         hoodConfig.Slot0.kA = 0.0;
@@ -87,9 +87,8 @@ public class ShooterConfigurator {
         hoodConfig.Slot0.kS = 0.0;
         hoodConfig.Slot0.kG = 0.0;
 
-        // hoodConfig.MotionMagic.MotionMagicAcceleration = 100;
-        // hoodConfig.MotionMagic.MotionMagicJerk = 0;
-        // hoodConfig.MotionMagic.MotionMagicCruiseVelocity = 100;
+        hoodConfig.MotionMagic.MotionMagicAcceleration = 8;
+        hoodConfig.MotionMagic.MotionMagicCruiseVelocity = 8;
 
         // spindexer config(four lane highway)
         spindexerConfig.CurrentLimits.SupplyCurrentLimit = 60;
@@ -104,13 +103,15 @@ public class ShooterConfigurator {
         spindexerConfig.Slot0.kI = 0.0;
         spindexerConfig.Slot0.kD = 0.0;
         spindexerConfig.Slot0.kA = 0.0;
-        spindexerConfig.Slot0.kV = 0.1;
+        spindexerConfig.Slot0.kV = 0.127;
         spindexerConfig.Slot0.kS = 0.0;
         spindexerConfig.Slot0.kG = 0.0;
 
-        spindexerConfig.MotionMagic.MotionMagicAcceleration = 0;
-        spindexerConfig.MotionMagic.MotionMagicJerk = 0;
-        spindexerConfig.MotionMagic.MotionMagicCruiseVelocity = 0;
+        
+        spindexerConfig.MotionMagic.MotionMagicAcceleration = 10;
+        spindexerConfig.MotionMagic.MotionMagicJerk = 100;
+        spindexerConfig.MotionMagic.MotionMagicCruiseVelocity = 2.75;
+        
 
         // vertical Feeder config(rural road)
         verticalFeederConfig.CurrentLimits.SupplyCurrentLimit = 20;
@@ -120,17 +121,18 @@ public class ShooterConfigurator {
 
         // set break mode and inversion
         verticalFeederConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+        verticalFeederConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
         // create PID gains
-        verticalFeederConfig.Slot0.kP = 0.0;
+        verticalFeederConfig.Slot0.kP = 3;
         verticalFeederConfig.Slot0.kI = 0.0;
         verticalFeederConfig.Slot0.kD = 0.0;
         verticalFeederConfig.Slot0.kA = 0.0;
-        verticalFeederConfig.Slot0.kV = 0.1;
+        verticalFeederConfig.Slot0.kV = 0.82;
         verticalFeederConfig.Slot0.kS = 0.0;
         verticalFeederConfig.Slot0.kG = 0.0;
 
-        verticalFeederConfig.MotionMagic.MotionMagicAcceleration = 0;
+        verticalFeederConfig.MotionMagic.MotionMagicAcceleration = 1;
         verticalFeederConfig.MotionMagic.MotionMagicJerk = 0;
-        verticalFeederConfig.MotionMagic.MotionMagicCruiseVelocity = 0;
+        verticalFeederConfig.MotionMagic.MotionMagicCruiseVelocity = 0.04;
     }
 }

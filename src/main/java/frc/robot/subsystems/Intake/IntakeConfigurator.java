@@ -20,7 +20,7 @@ public class IntakeConfigurator {
         // intake roller config
         intakeRollerConfig.CurrentLimits.SupplyCurrentLimit = 20;
         intakeRollerConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-        intakeRollerConfig.CurrentLimits.StatorCurrentLimit = 80;
+        intakeRollerConfig.CurrentLimits.StatorCurrentLimit = 59.99;
         intakeRollerConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 
         // set break mode and inversion
@@ -32,7 +32,7 @@ public class IntakeConfigurator {
         intakeRollerConfig.Slot0.kI = 0.0;
         intakeRollerConfig.Slot0.kD = 0.0;
         intakeRollerConfig.Slot0.kA = 0.0;
-        intakeRollerConfig.Slot0.kV = 0.14;
+        intakeRollerConfig.Slot0.kV = 0.28;
         intakeRollerConfig.Slot0.kS = 0.0;
         intakeRollerConfig.Slot0.kG = 0.0;
 
