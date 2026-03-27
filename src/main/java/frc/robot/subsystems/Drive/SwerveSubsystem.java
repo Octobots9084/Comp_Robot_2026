@@ -161,7 +161,7 @@ public class SwerveSubsystem extends SubsystemBase {
       NamedCommands.registerCommand("StartShoot", new InstantCommand(() -> {Superstructure.getInstance().wantedState = States.AUTO;}));
       NamedCommands.registerCommand("StopShoot", new InstantCommand(() -> {Superstructure.getInstance().wantedState = States.AUTONONFIRE;}));
         
-    NamedCommands.registerCommand("StartIntake", 
+        NamedCommands.registerCommand("StartIntake", 
             new SequentialCommandGroup(
                 new WaitUntilCommand(() -> Intake.getInstance().alreadyZeroed),//so it doedsnt override auto init wanted=zero
                 new InstantCommand(() -> {
@@ -169,7 +169,11 @@ public class SwerveSubsystem extends SubsystemBase {
                     Intake.getInstance().autoIntaked = true;
                 })//,
             ).withTimeout(5)
-      );
+        );
+    
+      NamedCommands.registerCommand("StartElephant", new InstantCommand(() -> {
+        Intake.getInstance().wantedState = IntakeStates.ELEPHANTIASISPART2;
+      }));
 
       NamedCommands.registerCommand("StopIntake", new InstantCommand(() -> {Intake.getInstance().wantedState = IntakeStates.EXTENDED;}));
     //   NamedCommands.registerCommand("StartIntake", new InstantCommand(() -> {Intake.getInstance().autonomousIntake = true;}));

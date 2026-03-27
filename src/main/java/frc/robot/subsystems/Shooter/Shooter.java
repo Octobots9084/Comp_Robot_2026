@@ -204,13 +204,13 @@ public class Shooter extends SubsystemBase {
                 break;
             case AUTOHUB:
                 isAimedAtHub = isAimedAtHub();
-                Intake.getInstance().wantedState = IntakeStates.ELEPHANTIASISPART2;
 
                 if(swerve.isInAllianceZone()){
 
                     flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
                     if(isAimedAtHub){
                         Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTHUB;
+                        Intake.getInstance().wantedState = IntakeStates.ELEPHANTIASISPART2;
                         if(flywheel.FlywheelInTolerance(1)){
                             feeder.setFeederVelocity(FeederStates.SCORING);
                             flywheelDebouncer = 0;

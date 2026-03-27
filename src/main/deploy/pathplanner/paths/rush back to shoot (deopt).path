@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.9779427549195,
-        "y": 6.752754919499105
+        "x": 7.864364937388194,
+        "y": 6.736529516994633
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.653434704830055,
-        "y": 3.0209123434704828
+        "x": 7.539856887298749,
+        "y": 3.004686940966011
       },
       "isLocked": false,
       "linkedName": "center (depot)"
@@ -76,7 +76,7 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0.0,
+    "velocity": 1.0,
     "rotation": 127.1847064532332
   },
   "reversed": false,

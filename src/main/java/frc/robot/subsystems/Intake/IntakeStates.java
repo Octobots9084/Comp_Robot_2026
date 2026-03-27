@@ -15,7 +15,7 @@ package frc.robot.subsystems.Intake;
    * </ul>
    */
 public enum IntakeStates {
-    INTAKING(45, 0.37),
+    INTAKING(80, 0.37),
     EXTENDED(0, 0.37),
     PARTIALEXTENTION(45,0.1),
     SAFE(0, 0),
@@ -39,3 +39,4 @@ public enum IntakeStates {
         this.intakePosition = intakePosition;
     }
 }
+
