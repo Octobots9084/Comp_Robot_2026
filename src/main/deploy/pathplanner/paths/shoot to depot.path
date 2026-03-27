@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.366248216833095,
-        "y": 5.542353780313838
+        "x": 2.8507155635062613,
+        "y": 5.552075134168158
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.498716119828815,
-        "y": 4.840101694742243
+        "x": 1.983183466501981,
+        "y": 4.849823048596563
       },
       "isLocked": false,
       "linkedName": "shoot (depot)"
@@ -62,7 +62,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 1.0,
-    "rotation": 90.07535360316513
+    "rotation": 127.1847064532332
   },
   "useDefaultConstraints": false
 }

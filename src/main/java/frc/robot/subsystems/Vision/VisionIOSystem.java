@@ -133,7 +133,6 @@ public class VisionIOSystem implements VisionIO {
         Optional<EstimatedRobotPose> visionEst = Optional.empty();
         boolean addedGoodMultiTagReslt = false;
         //loops through all camera results for each caemra and checkes for a hub multitage result if one is found then no other cameras a cheaked
-        //while cheaking this it adds the camera targets and results to the privios arraylists for later processing
         for (var result : frontLeftCamera.getAllUnreadResults()) {
             if(result.hasTargets()) {
                 result.targets = removeAmbigousTargets(result.targets);
@@ -147,26 +146,8 @@ public class VisionIOSystem implements VisionIO {
                 } else {
                     int numberOfHubTags = 0;
                     for(int i = 0; i < result.getTargets().size(); i++)
-                        if(
-                            Constants.isBlueAlliance && (
-                                result.getTargets().get(i).getFiducialId() == 18
-                                || result.getTargets().get(i).getFiducialId() == 19
-                                || result.getTargets().get(i).getFiducialId() == 20
-                                || result.getTargets().get(i).getFiducialId() == 21
-                                || result.getTargets().get(i).getFiducialId() == 24
-                                || result.getTargets().get(i).getFiducialId() == 27
-                            )
-                            ||
-                            !Constants.isBlueAlliance && (
-                                result.getTargets().get(i).getFiducialId() == 8
-                                || result.getTargets().get(i).getFiducialId() == 9
-                                || result.getTargets().get(i).getFiducialId() == 10
-                                || result.getTargets().get(i).getFiducialId() == 11
-                                || result.getTargets().get(i).getFiducialId() == 2
-                                || result.getTargets().get(i).getFiducialId() == 5
-                            )
-                            ){
-                            numberOfHubTags++;
+                        if(addToHubTagNumber(result, i)){
+                            numberOfHubTags+=1;
                         }
                     if (numberOfHubTags>=2){
                         frontLeftHubMultiTagResult = visionEst;
@@ -197,26 +178,8 @@ public class VisionIOSystem implements VisionIO {
                 } else {
                     int numberOfHubTags = 0;
                     for(int i = 0; i < result.getTargets().size(); i++)
-                        if(
-                            Constants.isBlueAlliance && (
-                                result.getTargets().get(i).getFiducialId() == 18
-                                || result.getTargets().get(i).getFiducialId() == 19
-                                || result.getTargets().get(i).getFiducialId() == 20
-                                || result.getTargets().get(i).getFiducialId() == 21
-                                || result.getTargets().get(i).getFiducialId() == 24
-                                || result.getTargets().get(i).getFiducialId() == 27
-                            )
-                            ||
-                            !Constants.isBlueAlliance && (
-                                result.getTargets().get(i).getFiducialId() == 8
-                                || result.getTargets().get(i).getFiducialId() == 9
-                                || result.getTargets().get(i).getFiducialId() == 10
-                                || result.getTargets().get(i).getFiducialId() == 11
-                                || result.getTargets().get(i).getFiducialId() == 2
-                                || result.getTargets().get(i).getFiducialId() == 5
-                            )
-                            ){
-                            numberOfHubTags++;
+                        if(addToHubTagNumber(result, i)){
+                            numberOfHubTags+=1;
                         }
                     if (numberOfHubTags>=2){
                         frontRightHubMultiTagResult = visionEst;
@@ -247,26 +210,8 @@ public class VisionIOSystem implements VisionIO {
                 } else {
                     int numberOfHubTags = 0;
                     for(int i = 0; i < result.getTargets().size(); i++)
-                        if(
-                            Constants.isBlueAlliance && (
-                                result.getTargets().get(i).getFiducialId() == 18
-                                || result.getTargets().get(i).getFiducialId() == 19
-                                || result.getTargets().get(i).getFiducialId() == 20
-                                || result.getTargets().get(i).getFiducialId() == 21
-                                || result.getTargets().get(i).getFiducialId() == 24
-                                || result.getTargets().get(i).getFiducialId() == 27
-                            )
-                            ||
-                            !Constants.isBlueAlliance && (
-                                result.getTargets().get(i).getFiducialId() == 8
-                                || result.getTargets().get(i).getFiducialId() == 9
-                                || result.getTargets().get(i).getFiducialId() == 10
-                                || result.getTargets().get(i).getFiducialId() == 11
-                                || result.getTargets().get(i).getFiducialId() == 2
-                                || result.getTargets().get(i).getFiducialId() == 5
-                            )
-                            ){
-                            numberOfHubTags++;
+                        if(addToHubTagNumber(result, i)){
+                            numberOfHubTags+=1;
                         }
                     if (numberOfHubTags>=2){
                         rightHubMultiTagResult = visionEst;
@@ -297,26 +242,8 @@ public class VisionIOSystem implements VisionIO {
                 } else {
                     int numberOfHubTags = 0;
                     for(int i = 0; i < result.getTargets().size(); i++)
-                        if(
-                            Constants.isBlueAlliance && (
-                                result.getTargets().get(i).getFiducialId() == 18
-                                || result.getTargets().get(i).getFiducialId() == 19
-                                || result.getTargets().get(i).getFiducialId() == 20
-                                || result.getTargets().get(i).getFiducialId() == 21
-                                || result.getTargets().get(i).getFiducialId() == 24
-                                || result.getTargets().get(i).getFiducialId() == 27
-                            )
-                            ||
-                            !Constants.isBlueAlliance && (
-                                result.getTargets().get(i).getFiducialId() == 8
-                                || result.getTargets().get(i).getFiducialId() == 9
-                                || result.getTargets().get(i).getFiducialId() == 10
-                                || result.getTargets().get(i).getFiducialId() == 11
-                                || result.getTargets().get(i).getFiducialId() == 2
-                                || result.getTargets().get(i).getFiducialId() == 5
-                            )
-                            ){
-                            numberOfHubTags++;
+                        if(addToHubTagNumber(result, i)){
+                            numberOfHubTags+=1;
                         }
                     if (numberOfHubTags>=2){
                         leftHubMultiTagResult = visionEst;
@@ -444,6 +371,35 @@ public class VisionIOSystem implements VisionIO {
         }
 
         this.visonCycleTime = Timer.getFPGATimestamp()-startTime;
+    }
+
+    private boolean addToHubTagNumber(PhotonPipelineResult result, int i){
+        if(
+            Constants.isBlueAlliance && (
+                result.getTargets().get(i).getFiducialId() == 18
+                || result.getTargets().get(i).getFiducialId() == 19
+                || result.getTargets().get(i).getFiducialId() == 20
+                || result.getTargets().get(i).getFiducialId() == 21
+                || result.getTargets().get(i).getFiducialId() == 24
+                || result.getTargets().get(i).getFiducialId() == 27
+                || result.getTargets().get(i).getFiducialId() == 26
+                || result.getTargets().get(i).getFiducialId() == 25
+            )
+            ||
+            !Constants.isBlueAlliance && (
+                result.getTargets().get(i).getFiducialId() == 8
+                || result.getTargets().get(i).getFiducialId() == 9
+                || result.getTargets().get(i).getFiducialId() == 10
+                || result.getTargets().get(i).getFiducialId() == 11
+                || result.getTargets().get(i).getFiducialId() == 2
+                || result.getTargets().get(i).getFiducialId() == 5
+                || result.getTargets().get(i).getFiducialId() == 4
+                || result.getTargets().get(i).getFiducialId() == 3
+            )
+            ){
+            return true;
+        }
+        return false;
     }
 
     private List<PhotonTrackedTarget> removeAmbigousTargets(List<PhotonTrackedTarget> allTargets){
