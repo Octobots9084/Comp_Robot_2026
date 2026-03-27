@@ -330,8 +330,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public boolean Shootable() {
-        if (!swerve.isTilted(0, 3) && ((swerve.isInAllianceZone() && isHubActive())
-                || (!swerve.isInAllianceZone()))) {
+        if (!swerve.isTilted(0, 3) && ((swerve.isInAllianceZone() && isHubActive()))) {
             return true;
         } else {
             return false;
