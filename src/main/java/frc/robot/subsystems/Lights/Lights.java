@@ -34,7 +34,10 @@ public class Lights extends SubsystemBase{
     public void periodic() {
         Logger.recordOutput("lightCurrentState", this.lightsCurrentState);
         lightStateTransitions();
-        if(shooter.cantShoot()){
+        if(shooter.Shootable() || shooter.Ferryable()){
+            lightsWantedState = LightAnimations.CANSHOOT;
+        }
+        else{
             lightsWantedState = LightAnimations.CANTSHOOT;
         }
         applyStates();
@@ -62,25 +65,25 @@ public class Lights extends SubsystemBase{
                 lightsCurrentState = LightAnimations.ZEROED;//implemented
                 break;
 
-            case REVERSEINTAKING:
-                lightsCurrentState = LightAnimations.REVERSEINTAKING;//implemented
-                break;
+            // case REVERSEINTAKING:
+            //     lightsCurrentState = LightAnimations.REVERSEINTAKING;//implemented
+            //     break;
             case CANTSHOOT:
-                if(lightsWantedState != LightAnimations.REVERSEINTAKING)
+                if(lightsWantedState != LightAnimations.ZEROED)
                 lightsCurrentState = LightAnimations.CANTSHOOT;
                 break;
-            case SHOOTHUB:
-                if(lightsWantedState != LightAnimations.REVERSEINTAKING)
-                lightsCurrentState = LightAnimations.SHOOTHUB;//implemented
+            case CANSHOOT:
+                if(lightsWantedState != LightAnimations.ZEROED)
+                lightsCurrentState = LightAnimations.CANSHOOT;//implemented
                 break;
-            case SHOOTFERRY:
-                if(lightsWantedState != LightAnimations.REVERSEINTAKING)
-                lightsCurrentState = LightAnimations.SHOOTFERRY;//implemented
+            case CANFERRY:
+                if(lightsWantedState != LightAnimations.ZEROED)
+                lightsCurrentState = LightAnimations.CANFERRY;//implemented
                 break;
-             case INTAKING:
-                if(lightsWantedState != LightAnimations.REVERSEINTAKING || lightsWantedState != LightAnimations.CANTSHOOT || lightsWantedState != LightAnimations.SHOOTFERRY || lightsWantedState != LightAnimations.SHOOTHUB)
-                lightsCurrentState = LightAnimations.INTAKING;//implemented
-                break;
+            //  case INTAKING:
+            //     if(lightsWantedState != LightAnimations.REVERSEINTAKING || lightsWantedState != LightAnimations.CANTSHOOT || lightsWantedState != LightAnimations.SHOOTFERRY || lightsWantedState != LightAnimations.SHOOTHUB)
+            //     lightsCurrentState = LightAnimations.INTAKING;//implemented
+            //     break;
              default:
                 lightsCurrentState = LightAnimations.DEFAULT;//implemented
                 break;
