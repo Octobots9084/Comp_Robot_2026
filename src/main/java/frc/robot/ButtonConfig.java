@@ -66,10 +66,6 @@ public class ButtonConfig {
                  .onFalse(new InstantCommand(
                          () -> Shooter.driverOverride = false));
 
-        driverController.b().onTrue(new InstantCommand(
-        () -> Superstructure.getInstance().wantedState = States.FIXEDFIRE))
-        .onFalse(new InstantCommand(
-                () -> Superstructure.getInstance().wantedState = States.SHOOTER));
         //X : TODO add unstuck
         // driverController.rightBumper().onTrue(new InstantCommand(
         // () -> Intake.getInstance().wantedState = IntakeStates.ELEPHANTIASISPART2))

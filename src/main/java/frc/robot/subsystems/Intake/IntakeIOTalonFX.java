@@ -57,7 +57,7 @@ public class IntakeIOTalonFX implements IntakeIO {
      @Override
      public void setIntakeState(IntakeStates states) {
           // pivotRequest.Position = states.intakePosition;
-          pivot.setControl(pivotRequest.withPosition(states.intakePosition).withFeedForward(0.5));
+          pivot.setControl(pivotRequest.withPosition(states.intakePosition).withFeedForward(1));
           roller.setControl(rollerRequest.withVelocity(states.rollerRPS));
 
      }

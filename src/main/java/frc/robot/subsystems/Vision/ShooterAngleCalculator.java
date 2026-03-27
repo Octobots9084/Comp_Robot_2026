@@ -70,13 +70,13 @@ public class ShooterAngleCalculator {
 
         //distance, hoodangle TODO MUST GATER DATA!
         hoodAngleMapFerry.put(3.05239922,new Rotation2d(58.0*Math.PI/180.0));
-        hoodAngleMapFerry.put(3.45835351,new Rotation2d(58.0*Math.PI/180.0));
+        hoodAngleMapFerry.put(9.291783575,new Rotation2d(58.0*Math.PI/180.0));
         //distance, flywheel speed TODO MUST GATER DATA!
         flywheelSpeedMapFerry.put(3.05239922,22.5);
-        flywheelSpeedMapFerry.put(3.45835351,9.3);
+        flywheelSpeedMapFerry.put(9.291783575,39.5);
         //distance, time TODO MUST GATER DATA!
         timeOfFlightMapFerry.put(3.05239922,1.085);//no TOF data yet
-        timeOfFlightMapFerry.put(3.45835351,1.033);
+        timeOfFlightMapFerry.put(9.291783575,1.63);
     }
     
     // d, vx,vy are robot to hub reletive

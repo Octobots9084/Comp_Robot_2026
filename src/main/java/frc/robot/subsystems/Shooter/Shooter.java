@@ -143,17 +143,11 @@ public class Shooter extends SubsystemBase {
                 turret.setTurretPosition(-90/360.0);
                 break;
             case FERRY:
-                //shoots balls from neutral to our zone
-                Logger.recordOutput("manuel hood position", manuelHood);
-                Logger.recordOutput("manuel flywheel position", manuelFlywheel);
-                isAimedAtHub = isAimedAtHub();
-                turret.setHoodPosition(58/360.0);
                 isAimedAtFerry = aimFerry();
 
                 if(!swerve.isInAllianceZone()){
                     if(driverOverride){
-                        // flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
-                        flywheel.setFlywheelVelocity(manuelFlywheel);
+                        flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
                         if(isAimedAtFerry){
                             Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTFERRY;
                             activateFeeder();
@@ -171,7 +165,7 @@ public class Shooter extends SubsystemBase {
                 isAimedAtHub = isAimedAtHub();
                 
                 if(swerve.isInAllianceZone()){
-                    if(driverOverride){
+                    if(driverOverride && isHubActive()){
                         flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
                         if(isAimedAtHub){
                             if(flywheel.FlywheelInTolerance(1)){
@@ -575,7 +569,7 @@ public class Shooter extends SubsystemBase {
         double proposedAngle = GetProposedAngle();
 
         turret.setTurretPosition(proposedAngle/(2*Math.PI));
-        // turret.setHoodPosition(pastShooterAngle.hoodRotation/(2.0*Math.PI));
+        turret.setHoodPosition(pastShooterAngle.hoodRotation/(2.0*Math.PI));
 
         return (turret.hoodInTolerance(.05) && turret.turretInTolerance(0.05));
     }
