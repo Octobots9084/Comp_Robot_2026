@@ -69,23 +69,14 @@ public class ShooterAngleCalculator {
         timeOfFlightMapHub.put(5.841232747,1.348);
 
         //distance, hoodangle TODO MUST GATER DATA!
-        hoodAngleMapFerry.put(3.033494684,new Rotation2d(72.0*Math.PI/180.0));
-        hoodAngleMapFerry.put(3.45835351,new Rotation2d(67.0*Math.PI/180.0));
-        hoodAngleMapFerry.put(4.057697993,new Rotation2d(68.0*Math.PI/180.0));
-        hoodAngleMapFerry.put(4.574690044,new Rotation2d(72.0*Math.PI/180.0));
-        hoodAngleMapFerry.put(5.540799311,new Rotation2d(66.5*Math.PI/180.0));
+        hoodAngleMapFerry.put(3.05239922,new Rotation2d(58.0*Math.PI/180.0));
+        hoodAngleMapFerry.put(3.45835351,new Rotation2d(58.0*Math.PI/180.0));
         //distance, flywheel speed TODO MUST GATER DATA!
-        flywheelSpeedMapFerry.put(3.033494684,9.3);
+        flywheelSpeedMapFerry.put(3.05239922,22.5);
         flywheelSpeedMapFerry.put(3.45835351,9.3);
-        flywheelSpeedMapFerry.put(4.057697993,9.9);
-        flywheelSpeedMapFerry.put(4.574690044,10.6);
-        flywheelSpeedMapFerry.put(5.540799311,11.3);
         //distance, time TODO MUST GATER DATA!
-        timeOfFlightMapFerry.put(3.033494684,1.038);
+        timeOfFlightMapFerry.put(3.05239922,1.085);//no TOF data yet
         timeOfFlightMapFerry.put(3.45835351,1.033);
-        timeOfFlightMapFerry.put(4.057697993,1.054);
-        timeOfFlightMapFerry.put(4.574690044,1.22);
-        timeOfFlightMapFerry.put(5.540799311,1.32);
     }
     
     // d, vx,vy are robot to hub reletive
