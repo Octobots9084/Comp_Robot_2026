@@ -35,9 +35,21 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "DepotShoot"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "depot bottom to top"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StartShoot"
           }
         }
       ]

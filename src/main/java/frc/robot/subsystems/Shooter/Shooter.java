@@ -232,6 +232,31 @@ public class Shooter extends SubsystemBase {
                     wantedShooterState = ShooterStates.BUMP;
                 }
                 break;
+            case AUTODEPOTSHOOT:
+                isAimedAtHub = isAimedAtHub();
+
+                if(swerve.isInAllianceZone()){
+
+                    flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
+                    if(isAimedAtHub){
+                        Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTHUB;
+                        Intake.getInstance().wantedState = IntakeStates.INTAKING;
+                        if(flywheel.FlywheelInTolerance(1)){
+                            feeder.setFeederVelocity(FeederStates.SCORING);
+                            flywheelDebouncer = 0;
+                        }else if (flywheelDebouncer<10){
+                            flywheelDebouncer ++;
+                            feeder.setFeederVelocity(FeederStates.SCORING);
+                        }
+                        else{
+                            feeder.setFeederVelocity(FeederStates.OFF);
+                        }
+                    }
+
+                }else{
+                    wantedShooterState = ShooterStates.BUMP;
+                }
+                break;
             case BUMP:
                 //figures out if were on our side our in the neutral zone and if were in auto
                 if (!swerve.isTilted(0, 3)) {
@@ -295,7 +320,12 @@ public class Shooter extends SubsystemBase {
                     currentShooterState = ShooterStates.AUTOHUB;
                 }
                 break;
-
+            case AUTODEPOTSHOOT:
+                // if we're on our side of the field
+                if (!swerve.isTilted(0, 3) && swerve.isInAllianceZone()) {
+                    currentShooterState = ShooterStates.AUTODEPOTSHOOT;
+                }
+                break;
             case FERRY:
                 // if we're in neutral or enemy zone
                 if (!swerve.isInAllianceZone() && !swerve.isTilted(0, 3)) {
