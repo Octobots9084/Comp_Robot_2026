@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.318676207513418,
-        "y": 0.4410733452593911
+        "x": 8.593466476462195,
+        "y": 0.4574607703281026
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.523631484794276,
-        "y": 5.081538461538462
+        "x": 8.153552068473608,
+        "y": 5.089500713266761
       },
       "isLocked": false,
       "linkedName": "outpost sweep"
@@ -46,7 +46,7 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1.45,
+      "waypointRelativePos": 1.178175618073316,
       "rotationDegrees": 180.0
     }
   ],
@@ -54,10 +54,10 @@
     {
       "name": "Constraints Zone",
       "minWaypointRelativePos": 0.0,
-      "maxWaypointRelativePos": 0.9314285714285713,
+      "maxWaypointRelativePos": 0.6458226550486929,
       "constraints": {
-        "maxVelocity": 0.75,
-        "maxAcceleration": 1.5,
+        "maxVelocity": 1.0,
+        "maxAcceleration": 1.0,
         "maxAngularVelocity": 720.0,
         "maxAngularAcceleration": 720.0,
         "nominalVoltage": 12.0,
