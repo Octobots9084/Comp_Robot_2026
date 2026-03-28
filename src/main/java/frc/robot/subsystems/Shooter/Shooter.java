@@ -165,7 +165,7 @@ public class Shooter extends SubsystemBase {
                 isAimedAtHub = isAimedAtHub();
                 
                 if(swerve.isInAllianceZone()){
-                    if(driverOverride && isHubActive()){
+                    if(driverOverride){
                         flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
                         if(isAimedAtHub){
                             if(flywheel.FlywheelInTolerance(1)){
