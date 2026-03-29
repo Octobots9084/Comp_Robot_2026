@@ -59,7 +59,7 @@ public class Shooter extends SubsystemBase {
     public boolean turretAlreadyZeroed = false;
     public boolean hoodAlreadyZeroed = false;
     public Flywheel flywheel = new Flywheel();
-    public final static double prefire = 1;
+    public final static double prefire = 0;
     public static boolean driverOverride = false;
     private String gameData;
     public double turretAim = -0.1;
@@ -586,7 +586,7 @@ public class Shooter extends SubsystemBase {
                 case 'B':
                 if(Robot.TeleopStarted){
                     if (Constants.isBlueAlliance) {
-                        return (Constants.timer.get() <= 10 || (timer >= (35 - prefire) && timer <= 55)
+                        return (Constants.timer.get() <= 10 || (timer >= (35 - prefire) && timer <= 60)
                                 || (timer >= (85 - prefire)));
                     } else {
                         return (timer <= 35) || (timer >= (60 - prefire) && timer <= 85)
@@ -599,7 +599,7 @@ public class Shooter extends SubsystemBase {
                 case 'R':
                 if(Robot.TeleopStarted){
                     if (!Constants.isBlueAlliance) {
-                        return (Constants.timer.get() <= 10 || (timer >= (35 - prefire) && timer <= 55)
+                        return (Constants.timer.get() <= 10 || (timer >= (35 - prefire) && timer <= 60)
                                 || (timer >= (85 - prefire)));
                     } else {
                         return (timer <= 35) || (timer >= (60 - prefire) && timer <= 85)

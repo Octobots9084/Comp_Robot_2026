@@ -60,6 +60,14 @@ public class DriverCommunications {
                 PhaseTime = 20;
                 NextPhaseIndication = "Transition Period";
         } 
+                if (((Constants.timer.get() >= 20))) {
+                PhaseCountdown.stop();
+                if (Robot.WonAuto()){
+                    NextPhaseIndication = "Opposing Shift";
+                }else{
+                    NextPhaseIndication = "Our Shift";
+             }
+            }
             }
 
         // set PhaseClock as the time before phase shift by subtracting timer from max
