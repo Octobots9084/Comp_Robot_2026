@@ -34,20 +34,9 @@ public class DriverCommunications {
                     }else if ((Constants.timer.get() >= (85 - Shooter.prefire)) && (Constants.timer.get() < (110 - Shooter.prefire))) {
                    NextPhaseIndication = "Endgame";                }
             }
-             if ((Constants.timer.get() >= 110) && (Constants.timer.get() <= 110.25)) {
-                PhaseTime = 30;
-                PhaseCountdown.restart();
-            }
-            if (((Constants.timer.get() >= 20) && (Constants.timer.get() <= 20.25))) {
-                PhaseCountdown.restart();
-                PhaseTime = 10;
 
-            }
-            if ((Constants.timer.get() <= 20)) {
-                PhaseTime = 20;
-                NextPhaseIndication = "Transition Period";
-            }   
-            if ((Constants.timer.get() > 20) && (Constants.timer.get() <= 30)) {
+
+            if (Constants.timer.get() < 10) {
                 PhaseTime = 10;
                 //Changing the "Next phase" indicator based on who won auto
                  if (Robot.WonAuto()){
@@ -55,11 +44,15 @@ public class DriverCommunications {
                  }else{
                     NextPhaseIndication = "Our Shift";
              }
-        } else if ((Constants.timer.get() > 30) && (Constants.timer.get() < 130)) {
+        } else if ((Constants.timer.get() > 10) && (Constants.timer.get() < 110)) {
             PhaseTime = 25;
 
-            }else if ((Constants.timer.get() >= 130)){
+            }else if ((Constants.timer.get() >= 110)){
             PhaseTime = 30;
+            }
+            if ((Constants.timer.get() >= 110) && (Constants.timer.get() <= 110.25)) {
+                PhaseTime = 30;
+                PhaseCountdown.restart();
             }
 
             }else{
@@ -67,14 +60,6 @@ public class DriverCommunications {
                 PhaseTime = 20;
                 NextPhaseIndication = "Transition Period";
         } 
-                if (((Constants.timer.get() >= 20) && (Constants.timer.get() <= 20.25))) {
-                PhaseCountdown.restart();
-                if (Robot.WonAuto()){
-                    NextPhaseIndication = "Opposing Shift";
-                }else{
-                    NextPhaseIndication = "Our Shift";
-             }
-            }
             }
 
         // set PhaseClock as the time before phase shift by subtracting timer from max

@@ -159,6 +159,7 @@ public class Superstructure extends SubsystemBase {
             case AUTO:
                 swerve.wantedState = SwerveStates.IDLE;
                 shooter.wantedShooterState = ShooterStates.AUTOHUB;
+                break;
             case AUTODEPOTSHOOT:
                 swerve.wantedState = SwerveStates.IDLE;
                 shooter.wantedShooterState = ShooterStates.AUTODEPOTSHOOT;

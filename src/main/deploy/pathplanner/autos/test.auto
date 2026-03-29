@@ -13,13 +13,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Rush to center (deopt)"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "rush back to shoot (deopt)"
+            "pathName": "depot bottom to top"
           }
         },
         {
@@ -33,23 +27,11 @@
           "data": {
             "name": "StartShoot"
           }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "shoot to depot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "DepotShoot"
-          }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "good",
+  "folder": null,
   "choreoAuto": false
 }

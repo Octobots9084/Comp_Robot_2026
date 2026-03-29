@@ -185,7 +185,7 @@ public class Shooter extends SubsystemBase {
                         feeder.setFeederVelocity(FeederStates.OFF);
                         flywheel.setFlywheelVelocity(FlywheelStates.SAFE);
                     }
-                }else{
+                }else{  
                     wantedShooterState = ShooterStates.BUMP;
                 }
                 break;
@@ -210,7 +210,7 @@ public class Shooter extends SubsystemBase {
                     flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
                     if(isAimedAtHub){
                         Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTHUB;
-                        // Intake.getInstance().wantedState = IntakeStates.ELEPHANTIASISPART2;
+                        Intake.getInstance().wantedState = IntakeStates.ELEPHANTIASISPART2;
                         if(flywheel.FlywheelInTolerance(1)){
                             feeder.setFeederVelocity(FeederStates.SCORING);
                             flywheelDebouncer = 0;

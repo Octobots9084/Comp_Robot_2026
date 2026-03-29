@@ -25,13 +25,13 @@
         {
           "type": "named",
           "data": {
-            "name": "StartShoot"
+            "name": "StopIntake"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "StartElephant"
+            "name": "StartShoot"
           }
         },
         {
@@ -43,7 +43,7 @@
         {
           "type": "named",
           "data": {
-            "name": "StopElephant"
+            "name": "StartIntake"
           }
         },
         {
