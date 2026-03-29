@@ -15,13 +15,13 @@ package frc.robot.subsystems.Intake;
    * </ul>
    */
 public enum IntakeStates {
-    INTAKING(70, 0.37),
-    EXTENDED(0, 0.37),
-    PARTIALEXTENTION(45,0.1),
+    INTAKING(70, 0.364),
+    EXTENDED(0, 0.364),
+    PARTIALEXTENTION(70,0.1),
     SAFE(0, 0),
-    REVERSEINTAKING(-65, 0.37),
+    REVERSEINTAKING(-65, 0.364),
     ZERO(0, 0),
-    ELEPHANTIASISPART2(45,0.37);
+    ELEPHANTIASISPART2(45,0.364);
 
     
    /**

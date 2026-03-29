@@ -17,55 +17,55 @@ public class DriverCommunications {
         static Timer PhaseCountdown = new Timer();
         public static void pushToElastic() {
     
-    
             // If the hub state changes, reset the phase shift timer and change
             // currentHUbSTate
-            if (!Shooter.getInstance().isHubActive() == CurrentHubState) {
+
+            if(Robot.TeleopStarted){
+                if (!Shooter.getInstance().isHubActive() == CurrentHubState) {
                 CurrentHubState = Shooter.getInstance().isHubActive();
                 PhaseCountdown.restart();
-                if ((Constants.timer.get() >= 28) && (Constants.timer.get() < 103)) {
+                if ((Constants.timer.get() >= (10 - Shooter.prefire)) && (Constants.timer.get() < (85 - Shooter.prefire))) {
                     if (NextPhaseIndication == "Opposing Shift"){
                         NextPhaseIndication = "Our Shift";
                     }else{
                         NextPhaseIndication = "Opposing Shift";
     
                     }
-                }else if ((Constants.timer.get() >= 103) && (Constants.timer.get() < 128)) {
-                   NextPhaseIndication = "Endgame";
-                }
+                    }else if ((Constants.timer.get() >= (85 - Shooter.prefire)) && (Constants.timer.get() < (110 - Shooter.prefire))) {
+                   NextPhaseIndication = "Endgame";                }
             }
-
-            if ((Constants.timer.get() >= 130) && (Constants.timer.get() <= 130.5)) {
+             if ((Constants.timer.get() >= 110) && (Constants.timer.get() <= 110.25)) {
                 PhaseTime = 30;
                 PhaseCountdown.restart();
-            }
-            if (((Constants.timer.get() >= 20) && (Constants.timer.get() <= 20.5))) {
-                PhaseCountdown.restart();
-                PhaseTime = 10;
+            NextPhaseIndication = "Match End";
 
             }
-            if ((Constants.timer.get() <= 20)) {
-                PhaseTime = 20;
-                NextPhaseIndication = "Transition Period";
-        } else if ((Constants.timer.get() > 20) && (Constants.timer.get() <= 30)) {
-                PhaseTime = 10;
-                //Changing the "Next phase" indicator based on who won auto
-                 if (Robot.WonAuto()){
-                    NextPhaseIndication = "Opposing Shift";
-                 }else{
-                    NextPhaseIndication = "Our Shift";
-             }
-        } else if ((Constants.timer.get() > 30) && (Constants.timer.get() < 130)) {
+
+            if ((Constants.timer.get() > 30) && (Constants.timer.get() < 130)) {
             PhaseTime = 25;
 
-        }else if ((Constants.timer.get() >= 130)){
+            }else if ((Constants.timer.get() >= 130)){
             PhaseTime = 30;
-            NextPhaseIndication = "Match End";
-        }
+            }
+
+            }else{
+                if ((Constants.timer.get() <= 20)) {
+                PhaseTime = 20;
+                NextPhaseIndication = "Transition Period";
+        } 
+                if (((Constants.timer.get() >= 20) && (Constants.timer.get() <= 20.25))) {
+                PhaseCountdown.restart();
+                if (Robot.WonAuto()){
+                    NextPhaseIndication = "Opposing Shift";
+                }else{
+                    NextPhaseIndication = "Our Shift";
+             }
+            }
+            }
 
         // set PhaseClock as the time before phase shift by subtracting timer from max
         // shift time
-        double PhaseClock = (PhaseTime - PhaseCountdown.get());
+        double PhaseClock = (Math.round(PhaseTime - PhaseCountdown.get()));
         SmartDashboard.putString("Next Phase", NextPhaseIndication);
         SmartDashboard.putNumber("Phase Shift Countdown", PhaseClock);
         SmartDashboard.putData("Field", fieldPose);

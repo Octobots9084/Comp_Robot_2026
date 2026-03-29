@@ -80,6 +80,8 @@ public class VisionIOSystem implements VisionIO {
     */
     @Override
     public void periodic() {
+        double camConfidance = 0;
+
         double startTime = Timer.getFPGATimestamp();
         //determines of a mutlitag hub pose was found
         boolean foundSutableMultiTagPoseOnCamRight = false;
@@ -141,9 +143,12 @@ public class VisionIOSystem implements VisionIO {
                 if (visionEst.isEmpty()) {
                     visionEst = photonEstimatorFrontLeft.estimateLowestAmbiguityPose(result);
                     if(!visionEst.isEmpty()) {
+                        if (camConfidance == 0)
+                            camConfidance = 1;
                         frontLeftResults.add(visionEst);
                     }
                 } else {
+                    camConfidance = 2;
                     int numberOfHubTags = 0;
                     for(int i = 0; i < result.getTargets().size(); i++)
                         if(addToHubTagNumber(result, i)){
@@ -173,9 +178,12 @@ public class VisionIOSystem implements VisionIO {
                 if (visionEst.isEmpty()) {
                     visionEst = photonEstimatorFrontRight.estimateLowestAmbiguityPose(result);
                     if(!visionEst.isEmpty()) {
+                        if (camConfidance == 0)
+                            camConfidance = 1;
                         frontRightResults.add(visionEst);
                     }
                 } else {
+                    camConfidance = 2;
                     int numberOfHubTags = 0;
                     for(int i = 0; i < result.getTargets().size(); i++)
                         if(addToHubTagNumber(result, i)){
@@ -205,9 +213,12 @@ public class VisionIOSystem implements VisionIO {
                 if (visionEst.isEmpty()) {
                     visionEst = photonEstimatorRight.estimateLowestAmbiguityPose(result);
                     if(!visionEst.isEmpty()) {
+                        if (camConfidance == 0)
+                            camConfidance = 1;
                         rightResults.add(visionEst);
                     }
                 } else {
+                    camConfidance = 2;
                     int numberOfHubTags = 0;
                     for(int i = 0; i < result.getTargets().size(); i++)
                         if(addToHubTagNumber(result, i)){
@@ -237,9 +248,12 @@ public class VisionIOSystem implements VisionIO {
                 if (visionEst.isEmpty()) {
                     visionEst = photonEstimatorLeft.estimateLowestAmbiguityPose(result);
                     if(!visionEst.isEmpty()) {
+                        if (camConfidance == 0)
+                            camConfidance = 1;
                         leftResults.add(visionEst);
                     }
                 } else {
+                    camConfidance = 2;
                     int numberOfHubTags = 0;
                     for(int i = 0; i < result.getTargets().size(); i++)
                         if(addToHubTagNumber(result, i)){
@@ -277,6 +291,10 @@ public class VisionIOSystem implements VisionIO {
                     });
         }
         else if (!addedGoodMultiTagReslt && !rightResults.isEmpty()){
+            Logger.recordOutput("useing Cam Right",false);
+            Logger.recordOutput("useing Cam Left",false);
+            Logger.recordOutput("useing Cam Front Right",false);
+            Logger.recordOutput("useing Cam Front Left",false);
             for(int i = 0; i<rightResults.size();i++){
                 updateEstimationStdDevs(rightResults.get(i), rightTargets.get(i));
 
@@ -304,6 +322,10 @@ public class VisionIOSystem implements VisionIO {
                     });
         }
         else if (!addedGoodMultiTagReslt && !leftResults.isEmpty()){
+            Logger.recordOutput("useing Cam Right",false);
+            Logger.recordOutput("useing Cam Left",false);
+            Logger.recordOutput("useing Cam Front Right",false);
+            Logger.recordOutput("useing Cam Front Left",false);
             for(int i = 0; i<leftResults.size();i++){
                 updateEstimationStdDevs(leftResults.get(i), leftTargets.get(i));
 
@@ -331,6 +353,10 @@ public class VisionIOSystem implements VisionIO {
                     });
         }
         else if (!addedGoodMultiTagReslt && !frontRightResults.isEmpty()){
+            Logger.recordOutput("useing Cam Right",false);
+            Logger.recordOutput("useing Cam Left",false);
+            Logger.recordOutput("useing Cam Front Right",false);
+            Logger.recordOutput("useing Cam Front Left",false);
             for(int i = 0; i<frontRightResults.size();i++){
                 updateEstimationStdDevs(frontRightResults.get(i), frontRightTargets.get(i));
 
@@ -358,6 +384,10 @@ public class VisionIOSystem implements VisionIO {
                     });
         }
         else if (!addedGoodMultiTagReslt  && !frontLeftResults.isEmpty()){
+            Logger.recordOutput("useing Cam Right",false);
+            Logger.recordOutput("useing Cam Left",false);
+            Logger.recordOutput("useing Cam Front Right",false);
+            Logger.recordOutput("useing Cam Front Left",false);
             for(int i = 0; i<frontLeftResults.size();i++){
                 updateEstimationStdDevs(frontLeftResults.get(i), frontLeftTargets.get(i));
 
@@ -369,13 +399,17 @@ public class VisionIOSystem implements VisionIO {
                         });
             }
         }
-
+        if (addedGoodMultiTagReslt){
+            Logger.recordOutput("cam confidance",3);
+        }
+        else {
+            Logger.recordOutput("cam confidance",camConfidance);
+        }
         this.visonCycleTime = Timer.getFPGATimestamp()-startTime;
     }
 
     private boolean addToHubTagNumber(PhotonPipelineResult result, int i){
         if(
-            Constants.isBlueAlliance && (
                 result.getTargets().get(i).getFiducialId() == 18
                 || result.getTargets().get(i).getFiducialId() == 19
                 || result.getTargets().get(i).getFiducialId() == 20
@@ -384,10 +418,7 @@ public class VisionIOSystem implements VisionIO {
                 || result.getTargets().get(i).getFiducialId() == 27
                 || result.getTargets().get(i).getFiducialId() == 26
                 || result.getTargets().get(i).getFiducialId() == 25
-            )
-            ||
-            !Constants.isBlueAlliance && (
-                result.getTargets().get(i).getFiducialId() == 8
+                || result.getTargets().get(i).getFiducialId() == 8
                 || result.getTargets().get(i).getFiducialId() == 9
                 || result.getTargets().get(i).getFiducialId() == 10
                 || result.getTargets().get(i).getFiducialId() == 11
@@ -395,7 +426,6 @@ public class VisionIOSystem implements VisionIO {
                 || result.getTargets().get(i).getFiducialId() == 5
                 || result.getTargets().get(i).getFiducialId() == 4
                 || result.getTargets().get(i).getFiducialId() == 3
-            )
             ){
             return true;
         }

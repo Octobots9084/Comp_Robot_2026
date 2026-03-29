@@ -25,19 +25,25 @@
         {
           "type": "named",
           "data": {
-            "name": "StopIntake"
+            "name": "StartShoot"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "StartShoot"
+            "name": "StartElephant"
           }
         },
         {
           "type": "path",
           "data": {
             "pathName": "outpost side to outpost"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopElephant"
           }
         },
         {

@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.983183466501981,
-        "y": 4.849823048596563
+        "x": 2.071896243291592,
+        "y": 6.0712880143112695
       },
       "isLocked": false,
       "linkedName": "shoot (depot)"
     },
     {
       "anchor": {
-        "x": 0.3774179743223962,
-        "y": 5.063623395149786
+        "x": 0.6602862254025041,
+        "y": 5.973935599284436
       },
       "prevControl": {
-        "x": 1.448294539617566,
-        "y": 5.031172590140843
+        "x": 2.3152772808586763,
+        "y": 5.9414847942754925
       },
       "nextControl": null,
       "isLocked": false,
@@ -29,26 +29,12 @@
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [
-    {
-      "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.7628571428571429,
-      "maxWaypointRelativePos": 1.0,
-      "constraints": {
-        "maxVelocity": 0.25,
-        "maxAcceleration": 0.25,
-        "maxAngularVelocity": 720.0,
-        "maxAngularAcceleration": 720.0,
-        "nominalVoltage": 12.0,
-        "unlimited": false
-      }
-    }
-  ],
+  "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 1.0,
-    "maxAcceleration": 1.0,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 720.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -56,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0.0,
-    "rotation": 89.80981686457503
+    "rotation": -177.56335175319
   },
   "reversed": false,
   "folder": null,

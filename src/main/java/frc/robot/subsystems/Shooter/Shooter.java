@@ -58,7 +58,7 @@ public class Shooter extends SubsystemBase {
     public boolean turretAlreadyZeroed = false;
     public boolean hoodAlreadyZeroed = false;
     public Flywheel flywheel = new Flywheel();
-    public final double prefire = 1;
+    public final static double prefire = 1;
     public static boolean driverOverride = false;
     private String gameData;
     public double turretAim = -0.1;
@@ -209,7 +209,7 @@ public class Shooter extends SubsystemBase {
                     flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
                     if(isAimedAtHub){
                         Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTHUB;
-                        Intake.getInstance().wantedState = IntakeStates.ELEPHANTIASISPART2;
+                        // Intake.getInstance().wantedState = IntakeStates.ELEPHANTIASISPART2;
                         if(flywheel.FlywheelInTolerance(1)){
                             feeder.setFeederVelocity(FeederStates.SCORING);
                             flywheelDebouncer = 0;
@@ -238,7 +238,7 @@ public class Shooter extends SubsystemBase {
                         if(flywheel.FlywheelInTolerance(1)){
                             feeder.setFeederVelocity(FeederStates.SCORING);
                             flywheelDebouncer = 0;
-                        }else if (flywheelDebouncer<10){
+                        }else if (flywheelDebouncer<10){  
                             flywheelDebouncer ++;
                             feeder.setFeederVelocity(FeederStates.SCORING);
                         }
@@ -253,7 +253,7 @@ public class Shooter extends SubsystemBase {
                 break;
             case BUMP:
                 //figures out if were on our side our in the neutral zone and if were in auto
-                if (!swerve.isTilted(0, 3)) {
+                // if (!swerve.isTilted(0, 3)) { 
                     if (swerve.isInAllianceZone()) {
                         if (DriverStation.isAutonomousEnabled()){
                         wantedShooterState = ShooterStates.AUTOHUB;
@@ -267,7 +267,7 @@ public class Shooter extends SubsystemBase {
                         wantedShooterState = ShooterStates.FERRY;
                         }
                     }
-                }
+                // }
                 break;
             case SPIT:
                 //shoot but slower
@@ -302,7 +302,8 @@ public class Shooter extends SubsystemBase {
         switch (wantedShooterState) {
             case HUB:
                 // if we're on our side of the field
-                if (!swerve.isTilted(0, 3) && swerve.isInAllianceZone()) {// !tilted and in alliance
+                // if (!swerve.isTilted(0, 3) && swerve.isInAllianceZone()) {// !tilted and in alliance
+                if(swerve.isInAllianceZone()){
                     currentShooterState = ShooterStates.HUB;
                 }else{
                     currentShooterState = ShooterStates.FERRY;
@@ -310,25 +311,27 @@ public class Shooter extends SubsystemBase {
                 break;
             case AUTOHUB:
                 // if we're on our side of the field
-                if (!swerve.isTilted(0, 3) && swerve.isInAllianceZone()) {
+                // if (!swerve.isTilted(0, 3) && swerve.isInAllianceZone()) {
+                if(swerve.isInAllianceZone()){
                     currentShooterState = ShooterStates.AUTOHUB;
                 }
                 break;
             case AUTODEPOTSHOOT:
                 // if we're on our side of the field
-                if (!swerve.isTilted(0, 3) && swerve.isInAllianceZone()) {
+                // if (!swerve.isTilted(0, 3) && swerve.isInAllianceZone()) {
+                if(swerve.isInAllianceZone()){
                     currentShooterState = ShooterStates.AUTODEPOTSHOOT;
                 }
                 break;
             case FERRY:
                 // if we're in neutral or enemy zone
-                if (!swerve.isInAllianceZone() && !swerve.isTilted(0, 3)) {
+                // if (!swerve.isInAllianceZone() && !swerve.isTilted(0, 3)) {
+                if(!swerve.isInAllianceZone()){
                     currentShooterState = ShooterStates.FERRY;
                 }else{
                     currentShooterState = ShooterStates.HUB;
                 }
                 break;
-
             case BUMP:
                 // if we're on the bump
                 currentShooterState = ShooterStates.BUMP;
@@ -358,14 +361,14 @@ public class Shooter extends SubsystemBase {
         }
     }
 
-    public boolean Shootable() {
-        if (!swerve.isTilted(0, 3) && ((swerve.isInAllianceZone() && isHubActive())
-                || (!swerve.isInAllianceZone()))) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+    // public boolean Shootable() {
+    //     if (!swerve.isTilted(0, 3) && ((swerve.isInAllianceZone() && isHubActive())
+    //             || (!swerve.isInAllianceZone()))) {
+    //         return true;
+    //     } else {
+    //         return false;
+    //     }
+    // }
 
     public void activateFeeder(){
         if(flywheel.FlywheelInTolerance(1) || flywheelInToleranceOnce){
@@ -581,21 +584,20 @@ public class Shooter extends SubsystemBase {
             switch (gameData.charAt(0)) {
                 case 'B':
                     if (Constants.isBlueAlliance) {
-                        return (timer <= 10 || (timer >= (35 - prefire) && timer <= 60)
-                                || (timer >= (85 - prefire)));
+                        return (Constants.timer.get() <= 30 || (timer >= (55 - prefire) && timer <= 80)
+                                || (timer >= (105 - prefire)));
                     } else {
-                        return (timer <= 35) || (timer >= (60 - prefire) && timer <= 85)
-                                || (timer >= (110 - prefire));
+                        return (timer <= 55) || (timer >= (80 - prefire) && timer <= 105)
+                                || (timer >= (130 - prefire));
                     }
                 case 'R':
                     if (!Constants.isBlueAlliance) {
-                        return (timer <= 35) || (timer >= (60 - prefire) && timer <= 85)
-                                || (timer >= (110 - prefire));
+                        return (timer <= 30 || (timer >= (55 - prefire) && timer <= 80)
+                                || (timer >= (105 - prefire)));
                     } else {
-                        return (timer <= 10 || (timer >= (35 - prefire) && timer <= 60)
-                                || (timer >= (85 - prefire)));
+                        return (timer <= 55) || (timer >= (80 - prefire) && timer <= 105)
+                                || (timer >= (130 - prefire));
                     }
-
                 default:
                     return true;
             }

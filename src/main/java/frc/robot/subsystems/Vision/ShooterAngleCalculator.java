@@ -45,16 +45,16 @@ public class ShooterAngleCalculator {
         hoodAngleMapHub.put(5.841232747,new Rotation2d(59.0*Math.PI/180.0));
 
         //distance, flywheel speed
-        flywheelSpeedMapHub.put(1.593281206,26.5);
-        flywheelSpeedMapHub.put(2.051194774,28.5);
-        flywheelSpeedMapHub.put(2.550176464,30.0);
-        flywheelSpeedMapHub.put(3.034000659,30.5);
-        flywheelSpeedMapHub.put(3.502676691,32.0);
-        flywheelSpeedMapHub.put(3.955624350,33.5);
-        flywheelSpeedMapHub.put(4.516425578,35.0);
-        flywheelSpeedMapHub.put(4.981967483,36.5);
-        flywheelSpeedMapHub.put(5.515886148,37.0);
-        flywheelSpeedMapHub.put(5.841232747,38.0);
+        flywheelSpeedMapHub.put(1.593281206,26.5-0.2);
+        flywheelSpeedMapHub.put(2.051194774,28.5-0.2);
+        flywheelSpeedMapHub.put(2.550176464,30.0-0.2);
+        flywheelSpeedMapHub.put(3.034000659,30.5-0.2);
+        flywheelSpeedMapHub.put(3.502676691,32.0-0.2);
+        flywheelSpeedMapHub.put(3.955624350,33.5-0.2);
+        flywheelSpeedMapHub.put(4.516425578,35.0-0.3);
+        flywheelSpeedMapHub.put(4.981967483,36.5-0.5);
+        flywheelSpeedMapHub.put(5.515886148,37.0-0.7);
+        flywheelSpeedMapHub.put(5.841232747,38.0-1);
 
         //distance, time
         timeOfFlightMapHub.put(1.593281206,0.916);

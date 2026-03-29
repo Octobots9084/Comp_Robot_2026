@@ -112,12 +112,12 @@ public class SwerveSubsystem extends SubsystemBase {
     public boolean isInAllianceZone() {
         Pose2d currentPose = this.getRobotPose();
         if (Constants.isBlueAlliance) {
-            if (currentPose.getX() <= 3.67) {// x boundary for blue alliance zone
+            if (currentPose.getX() <= 4.6) {// x boundary for blue alliance zone
                 return true;
             }
             return false;
         } else {
-            if (currentPose.getX() >= 12.95) {// x boundary for red alliance zone
+            if (currentPose.getX() >= 11.9) {// x boundary for red alliance zone
                 return true;
             }
             return false;
@@ -129,12 +129,12 @@ public class SwerveSubsystem extends SubsystemBase {
         this.io.updateInputs(inputs);
         Logger.processInputs("Swerve", inputs);
         currentState = handleStateTransition();
-        // Logger.recordOutput("Xrot", this.io.getRotation3d().getX());
-        // Logger.recordOutput("Yrot", this.io.getRotation3d().getY());
-        // Logger.recordOutput("Zrot", this.io.getRotation3d().getZ());
-        // Logger.recordOutput("Tilt",
-        // Math.acos(this.io.getRotation3d().toMatrix().get(2, 2)));
-        // SmartDashboard.putBoolean("onRamp", onRamp(0, 3));
+        Logger.recordOutput("Xrot", this.io.getRotation3d().getX());
+        Logger.recordOutput("Yrot", this.io.getRotation3d().getY());
+        Logger.recordOutput("Zrot", this.io.getRotation3d().getZ());
+        Logger.recordOutput("Tilt",
+        Math.acos(this.io.getRotation3d().toMatrix().get(2, 2)));
+        SmartDashboard.putBoolean("onRamp", isTilted(0, 3));
         applyStates();
         // Logger.recordOutput("front left absolute", io.getAbsoluteEncoderPositions(0));
         // Logger.recordOutput("front right absolute", io.getAbsoluteEncoderPositions(1));
@@ -149,7 +149,7 @@ public class SwerveSubsystem extends SubsystemBase {
         Rotation3d gyroRotation = this.io.getRotation3d();
         Matrix<N3,N3> gyroMatrix = gyroRotation.toMatrix();
         double tilt = Math.acos(gyroMatrix.get(2, 2)) - 0.015 - Math.PI; // gyro mounted upside down so subtact PI radians out
-        // SmartDashboard.putNumber("Tilt", Units.radiansToDegrees(tilt));
+        SmartDashboard.putNumber("Tilt", Units.radiansToDegrees(tilt));
         if (tilt <= (wanted + tolerance) && tilt >= (wanted - tolerance)) {
             inTolerance = true;
         }
@@ -175,6 +175,10 @@ public class SwerveSubsystem extends SubsystemBase {
     
       NamedCommands.registerCommand("StartElephant", new InstantCommand(() -> {
         Intake.getInstance().wantedState = IntakeStates.ELEPHANTIASISPART2;
+      }));
+
+      NamedCommands.registerCommand("StopElephant", new InstantCommand(() -> {
+        Intake.getInstance().wantedState = IntakeStates.EXTENDED;
       }));
 
       NamedCommands.registerCommand("StopIntake", new InstantCommand(() -> {Intake.getInstance().wantedState = IntakeStates.EXTENDED;}));

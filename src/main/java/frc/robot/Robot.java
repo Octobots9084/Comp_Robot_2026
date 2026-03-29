@@ -58,7 +58,7 @@ public class Robot extends LoggedRobot {
   double timer = Constants.timer.get();
   private static String gameData;
   private boolean lastHubPeriod = false;
-
+  public static boolean TeleopStarted = false;
   public Robot() {
     // Set up data receivers & replay source
     switch (Constants.currentMode) {
@@ -189,10 +189,8 @@ public class Robot extends LoggedRobot {
     if (autonomousCommand != null) {
       CommandScheduler.getInstance().schedule(autonomousCommand);// TODO: not command
     }
-    Constants.timer.reset();
-    Constants.timer.start();
-    DriverCommunications.PhaseCountdown.reset();
-    DriverCommunications.PhaseCountdown.start();
+    Constants.timer.restart();
+    DriverCommunications.PhaseCountdown.restart();
 
   }
 
@@ -207,10 +205,15 @@ public class Robot extends LoggedRobot {
     if (Intake.getInstance().autoIntaked) {
       Intake.getInstance().wantedState = IntakeStates.EXTENDED;
     }
+    DriverCommunications.PhaseCountdown.restart();
+    Constants.timer.restart();
     // // if (!shooter.turretAlreadyZeroed){
     //   SmartDashboard.putNumber("hubBallSpeed", 6.7);
     // //   SmartDashboard.putNumber("hubFlywheelSpeed", 9.5);
     // // }
+    TeleopStarted = true;
+    DriverCommunications.PhaseTime = 10;
+
     
     setAllianceColor();
     //only automaticly zeros if we havent already zeroed while still allowing a zero button

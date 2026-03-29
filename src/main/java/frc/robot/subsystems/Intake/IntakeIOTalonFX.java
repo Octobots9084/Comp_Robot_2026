@@ -82,7 +82,8 @@ public class IntakeIOTalonFX implements IntakeIO {
      }
 
      public boolean isZeroingSwitchPressed() {
-          return zeroingSwitch.get();
+          // return zeroingSwitch.get();
+          return false;
      }
 
      public boolean zeroIntake() {

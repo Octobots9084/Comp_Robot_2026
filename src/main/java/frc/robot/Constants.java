@@ -81,7 +81,7 @@ public final class Constants {
   public static final double leftYDeadband = 0.1;// TODO
   public static final double leftXDeadband = 0.1;// TODO
   public static final double rightXDeadband = 0.15;// TODO
-  public static final double maxAngularVelocity = 3.75;// TODO
+  public static final double maxAngularVelocity = 4.5;// TODO
   // public static final enum currentMode = 1;//TODO
   public static final double maxVelocity = 3.75;// TODO
 
@@ -110,7 +110,7 @@ public final class Constants {
   public static int spindexerID = 18;
   public static int verticalFeederID = 15;
 
-  public static double turretZeroPosition = 187.48/360.0;
+  public static double turretZeroPosition = 183.75/360.0;
   public static double maximumHoodPosition = 74/360.0;
   public static double minimumHoodPosition = 58/360.0;
   public static double maximumTurretPosition = 0.8; // TODO set this to an actual value so sinjin doesnt cry
