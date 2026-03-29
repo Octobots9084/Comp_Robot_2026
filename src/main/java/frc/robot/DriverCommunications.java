@@ -37,11 +37,25 @@ public class DriverCommunications {
              if ((Constants.timer.get() >= 110) && (Constants.timer.get() <= 110.25)) {
                 PhaseTime = 30;
                 PhaseCountdown.restart();
-            NextPhaseIndication = "Match End";
+            }
+            if (((Constants.timer.get() >= 20) && (Constants.timer.get() <= 20.25))) {
+                PhaseCountdown.restart();
+                PhaseTime = 10;
 
             }
-
-            if ((Constants.timer.get() > 30) && (Constants.timer.get() < 130)) {
+            if ((Constants.timer.get() <= 20)) {
+                PhaseTime = 20;
+                NextPhaseIndication = "Transition Period";
+            }   
+            if ((Constants.timer.get() > 20) && (Constants.timer.get() <= 30)) {
+                PhaseTime = 10;
+                //Changing the "Next phase" indicator based on who won auto
+                 if (Robot.WonAuto()){
+                    NextPhaseIndication = "Opposing Shift";
+                 }else{
+                    NextPhaseIndication = "Our Shift";
+             }
+        } else if ((Constants.timer.get() > 30) && (Constants.timer.get() < 130)) {
             PhaseTime = 25;
 
             }else if ((Constants.timer.get() >= 130)){

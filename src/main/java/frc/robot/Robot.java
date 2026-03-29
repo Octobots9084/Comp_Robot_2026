@@ -184,6 +184,8 @@ public class Robot extends LoggedRobot {
     autonomousCommand = robotContainer.getAutonomousCommand();
     Superstructure.getInstance().wantedState = States.ZERO;
     swerve.wantedState = SwerveStates.IDLE;
+        TeleopStarted = false;
+
 
     // schedule the autonomous command (example)
     if (autonomousCommand != null) {
@@ -191,7 +193,6 @@ public class Robot extends LoggedRobot {
     }
     Constants.timer.restart();
     DriverCommunications.PhaseCountdown.restart();
-
   }
 
   /** This function is called periodically during autonomous. */

@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.subsystems.Vision.ShooterAngle;
 import frc.robot.subsystems.Vision.ShooterAngleCalculator;
 import frc.robot.subsystems.Drive.SwerveSubsystem;
@@ -583,21 +584,30 @@ public class Shooter extends SubsystemBase {
         if (gameData.length() > 0) {
             switch (gameData.charAt(0)) {
                 case 'B':
+                if(Robot.TeleopStarted){
                     if (Constants.isBlueAlliance) {
-                        return (Constants.timer.get() <= 30 || (timer >= (55 - prefire) && timer <= 80)
-                                || (timer >= (105 - prefire)));
+                        return (Constants.timer.get() <= 10 || (timer >= (35 - prefire) && timer <= 55)
+                                || (timer >= (85 - prefire)));
                     } else {
-                        return (timer <= 55) || (timer >= (80 - prefire) && timer <= 105)
-                                || (timer >= (130 - prefire));
+                        return (timer <= 35) || (timer >= (60 - prefire) && timer <= 85)
+                                || (timer >= (110 - prefire));
                     }
+                }else{
+                    return true;
+                }
+
                 case 'R':
+                if(Robot.TeleopStarted){
                     if (!Constants.isBlueAlliance) {
-                        return (timer <= 30 || (timer >= (55 - prefire) && timer <= 80)
-                                || (timer >= (105 - prefire)));
+                        return (Constants.timer.get() <= 10 || (timer >= (35 - prefire) && timer <= 55)
+                                || (timer >= (85 - prefire)));
                     } else {
-                        return (timer <= 55) || (timer >= (80 - prefire) && timer <= 105)
-                                || (timer >= (130 - prefire));
+                        return (timer <= 35) || (timer >= (60 - prefire) && timer <= 85)
+                                || (timer >= (110 - prefire));
                     }
+                }else{
+                    return true;
+                }
                 default:
                     return true;
             }
