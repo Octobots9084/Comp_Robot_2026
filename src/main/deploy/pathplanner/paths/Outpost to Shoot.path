@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.6602862254025041,
-        "y": 0.39239713774597473
+        "x": 0.4980322003577814,
+        "y": 0.7006797853309479
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.5202325581395346,
-        "y": 1.5444007155635067
+        "x": 1.244400715563506,
+        "y": 1.8202325581395349
       },
       "isLocked": false,
       "linkedName": "Outpost"
     },
     {
       "anchor": {
-        "x": 2.834490161001789,
-        "y": 2.50169946332737
+        "x": 1.5526833631484793,
+        "y": 2.2096422182468687
       },
       "prevControl": {
-        "x": 2.120572450805009,
-        "y": 1.576851520572451
+        "x": 0.9523434704830047,
+        "y": 1.398372093023255
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "starting for bump"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 2.0,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 720.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -178.413059601992
+    "rotation": -177.2072976342867
   },
   "reversed": false,
   "folder": null,

@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.282826475849732,
-        "y": 1.398372093023255
+        "x": 0.7414132379248657,
+        "y": 0.8953846153846137
       },
       "isLocked": false,
       "linkedName": "after sweep outpost"
     },
     {
       "anchor": {
-        "x": 0.6602862254025041,
-        "y": 0.39239713774597473
+        "x": 0.4980322003577814,
+        "y": 0.7006797853309479
       },
       "prevControl": {
-        "x": 1.6662611806797851,
-        "y": 1.2523434704830048
+        "x": 2.931842576028622,
+        "y": 2.128515205724508
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,11 +32,11 @@
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.6771428571428572,
+      "minWaypointRelativePos": 0.9064171122994652,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
-        "maxVelocity": 0.75,
-        "maxAcceleration": 1.0,
+        "maxVelocity": 0.5,
+        "maxAcceleration": 0.5,
         "maxAngularVelocity": 720.0,
         "maxAngularAcceleration": 720.0,
         "nominalVoltage": 12.0,
@@ -47,15 +47,15 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 0.5,
-    "maxAcceleration": 0.5,
+    "maxVelocity": 0.75,
+    "maxAcceleration": 0.75,
     "maxAngularVelocity": 720.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0.25,
+    "velocity": 0.0,
     "rotation": 180.0
   },
   "reversed": false,
