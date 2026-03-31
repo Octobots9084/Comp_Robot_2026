@@ -185,6 +185,7 @@ public class Robot extends LoggedRobot {
     Superstructure.getInstance().wantedState = States.ZERO;
     swerve.wantedState = SwerveStates.IDLE;
         TeleopStarted = false;
+        DriverCommunications.TeleopAccounted = false;
 
 
     // schedule the autonomous command (example)
