@@ -21,8 +21,23 @@ public class DriverCommunications {
             // If the hub state changes, reset the phase shift timer and change
             // currentHUbSTate
 
+            
+
+            
+
             if(Robot.TeleopStarted){ //if in teleop
-                if (!Shooter.getInstance().isHubActive() == CurrentHubState) { //if hubactivity changes
+                double phaseTimer;
+                String nextShift;
+                boolean hubactive;
+                if (Constants.timer.get()-1 <10) {
+                    hubactive = true;
+                    phaseTimer = 1;
+                    nextShift = Robot.WonAuto() ? ("Opposing Shift") : ("our Shift");
+                } else if (){}
+
+
+
+            if (!Shooter.getInstance().isHubActive() == CurrentHubState) { //if hubactivity changes
                 CurrentHubState = Shooter.getInstance().isHubActive();
                 PhaseCountdown.restart();
                 if ((Constants.timer.get() >= (10 - Shooter.prefire)) && (Constants.timer.get() < (85 - Shooter.prefire))) {
@@ -32,7 +47,7 @@ public class DriverCommunications {
                         NextPhaseIndication = "Opposing Shift";
     
                     }
-                    }else if ((Constants.timer.get() >= (85 - Shooter.prefire)) && (Constants.timer.get() < (110 - Shooter.prefire))) {
+                    } else if ((Constants.timer.get() >= (85 - Shooter.prefire)) && (Constants.timer.get() < (110 - Shooter.prefire))) {
                    NextPhaseIndication = "Endgame"; //if in 4th shift, indicate endgame
                 }
             }

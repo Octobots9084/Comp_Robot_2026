@@ -264,9 +264,9 @@ public class Robot extends LoggedRobot {
                     }
                 case 'R':
                     if (!Constants.isBlueAlliance) {
-                        return false;
-                    } else {
                         return true;
+                    } else {
+                        return false;
                     }
 
                 default:
