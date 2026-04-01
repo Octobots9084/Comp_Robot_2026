@@ -1,5 +1,7 @@
 package frc.robot.subsystems.Intake;
 
+import com.ctre.phoenix6.BaseStatusSignal;
+import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
@@ -9,11 +11,17 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularVelocity;
 import frc.robot.Constants;
 import frc.robot.subsystems.Lights.LightAnimations;
 import frc.robot.subsystems.Lights.Lights;
+import frc.robot.util.PhoenixUtil;
 
 public class IntakeIOTalonFX implements IntakeIO {
+     private final StatusSignal<AngularVelocity> rollerVelocity;
+     private final StatusSignal<Angle> pivotAngle;
+
      public DigitalInput zeroingSwitch = new DigitalInput(0);
      public IntakeConfigurator config;
      public TalonFX pivot;
@@ -43,6 +51,18 @@ public class IntakeIOTalonFX implements IntakeIO {
 
           rollerfollower.setControl(followRoller);
           pivotfollower.setControl(followPivot);
+
+          rollerVelocity = roller.getVelocity();
+          pivotAngle = pivot.getPosition();
+
+          PhoenixUtil.tryUntilOk(5, () -> BaseStatusSignal.setUpdateFrequencyForAll(50,rollerVelocity,pivotAngle));
+          PhoenixUtil.tryUntilOk(5, () -> roller.optimizeBusUtilization(0,1.0));
+          PhoenixUtil.tryUntilOk(5, () -> pivot.optimizeBusUtilization(0,1.0));
+
+          PhoenixUtil.registerSignals(
+               Constants.krakenBus.isNetworkFD(),
+               rollerVelocity,
+               pivotAngle);
      }
 
      public void updateInputs(IntakeIOInputs inputs) {
@@ -64,12 +84,12 @@ public class IntakeIOTalonFX implements IntakeIO {
 
      @Override
      public double getRollerRPS() {
-          return roller.getVelocity().getValueAsDouble();
+          return rollerVelocity.getValueAsDouble();
      }
 
      @Override
      public double getIntakePosition() {
-          return pivot.getPosition().getValueAsDouble();
+          return pivotAngle.getValueAsDouble();
      }
      @Override
      public void setRotateVoltage(double voltage) {
