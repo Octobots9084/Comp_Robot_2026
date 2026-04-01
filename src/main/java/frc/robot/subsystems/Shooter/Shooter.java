@@ -195,11 +195,15 @@ public class Shooter extends SubsystemBase {
 
                 if(!swerve.isInAllianceZone()){
                         if(isAimedAtFerry){
-                             Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTFERRY;
+                            Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTFERRY;
                             activateFeeder();
+                        }else{
+                            Lights.getLightInstance().lightsWantedState = LightAnimations.CANTSHOOT;
+
                         }
                 }else{
                     wantedShooterState = ShooterStates.BUMP;
+                    Lights.getLightInstance().lightsWantedState = LightAnimations.CANTSHOOT;
                 }
                 break;
             case AUTOHUB:
@@ -221,10 +225,15 @@ public class Shooter extends SubsystemBase {
                         else{
                             feeder.setFeederVelocity(FeederStates.OFF);
                         }
+                    }else{
+                        Lights.getLightInstance().lightsWantedState = LightAnimations.CANTSHOOT;
+
                     }
 
                 }else{
                     wantedShooterState = ShooterStates.BUMP;
+                    Lights.getLightInstance().lightsWantedState = LightAnimations.CANTSHOOT;
+
                 }
                 break;
             case AUTODEPOTSHOOT:
@@ -580,40 +589,16 @@ public class Shooter extends SubsystemBase {
 
     public boolean isHubActive() {
         double timer = Constants.timer.get();
-        gameData = DriverStation.getGameSpecificMessage();
-        if (gameData.length() > 0) {
-            switch (gameData.charAt(0)) {
-                case 'B':
-                if(Robot.TeleopStarted){
-                    if (Constants.isBlueAlliance) {
-                        return (Constants.timer.get() <= 10 || (timer >= (35 - prefire) && timer <= 60)
+        if(Robot.TeleopStarted){
+            if (Robot.WonAuto()) {
+                return (Constants.timer.get() <= 10 || (timer >= (35 - prefire) && timer <= 60)
                                 || (timer >= (85 - prefire)));
-                    } else {
-                        return (timer <= 35) || (timer >= (60 - prefire) && timer <= 85)
-                                || (timer >= (110 - prefire));
-                    }
                 }else{
-                    return true;
+                    return (timer <= 35) || (timer >= (60 - prefire) && timer <= 85)
+                        || (timer >= (110 - prefire));               
                 }
-
-                case 'R':
-                if(Robot.TeleopStarted){
-                    if (!Constants.isBlueAlliance) {
-                        return (Constants.timer.get() <= 10 || (timer >= (35 - prefire) && timer <= 60)
-                                || (timer >= (85 - prefire)));
-                    } else {
-                        return (timer <= 35) || (timer >= (60 - prefire) && timer <= 85)
-                                || (timer >= (110 - prefire));
-                    }
-                }else{
-                    return true;
-                }
-                default:
-                    return true;
-            }
-        } else {
+        }else{
             return true;
         }
     }
-
 }

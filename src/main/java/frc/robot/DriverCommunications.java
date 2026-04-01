@@ -12,94 +12,68 @@ import frc.robot.subsystems.Shooter.Shooter;
 public class DriverCommunications {
     static boolean CurrentHubState = Shooter.getInstance().isHubActive();
     static String NextPhaseIndication = "Transition Period";
-    static double PhaseTime = 0;
-    static boolean TeleopAccounted;
+    static String PhaseIndication = "Autonomous";
+    static double TeleopAccounted = 1;
+    static double PhaseClock = 0;
     public static Field2d fieldPose = new Field2d();
-        static Timer PhaseCountdown = new Timer();
-        public static void pushToElastic() {
+    static double TeleopTimer = Constants.timer.get() - TeleopAccounted;
+    static void allianceShift(int ShiftEndTime){
+        PhaseClock = Math.round(ShiftEndTime - TeleopTimer);
+        if(!Shooter.getInstance().isHubActive()){
+            NextPhaseIndication = "Our Shift";
+        }else{
+            NextPhaseIndication = "Opposing Shift";
+        }
+        if(Shooter.getInstance().isHubActive()){
+            PhaseIndication = "Our Shift";
+        }else{
+            PhaseIndication = "Opposing Shift";
+        }
+    }
     
-            // If the hub state changes, reset the phase shift timer and change
-            // currentHUbSTate
-
-            
-
-            
-
-            if(Robot.TeleopStarted){ //if in teleop
-                double phaseTimer;
-                String nextShift;
-                boolean hubactive;
-                if (Constants.timer.get()-1 <10) {
-                    hubactive = true;
-                    phaseTimer = 1;
-                    nextShift = Robot.WonAuto() ? ("Opposing Shift") : ("our Shift");
-                } else if (){}
-
-
-
-            if (!Shooter.getInstance().isHubActive() == CurrentHubState) { //if hubactivity changes
-                CurrentHubState = Shooter.getInstance().isHubActive();
-                PhaseCountdown.restart();
-                if ((Constants.timer.get() >= (10 - Shooter.prefire)) && (Constants.timer.get() < (85 - Shooter.prefire))) {
-                    if (NextPhaseIndication == "Opposing Shift"){ //if in first 3 alliance shifts, switch hub indication
-                        NextPhaseIndication = "Our Shift";
-                    }else{
-                        NextPhaseIndication = "Opposing Shift";
-    
-                    }
-                    } else if ((Constants.timer.get() >= (85 - Shooter.prefire)) && (Constants.timer.get() < (110 - Shooter.prefire))) {
-                   NextPhaseIndication = "Endgame"; //if in 4th shift, indicate endgame
-                }
-            }
-
-            if(!TeleopAccounted){ //match time starts ~1 second after teleop init, so I'm accounting for that
-                if(Constants.timer.get() >= 1){ //if one second has passed
-                    Constants.timer.restart(); //restart both timers and make TeleopAccounted true
-                    PhaseCountdown.restart();
-                    TeleopAccounted = true;
-                }
-
-            }
-            if (Constants.timer.get() < 10) { //in transition period
-                PhaseTime = 10;
+    public static void pushToElastic() {
+        if(Robot.TeleopStarted){ //if in teleop
+            if (TeleopTimer < 10) { //in transition period
+                PhaseClock = Math.round(10 -TeleopTimer);
+                PhaseIndication = "Transition Period";
                 //Changing the "Next phase" indicator based on who won auto
                  if (Robot.WonAuto()){
                     NextPhaseIndication = "Opposing Shift";
                  }else{
                     NextPhaseIndication = "Our Shift";
-             }
-        } else if ((Constants.timer.get() > 10) && (Constants.timer.get() < 110)) { //in alliance shifts
-            PhaseTime = 25;
+                }
 
-            }else if ((Constants.timer.get() >= 110)){ //in endgame
-            PhaseTime = 30;
-            }
-            else if ((Constants.timer.get() >= 110) && (Constants.timer.get() <= 110.25)) {//once endgame starts
-                PhaseTime = 30;
-                PhaseCountdown.restart();
+            }else if (TeleopTimer < 35) { //in alliance shift 1
+                allianceShift(35);
+            }else if (TeleopTimer < 60) { //in alliance shift 2
+                allianceShift(60);
+            }else if (TeleopTimer < 85) { //in alliance shift 3
+                allianceShift(85);
+            }else if (TeleopTimer < 110) { //in alliance shift 4
+                NextPhaseIndication = "Endgame";
+                PhaseClock = Math.round(110 - TeleopTimer);
+            }else{
+                PhaseClock = Math.round(140 - TeleopTimer);
+                NextPhaseIndication = "Match End";
+                PhaseIndication = "Endgame";
             }
 
-            }else{ //if in auto
-                if ((Constants.timer.get() <= 20)) {
-                PhaseTime = 20;
-                NextPhaseIndication = "Transition Period";
+        }else{ //if in auto
+            PhaseClock = Math.round(20 - Constants.timer.get());
+            NextPhaseIndication = "Transition Phase";
+            PhaseIndication = "Autonomous";
 
-        } 
-                if ((Constants.timer.get() >= 20)&&(Constants.timer.get() <= 20.5)) { // auto end
-                PhaseCountdown.stop();
-                Constants.timer.stop();
-             }
-            }
+        }
 
         // set PhaseClock as the time before phase shift by subtracting timer from max
         // shift time
-        double PhaseClock = (Math.round(PhaseTime - PhaseCountdown.get()));
         SmartDashboard.putString("Next Phase", NextPhaseIndication);
+        SmartDashboard.putString("Current Phase", PhaseIndication);
         SmartDashboard.putNumber("Phase Shift Countdown", PhaseClock);
         SmartDashboard.putData("Field", fieldPose);
         SmartDashboard.putNumber("Timer", Constants.timer.get());
         SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime());
-        SmartDashboard.putBoolean("Is Hub Active?", Shooter.getInstance().isHubActive());
+        SmartDashboard.putBoolean("Hub Activity", Shooter.getInstance().isHubActive());
         //SmartDashboard.putBoolean("In Manual?", Superstructure.getInstance().getCurrentState() == States.MANUAL);
         //SmartDashboard.putBoolean("Can Shoot", Shooter.getInstance().Shootable());
     }
