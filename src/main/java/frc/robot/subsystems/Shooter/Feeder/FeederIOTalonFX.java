@@ -49,8 +49,8 @@ public class FeederIOTalonFX implements FeederIO {
 
     public void updateInputs(FeederIOInputs inputs) {
         inputs.feederCurrentState = Feeder.getInstance().getCurrentState();
-        inputs.spindexerRPS = spindexerMotor.getVelocity().getValueAsDouble();
-        inputs.verticalFeederRPS = verticalFeederMotor.getVelocity().getValueAsDouble();
+        inputs.spindexerRPS = getSpindexerVelocity();
+        inputs.verticalFeederRPS = getVerticalFeederVelocity();
         // inputs.SpindexerCurrent = spindexerMotor.getStatorCurrent().getValueAsDouble();
         // inputs.verticalFeederCurrent = verticalFeederMotor.getStatorCurrent().getValueAsDouble();
 

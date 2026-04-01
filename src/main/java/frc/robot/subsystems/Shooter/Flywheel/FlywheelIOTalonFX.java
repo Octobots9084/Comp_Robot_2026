@@ -53,7 +53,7 @@ public class FlywheelIOTalonFX implements FlywheelIO {
     @Override
     public void updateInputs(FlywheelIOInputs inputs) {
         inputs.flywheelCurrentState = Flywheel.getInstance().getCurrentState();
-        inputs.FlywheelRightRPS = FlywheelRightMotor.getVelocity().getValueAsDouble();
+        inputs.FlywheelRightRPS = getRightMotorVelocity();
         // inputs.FlywheelLeftCurrent = FlywheelLeftMotor.getStatorCurrent().getValueAsDouble();
         // inputs.FlywheelRightCurrent = FlywheelRightMotor.getStatorCurrent().getValueAsDouble();
         inputs.flywheelWantedSpeed = FlywheelRightMotorRequest.getVelocityMeasure().in(Units.RevolutionsPerSecond);
@@ -61,12 +61,12 @@ public class FlywheelIOTalonFX implements FlywheelIO {
 
     @Override
     public void setFlywheelVelocity(FlywheelStates state) {
-        Logger.recordOutput("flywheelWantedSpeed_", state.FlywheelRightRPS);
+        Logger.recordOutput("flywheelWantedSpeed", state.FlywheelRightRPS);
         FlywheelRightMotor.setControl(FlywheelRightMotorRequest.withVelocity(state.FlywheelRightRPS));
     }
     @Override
     public void setFlywheelVelocity(double rps) {
-        Logger.recordOutput("flywheelWantedSpeed_", rps);
+        Logger.recordOutput("flywheelWantedSpeed", rps);
         FlywheelRightMotor.setControl(FlywheelRightMotorRequest.withVelocity(rps));
     }
 

@@ -35,14 +35,6 @@ public class Flywheel extends SubsystemBase {
         io.setFlywheelVelocity(rps);
     }
 
-    public double[] getFlywheelVelocity() {
-        return io.getFlywheelVelocity();
-    }
-
-    public double getLeftMotorVelocity() {
-        return io.getLeftMotorVelocity();
-    }
-
     public double getRightMotorVelocity() {
         return io.getRightMotorVelocity();
     }
