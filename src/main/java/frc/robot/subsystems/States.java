@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import frc.robot.subsystems.Climb.Climb;
 
 public enum States {
     SAFE,

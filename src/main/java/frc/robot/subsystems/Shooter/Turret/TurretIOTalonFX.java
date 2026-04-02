@@ -2,20 +2,27 @@ package frc.robot.subsystems.Shooter.Turret;
 
 import org.littletonrobotics.junction.Logger;
 
+import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.BaseStatusSignal; 
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Constants;
 import frc.robot.subsystems.Lights.LightAnimations;
 import frc.robot.subsystems.Lights.Lights;
 import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.ShooterConfigurator;
+import frc.robot.util.PhoenixUtil;
 
 public class TurretIOTalonFX implements TurretIO {
+    private final StatusSignal<Angle> turretPosition;
+    private final StatusSignal<Angle> hoodPosition;
+
     public TalonFX hoodMotor;
     public TalonFX turretMotor;
     public double zeroTurret;
@@ -36,6 +43,17 @@ public class TurretIOTalonFX implements TurretIO {
         hoodMotor.getConfigurator().apply(shooterConfigs.hoodConfig);
         turretMotor.getConfigurator().apply(shooterConfigs.turretConfig);
         
+        hoodPosition = hoodMotor.getPosition();
+        turretPosition = turretMotor.getPosition();
+
+        PhoenixUtil.tryUntilOk(5, () -> BaseStatusSignal.setUpdateFrequencyForAll(50,turretPosition,hoodPosition));
+        PhoenixUtil.tryUntilOk(5, () -> hoodMotor.optimizeBusUtilization(0,1.0));
+        PhoenixUtil.tryUntilOk(5, () -> turretMotor.optimizeBusUtilization(0,1.0));
+
+        PhoenixUtil.registerSignals(
+            Constants.krakenBus.isNetworkFD(),
+            hoodPosition,
+            turretPosition);
     }
 
     @Override
@@ -81,7 +99,7 @@ public class TurretIOTalonFX implements TurretIO {
 
     @Override
     public double getHoodPosition() {
-        return hoodMotor.getPosition().getValueAsDouble();
+        return hoodPosition.getValueAsDouble();
         
     }
     public boolean getMagnetBreakValue(){
@@ -90,7 +108,7 @@ public class TurretIOTalonFX implements TurretIO {
 
     @Override
     public double getTurretPosition() {
-        return turretMotor.getPosition().getValueAsDouble();
+        return turretPosition.getValueAsDouble();
     }
 
     @Override

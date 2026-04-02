@@ -16,8 +16,6 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.States;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.Climb.Climb;
-import frc.robot.subsystems.Climb.ClimbStates;
 import frc.robot.subsystems.Drive.SwerveStates;
 import frc.robot.subsystems.Drive.SwerveSubsystem;
 import frc.robot.subsystems.Intake.Intake;
@@ -28,6 +26,8 @@ import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.ShooterStates;
 import frc.robot.subsystems.Shooter.Turret.Turret;
 import frc.robot.subsystems.Shooter.Turret.TurretIO;
+import frc.robot.util.LoggedTracer;
+import frc.robot.util.PhoenixUtil;
 
 import java.util.Optional;
 
@@ -53,7 +53,6 @@ public class Robot extends LoggedRobot {
   private Command autonomousCommand;
   private RobotContainer robotContainer;
   public Shooter shooter;
-  public Climb climb;
   public Intake intake;
   double timer = Constants.timer.get();
   private static String gameData;
@@ -138,6 +137,9 @@ public class Robot extends LoggedRobot {
     // This must be called from the robot's periodic block in order for anything in
     // the Command-based framework to work.
     CommandScheduler.getInstance().run();
+    LoggedTracer.reset();
+    PhoenixUtil.refreshAll();
+    LoggedTracer.record("PhoenixRefresh");
     Logger.recordOutput("IsBlueAlliance",Constants.isBlueAlliance);
     DriverCommunications.pushToElastic();
     LightAnimations.RainbowAnim();
