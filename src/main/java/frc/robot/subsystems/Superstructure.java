@@ -165,7 +165,6 @@ public class Superstructure extends SubsystemBase {
                 shooter.wantedShooterState = ShooterStates.AUTODEPOTSHOOT;
                 break;
             case FIXEDFIRE:
-                swerve.wantedState = SwerveStates.IDLE;
                 shooter.wantedShooterState = ShooterStates.FIXEDFIRE;
                 break;
             case UNJAM:
