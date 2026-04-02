@@ -279,10 +279,14 @@ public class Shooter extends SubsystemBase {
                 break;
             case FIXEDFIRE:
                 //second button that shoots the same shot everytime
-                feeder.setFeederVelocity(FeederStates.FIXEDFIRE);
                 flywheel.setFlywheelVelocity(FlywheelStates.FIXEDFIRE);
+                if(flywheel.io.FlywheelInTolerance(3.0))
+                    feeder.setFeederVelocity(FeederStates.FIXEDFIRE);
+                else
+                    feeder.setFeederVelocity(FeederStates.OFF);
                 turret.setHoodPosition(85);
-                turret.setTurretPosition(10);
+                turret.setTurretPosition(90);
+                
                 break;
             case ZERO:
                 //makes the turret figure out where it is
@@ -356,6 +360,9 @@ public class Shooter extends SubsystemBase {
                 break;
             case SPITTOCONTAINER:
                 currentShooterState = ShooterStates.SPITTOCONTAINER;
+                break;
+            case FIXEDFIRE:
+                currentShooterState = ShooterStates.FIXEDFIRE;
                 break;
             default:
                 break;
