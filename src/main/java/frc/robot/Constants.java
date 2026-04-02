@@ -107,7 +107,7 @@ public final class Constants {
   public static int flyWheelLeftID = 16;
   public static int hoodID = 13;
   public static int turretID = 17;
-  public static int spindexerID = 18;
+  public static int spindexerID = 26;
   public static int verticalFeederID = 15;
 
   public static double turretZeroPosition = 183.75/360.0;
@@ -126,8 +126,8 @@ public final class Constants {
   public static double feederGearRatio = 21/34.0;
   public static double feederWheelRadius = 1.5*0.0254;
 
-  public static double spindexerRadius = 3*0.0254;
-  public static double spindexerGearRatio = 4/1;
+  public static double spindexerRadius = 3.25*0.0254;
+  public static double spindexerGearRatio = 1;
 
   public static double rotateGearRatio = 12.0;// TODO fix this gear ratio
 

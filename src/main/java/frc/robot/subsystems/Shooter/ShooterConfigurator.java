@@ -93,11 +93,12 @@ public class ShooterConfigurator {
         // spindexer config(four lane highway)
         spindexerConfig.CurrentLimits.SupplyCurrentLimit = 60;
         spindexerConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-        spindexerConfig.CurrentLimits.StatorCurrentLimit = 60;
+        spindexerConfig.CurrentLimits.StatorCurrentLimit = 100;
         spindexerConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 
         // set break mode and inversion
         spindexerConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+        spindexerConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
         // create PID gains
         spindexerConfig.Slot0.kP = 0.3;
         spindexerConfig.Slot0.kI = 0.0;
