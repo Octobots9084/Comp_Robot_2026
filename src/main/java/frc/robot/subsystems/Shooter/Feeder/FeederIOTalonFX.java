@@ -51,6 +51,8 @@ public class FeederIOTalonFX implements FeederIO {
         inputs.feederCurrentState = Feeder.getInstance().getCurrentState();
         inputs.spindexerRPS = getSpindexerVelocity();
         inputs.verticalFeederRPS = getVerticalFeederVelocity();
+        inputs.wantedSpindexerRPS = spindexerRequest.Velocity;
+        inputs.wantedVerticalFeederRPS = verticalFeederRequest.Velocity;
         // inputs.SpindexerCurrent = spindexerMotor.getStatorCurrent().getValueAsDouble();
         // inputs.verticalFeederCurrent = verticalFeederMotor.getStatorCurrent().getValueAsDouble();
 

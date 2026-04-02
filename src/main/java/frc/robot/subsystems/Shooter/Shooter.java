@@ -82,6 +82,8 @@ public class Shooter extends SubsystemBase {
     public double manuelHood = 74; 
     public double manuelFlywheel = 40; //0 to 1
 
+    public double hoodTargetPosition = Constants.maximumHoodPosition;
+
     public Shooter(FeederIO fIO, FlywheelIO fwIO, TurretIO tIO, ShooterIO sIO) {
         this.fIO = fIO;
         this.fwIO = fwIO;
@@ -140,14 +142,15 @@ public class Shooter extends SubsystemBase {
             case SPITTOCONTAINER:
                 feeder.setFeederVelocity(FeederStates.SPITTING);
                 flywheel.setFlywheelVelocity(FlywheelStates.SPITTOCONTAINER);
-                turret.setHoodPosition(85);
+                turret.setHoodPosition(Constants.maximumHoodPosition);
                 turret.setTurretPosition(-90/360.0);
                 break;
             case FERRY:
                 isAimedAtFerry = aimFerry();
-
+                turret.setHoodPosition(Constants.maximumHoodPosition);
                 if(!swerve.isInAllianceZone()){
                     if(driverOverride){
+                        turret.setHoodPosition(hoodTargetPosition);
                         flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
                         if(isAimedAtFerry){
                             Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTFERRY;
@@ -163,10 +166,11 @@ public class Shooter extends SubsystemBase {
                 }
                 break;
             case HUB:
+            isAimedAtHub = isAimedAtHub();
                 turret.setHoodPosition(Constants.maximumHoodPosition);
                 if(swerve.isInAllianceZone()){
                     if(driverOverride){
-                        isAimedAtHub = isAimedAtHub();
+                        turret.setHoodPosition(hoodTargetPosition);
                         flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
                         if(isAimedAtHub){
                             if(flywheel.FlywheelInTolerance(1)){
@@ -492,8 +496,8 @@ public class Shooter extends SubsystemBase {
         
         Logger.recordOutput("CalculatedCorrectedTurretAngle", 180*proposedAngle/(Math.PI));
 
-        turret.setHoodPosition(pastShooterAngle.hoodRotation/(2.0*Math.PI));
-
+        // turret.setHoodPosition(pastShooterAngle.hoodRotation/(2.0*Math.PI));
+        hoodTargetPosition = pastShooterAngle.hoodRotation/(2.0*Math.PI);
         Logger.recordOutput("CalculatedHoodAngle", pastShooterAngle.hoodRotation/(2*Math.PI));
 
         // return true;
@@ -573,7 +577,7 @@ public class Shooter extends SubsystemBase {
         double proposedAngle = GetProposedAngle();
 
         turret.setTurretPosition(proposedAngle/(2*Math.PI));
-        turret.setHoodPosition(pastShooterAngle.hoodRotation/(2.0*Math.PI));
+        hoodTargetPosition = pastShooterAngle.hoodRotation/(2.0*Math.PI);
 
         return (turret.hoodInTolerance(.05) && turret.turretInTolerance(0.05));
     }
