@@ -211,7 +211,7 @@ public class Robot extends LoggedRobot {
     // //   SmartDashboard.putNumber("hubFlywheelSpeed", 9.5);
     // // }
     TeleopStarted = true;
-    
+    Constants.timer.restart();
     setAllianceColor();
     //only automaticly zeros if we havent already zeroed while still allowing a zero button
     Superstructure.getInstance().wantedState = States.ZERO;
@@ -243,6 +243,7 @@ public class Robot extends LoggedRobot {
     }
     lastHubPeriod = Shooter.getInstance().isHubActive();
     WonAuto();
+    Shooter.getInstance().isHubActive();
    
 
       

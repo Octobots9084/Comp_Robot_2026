@@ -13,10 +13,10 @@ public class DriverCommunications {
     static boolean CurrentHubState = Shooter.getInstance().isHubActive();
     static String NextPhaseIndication = "Transition Period";
     static String PhaseIndication = "Autonomous";
-    static double TeleopAccounted = 1;
+    static double TeleopAccounted = -0.5;
     static double PhaseClock = 0;
     public static Field2d fieldPose = new Field2d();
-    static double TeleopTimer = Constants.timer.get() - TeleopAccounted;
+    public static double TeleopTimer = Constants.timer.get() - TeleopAccounted;
     static void allianceShift(int ShiftEndTime){
         PhaseClock = Math.round(ShiftEndTime - TeleopTimer);
         if(!Shooter.getInstance().isHubActive()){
@@ -32,6 +32,7 @@ public class DriverCommunications {
     }
     
     public static void pushToElastic() {
+        TeleopTimer = Constants.timer.get() - TeleopAccounted;
         if(Robot.TeleopStarted){ //if in teleop
             if (TeleopTimer < 10) { //in transition period
                 PhaseClock = Math.round(10 -TeleopTimer);
