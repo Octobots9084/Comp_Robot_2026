@@ -26,12 +26,14 @@ import com.ctre.phoenix6.controls.StrobeAnimation;
    */
 public enum LightAnimations {
     DEFAULT(new StrobeAnimation(0, 65).withColor(new RGBWColor(255, 255, 0, 0)), 0), // Yellow
-    CANTSHOOT(new StrobeAnimation(0, 65).withColor(new RGBWColor(255, 120, 0, 0)), 0), // Orange
+    CANTSHOOT(new StrobeAnimation(0, 65).withColor(new RGBWColor(255, 30, 0, 0)), 0), // Orange
     INTAKING(new StrobeAnimation(0, 65).withColor(new RGBWColor(0, 55, 255, 0)), 0), // Blue
     REVERSEINTAKING(new StrobeAnimation(0, 65).withColor(new RGBWColor(255, 0, 255, 0)), 0), // The hottest pink
     SHOOTFERRY(new StrobeAnimation(0, 65).withColor(new RGBWColor(0, 255, 100, 0)), 0), // Green
-    SHOOTHUB(new StrobeAnimation(0, 65).withColor(new RGBWColor(0, 200, 255, 0)), 0), // Teal
-    ZEROED(new StrobeAnimation(0,65).withColor(new RGBWColor(250, 0, 0, 100)), 0);//light blue   /**
+    SHOOTHUB(new StrobeAnimation(0, 65).withColor(new RGBWColor(0, 255, 0, 0)), 0), // Teal
+    ZEROED(new StrobeAnimation(0,65).withColor(new RGBWColor(0, 0, 255, 100)), 0),//light blue   /**
+    DISABLED(new StrobeAnimation(0,65).withColor(new RGBWColor(150, 0, 150, 0)), 0);//violet   /**
+
 /*  The strobe animation
    */
     StrobeAnimation animation;

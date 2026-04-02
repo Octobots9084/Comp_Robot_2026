@@ -150,7 +150,7 @@ public class Robot extends LoggedRobot {
   /** This function is called once when the robot is disabled. */
   @Override
   public void disabledInit() {
-    
+    Lights.getLightInstance().lightsWantedState = LightAnimations.DISABLED;
     Superstructure.getInstance().wantedState = States.SAFE;
     // SmartDashboard.putBoolean("IsBlueAlliance", Constants.isBlueAlliance);
     ButtonConfig.driverController.setRumble(RumbleType.kBothRumble, 0);
@@ -172,6 +172,8 @@ public class Robot extends LoggedRobot {
         Constants.isBlueAlliance = true;
       }
     }
+    
+  
   }
 
   /**
@@ -186,13 +188,11 @@ public class Robot extends LoggedRobot {
     swerve.wantedState = SwerveStates.IDLE;
         TeleopStarted = false;
 
-
     // schedule the autonomous command (example)
     if (autonomousCommand != null) {
       CommandScheduler.getInstance().schedule(autonomousCommand);// TODO: not command
     }
     Constants.timer.restart();
-    DriverCommunications.PhaseCountdown.restart();
   }
 
   /** This function is called periodically during autonomous. */
@@ -205,17 +205,13 @@ public class Robot extends LoggedRobot {
   public void teleopInit() {
     if (Intake.getInstance().autoIntaked) {
       Intake.getInstance().wantedState = IntakeStates.EXTENDED;
-    }
-    DriverCommunications.PhaseCountdown.restart();
-    Constants.timer.restart();
+    }    Constants.timer.restart();
     // // if (!shooter.turretAlreadyZeroed){
     //   SmartDashboard.putNumber("hubBallSpeed", 6.7);
     // //   SmartDashboard.putNumber("hubFlywheelSpeed", 9.5);
     // // }
     TeleopStarted = true;
-    DriverCommunications.PhaseTime = 10;
-
-    
+    Constants.timer.restart();
     setAllianceColor();
     //only automaticly zeros if we havent already zeroed while still allowing a zero button
     Superstructure.getInstance().wantedState = States.ZERO;
@@ -247,6 +243,7 @@ public class Robot extends LoggedRobot {
     }
     lastHubPeriod = Shooter.getInstance().isHubActive();
     WonAuto();
+    Shooter.getInstance().isHubActive();
    
 
       
@@ -263,9 +260,9 @@ public class Robot extends LoggedRobot {
                     }
                 case 'R':
                     if (!Constants.isBlueAlliance) {
-                        return false;
-                    } else {
                         return true;
+                    } else {
+                        return false;
                     }
 
                 default:
