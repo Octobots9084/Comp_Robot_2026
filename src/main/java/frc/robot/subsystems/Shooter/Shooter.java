@@ -153,7 +153,6 @@ public class Shooter extends SubsystemBase {
                         turret.setHoodPosition(hoodTargetPosition);
                         flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
                         if(isAimedAtFerry){
-                            Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTFERRY;
                             activateFeeder();
                         }
                     }else{
@@ -174,7 +173,6 @@ public class Shooter extends SubsystemBase {
                         flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
                         if(isAimedAtHub){
                             if(flywheel.FlywheelInTolerance(1)){
-                                Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTHUB;
                                 feeder.setFeederVelocity(FeederStates.SCORING);
                                 flywheelDebouncer = 0;
                             }else if (flywheelDebouncer<10){
@@ -199,15 +197,10 @@ public class Shooter extends SubsystemBase {
 
                 if(!swerve.isInAllianceZone()){
                         if(isAimedAtFerry){
-                            Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTFERRY;
                             activateFeeder();
-                        }else{
-                            Lights.getLightInstance().lightsWantedState = LightAnimations.CANTSHOOT;
-
                         }
                 }else{
                     wantedShooterState = ShooterStates.BUMP;
-                    Lights.getLightInstance().lightsWantedState = LightAnimations.CANTSHOOT;
                 }
                 break;
             case AUTOHUB:
@@ -217,8 +210,7 @@ public class Shooter extends SubsystemBase {
 
                     flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
                     if(isAimedAtHub){
-                        Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTHUB;
-                        Intake.getInstance().wantedState = IntakeStates.ELEPHANTIASISPART2;
+                       Intake.getInstance().wantedState = IntakeStates.ELEPHANTIASISPART2;
                         if(flywheel.FlywheelInTolerance(1)){
                             feeder.setFeederVelocity(FeederStates.SCORING);
                             flywheelDebouncer = 0;
@@ -247,7 +239,6 @@ public class Shooter extends SubsystemBase {
 
                     flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
                     if(isAimedAtHub){
-                        Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTHUB;
                         Intake.getInstance().wantedState = IntakeStates.INTAKING;
                         if(flywheel.FlywheelInTolerance(1)){
                             feeder.setFeederVelocity(FeederStates.SCORING);

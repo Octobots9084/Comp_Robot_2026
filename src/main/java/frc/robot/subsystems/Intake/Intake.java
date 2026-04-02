@@ -116,6 +116,7 @@ public class Intake extends SubsystemBase {
             case INTAKING:
             //motors on intake out
             io.setIntakeState(currentState);
+            //Lights.getLightInstance().lightsWantedState = LightAnimations.INTAKING;
             break;
 
             case EXTENDED:
@@ -131,6 +132,7 @@ public class Intake extends SubsystemBase {
 
             case REVERSEINTAKING:
             io.setIntakeState(currentState);
+            //Lights.getLightInstance().lightsWantedState = LightAnimations.REVERSEINTAKING;
             break;
             case ZERO:
                 if (io.zeroIntake()) {

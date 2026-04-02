@@ -214,6 +214,10 @@ public class Robot extends LoggedRobot {
     // // }
     TeleopStarted = true;
     Constants.timer.restart();
+    if (shooter.turretAlreadyZeroed && intake.alreadyZeroed){
+      LightAnimations.Lights();
+    }
+
     setAllianceColor();
     //only automaticly zeros if we havent already zeroed while still allowing a zero button
     Superstructure.getInstance().wantedState = States.ZERO;
