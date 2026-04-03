@@ -26,6 +26,8 @@ import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.ShooterStates;
 import frc.robot.subsystems.Shooter.Turret.Turret;
 import frc.robot.subsystems.Shooter.Turret.TurretIO;
+import frc.robot.subsystems.Vision.VisionIOSystem;
+import frc.robot.subsystems.Vision.VisionIO.VisionIOInputs;
 import frc.robot.util.LoggedTracer;
 import frc.robot.util.PhoenixUtil;
 
@@ -153,7 +155,6 @@ public class Robot extends LoggedRobot {
   @Override
   public void disabledInit() {
     
-    Lights.getLightInstance().lightsWantedState = LightAnimations.DISABLED;
     Superstructure.getInstance().wantedState = States.SAFE;
     // SmartDashboard.putBoolean("IsBlueAlliance", Constants.isBlueAlliance);
     ButtonConfig.driverController.setRumble(RumbleType.kBothRumble, 0);
@@ -175,6 +176,11 @@ public class Robot extends LoggedRobot {
         Constants.isBlueAlliance = true;
       }
     }
+    // if(VisionIOInputs.frontLeftCameraConected){
+    //   Lights.getLightInstance().lightsWantedState = LightAnimations.DISABLED;
+    // }else{
+    //   Lights.getLightInstance().lightsWantedState = LightAnimations.DISCONNECTEDCAMERA;
+    // }
     
   
   }

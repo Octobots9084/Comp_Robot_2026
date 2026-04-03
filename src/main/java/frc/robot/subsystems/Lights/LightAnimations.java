@@ -29,12 +29,12 @@ import com.ctre.phoenix6.controls.StrobeAnimation;
 public enum LightAnimations {
 
     DEFAULT(new StrobeAnimation(0, 65).withColor(new RGBWColor(255, 255, 0, 0)), 0.1), // Yellow
-    CANTSHOOT(new StrobeAnimation(0, 65).withColor(new RGBWColor(255, 20, 0, 0)), 0.1), // Orange
-    SHOOTFERRY(new StrobeAnimation(0, 65).withColor(new RGBWColor(0, 255, 100, 0)), 0.1), // Green
-    SHOOTHUB(new StrobeAnimation(0, 65).withColor(new RGBWColor(0, 200, 255, 0)), 0.1), // Teal
-    ZEROED(new StrobeAnimation(0,65).withColor(new RGBWColor(250, 0, 0, 100)), 0.1),//light blue   /**
-    DISABLED(new StrobeAnimation(0,65).withColor(new RGBWColor(250, 100, 0, 100)), 0.1),//light blue   /**
-    DISCONNECTEDCAMERA(new StrobeAnimation(0,65).withColor(new RGBWColor(255,0,0,0)), 0.1),
+    CANTSHOOT(new StrobeAnimation(0, 65).withColor(new RGBWColor(255, 50, 0, 0)), 0.1), // Orange
+    SHOOTFERRY(new StrobeAnimation(0, 65).withColor(new RGBWColor(0, 255, 100, 0)), 0.1), // Tealish
+    SHOOTHUB(new StrobeAnimation(0, 65).withColor(new RGBWColor(0, 255, 0, 0)), 0.1), // Green
+    ZEROED(new StrobeAnimation(0,65).withColor(new RGBWColor(0, 0, 255, 100)), 0.1),//light blue   /**
+    DISABLED(new StrobeAnimation(0,65).withColor(new RGBWColor(250, 0, 250, 100)), 0.1),//pink   /**
+    DISCONNECTEDCAMERA(new StrobeAnimation(0,65).withColor(new RGBWColor(255,0,0,0)), 0.1),//violently red
 
     //NOT USING
     INTAKING(new StrobeAnimation(0, 65).withColor(new RGBWColor(0, 55, 255, 0)), 0), // Blue
