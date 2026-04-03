@@ -24,6 +24,10 @@ public interface VisionIO {
     public default void updateInputs(VisionIOInputs inputs) {
     }
 
+    public default boolean CamerasConnected(){
+            return true;
+        }
+
     public default void addVisionReading(String cameraName, EstimatedRobotPose pose,
             Matrix<N3, N1> visionMeasurementStdDevs) {
     }

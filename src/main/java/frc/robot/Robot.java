@@ -26,6 +26,7 @@ import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.ShooterStates;
 import frc.robot.subsystems.Shooter.Turret.Turret;
 import frc.robot.subsystems.Shooter.Turret.TurretIO;
+import frc.robot.subsystems.Vision.Vision;
 import frc.robot.subsystems.Vision.VisionIOSystem;
 import frc.robot.subsystems.Vision.VisionIO.VisionIOInputs;
 import frc.robot.util.LoggedTracer;
@@ -176,11 +177,11 @@ public class Robot extends LoggedRobot {
         Constants.isBlueAlliance = true;
       }
     }
-    // if(VisionIOInputs.frontLeftCameraConected){
-    //   Lights.getLightInstance().lightsWantedState = LightAnimations.DISABLED;
-    // }else{
-    //   Lights.getLightInstance().lightsWantedState = LightAnimations.DISCONNECTEDCAMERA;
-    // }
+    if(Vision.getInstance().io.CamerasConnected()){
+      Lights.getLightInstance().lightsWantedState = LightAnimations.DISABLED;
+    }else{
+      Lights.getLightInstance().lightsWantedState = LightAnimations.DISCONNECTEDCAMERA;
+    }
     
   
   }

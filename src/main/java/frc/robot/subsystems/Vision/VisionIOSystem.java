@@ -74,7 +74,13 @@ public class VisionIOSystem implements VisionIO {
         inputs.leftCameraConected = leftCamera.isConnected();
     }
 
-
+    public boolean CamerasConnected(){
+        if(frontLeftCamera.isConnected() && frontRightCamera.isConnected() && rightCamera.isConnected() && leftCamera.isConnected()){
+            return true;
+        }else{
+            return false;
+        }
+    }
     /*
      * the periodic seaches all cameras for a hub mutitag pose and if found uses only that pose however if it is not found it adds togeter all the other tag poses to get a sutable estimate.
     */

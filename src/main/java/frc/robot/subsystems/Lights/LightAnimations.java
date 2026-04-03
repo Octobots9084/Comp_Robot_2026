@@ -11,21 +11,6 @@ import com.ctre.phoenix6.controls.RainbowAnimation;
 import com.ctre.phoenix6.controls.StrobeAnimation;
 
 
-
-
-   /**
-   * The premade color and strobe settings for {@link frc.robot.subsystems.Lights.Lights Lights}
-   * <br></br>
-   * <b>Colors</b>
-   * <ul>
-   * <li>DEFAULT - Yellow</li>
-   * <li>CANTSHOOT - Orange</li>
-   * <li>INTAKING - Blue</li>
-   * <li>REVERSEINTAKING - Pink</li>
-   * <li>SHOOTREADYMANUAL - Green</li>
-   * <li>SHOOTREADYCONTINIOUS - Teal</li>
-   * </ul>
-   */
 public enum LightAnimations {
 
     DEFAULT(new StrobeAnimation(0, 65).withColor(new RGBWColor(255, 255, 0, 0)), 0.1), // Yellow
@@ -47,7 +32,7 @@ public enum LightAnimations {
    */
     StrobeAnimation animation;
     
-    static RainbowAnimation rainbowAnim = new RainbowAnimation(0, 64);
+    static RainbowAnimation rainbowAnim = new RainbowAnimation(0, 65);
        /**
        * The time
        */
