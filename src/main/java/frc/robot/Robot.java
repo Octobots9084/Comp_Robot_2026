@@ -152,6 +152,7 @@ public class Robot extends LoggedRobot {
   /** This function is called once when the robot is disabled. */
   @Override
   public void disabledInit() {
+    
     Lights.getLightInstance().lightsWantedState = LightAnimations.DISABLED;
     Superstructure.getInstance().wantedState = States.SAFE;
     // SmartDashboard.putBoolean("IsBlueAlliance", Constants.isBlueAlliance);
@@ -252,6 +253,7 @@ public class Robot extends LoggedRobot {
     lastHubPeriod = Shooter.getInstance().isHubActive();
     WonAuto();
     Shooter.getInstance().isHubActive();
+    LightAnimations.Lights();
    
 
       

@@ -34,7 +34,7 @@ public enum LightAnimations {
     SHOOTHUB(new StrobeAnimation(0, 65).withColor(new RGBWColor(0, 200, 255, 0)), 0.1), // Teal
     ZEROED(new StrobeAnimation(0,65).withColor(new RGBWColor(250, 0, 0, 100)), 0.1),//light blue   /**
     DISABLED(new StrobeAnimation(0,65).withColor(new RGBWColor(250, 100, 0, 100)), 0.1),//light blue   /**
-
+    DISCONNECTEDCAMERA(new StrobeAnimation(0,65).withColor(new RGBWColor(255,0,0,0)), 0.1),
 
     //NOT USING
     INTAKING(new StrobeAnimation(0, 65).withColor(new RGBWColor(0, 55, 255, 0)), 0), // Blue
@@ -62,7 +62,7 @@ public enum LightAnimations {
            new RainbowAnimation(0, 65);
     }
     public static void Lights(){
-       /* if(SwerveSubsystem.getInstance().isInAllianceZone()){
+        if(SwerveSubsystem.getInstance().isInAllianceZone()){
             if(Shooter.getInstance().isAimedAtHub){
                 Lights.getLightInstance().lightsWantedState = SHOOTHUB;
             }else{
@@ -75,6 +75,6 @@ public enum LightAnimations {
                 Lights.getLightInstance().lightsWantedState = CANTSHOOT;
 
             }
-        }*/
+        }
     }
 }
