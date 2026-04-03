@@ -4,6 +4,7 @@ public enum ShooterStates {
     SAFE,
     FERRY,
     BUMP,
+    TRENCH,
     HUB,
     AUTOHUB,
     AUTOFERRY,

@@ -149,7 +149,7 @@ public class TurretIOTalonFX implements TurretIO {
     }
 
     @Override
-    public void zeroTurret() {
+    public boolean zeroTurret() {
         Logger.recordOutput("turretAlreadyZeroed", Shooter.getInstance().turretAlreadyZeroed);
         if(!Shooter.getInstance().turretAlreadyZeroed){
             if (!turretMagnetBreak.get()) {
@@ -163,6 +163,7 @@ public class TurretIOTalonFX implements TurretIO {
                 Shooter.getInstance().turretAlreadyZeroed = false;
             }
         }
+        return Shooter.getInstance().turretAlreadyZeroed;
     }
 
     // TODO add later gravity zeroing is fine for now

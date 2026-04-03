@@ -11,6 +11,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
@@ -119,6 +120,8 @@ public class Shooter extends SubsystemBase {
         sIO.updateInputs(shooterInputs);
         Logger.processInputs("Shooter/Shooter", shooterInputs);
         // SmartDashboard.putBoolean("HubAcivity", isHubActive());
+        Logger.recordOutput("isInTrenchZone", inEnterTrenchZone());
+        Logger.recordOutput("trench danger zone", inTrenchDangerZone());
     }
 
     public void ApplyStates() {
@@ -149,6 +152,11 @@ public class Shooter extends SubsystemBase {
                 isAimedAtFerry = aimFerry();
                 turret.setHoodPosition(Constants.maximumHoodPosition);
                 if(!swerve.isInAllianceZone()){
+                    if(inEnterTrenchZone()){
+                        if(inTrenchDangerZone()){
+                            wantedShooterState = ShooterStates.TRENCH;
+                        }
+                    }
                     if(driverOverride){
                         turret.setHoodPosition(hoodTargetPosition);
                         flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
@@ -162,13 +170,20 @@ public class Shooter extends SubsystemBase {
                         flywheelInToleranceOnce = false;
                     }
                 }else{
+                    if(!inEnterTrenchZone()){
                     wantedShooterState = ShooterStates.BUMP;
+                    }
                 }
                 break;
             case HUB:
-            isAimedAtHub = isAimedAtHub();
+                isAimedAtHub = isAimedAtHub();
                 turret.setHoodPosition(Constants.maximumHoodPosition);
                 if(swerve.isInAllianceZone()){
+                    if(inEnterTrenchZone()){
+                        if(inTrenchDangerZone()){
+                            wantedShooterState = ShooterStates.TRENCH;
+                        }
+                    }
                     if(driverOverride){
                         turret.setHoodPosition(hoodTargetPosition);
                         flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
@@ -189,9 +204,25 @@ public class Shooter extends SubsystemBase {
                         feeder.setFeederVelocity(FeederStates.OFF);
                         flywheel.setFlywheelVelocity(FlywheelStates.SAFE);
                     }
-                }else{  
-                    wantedShooterState = ShooterStates.BUMP;
+                }else{
+                    //TODO comment this out when testing
+                    if(!inEnterTrenchZone()){
+                        wantedShooterState = ShooterStates.BUMP;
+                    }
                 }
+                break;
+            case TRENCH:
+                turret.setHoodPosition(Constants.maximumHoodPosition);
+                flywheel.setFlywheelVelocity(FlywheelStates.SAFE);
+                feeder.setFeederVelocity(FeederStates.OFF);
+                if(!inTrenchDangerZone()){
+                    if(swerve.isInAllianceZone()){
+                        wantedShooterState = ShooterStates.HUB;
+                    }else{
+                        wantedShooterState = ShooterStates.FERRY;
+                    }
+                }
+                //TODO
                 break;
             case AUTOFERRY:
                 //shoots balls from neutral to our zone
@@ -300,7 +331,9 @@ public class Shooter extends SubsystemBase {
             case ZERO:
                 //makes the turret figure out where it is
                 turret.io.zeroHoodMotor();
-                turret.io.zeroTurret();
+                if(turret.io.zeroTurret()){
+                    wantedShooterState = ShooterStates.HUB;
+                }
                 break;
             default:
                 break;
@@ -350,7 +383,9 @@ public class Shooter extends SubsystemBase {
                 // if we're on the bump
                 currentShooterState = ShooterStates.BUMP;
                 break;
-
+            case TRENCH:
+                currentShooterState = ShooterStates.TRENCH;
+                break;
             case SAFE:
                 // driver input 
                 currentShooterState = ShooterStates.SAFE;
@@ -392,6 +427,57 @@ public class Shooter extends SubsystemBase {
         else{
             feeder.setFeederVelocity(FeederStates.OFF);
         }
+    }
+
+    public boolean inTrenchDangerZone(){
+        double zeroSpeedDistance = 0.5;
+        double coefficientForDistance = 1.5;
+        double hoodFullSwingTime = 0.5; //TODO
+        double trenchRelativeXVelocity = getTrenchRelativeVelocity().vxMetersPerSecond;
+        if(trenchRelativeXVelocity > 0){
+            return getDistanceToClosestTrench()<(zeroSpeedDistance + coefficientForDistance*trenchRelativeXVelocity*hoodFullSwingTime);
+        }
+        return getDistanceToClosestTrench() < zeroSpeedDistance;
+    }
+
+    public ChassisSpeeds getTrenchRelativeVelocity(){
+        // Trench relative velocity means that positive is moving towards the closest trench, and negative is moving away from the closest trench.
+        ChassisSpeeds fieldRelative = ChassisSpeeds.fromRobotRelativeSpeeds(swerve.io.getChassisSpeeds(), swerve.io.getPose2d().getRotation());
+        ChassisSpeeds fieldRelativeInverted = new ChassisSpeeds(fieldRelative.vxMetersPerSecond*-1, fieldRelative.vxMetersPerSecond, fieldRelative.omegaRadiansPerSecond);
+        double robotX = swerve.getRobotPose().getX();
+        boolean inversion;
+
+        if(robotX < 4){ //if in blue alliance zone going to neutral
+            inversion = false;
+        }else if(robotX < 8.25){ // in the neutral zone on the side of blue alliance moving towards the red alliance
+                inversion = true;
+        }else if(robotX < 12.5){ // if moving towards red alliance zone and in the red alliance side of the neutral zone
+            inversion = false;
+        }else{
+            inversion = true;
+        }
+        if(fieldRelative.vxMetersPerSecond < 0){
+            return inversion ? fieldRelativeInverted : fieldRelative;
+        }else{
+            return inversion ? fieldRelative : fieldRelativeInverted;
+        }
+    }
+
+    public double getDistanceToClosestTrench(){
+        Pose2d robotPose = swerve.getRobotPose();
+        double distToRedTrench = Math.abs(getXToTarget(Constants.redTrenchX));
+        double distToBlueTrench = Math.abs(getXToTarget(Constants.blueTrenchX));
+        if(distToBlueTrench < distToRedTrench){
+            return distToBlueTrench;
+        }
+        return distToRedTrench;
+    }
+
+    public boolean inEnterTrenchZone(){
+        if(swerve.getRobotPose().getMeasureY().in(Units.Meters) < 2 || swerve.getRobotPose().getMeasureY().in(Units.Meters) > 6){
+            return true;
+        }
+        return false;
     }
 
     public boolean cantShoot(){

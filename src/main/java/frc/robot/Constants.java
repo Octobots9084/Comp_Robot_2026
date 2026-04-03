@@ -143,6 +143,13 @@ public final class Constants {
 
   public static RobotTypes robotType = RobotTypes.COMP;
 
+  public static double redTrenchX = 11.9375;
+  public static double blueTrenchX = 3.625;
+  public static double outpostTrenchY = 7.4375;
+  public static double depotTrenchY = 0.625;
+
+  
+
   //climb positions Red
     public static Translation2d climbStartPositionRedPosY = new Translation2d(15.500,6.106); //TODO get a real value
     public static Translation2d climbEngagedPositionRedPosY = new Translation2d(15.500,4.802); //TODO get a real value
