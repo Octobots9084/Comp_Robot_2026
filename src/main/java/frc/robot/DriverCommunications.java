@@ -21,14 +21,12 @@ public class DriverCommunications {
         PhaseClock = Math.round(ShiftEndTime - TeleopTimer);
         if(!Shooter.getInstance().isHubActive()){
             NextPhaseIndication = "Our Shift";
+            PhaseIndication = "Opposing Shift";
         }else{
             NextPhaseIndication = "Opposing Shift";
-        }
-        if(Shooter.getInstance().isHubActive()){
             PhaseIndication = "Our Shift";
-        }else{
-            PhaseIndication = "Opposing Shift";
         }
+
     }
     
     public static void pushToElastic() {
@@ -60,7 +58,7 @@ public class DriverCommunications {
             }
 
         }else{ //if in auto
-            PhaseClock = Math.round(20 - Constants.timer.get());
+            PhaseClock = Math.round(20 - TeleopTimer);
             NextPhaseIndication = "Transition Phase";
             PhaseIndication = "Autonomous";
 

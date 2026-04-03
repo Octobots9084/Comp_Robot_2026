@@ -48,7 +48,7 @@ public enum LightAnimations {
     }
     public static void Lights(){
         if(SwerveSubsystem.getInstance().isInAllianceZone()){
-            if(Shooter.getInstance().isAimedAtHub){
+            if(Shooter.getInstance().isAimedAtHub && Shooter.getInstance().isHubActive()){
                 Lights.getLightInstance().lightsWantedState = SHOOTHUB;
             }else{
                 Lights.getLightInstance().lightsWantedState = CANTSHOOT;
