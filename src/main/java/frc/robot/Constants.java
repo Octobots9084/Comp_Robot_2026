@@ -69,6 +69,13 @@ public final class Constants {
   // (Fake values. Experiment anl;y   y y    +        u'  d determine estimation noise on an actual robot.)
   public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
   public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
+  // Basic filtering thresholds
+  public static final double maxAmbiguity = 0.3;
+  public static final double maxZError = 0.75;
+  // Standard deviation baselines, for 1 meter distance and 1 tag
+  // (Adjusted automatically based on distance and # of tags)
+  public static double linearStdDevBaseline = 0.02; // Meters
+  public static double angularStdDevBaseline = 0.06; // Radians
 
   public static final Mode simMode = Mode.SIM;
   public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;

@@ -23,6 +23,7 @@ import frc.robot.subsystems.Shooter.Feeder.FeederIOTalonFX;
 import frc.robot.subsystems.Shooter.Flywheel.FlywheelIOTalonFX;
 import frc.robot.subsystems.Shooter.Turret.TurretIOTalonFX;
 import frc.robot.subsystems.Vision.Vision;
+import frc.robot.subsystems.Vision.VisionIOPhoton;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -63,7 +64,11 @@ public class RobotContainer {
           Constants.maxAngularVelocity, Constants.maxVelocity);
     }
 
-    vision = new Vision(swerve::addVisionMeasurement);
+    vision = new Vision(swerve::addVisionMeasurement,
+      new VisionIOPhoton(Constants.frontRightCameraName, Constants.robotToCamFrontRight),
+      new VisionIOPhoton(Constants.frontleftCameraName, Constants.robotToCamFrontLeft),
+      new VisionIOPhoton(Constants.leftCameraName, Constants.robotToCamLeft),
+      new VisionIOPhoton(Constants.rightCameraName, Constants.robotToCamFrontRight));
 
     switch (Constants.currentMode) {
       case REAL:

@@ -30,7 +30,7 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
-import frc.robot.subsystems.Vision.VisionIOSystem;
+// import frc.robot.subsystems.Vision.VisionIOSystem;
 import frc.robot.subsystems.States;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Intake.Intake;
@@ -200,7 +200,7 @@ public class SwerveSubsystem extends SubsystemBase {
                 
             case ALIGNCLIMB:
                 if (this.currentState != SwerveStates.ALIGNCLIMB)
-                    VisionIOSystem.climbAlignStage = 0;
+                    // VisionIOSystem.climbAlignStage = 0;
                 return SwerveStates.ALIGNCLIMB;
 
             default:
@@ -238,8 +238,8 @@ public class SwerveSubsystem extends SubsystemBase {
                         .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
                 break;
             case ALIGNCLIMB:
-                io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(VisionIOSystem.allignClimb(getRobotPose()))
-                        .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
+                // io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(VisionIOSystem.allignClimb(getRobotPose()))
+                //         .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
                 break;
             default:
                 break;
