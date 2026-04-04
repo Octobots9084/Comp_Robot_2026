@@ -74,10 +74,10 @@ public class Superstructure extends SubsystemBase {
                 // }
                 break;
             case SHOOTER:
-                // if (climb.getClimbState() != ClimbStates.CLIMBEDL1 || climb.getClimbState() != ClimbStates.CLIMBEDL3) {
-                    currentState = States.SHOOTER;
-                    
-                // }
+                currentState = States.SHOOTER;
+                if(currentState != States.SHOOTER){
+                    shooter.wantedShooterState = ShooterStates.HUB;
+                }
                 break;
             case ZERO:
                 if (!shooter.turretAlreadyZeroed || !intake.alreadyZeroed){

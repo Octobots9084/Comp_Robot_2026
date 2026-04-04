@@ -222,7 +222,6 @@ public class Shooter extends SubsystemBase {
                         wantedShooterState = ShooterStates.FERRY;
                     }
                 }
-                //TODO
                 break;
             case AUTOFERRY:
                 //shoots balls from neutral to our zone
