@@ -119,7 +119,7 @@ public final class Constants {
   public static double hoodGearRatio = 738/23.0;
 
   public static double flywheelGearRatio = 1;//29/33.0;
-  public static double flywheelToTopRollerRatio = 28/21.0;
+  public static double flywheelToTopRollerRatio = 28/23.0;
   public static double flywheelRadius = 0.0508;
   public static double topRollerRadius = 0.0254;
 

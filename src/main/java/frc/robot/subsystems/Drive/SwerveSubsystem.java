@@ -142,18 +142,13 @@ public class SwerveSubsystem extends SubsystemBase {
         // Logger.recordOutput("back right absolute", io.getAbsoluteEncoderPositions(3));
     }
 
-    // TODO: move somewhere important
     public boolean isTilted(double wanted, double tolerance) { /////////////////////
-        boolean inTolerance = false;
         tolerance = Units.degreesToRadians(tolerance);
-        Rotation3d gyroRotation = this.io.getRotation3d();
-        Matrix<N3,N3> gyroMatrix = gyroRotation.toMatrix();
-        double tilt = Math.acos(gyroMatrix.get(2, 2)) - 0.015 - Math.PI; // gyro mounted upside down so subtact PI radians out
-        SmartDashboard.putNumber("Tilt", Units.radiansToDegrees(tilt));
-        if (tilt <= (wanted + tolerance) && tilt >= (wanted - tolerance)) {
-            inTolerance = true;
-        }
-        return !inTolerance;
+        Matrix<N3,N3> gyroMatrix = this.io.getRotation3d().toMatrix();
+        
+        // gyro mounted upside down so subtact PI radians out
+        double tilt = Math.acos(gyroMatrix.get(2, 2)) - 0.015 - Math.PI; 
+        return !MathUtil.isNear(wanted, tilt, tolerance);
     }
 
     public void registerNamedCommands () {
