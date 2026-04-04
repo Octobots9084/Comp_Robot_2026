@@ -60,6 +60,7 @@ public class ButtonConfig {
         coDriverController.b().onTrue(new SetStateManual());
         //coDriverController.leftTrigger(0.5).onTrue(new SetStateSafe());
         driverController.a().onTrue(new Spit());
+        driverController.y().onTrue(new InstantCommand(() -> superstructure.wantedState = States.FIXEDFIRE)).onFalse(new InstantCommand(() -> superstructure.wantedState = States.SHOOTER));
         coDriverController.rightTrigger(0.5).onTrue(new SetStateShooter());
         coDriverController.rightTrigger().onTrue(new InstantCommand(
                 () -> Shooter.driverOverride = true))
