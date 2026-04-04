@@ -410,15 +410,9 @@ public class Shooter extends SubsystemBase {
         }
     }
 
-    // public boolean Shootable() {
-    //     if (!swerve.isTilted(0, 3) && ((swerve.isInAllianceZone() && isHubActive())
-    //             || (!swerve.isInAllianceZone()))) {
-    //         return true;
-    //     } else {
-    //         return false;
-    //     }
-    // }
-
+    /**
+     * Turns on the feeder if the flywheel is up to speed
+     */
     public void activateFeeder(){
         if(flywheel.FlywheelInTolerance(1) || flywheelInToleranceOnce){
             feeder.setFeederVelocity(FeederStates.SCORING);
@@ -429,6 +423,14 @@ public class Shooter extends SubsystemBase {
         }
     }
 
+    /**
+     * Determines if we are in danger of slaming the hood into the trench.
+     * <p>
+     * 
+     * Uses our current speed and distance realtive to the trench to determine if we are in danger of hitting the trench, meaning we need to bring the hood back down.
+     * 
+     * @return true or false dependig on if we are in danger of hitting the hood on the trench.
+     */
     public boolean inTrenchDangerZone(){
         double zeroSpeedDistance = 0.5;
         double coefficientForDistance = 1.5;
@@ -440,6 +442,18 @@ public class Shooter extends SubsystemBase {
         return getDistanceToClosestTrench() < zeroSpeedDistance;
     }
 
+    /**
+     * Gets the velocity of the robot relative to the trench(Trench Relative Velocity)
+     * <p>
+     * 
+     * Trench Relative Velocity means that if you are moving towards the closest trench then your velocity is positive in the X direction and the Y stays the same, 
+     * and if you are moving away the X velocity is negative and Y remains the same. 
+     * Essentially inverting the X velocity to get it always pointing toward or away the trench.
+     * 
+     * This checks if our velocity is positive or negative and if we are in certain zones of the field to determine if we need to invert the velocity
+     *
+     * @return the Trench Relative Velocity based on the robots Field Relative Velocity
+     */
     public ChassisSpeeds getTrenchRelativeVelocity(){
         // Trench relative velocity means that positive is moving towards the closest trench, and negative is moving away from the closest trench.
         ChassisSpeeds fieldRelative = ChassisSpeeds.fromRobotRelativeSpeeds(swerve.io.getChassisSpeeds(), swerve.io.getPose2d().getRotation());
@@ -463,6 +477,14 @@ public class Shooter extends SubsystemBase {
         }
     }
 
+    /**
+     * Is the robot in a position to which it could drive through the trench(or enter the trench)
+     * <p>
+     * 
+     * Uses the method {@link #getXToTarget()} to calclate the distance between the hood and both sets of trenches(red and blue) and compares them to get the least distance.
+     *
+     * @return whether or not the turret is in a place in which we could enter the trench from
+     */
     public double getDistanceToClosestTrench(){
         Pose2d robotPose = swerve.getRobotPose();
         double distToRedTrench = Math.abs(getXToTarget(Constants.redTrenchX));
@@ -472,7 +494,14 @@ public class Shooter extends SubsystemBase {
         }
         return distToRedTrench;
     }
-
+     /**
+     * Is the robot in a position to which it could drive through the trench(or enter the trench)
+     * <p>
+     * 
+     * Checks if the robot is in the X areas that correspond with the width of the trench
+     *
+     * @return whether or not the turret is in a place in which we could enter the trench from
+     */
     public boolean inEnterTrenchZone(){
         if(swerve.getRobotPose().getMeasureY().in(Units.Meters) < 2 || swerve.getRobotPose().getMeasureY().in(Units.Meters) > 6){
             return true;
@@ -487,14 +516,15 @@ public class Shooter extends SubsystemBase {
             return true;
     }
 
-    //used in hub and autohub for logging and setting the ball and flywheel speed
-    public void scaleFlywheel(){
-        hubBallSpeed = 0.5*(getDistanceToHub())+6;//8;//12;//6.5361+ 0.96897 * (getDistanceToHub()); // first change
-        hubFlywheelSpeed = 1.333333*getDistanceToHub()+5.133333;//7;//8.5;//6.3677 + 0.56653 * (getDistanceToHub()); // second change
-        Logger.recordOutput("hubBallSpeed",hubBallSpeed);
-        Logger.recordOutput("hubFlywheelSpeed",hubFlywheelSpeed);
-    }
-
+    /**
+     * Get the distance from the turret to the hub
+     * <p>
+     * 
+     * Uses the helper methods {@link #getXToTarget()} and {@link #getYToTarget()} to calculate the individual distances
+     * and then uses the pythagorean theorem to calculate the distance between the two points
+     *
+     * @return the distance from the turret to the hub
+     */
     public double getDistanceToHub(){
         double XToHub;
         double YToHub;
@@ -507,7 +537,16 @@ public class Shooter extends SubsystemBase {
         }
         return Math.sqrt(YToHub*YToHub+XToHub*XToHub);
     }
-
+    /**
+     * Get the difference in the Y component of the field relative positions of a target and the turret.
+     * <p>
+     * 
+     * Calculates the current position of the turret from robot position, rotation, and distance from the center 
+     * then gets the difference in the Y components of the positions
+     *
+     * @param poseY the y component of the target field relative position
+     * @return the difference in the y components of the turret and target
+     */
     public double getYToTarget(double poseY){
         ChassisSpeeds fieldRelative = ChassisSpeeds.fromRobotRelativeSpeeds(swerve.io.getChassisSpeeds(), swerve.io.getPose2d().getRotation());
         return poseY - (swerve.io.getPose2d().getY()
@@ -515,12 +554,23 @@ public class Shooter extends SubsystemBase {
                 * Math.sin(((swerve.io.getPose2d().getRotation().getRadians() + fieldRelative.omegaRadiansPerSecond * ShooterAngleCalculator.lagTime) + Constants.TurretAngleFromCenter)) + fieldRelative.vyMetersPerSecond * ShooterAngleCalculator.lagTime);
     }
 
+    /**
+     * Get the difference in the X component of the field relative positions of a target and the turret.
+     * <p>
+     * 
+     * Calculates the current position of the turret from robot position, rotation, and distance from the center 
+     * then gets the difference in the X components of the positions
+     *
+     * @param poseX the X component of the target field relative position
+     * @return the difference in the X components of the turret and target
+     */
     public double getXToTarget(double poseX){
         ChassisSpeeds fieldRelative = ChassisSpeeds.fromRobotRelativeSpeeds(swerve.io.getChassisSpeeds(), swerve.io.getPose2d().getRotation());
         return poseX - (swerve.io.getPose2d().getX()
             + Constants.TurretDistFromCenter
                 * Math.cos(((swerve.io.getPose2d().getRotation().getRadians() + fieldRelative.omegaRadiansPerSecond * ShooterAngleCalculator.lagTime) + Constants.TurretAngleFromCenter)) + fieldRelative.vxMetersPerSecond * ShooterAngleCalculator.lagTime);
     }
+
 
     public double getVXOfRobot(ChassisSpeeds fieldRelative){
         return fieldRelative.vxMetersPerSecond -
@@ -556,6 +606,15 @@ public class Shooter extends SubsystemBase {
                 * Math.cos(((swerve.io.getPose2d().getRotation().getRadians())) + Constants.TurretAngleFromCenter);
     }
 
+
+    /**
+     * Aims the turret and hood in order to make it into the hub.
+     * <p>
+     * 
+     * Uses the wrapped turret angle given by {@link #GetProposedAngle()} and the hood angle interpolated from the LUT to command the turret and hood to the positions required to make it in the hub.
+     *
+     * @return if the hood and turret are within tolerance of their setpoint given by the LUT
+     */
     public boolean isAimedAtHub() {
         double YToHub;
         double XToHub;
@@ -599,6 +658,14 @@ public class Shooter extends SubsystemBase {
         return (turret.hoodInTolerance(.05) && turret.turretInTolerance(0.05));
     }
 
+    /**
+     * Uses the LUT to determine the turret angle to aim towards the hub and then wraps it to be in the ROM of the turret on our robot
+     * <p>
+     * 
+     * Uses the calculated angle from Newtons method with a LUT to get the field relative rotation, then converts that to be robot relative so it always aims no matter the rotation.
+     *
+     * @return the turret angle required to make it in the hub
+     */
     public double GetProposedAngle(){
         double rotation = SwerveSubsystem.getInstance().getRobotPose().getRotation().getRadians();
 
@@ -626,6 +693,15 @@ public class Shooter extends SubsystemBase {
         return proposedAngle;
     }
 
+
+    /**
+     * Aims the turret and hood in order to make it into the hub.
+     * <p>
+     * 
+     * Uses the wrapped turret angle given by {@link #GetProposedAngle()} and the hood angle interpolated from the LUT to command the turret and hood to the positions required to make it in the hub.
+     *
+     * @return if the hood and turret are within tolerance of their setpoint given by the LUT
+     */
     public boolean aimFerry() {
         double YToHub;
         double XToHub;
