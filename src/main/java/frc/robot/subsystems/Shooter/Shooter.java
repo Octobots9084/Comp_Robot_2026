@@ -81,7 +81,7 @@ public class Shooter extends SubsystemBase {
     public double ferryFlywheelSpeed = 10;
 
     public double manuelHood = 74; 
-    public double manuelFlywheel = 40; //0 to 1
+    public double manuelFlywheel = 40;
 
     public double hoodTargetPosition = Constants.maximumHoodPosition;
 
@@ -147,6 +147,18 @@ public class Shooter extends SubsystemBase {
                 flywheel.setFlywheelVelocity(FlywheelStates.SPITTOCONTAINER);
                 turret.setHoodPosition(Constants.maximumHoodPosition);
                 turret.setTurretPosition(-90/360.0);
+                break;
+            case MANUEL:
+                Logger.recordOutput("manuel hood position", manuelHood); 
+                Logger.recordOutput("manuel flywheel position", manuelFlywheel); 
+                isAimedAtHub = isAimedAtHub(); 
+                turret.setHoodPosition(manuelHood/360.0);
+                if(driverOverride){
+                    if(isAimedAtHub){
+                        flywheel.setFlywheelVelocity(manuelFlywheel);
+                        activateFeeder();
+                    }
+                }
                 break;
             case FERRY:
                 isAimedAtFerry = aimFerry();
@@ -398,6 +410,9 @@ public class Shooter extends SubsystemBase {
                 break;
             case MANUAL:
                 currentShooterState = ShooterStates.MANUAL;
+                break;
+            case MANUEL:
+                currentShooterState = ShooterStates.MANUEL;
                 break;
             case SPIT:
                 currentShooterState = ShooterStates.SPIT;

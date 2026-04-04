@@ -93,6 +93,16 @@ public class ButtonConfig {
 
         }));
 
+        if(Shooter.getInstance().currentShooterState != ShooterStates.MANUEL){
+                driverController.povUp().onTrue(new InstantCommand( () -> {
+                        Shooter.getInstance().wantedShooterState = ShooterStates.MANUEL;
+                }));
+        }else{
+                driverController.povUp().onTrue(new InstantCommand( () -> {
+                        Shooter.getInstance().wantedShooterState = ShooterStates.HUB;
+                }));
+        }
+
 
         //TODO remove this after testing
         // driverController.y().onTrue(new InstantCommand(() -> {
