@@ -60,8 +60,8 @@ public final class Constants {
   public static final Transform3d robotToCamFrontRight = new Transform3d(new Translation3d(-0.28,0.195,0.19),
       new Rotation3d(0, -highCamPitch, (-30/180.0)*Math.PI+Math.PI));
   //-20 +30
-  public static final Transform3d robotToCamFrontLeft = new Transform3d(new Translation3d(-0.30,-0.13,0.24),
-      new Rotation3d(0, LowCamPitch, (30/180.0)*Math.PI + Math.PI));
+  public static final Transform3d robotToCamFrontLeft = new Transform3d(new Translation3d(-0.28,-0.135,0.24),
+      new Rotation3d(0, -LowCamPitch, (30/180.0)*Math.PI + Math.PI));
   public static final Transform3d robotToCamRight = new Transform3d(new Translation3d(-0.265, 0.36, .465),
       new Rotation3d(0, -highCamPitch, Math.PI/2));
   public static final Transform3d robotToCamLeft = new Transform3d(new Translation3d(-0.04,-0.36, 0.26),
