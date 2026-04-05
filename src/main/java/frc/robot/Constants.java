@@ -50,6 +50,7 @@ public final class Constants {
   public static final String frontleftCameraName = "FrontLeftCamera";
   public static final String rightCameraName = "RightCamera";
   public static final String leftCameraName = "LeftCamera";
+  public static final String backCameraName = "BackCamera";
 
   // public static final String intakeCameraName = "IntakeCamera";
   public static final AprilTagFieldLayout kTagLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded);
@@ -60,13 +61,15 @@ public final class Constants {
       new Rotation3d(0, -highCamPitch, (-30/180.0)*Math.PI+Math.PI));
   //-20 +30
   public static final Transform3d robotToCamFrontLeft = new Transform3d(new Translation3d(-0.30,-0.13,0.24),
-      new Rotation3d(0, (-20/180.0)*Math.PI, (30/180.0)*Math.PI + Math.PI));
+      new Rotation3d(0, LowCamPitch, (30/180.0)*Math.PI + Math.PI));
   public static final Transform3d robotToCamRight = new Transform3d(new Translation3d(-0.265, 0.36, .465),
       new Rotation3d(0, -highCamPitch, Math.PI/2));
   public static final Transform3d robotToCamLeft = new Transform3d(new Translation3d(-0.04,-0.36, 0.26),
       new Rotation3d(0, -LowCamPitch, 3.0*Math.PI/2.0));
+  public static final Transform3d robotToCamBack = new Transform3d(new Translation3d(-0.28,0.09, 0.42), //set these values
+      new Rotation3d(0, -highCamPitch,0));  //and() these
   // The standard deviations of our vision estimated poses, which affect
-  // correction rate
+  // correction rate    
   // (Fake values. Experiment anl;y   y y    +        u'  d determine estimation noise on an actual robot.)
   public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
   public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);

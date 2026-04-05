@@ -11,8 +11,7 @@ import edu.wpi.first.math.numbers.N3;
 public interface VisionIO {
     @AutoLog
     public static class VisionIOInputs {
-        public boolean intakeCameraConected = false;
-        public boolean frontCameraConected = false;
+        public boolean backCameraConected = false;
         public boolean rightCameraConected = false;
         public boolean frontLeftCameraConected = false;
         public boolean frontRightCameraConected = false;
