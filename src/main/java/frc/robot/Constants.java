@@ -50,22 +50,26 @@ public final class Constants {
   public static final String frontleftCameraName = "FrontLeftCamera";
   public static final String rightCameraName = "RightCamera";
   public static final String leftCameraName = "LeftCamera";
+  public static final String backCameraName = "BackCamera";
 
   // public static final String intakeCameraName = "IntakeCamera";
   public static final AprilTagFieldLayout kTagLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded);
-  private static final double camPitch = Units.degreesToRadians(20);
+  private static final double highCamPitch = Units.degreesToRadians(20);
+  private static final double LowCamPitch = Units.degreesToRadians(28.5);
   //-20 -26.57
   public static final Transform3d robotToCamFrontRight = new Transform3d(new Translation3d(-0.28,0.195,0.19),
-      new Rotation3d(0, (-20/180.0)*Math.PI, (-30/180.0)*Math.PI+Math.PI));
+      new Rotation3d(0, -highCamPitch, (-30/180.0)*Math.PI+Math.PI));
   //-20 +30
-  public static final Transform3d robotToCamFrontLeft = new Transform3d(new Translation3d(-0.28,-0.13,0.19),
-      new Rotation3d(0, (-20/180.0)*Math.PI, (30/180.0)*Math.PI + Math.PI));
-  public static final Transform3d robotToCamRight = new Transform3d(new Translation3d(-0.087, 0.36, .31),
-      new Rotation3d(0, -camPitch, Math.PI/2));
-  public static final Transform3d robotToCamLeft = new Transform3d(new Translation3d(-0.035,-0.36, 0.246),
-      new Rotation3d(0, -camPitch, 3.0*Math.PI/2.0));
+  public static final Transform3d robotToCamFrontLeft = new Transform3d(new Translation3d(-0.28,-0.135,0.24),
+      new Rotation3d(0, -LowCamPitch, (30/180.0)*Math.PI + Math.PI));
+  public static final Transform3d robotToCamRight = new Transform3d(new Translation3d(-0.265, 0.36, .465),
+      new Rotation3d(0, -highCamPitch, Math.PI/2));
+  public static final Transform3d robotToCamLeft = new Transform3d(new Translation3d(-0.04,-0.36, 0.26),
+      new Rotation3d(0, -LowCamPitch, 3.0*Math.PI/2.0));
+  public static final Transform3d robotToCamBack = new Transform3d(new Translation3d(-0.28,0.09, 0.42), //set these values
+      new Rotation3d(0, -highCamPitch,0));  //and() these
   // The standard deviations of our vision estimated poses, which affect
-  // correction rate
+  // correction rate    
   // (Fake values. Experiment anl;y   y y    +        u'  d determine estimation noise on an actual robot.)
   public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
   public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
@@ -110,16 +114,15 @@ public final class Constants {
   public static int spindexerID = 26;
   public static int verticalFeederID = 15;
 
-  public static double turretZeroPosition = 183.75/360.0;
-  public static double maximumHoodPosition = 74/360.0;
+  public static double turretZeroPosition = 197.75/360.0;
+  public static double maximumHoodPosition = 77/360.0;
   public static double minimumHoodPosition = 58/360.0;
   public static double maximumTurretPosition = 0.8; // TODO set this to an actual value so sinjin doesnt cry
-
   public static double turretGearRatio = (60 / 14.0) * (156 / 20.0); //it is flipped to allign turret and gyro yaw rotation
   public static double hoodGearRatio = 738/23.0;
 
   public static double flywheelGearRatio = 1;//29/33.0;
-  public static double flywheelToTopRollerRatio = 28/21.0;
+  public static double flywheelToTopRollerRatio = 28/23.0;
   public static double flywheelRadius = 0.0508;
   public static double topRollerRadius = 0.0254;
 
@@ -132,7 +135,7 @@ public final class Constants {
   public static double rotateGearRatio = 12.0;// TODO fix this gear ratio
 
   public static double intakePivotGearRatio = 25; 
-  public static double intakeRollerGearRatio = 1;
+  public static double intakeRollerGearRatio = 2;
   public static int intakePivotFollowerID = 22;
   public static int intakeRollerFollowerID = 23;
 
@@ -143,7 +146,7 @@ public final class Constants {
 
   public static RobotTypes robotType = RobotTypes.COMP;
 
-  public static double redTrenchX = 11.9375;
+  public static double redTrenchX = 11.7;
   public static double blueTrenchX = 3.625;
   public static double outpostTrenchY = 7.4375;
   public static double depotTrenchY = 0.625;

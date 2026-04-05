@@ -74,10 +74,10 @@ public class Superstructure extends SubsystemBase {
                 // }
                 break;
             case SHOOTER:
-                // if (climb.getClimbState() != ClimbStates.CLIMBEDL1 || climb.getClimbState() != ClimbStates.CLIMBEDL3) {
-                    currentState = States.SHOOTER;
-                    
-                // }
+                if(currentState != States.SHOOTER){
+                    shooter.wantedShooterState = ShooterStates.HUB;
+                }
+                currentState = States.SHOOTER;
                 break;
             case ZERO:
                 if (!shooter.turretAlreadyZeroed || !intake.alreadyZeroed){
@@ -153,7 +153,6 @@ public class Superstructure extends SubsystemBase {
                 shooter.wantedShooterState = ShooterStates.AUTODEPOTSHOOT;
                 break;
             case FIXEDFIRE:
-                swerve.wantedState = SwerveStates.IDLE;
                 shooter.wantedShooterState = ShooterStates.FIXEDFIRE;
                 break;
             case UNJAM:

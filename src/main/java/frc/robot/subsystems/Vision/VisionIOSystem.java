@@ -24,6 +24,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.util.sendable.SendableBuilder.BackendKind;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Constants;
 
@@ -32,11 +33,13 @@ public class VisionIOSystem implements VisionIO {
     private final PhotonCamera frontRightCamera;
     private final PhotonCamera leftCamera;
     private final PhotonCamera rightCamera;
+    private final PhotonCamera backCamera;
     // private final PhotonCamera intakeCamera;
     private final PhotonPoseEstimator photonEstimatorFrontRight;
     private final PhotonPoseEstimator photonEstimatorFrontLeft;
     private final PhotonPoseEstimator photonEstimatorLeft;
     private final PhotonPoseEstimator photonEstimatorRight;
+    private final PhotonPoseEstimator photonEstimatorBack;
     private Matrix<N3, N1> curStdDevs;
     private final EstimateConsumer estConsumer;
     private double visonCycleTime;
@@ -58,10 +61,12 @@ public class VisionIOSystem implements VisionIO {
         frontLeftCamera = new PhotonCamera(Constants.frontleftCameraName);
         leftCamera = new PhotonCamera(Constants.leftCameraName);
         rightCamera = new PhotonCamera(Constants.rightCameraName);
+        backCamera = new PhotonCamera(Constants.backCameraName);
         photonEstimatorFrontRight = new PhotonPoseEstimator(Constants.kTagLayout, Constants.robotToCamFrontRight);
         photonEstimatorFrontLeft = new PhotonPoseEstimator(Constants.kTagLayout, Constants.robotToCamFrontLeft);
         photonEstimatorRight = new PhotonPoseEstimator(Constants.kTagLayout, Constants.robotToCamRight);
         photonEstimatorLeft = new PhotonPoseEstimator(Constants.kTagLayout, Constants.robotToCamLeft);
+        photonEstimatorBack = new PhotonPoseEstimator(Constants.kTagLayout, Constants.robotToCamBack);
         this.estConsumer = estConsumer; // Lamba that will accept a pose estimate and pass it to your desired {@link
     }
 
@@ -72,6 +77,8 @@ public class VisionIOSystem implements VisionIO {
         inputs.frontRightCameraConected = frontRightCamera.isConnected();
         inputs.rightCameraConected = rightCamera.isConnected();
         inputs.leftCameraConected = leftCamera.isConnected();
+        inputs.backCameraConected = backCamera.isConnected();
+
     }
 
     public boolean CamerasConnected(){
@@ -89,6 +96,20 @@ public class VisionIOSystem implements VisionIO {
         double camConfidance = 0;
 
         double startTime = Timer.getFPGATimestamp();
+
+        //determines of a mutlitag hub pose was found
+        boolean foundSutableMultiTagPoseOnCamBack = false;
+
+        //multitag hub visionmesurment for the right camera
+        Optional<EstimatedRobotPose> backHubMultiTagResult = Optional.empty();
+        //multitag hub targets for the visionmesurment for the right camera
+        Optional<List<PhotonTrackedTarget>> backHubMultiTagTargets = Optional.empty();
+        //list of all single tag visionmesurments for the right camera
+        ArrayList<Optional<EstimatedRobotPose>> backResults = new ArrayList<Optional<EstimatedRobotPose>>();
+        //list of all lists of single tag targets per visionmesurment for the right camera
+        ArrayList<List<PhotonTrackedTarget>> backTargets = new ArrayList<List<PhotonTrackedTarget>>();
+
+
         //determines of a mutlitag hub pose was found
         boolean foundSutableMultiTagPoseOnCamRight = false;
 
@@ -280,6 +301,41 @@ public class VisionIOSystem implements VisionIO {
                 leftTargets.add(result.getTargets());
             }
         }
+        if (!addedGoodMultiTagReslt)
+            for (var result : backCamera.getAllUnreadResults()) {
+            if(result.hasTargets()) {
+                result.targets = removeAmbigousTargets(result.targets);
+
+                visionEst = photonEstimatorBack.estimateCoprocMultiTagPose(result);
+                if (visionEst.isEmpty()) {
+                    visionEst = photonEstimatorBack.estimateLowestAmbiguityPose(result);
+                    if(!visionEst.isEmpty()) {
+                        if (camConfidance == 0)
+                            camConfidance = 1;
+                        backResults.add(visionEst);
+                    }
+                } else {
+                    camConfidance = 2;
+                    int numberOfHubTags = 0;
+                    for(int i = 0; i < result.getTargets().size(); i++)
+                        if(addToHubTagNumber(result, i)){
+                            numberOfHubTags+=1;
+                        }
+                    if (numberOfHubTags>=2){
+                        backHubMultiTagResult = visionEst;
+                        backHubMultiTagTargets = Optional.of(result.getTargets());
+                        foundSutableMultiTagPoseOnCamBack = true;
+                        addedGoodMultiTagReslt = true;
+                        break;
+                    }
+                    else{
+                        backResults.add(visionEst);
+                    }
+                    
+                }
+                backTargets.add(result.getTargets());
+            }
+        }
 
         //loops thouhg all saved camera results and adds them to pose unless the last section found a hub multi tag pose in witch case that is the only pose added
         if (foundSutableMultiTagPoseOnCamRight){
@@ -287,6 +343,7 @@ public class VisionIOSystem implements VisionIO {
             Logger.recordOutput("useing Cam Left",false);
             Logger.recordOutput("useing Cam Front Right",false);
             Logger.recordOutput("useing Cam Front Left",false);
+            Logger.recordOutput("Using Cam Back", false);
             updateEstimationStdDevs(rightHubMultiTagResult, rightHubMultiTagTargets.get());
 
             rightHubMultiTagResult.ifPresent(
@@ -301,6 +358,7 @@ public class VisionIOSystem implements VisionIO {
             Logger.recordOutput("useing Cam Left",false);
             Logger.recordOutput("useing Cam Front Right",false);
             Logger.recordOutput("useing Cam Front Left",false);
+            Logger.recordOutput("Using Cam Back", false);
             for(int i = 0; i<rightResults.size();i++){
                 updateEstimationStdDevs(rightResults.get(i), rightTargets.get(i));
 
@@ -318,6 +376,7 @@ public class VisionIOSystem implements VisionIO {
             Logger.recordOutput("useing Cam Left",true);
             Logger.recordOutput("useing Cam Front Right",false);
             Logger.recordOutput("useing Cam Front Left",false);
+            Logger.recordOutput("Using Cam Back", false);
             updateEstimationStdDevs(leftHubMultiTagResult, leftHubMultiTagTargets.get());
 
             leftHubMultiTagResult.ifPresent(
@@ -332,6 +391,7 @@ public class VisionIOSystem implements VisionIO {
             Logger.recordOutput("useing Cam Left",false);
             Logger.recordOutput("useing Cam Front Right",false);
             Logger.recordOutput("useing Cam Front Left",false);
+            Logger.recordOutput("Using Cam Back", false);
             for(int i = 0; i<leftResults.size();i++){
                 updateEstimationStdDevs(leftResults.get(i), leftTargets.get(i));
 
@@ -349,6 +409,7 @@ public class VisionIOSystem implements VisionIO {
             Logger.recordOutput("useing Cam Left",false);
             Logger.recordOutput("useing Cam Front Right",true);
             Logger.recordOutput("useing Cam Front Left",false);
+            Logger.recordOutput("Using Cam Back", false);
             updateEstimationStdDevs(frontRightHubMultiTagResult, frontRightHubMultiTagTargets.get());
 
             frontRightHubMultiTagResult.ifPresent(
@@ -363,6 +424,7 @@ public class VisionIOSystem implements VisionIO {
             Logger.recordOutput("useing Cam Left",false);
             Logger.recordOutput("useing Cam Front Right",false);
             Logger.recordOutput("useing Cam Front Left",false);
+            Logger.recordOutput("Using Cam Back", false);
             for(int i = 0; i<frontRightResults.size();i++){
                 updateEstimationStdDevs(frontRightResults.get(i), frontRightTargets.get(i));
 
@@ -380,6 +442,7 @@ public class VisionIOSystem implements VisionIO {
             Logger.recordOutput("useing Cam Left",false);
             Logger.recordOutput("useing Cam Front Right",false);
             Logger.recordOutput("useing Cam Front Left",true);
+            Logger.recordOutput("Using Cam Back", false);
             updateEstimationStdDevs(frontLeftHubMultiTagResult, frontLeftHubMultiTagTargets.get());
 
             frontLeftHubMultiTagResult.ifPresent(
@@ -394,10 +457,43 @@ public class VisionIOSystem implements VisionIO {
             Logger.recordOutput("useing Cam Left",false);
             Logger.recordOutput("useing Cam Front Right",false);
             Logger.recordOutput("useing Cam Front Left",false);
+            Logger.recordOutput("Using Cam Back", false);
             for(int i = 0; i<frontLeftResults.size();i++){
                 updateEstimationStdDevs(frontLeftResults.get(i), frontLeftTargets.get(i));
 
                 frontLeftResults.get(i).ifPresent(
+                        est -> {
+                            // Change our trust in the measurement based on the tags we can see
+                            var estStdDevs = getEstimationStdDevs();
+                            estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+                        });
+            }
+        }
+        if (foundSutableMultiTagPoseOnCamBack){
+            Logger.recordOutput("useing Cam Right",true);
+            Logger.recordOutput("useing Cam Left",false);
+            Logger.recordOutput("useing Cam Front Right",false);
+            Logger.recordOutput("useing Cam Front Left",false);
+            Logger.recordOutput("Using Cam Back", true);
+            updateEstimationStdDevs(backHubMultiTagResult, backHubMultiTagTargets.get());
+
+            backHubMultiTagResult.ifPresent(
+                    est -> {
+                        // Change our trust in the measurement based on the tags we can see
+                        var estStdDevs = getEstimationStdDevs();
+                        estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+                    });
+        }
+        else if (!addedGoodMultiTagReslt && !backResults.isEmpty()){
+            Logger.recordOutput("useing Cam Right",false);
+            Logger.recordOutput("useing Cam Left",false);
+            Logger.recordOutput("useing Cam Front Right",false);
+            Logger.recordOutput("useing Cam Front Left",false);
+            Logger.recordOutput("Using Cam Back", false);
+            for(int i = 0; i<backResults.size();i++){
+                updateEstimationStdDevs(backResults.get(i), backTargets.get(i));
+
+                backResults.get(i).ifPresent(
                         est -> {
                             // Change our trust in the measurement based on the tags we can see
                             var estStdDevs = getEstimationStdDevs();
