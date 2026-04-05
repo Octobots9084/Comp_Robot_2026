@@ -61,7 +61,6 @@ public class Lights extends SubsystemBase{
              case ZEROED:
                 lightsCurrentState = LightAnimations.ZEROED;//implemented
                 break;
-
             case REVERSEINTAKING:
                 lightsCurrentState = LightAnimations.REVERSEINTAKING;//implemented
                 break;
@@ -81,6 +80,10 @@ public class Lights extends SubsystemBase{
                 if(lightsWantedState != LightAnimations.REVERSEINTAKING || lightsWantedState != LightAnimations.CANTSHOOT || lightsWantedState != LightAnimations.SHOOTFERRY || lightsWantedState != LightAnimations.SHOOTHUB)
                 lightsCurrentState = LightAnimations.INTAKING;//implemented
                 break;
+            case DISABLED:
+                break;
+            case DISCONNECTEDCAMERA:
+            break;
              default:
                 lightsCurrentState = LightAnimations.DEFAULT;//implemented
                 break;

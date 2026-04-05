@@ -145,7 +145,6 @@ public class Robot extends LoggedRobot {
     LoggedTracer.record("PhoenixRefresh");
     Logger.recordOutput("IsBlueAlliance",Constants.isBlueAlliance);
     DriverCommunications.pushToElastic();
-    LightAnimations.RainbowAnim();
     DriverCommunications.fieldPose.setRobotPose(SwerveSubsystem.getInstance().getRobotPose());
 
     // Return to non-RT thread priority (do not modify the first argument)
