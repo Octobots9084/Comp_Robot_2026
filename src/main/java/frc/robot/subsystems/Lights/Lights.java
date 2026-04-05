@@ -81,8 +81,10 @@ public class Lights extends SubsystemBase{
                 lightsCurrentState = LightAnimations.INTAKING;//implemented
                 break;
             case DISABLED:
+                lightsCurrentState = LightAnimations.DISABLED;
                 break;
             case DISCONNECTEDCAMERA:
+                lightsCurrentState = LightAnimations.DISCONNECTEDCAMERA;
             break;
              default:
                 lightsCurrentState = LightAnimations.DEFAULT;//implemented

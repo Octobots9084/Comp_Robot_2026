@@ -56,6 +56,7 @@ public class Robot extends LoggedRobot {
   private Command autonomousCommand;
   private RobotContainer robotContainer;
   public Shooter shooter;
+  public static boolean zeroingLights = false;
   public Intake intake;
   double timer = Constants.timer.get();
   private static String gameData;

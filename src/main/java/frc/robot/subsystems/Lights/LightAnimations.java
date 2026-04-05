@@ -4,6 +4,7 @@ import com.ctre.phoenix6.hardware.CANdle;
 import com.ctre.phoenix6.signals.RGBWColor;
 import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.subsystems.Drive.SwerveSubsystem;
 import frc.robot.subsystems.Shooter.Shooter;
 
@@ -47,19 +48,24 @@ public enum LightAnimations {
            new RainbowAnimation(0, 65);
     }
     public static void Lights(){
-        if(SwerveSubsystem.getInstance().isInAllianceZone()){
-            if(Shooter.getInstance().isAimedAtHub && Shooter.getInstance().isHubActive()){
-                Lights.getLightInstance().lightsWantedState = SHOOTHUB;
+        if(!Robot.zeroingLights){
+            if(SwerveSubsystem.getInstance().isInAllianceZone()){
+                if(Shooter.getInstance().isAimedAtHub && Shooter.getInstance().isHubActive()){
+                    Lights.getLightInstance().lightsWantedState = SHOOTHUB;
+                }else{
+                    Lights.getLightInstance().lightsWantedState = CANTSHOOT;
+                }
             }else{
-                Lights.getLightInstance().lightsWantedState = CANTSHOOT;
+                if(Shooter.getInstance().isAimedAtFerry){
+                    Lights.getLightInstance().lightsWantedState = SHOOTFERRY;
+                }else{
+                    Lights.getLightInstance().lightsWantedState = CANTSHOOT;
+
+                }
             }
         }else{
-            if(Shooter.getInstance().isAimedAtFerry){
-                Lights.getLightInstance().lightsWantedState = SHOOTFERRY;
-            }else{
-                Lights.getLightInstance().lightsWantedState = CANTSHOOT;
-
-            }
+            Lights.getLightInstance().lightsWantedState = ZEROED;
         }
+
     }
 }

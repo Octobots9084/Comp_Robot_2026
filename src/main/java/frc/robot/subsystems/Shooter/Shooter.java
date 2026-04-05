@@ -345,9 +345,11 @@ public class Shooter extends SubsystemBase {
                 break;
             case ZERO:
                 //makes the turret figure out where it is
+                Robot.zeroingLights = true;
                 turret.io.zeroHoodMotor();
                 if(turret.io.zeroTurret()){
                     wantedShooterState = ShooterStates.HUB;
+                    Robot.zeroingLights = false;
                 }
                 break;
             default:
