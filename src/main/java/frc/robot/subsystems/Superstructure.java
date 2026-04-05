@@ -74,10 +74,10 @@ public class Superstructure extends SubsystemBase {
                 // }
                 break;
             case SHOOTER:
-                currentState = States.SHOOTER;
                 if(currentState != States.SHOOTER){
                     shooter.wantedShooterState = ShooterStates.HUB;
                 }
+                currentState = States.SHOOTER;
                 break;
             case ZERO:
                 if (!shooter.turretAlreadyZeroed || !intake.alreadyZeroed){
