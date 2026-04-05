@@ -82,7 +82,7 @@ public class VisionIOSystem implements VisionIO {
     }
 
     public boolean CamerasConnected(){
-        if(frontLeftCamera.isConnected() && frontRightCamera.isConnected() && rightCamera.isConnected() && leftCamera.isConnected()){
+        if(frontLeftCamera.isConnected() && frontRightCamera.isConnected() && rightCamera.isConnected() && leftCamera.isConnected() && backCamera.isConnected()){
             return true;
         }else{
             return false;
