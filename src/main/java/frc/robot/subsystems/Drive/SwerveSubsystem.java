@@ -136,6 +136,7 @@ public class SwerveSubsystem extends SubsystemBase {
         Math.acos(this.io.getRotation3d().toMatrix().get(2, 2)));
         SmartDashboard.putBoolean("onRamp", isTilted(0, 3));
         applyStates();
+        Logger.recordOutput("isInAllianceZone",this.isInAllianceZone());
         // Logger.recordOutput("front left absolute", io.getAbsoluteEncoderPositions(0));
         // Logger.recordOutput("front right absolute", io.getAbsoluteEncoderPositions(1));
         // Logger.recordOutput("back left absolute", io.getAbsoluteEncoderPositions(2));

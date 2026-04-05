@@ -59,7 +59,7 @@ public class ShooterConfigurator {
         // create PID gains
         turretConfig.Slot0.kP = 1125; //1125;
         turretConfig.Slot0.kI = 0.0;
-        turretConfig.Slot0.kD = 0.0;
+        turretConfig.Slot0.kD = 5.0;
         turretConfig.Slot0.kA = 0.0;
         turretConfig.Slot0.kV = 0.0;
         turretConfig.Slot0.kS = 0; //0.5;
