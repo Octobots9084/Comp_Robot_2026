@@ -97,6 +97,6 @@ public class Lights extends SubsystemBase{
     }
 
     public void applyStates() {
-        device.candle.setControl(lightsCurrentState.animation);
+            device.candle.setControl(lightsCurrentState.color);
     }
 }
