@@ -8,6 +8,7 @@ package frc.robot;
 
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -27,7 +28,7 @@ import frc.robot.subsystems.Shooter.ShooterStates;
 import frc.robot.subsystems.Shooter.Turret.Turret;
 import frc.robot.subsystems.Shooter.Turret.TurretIO;
 import frc.robot.subsystems.Vision.Vision;
-import frc.robot.subsystems.Vision.VisionIOSystem;
+// import frc.robot.subsystems.Vision.VisionIOSystem;
 import frc.robot.subsystems.Vision.VisionIO.VisionIOInputs;
 import frc.robot.util.LoggedTracer;
 import frc.robot.util.PhoenixUtil;
@@ -145,14 +146,17 @@ public class Robot extends LoggedRobot {
     PhoenixUtil.refreshAll();
     LoggedTracer.record("PhoenixRefresh");
     Logger.recordOutput("IsBlueAlliance",Constants.isBlueAlliance);
-    DriverCommunications.pushToElastic();
-    DriverCommunications.fieldPose.setRobotPose(SwerveSubsystem.getInstance().getRobotPose());
+    // DriverCommunications.pushToElastic();
+    // DriverCommunications.fieldPose.setRobotPose(SwerveSubsystem.getInstance().getRobotPose());
+    Logger.recordOutput("SystemStats/MemoryFree", Runtime.getRuntime().freeMemory());
+    Logger.recordOutput("SystemStats/MaxMemory", Runtime.getRuntime().maxMemory());
+    Logger.recordOutput("SystemStats/CanUtilization", Constants.krakenBus.getStatus().BusUtilization);
 
     // Return to non-RT thread priority (do not modify the first argument)
     // Threads.setCurrentThreadPriority(false, 10);
   }
 
-  /** This function is called once when the robot is disabled. */
+  /** This function is called once when the robotC is disabled. */
   @Override
   public void disabledInit() {
     
@@ -177,11 +181,11 @@ public class Robot extends LoggedRobot {
         Constants.isBlueAlliance = true;
       }
     }
-    if(Vision.getInstance().io.CamerasConnected()){
-      Lights.getLightInstance().lightsWantedState = LightAnimations.DISABLED;
-    }else{
-      Lights.getLightInstance().lightsWantedState = LightAnimations.DISCONNECTEDCAMERA;
-    }
+    // if(Vision.getInstance().io.CamerasConnected()){
+    //   Lights.getLightInstance().lightsWantedState = LightAnimations.DISABLED;
+    // }else{
+    //   Lights.getLightInstance().lightsWantedState = LightAnimations.DISCONNECTEDCAMERA;
+    // }
     
   
   }

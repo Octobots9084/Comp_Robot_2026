@@ -68,7 +68,8 @@ public class RobotContainer {
       new VisionIOPhoton(Constants.frontRightCameraName, Constants.robotToCamFrontRight),
       new VisionIOPhoton(Constants.frontleftCameraName, Constants.robotToCamFrontLeft),
       new VisionIOPhoton(Constants.leftCameraName, Constants.robotToCamLeft),
-      new VisionIOPhoton(Constants.rightCameraName, Constants.robotToCamFrontRight));
+      new VisionIOPhoton(Constants.rightCameraName, Constants.robotToCamRight),
+      new VisionIOPhoton(Constants.backCameraName, Constants.robotToCamBack));
 
     switch (Constants.currentMode) {
       case REAL:
