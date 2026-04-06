@@ -73,17 +73,11 @@ public class Superstructure extends SubsystemBase {
                     currentState = States.SAFE;
                 // }
                 break;
-            case CLIMB_L3:
-                currentState = States.CLIMB_L3;
-                break;
-            case CLIMB_L1:
-                currentState = States.CLIMB_L1;
-                break;
             case SHOOTER:
-                // if (climb.getClimbState() != ClimbStates.CLIMBEDL1 || climb.getClimbState() != ClimbStates.CLIMBEDL3) {
-                    currentState = States.SHOOTER;
-                    
-                // }
+                if(currentState != States.SHOOTER){
+                    shooter.wantedShooterState = ShooterStates.HUB;
+                }
+                currentState = States.SHOOTER;
                 break;
             case ZERO:
                 if (!shooter.turretAlreadyZeroed || !intake.alreadyZeroed){
@@ -133,17 +127,11 @@ public class Superstructure extends SubsystemBase {
             case MANUAL:
                 stateMANUAL();
                 break;
-            case CLIMB_L3:
-                stateCLIMBL3();
-                break;
-            case CLIMB_L1:
-                stateCLIMBL1();
-                break;
             case SHOOTER:
                 stateSHOOTER();
                 break;
             case ZERO:
-                Lights.getLightInstance().lightsWantedState = LightAnimations.ZEROED;
+                //Lights.getLightInstance().lightsWantedState = LightAnimations.ZEROED;
                 if(stateZERO()){
                     if(DriverStation.isAutonomousEnabled()){
                         wantedState = States.AUTONONFIRE;
@@ -165,7 +153,6 @@ public class Superstructure extends SubsystemBase {
                 shooter.wantedShooterState = ShooterStates.AUTODEPOTSHOOT;
                 break;
             case FIXEDFIRE:
-                swerve.wantedState = SwerveStates.IDLE;
                 shooter.wantedShooterState = ShooterStates.FIXEDFIRE;
                 break;
             case UNJAM:
@@ -194,23 +181,6 @@ public class Superstructure extends SubsystemBase {
         // turn off intake when starting
         // turn off shooter when starting        
     }
-    private void stateCLIMBL3() {
-        stowForClimb();
-        // climb.setClimbState(ClimbStates.DEPLOYEDL3);
-        // // TODO align to bar(use button before alignment)
-        // climb.setClimbState(ClimbStates.ENGAGEDL3);
-        // //TODO align to vertical pole(button before alignment)
-        // climb.setClimbState(ClimbStates.CLIMBEDL3);
-        boolean climbAligned = true; //TODO when rui finishes alignment put this when it finishes
-
-    }
-    private void stateCLIMBL1() {
-        stowForClimb();
-        // climb.setClimbState(ClimbStates.DEPLOYEDL1);
-        // //TODO align to bar(button before alignment)
-        // climb.setClimbState(ClimbStates.CLIMBEDL1);
-    }
-   
 
     private void stateSHOOTER() {
         // if (userRequestedIntakeState != Intake.getInstance().currentState) {
@@ -221,7 +191,7 @@ public class Superstructure extends SubsystemBase {
         //     prevState = States.SHOOTER;
 
         // }
-        shooter.wantedShooterState = ShooterStates.HUB;  
+        // shooter.wantedShooterState = ShooterStates.HUB;  
     }
 
     private void stateUnJam(){

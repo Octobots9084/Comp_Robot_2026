@@ -61,7 +61,6 @@ public class Lights extends SubsystemBase{
              case ZEROED:
                 lightsCurrentState = LightAnimations.ZEROED;//implemented
                 break;
-
             case REVERSEINTAKING:
                 lightsCurrentState = LightAnimations.REVERSEINTAKING;//implemented
                 break;
@@ -81,6 +80,12 @@ public class Lights extends SubsystemBase{
                 if(lightsWantedState != LightAnimations.REVERSEINTAKING || lightsWantedState != LightAnimations.CANTSHOOT || lightsWantedState != LightAnimations.SHOOTFERRY || lightsWantedState != LightAnimations.SHOOTHUB)
                 lightsCurrentState = LightAnimations.INTAKING;//implemented
                 break;
+            case DISABLED:
+                lightsCurrentState = LightAnimations.DISABLED;
+                break;
+            case DISCONNECTEDCAMERA:
+                lightsCurrentState = LightAnimations.DISCONNECTEDCAMERA;
+            break;
              default:
                 lightsCurrentState = LightAnimations.DEFAULT;//implemented
                 break;
@@ -92,6 +97,6 @@ public class Lights extends SubsystemBase{
     }
 
     public void applyStates() {
-        device.candle.setControl(lightsCurrentState.animation);
+            device.candle.setControl(lightsCurrentState.color);
     }
 }

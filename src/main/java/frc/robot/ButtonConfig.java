@@ -60,6 +60,7 @@ public class ButtonConfig {
         coDriverController.b().onTrue(new SetStateManual());
         //coDriverController.leftTrigger(0.5).onTrue(new SetStateSafe());
         driverController.a().onTrue(new Spit());
+        driverController.y().onTrue(new InstantCommand(() -> superstructure.wantedState = States.FIXEDFIRE)).onFalse(new InstantCommand(() -> superstructure.wantedState = States.SHOOTER));
         coDriverController.rightTrigger(0.5).onTrue(new SetStateShooter());
         coDriverController.rightTrigger().onTrue(new InstantCommand(
                 () -> Shooter.driverOverride = true))
@@ -91,6 +92,16 @@ public class ButtonConfig {
                         Intake.getInstance().setWantedState(IntakeStates.EXTENDED);
 
         }));
+
+        if(Shooter.getInstance().currentShooterState != ShooterStates.MANUEL){
+                driverController.povUp().onTrue(new InstantCommand( () -> {
+                        Shooter.getInstance().wantedShooterState = ShooterStates.MANUEL;
+                }));
+        }else{
+                driverController.povUp().onTrue(new InstantCommand( () -> {
+                        Shooter.getInstance().wantedShooterState = ShooterStates.HUB;
+                }));
+        }
 
 
         //TODO remove this after testing

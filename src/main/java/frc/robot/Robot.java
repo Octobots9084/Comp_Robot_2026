@@ -26,6 +26,9 @@ import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.ShooterStates;
 import frc.robot.subsystems.Shooter.Turret.Turret;
 import frc.robot.subsystems.Shooter.Turret.TurretIO;
+import frc.robot.subsystems.Vision.Vision;
+import frc.robot.subsystems.Vision.VisionIOSystem;
+import frc.robot.subsystems.Vision.VisionIO.VisionIOInputs;
 import frc.robot.util.LoggedTracer;
 import frc.robot.util.PhoenixUtil;
 
@@ -53,6 +56,7 @@ public class Robot extends LoggedRobot {
   private Command autonomousCommand;
   private RobotContainer robotContainer;
   public Shooter shooter;
+  public static boolean zeroingLights = false;
   public Intake intake;
   double timer = Constants.timer.get();
   private static String gameData;
@@ -142,7 +146,6 @@ public class Robot extends LoggedRobot {
     LoggedTracer.record("PhoenixRefresh");
     Logger.recordOutput("IsBlueAlliance",Constants.isBlueAlliance);
     DriverCommunications.pushToElastic();
-    LightAnimations.RainbowAnim();
     DriverCommunications.fieldPose.setRobotPose(SwerveSubsystem.getInstance().getRobotPose());
 
     // Return to non-RT thread priority (do not modify the first argument)
@@ -174,6 +177,13 @@ public class Robot extends LoggedRobot {
         Constants.isBlueAlliance = true;
       }
     }
+    if(Vision.getInstance().io.CamerasConnected()){
+      Lights.getLightInstance().lightsWantedState = LightAnimations.DISABLED;
+    }else{
+      Lights.getLightInstance().lightsWantedState = LightAnimations.DISCONNECTEDCAMERA;
+    }
+    
+  
   }
 
   /**
@@ -188,13 +198,11 @@ public class Robot extends LoggedRobot {
     swerve.wantedState = SwerveStates.IDLE;
         TeleopStarted = false;
 
-
     // schedule the autonomous command (example)
     if (autonomousCommand != null) {
       CommandScheduler.getInstance().schedule(autonomousCommand);// TODO: not command
     }
     Constants.timer.restart();
-    DriverCommunications.PhaseCountdown.restart();
   }
 
   /** This function is called periodically during autonomous. */
@@ -207,17 +215,17 @@ public class Robot extends LoggedRobot {
   public void teleopInit() {
     if (Intake.getInstance().autoIntaked) {
       Intake.getInstance().wantedState = IntakeStates.EXTENDED;
-    }
-    DriverCommunications.PhaseCountdown.restart();
-    Constants.timer.restart();
+    }    Constants.timer.restart();
     // // if (!shooter.turretAlreadyZeroed){
     //   SmartDashboard.putNumber("hubBallSpeed", 6.7);
     // //   SmartDashboard.putNumber("hubFlywheelSpeed", 9.5);
     // // }
     TeleopStarted = true;
-    DriverCommunications.PhaseTime = 10;
+    Constants.timer.restart();
+    // if (shooter.turretAlreadyZeroed && intake.alreadyZeroed){
+    //   LightAnimations.Lights();
+    // }
 
-    
     setAllianceColor();
     //only automaticly zeros if we havent already zeroed while still allowing a zero button
     Superstructure.getInstance().wantedState = States.ZERO;
@@ -226,7 +234,9 @@ public class Robot extends LoggedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    Logger.recordOutput("EXECUTING!!!!", false);
+    if(Shooter.getInstance().turretAlreadyZeroed){
+      Shooter.getInstance().wantedShooterState = ShooterStates.HUB;
+    }
 
     if (autonomousCommand != null) {
       CommandScheduler.getInstance().cancel(autonomousCommand);
@@ -249,6 +259,9 @@ public class Robot extends LoggedRobot {
     }
     lastHubPeriod = Shooter.getInstance().isHubActive();
     WonAuto();
+    Shooter.getInstance().isHubActive();
+    LightAnimations.Lights();
+
    
 
       
@@ -265,9 +278,9 @@ public class Robot extends LoggedRobot {
                     }
                 case 'R':
                     if (!Constants.isBlueAlliance) {
-                        return false;
-                    } else {
                         return true;
+                    } else {
+                        return false;
                     }
 
                 default:
