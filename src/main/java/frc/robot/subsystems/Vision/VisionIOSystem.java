@@ -93,7 +93,7 @@ public class VisionIOSystem implements VisionIO {
     */
     @Override
     public void periodic() {
-        double camConfidance = 0;
+        double camConfidance = 0.0;
 
         double startTime = Timer.getFPGATimestamp();
 
@@ -171,11 +171,11 @@ public class VisionIOSystem implements VisionIO {
                     visionEst = photonEstimatorFrontLeft.estimateLowestAmbiguityPose(result);
                     if(!visionEst.isEmpty()) {
                         if (camConfidance == 0)
-                            camConfidance = 1;
+                            camConfidance = 1.0;
                         frontLeftResults.add(visionEst);
                     }
                 } else {
-                    camConfidance = 2;
+                    camConfidance = 2.0;
                     int numberOfHubTags = 0;
                     for(int i = 0; i < result.getTargets().size(); i++)
                         if(addToHubTagNumber(result, i)){
@@ -206,11 +206,11 @@ public class VisionIOSystem implements VisionIO {
                     visionEst = photonEstimatorFrontRight.estimateLowestAmbiguityPose(result);
                     if(!visionEst.isEmpty()) {
                         if (camConfidance == 0)
-                            camConfidance = 1;
+                            camConfidance = 1.0;
                         frontRightResults.add(visionEst);
                     }
                 } else {
-                    camConfidance = 2;
+                    camConfidance = 2.0;
                     int numberOfHubTags = 0;
                     for(int i = 0; i < result.getTargets().size(); i++)
                         if(addToHubTagNumber(result, i)){
@@ -241,11 +241,11 @@ public class VisionIOSystem implements VisionIO {
                     visionEst = photonEstimatorRight.estimateLowestAmbiguityPose(result);
                     if(!visionEst.isEmpty()) {
                         if (camConfidance == 0)
-                            camConfidance = 1;
+                            camConfidance = 1.0;
                         rightResults.add(visionEst);
                     }
                 } else {
-                    camConfidance = 2;
+                    camConfidance = 2.0;
                     int numberOfHubTags = 0;
                     for(int i = 0; i < result.getTargets().size(); i++)
                         if(addToHubTagNumber(result, i)){
@@ -276,11 +276,11 @@ public class VisionIOSystem implements VisionIO {
                     visionEst = photonEstimatorLeft.estimateLowestAmbiguityPose(result);
                     if(!visionEst.isEmpty()) {
                         if (camConfidance == 0)
-                            camConfidance = 1;
+                            camConfidance = 1.0;
                         leftResults.add(visionEst);
                     }
                 } else {
-                    camConfidance = 2;
+                    camConfidance = 2.0;
                     int numberOfHubTags = 0;
                     for(int i = 0; i < result.getTargets().size(); i++)
                         if(addToHubTagNumber(result, i)){
@@ -311,11 +311,11 @@ public class VisionIOSystem implements VisionIO {
                     visionEst = photonEstimatorBack.estimateLowestAmbiguityPose(result);
                     if(!visionEst.isEmpty()) {
                         if (camConfidance == 0)
-                            camConfidance = 1;
+                            camConfidance = 1.0;
                         backResults.add(visionEst);
                     }
                 } else {
-                    camConfidance = 2;
+                    camConfidance = 2.0;
                     int numberOfHubTags = 0;
                     for(int i = 0; i < result.getTargets().size(); i++)
                         if(addToHubTagNumber(result, i)){
@@ -502,7 +502,7 @@ public class VisionIOSystem implements VisionIO {
             }
         }
         if (addedGoodMultiTagReslt){
-            Logger.recordOutput("cam confidance",3);
+            Logger.recordOutput("cam confidance",3.0);
         }
         else {
             Logger.recordOutput("cam confidance",camConfidance);

@@ -80,7 +80,7 @@ public class Shooter extends SubsystemBase {
     public double ferryBallSpeed = 6.7;
     public double ferryFlywheelSpeed = 10;
 
-    public double manuelHood = 74; 
+    public double manuelHood = 77; 
     public double manuelFlywheel = 40;
 
     public double hoodTargetPosition = Constants.maximumHoodPosition;
@@ -158,6 +158,9 @@ public class Shooter extends SubsystemBase {
                         flywheel.setFlywheelVelocity(manuelFlywheel);
                         activateFeeder();
                     }
+                }else{
+                    feeder.setFeederVelocity(FeederStates.OFF);
+                    flywheel.setFlywheelVelocity(FlywheelStates.SAFE);
                 }
                 break;
             case FERRY:

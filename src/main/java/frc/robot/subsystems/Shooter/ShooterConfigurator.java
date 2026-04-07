@@ -83,7 +83,8 @@ public class ShooterConfigurator {
         hoodConfig.Slot0.kI = 0;
         hoodConfig.Slot0.kD = 0.0;
         hoodConfig.Slot0.kA = 0.0;
-        hoodConfig.Slot0.kV = 0.0;
+        hoodConfig.Slot0.kV =
+         0.0;
         hoodConfig.Slot0.kS = 0.0;
         hoodConfig.Slot0.kG = 0.0;
 
