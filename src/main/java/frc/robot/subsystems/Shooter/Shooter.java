@@ -11,6 +11,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
@@ -80,7 +81,9 @@ public class Shooter extends SubsystemBase {
     public double ferryFlywheelSpeed = 10;
 
     public double manuelHood = 74; 
-    public double manuelFlywheel = 40; //0 to 1
+    public double manuelFlywheel = 40;
+
+    public double hoodTargetPosition = Constants.maximumHoodPosition;
 
     public Shooter(FeederIO fIO, FlywheelIO fwIO, TurretIO tIO, ShooterIO sIO) {
         this.fIO = fIO;
@@ -117,6 +120,8 @@ public class Shooter extends SubsystemBase {
         sIO.updateInputs(shooterInputs);
         Logger.processInputs("Shooter/Shooter", shooterInputs);
         // SmartDashboard.putBoolean("HubAcivity", isHubActive());
+        Logger.recordOutput("isInTrenchZone", inEnterTrenchZone());
+        Logger.recordOutput("trench danger zone", inTrenchDangerZone());
     }
 
     public void ApplyStates() {
@@ -140,17 +145,35 @@ public class Shooter extends SubsystemBase {
             case SPITTOCONTAINER:
                 feeder.setFeederVelocity(FeederStates.SPITTING);
                 flywheel.setFlywheelVelocity(FlywheelStates.SPITTOCONTAINER);
-                turret.setHoodPosition(85);
+                turret.setHoodPosition(Constants.maximumHoodPosition);
                 turret.setTurretPosition(-90/360.0);
+                break;
+            case MANUEL:
+                Logger.recordOutput("manuel hood position", manuelHood); 
+                Logger.recordOutput("manuel flywheel position", manuelFlywheel); 
+                isAimedAtHub = isAimedAtHub(); 
+                turret.setHoodPosition(manuelHood/360.0);
+                if(driverOverride){
+                    if(isAimedAtHub){
+                        flywheel.setFlywheelVelocity(manuelFlywheel);
+                        activateFeeder();
+                    }
+                }
                 break;
             case FERRY:
                 isAimedAtFerry = aimFerry();
-
+                turret.setHoodPosition(Constants.maximumHoodPosition);
                 if(!swerve.isInAllianceZone()){
+                    if(inEnterTrenchZone()){
+                        if(inTrenchDangerZone()){
+                            wantedShooterState = ShooterStates.TRENCH;
+                        }
+                    }
                     if(driverOverride){
+                        turret.setHoodPosition(hoodTargetPosition);
                         flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
                         if(isAimedAtFerry){
-                            Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTFERRY;
+                            //Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTFERRY;
                             activateFeeder();
                         }
                     }else{
@@ -159,18 +182,26 @@ public class Shooter extends SubsystemBase {
                         flywheelInToleranceOnce = false;
                     }
                 }else{
+                    if(!inEnterTrenchZone()){
                     wantedShooterState = ShooterStates.BUMP;
+                    }
                 }
                 break;
             case HUB:
+                isAimedAtHub = isAimedAtHub();
                 turret.setHoodPosition(Constants.maximumHoodPosition);
                 if(swerve.isInAllianceZone()){
+                    if(inEnterTrenchZone()){
+                        if(inTrenchDangerZone()){
+                            wantedShooterState = ShooterStates.TRENCH;
+                        }
+                    }
                     if(driverOverride){
-                        isAimedAtHub = isAimedAtHub();
+                        turret.setHoodPosition(hoodTargetPosition);
                         flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
                         if(isAimedAtHub){
                             if(flywheel.FlywheelInTolerance(1)){
-                                Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTHUB;
+                                //Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTHUB;
                                 feeder.setFeederVelocity(FeederStates.SCORING);
                                 flywheelDebouncer = 0;
                             }else if (flywheelDebouncer<10){
@@ -185,8 +216,23 @@ public class Shooter extends SubsystemBase {
                         feeder.setFeederVelocity(FeederStates.OFF);
                         flywheel.setFlywheelVelocity(FlywheelStates.SAFE);
                     }
-                }else{  
-                    wantedShooterState = ShooterStates.BUMP;
+                }else{
+                    //TODO comment this out when testing
+                    if(!inEnterTrenchZone()){
+                        wantedShooterState = ShooterStates.BUMP;
+                    }
+                }
+                break;
+            case TRENCH:
+                turret.setHoodPosition(Constants.maximumHoodPosition);
+                flywheel.setFlywheelVelocity(FlywheelStates.SAFE);
+                feeder.setFeederVelocity(FeederStates.OFF);
+                if(!inTrenchDangerZone()){
+                    if(swerve.isInAllianceZone()){
+                        wantedShooterState = ShooterStates.HUB;
+                    }else{
+                        wantedShooterState = ShooterStates.FERRY;
+                    }
                 }
                 break;
             case AUTOFERRY:
@@ -195,11 +241,15 @@ public class Shooter extends SubsystemBase {
 
                 if(!swerve.isInAllianceZone()){
                         if(isAimedAtFerry){
-                             Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTFERRY;
+                            //Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTFERRY;
                             activateFeeder();
+                        }else{
+                            //Lights.getLightInstance().lightsWantedState = LightAnimations.CANTSHOOT;
+
                         }
                 }else{
                     wantedShooterState = ShooterStates.BUMP;
+                    //Lights.getLightInstance().lightsWantedState = LightAnimations.CANTSHOOT;
                 }
                 break;
             case AUTOHUB:
@@ -209,7 +259,7 @@ public class Shooter extends SubsystemBase {
 
                     flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
                     if(isAimedAtHub){
-                        Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTHUB;
+                        //Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTHUB;
                         Intake.getInstance().wantedState = IntakeStates.ELEPHANTIASISPART2;
                         if(flywheel.FlywheelInTolerance(1)){
                             feeder.setFeederVelocity(FeederStates.SCORING);
@@ -221,10 +271,15 @@ public class Shooter extends SubsystemBase {
                         else{
                             feeder.setFeederVelocity(FeederStates.OFF);
                         }
+                    }else{
+                        //Lights.getLightInstance().lightsWantedState = LightAnimations.CANTSHOOT;
+
                     }
 
                 }else{
                     wantedShooterState = ShooterStates.BUMP;
+                    //Lights.getLightInstance().lightsWantedState = LightAnimations.CANTSHOOT;
+
                 }
                 break;
             case AUTODEPOTSHOOT:
@@ -234,7 +289,7 @@ public class Shooter extends SubsystemBase {
 
                     flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
                     if(isAimedAtHub){
-                        Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTHUB;
+                        //Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTHUB;
                         Intake.getInstance().wantedState = IntakeStates.INTAKING;
                         if(flywheel.FlywheelInTolerance(1)){
                             feeder.setFeederVelocity(FeederStates.SCORING);
@@ -279,15 +334,23 @@ public class Shooter extends SubsystemBase {
                 break;
             case FIXEDFIRE:
                 //second button that shoots the same shot everytime
-                feeder.setFeederVelocity(FeederStates.FIXEDFIRE);
                 flywheel.setFlywheelVelocity(FlywheelStates.FIXEDFIRE);
-                turret.setHoodPosition(85);
-                turret.setTurretPosition(10);
+                if(flywheel.io.FlywheelInTolerance(3.0))
+                    feeder.setFeederVelocity(FeederStates.FIXEDFIRE);
+                else
+                    feeder.setFeederVelocity(FeederStates.OFF);
+                turret.setHoodPosition(85 / 360.0);
+                turret.setTurretPosition(-90 / 360.0);
+                
                 break;
             case ZERO:
                 //makes the turret figure out where it is
+                Robot.zeroingLights = true;
                 turret.io.zeroHoodMotor();
-                turret.io.zeroTurret();
+                if(turret.io.zeroTurret()){
+                    wantedShooterState = ShooterStates.HUB;
+                    Robot.zeroingLights = false;
+                }
                 break;
             default:
                 break;
@@ -337,7 +400,9 @@ public class Shooter extends SubsystemBase {
                 // if we're on the bump
                 currentShooterState = ShooterStates.BUMP;
                 break;
-
+            case TRENCH:
+                currentShooterState = ShooterStates.TRENCH;
+                break;
             case SAFE:
                 // driver input 
                 currentShooterState = ShooterStates.SAFE;
@@ -348,6 +413,9 @@ public class Shooter extends SubsystemBase {
             case MANUAL:
                 currentShooterState = ShooterStates.MANUAL;
                 break;
+            case MANUEL:
+                currentShooterState = ShooterStates.MANUEL;
+                break;
             case SPIT:
                 currentShooterState = ShooterStates.SPIT;
                 break;
@@ -357,20 +425,17 @@ public class Shooter extends SubsystemBase {
             case SPITTOCONTAINER:
                 currentShooterState = ShooterStates.SPITTOCONTAINER;
                 break;
+            case FIXEDFIRE:
+                currentShooterState = ShooterStates.FIXEDFIRE;
+                break;
             default:
                 break;
         }
     }
 
-    // public boolean Shootable() {
-    //     if (!swerve.isTilted(0, 3) && ((swerve.isInAllianceZone() && isHubActive())
-    //             || (!swerve.isInAllianceZone()))) {
-    //         return true;
-    //     } else {
-    //         return false;
-    //     }
-    // }
-
+    /**
+     * Turns on the feeder if the flywheel is up to speed
+     */
     public void activateFeeder(){
         if(flywheel.FlywheelInTolerance(1) || flywheelInToleranceOnce){
             feeder.setFeederVelocity(FeederStates.SCORING);
@@ -381,6 +446,92 @@ public class Shooter extends SubsystemBase {
         }
     }
 
+    /**
+     * Determines if we are in danger of slaming the hood into the trench.
+     * <p>
+     * 
+     * Uses our current speed and distance realtive to the trench to determine if we are in danger of hitting the trench, meaning we need to bring the hood back down.
+     * 
+     * @return true or false dependig on if we are in danger of hitting the hood on the trench.
+     */
+    public boolean inTrenchDangerZone(){
+        double zeroSpeedDistance = 0.5;
+        double coefficientForDistance = 1.5;
+        double hoodFullSwingTime = 0.5; //TODO
+        double trenchRelativeXVelocity = getTrenchRelativeVelocity().vxMetersPerSecond;
+        if(trenchRelativeXVelocity > 0){
+            return getDistanceToClosestTrench()<(zeroSpeedDistance + coefficientForDistance*trenchRelativeXVelocity*hoodFullSwingTime);
+        }
+        return getDistanceToClosestTrench() < zeroSpeedDistance;
+    }
+
+    /**
+     * Gets the velocity of the robot relative to the trench(Trench Relative Velocity)
+     * <p>
+     * 
+     * Trench Relative Velocity means that if you are moving towards the closest trench then your velocity is positive in the X direction and the Y stays the same, 
+     * and if you are moving away the X velocity is negative and Y remains the same. 
+     * Essentially inverting the X velocity to get it always pointing toward or away the trench.
+     * 
+     * This checks if our velocity is positive or negative and if we are in certain zones of the field to determine if we need to invert the velocity
+     *
+     * @return the Trench Relative Velocity based on the robots Field Relative Velocity
+     */
+    public ChassisSpeeds getTrenchRelativeVelocity(){
+        // Trench relative velocity means that positive is moving towards the closest trench, and negative is moving away from the closest trench.
+        ChassisSpeeds fieldRelative = ChassisSpeeds.fromRobotRelativeSpeeds(swerve.io.getChassisSpeeds(), swerve.io.getPose2d().getRotation());
+        ChassisSpeeds fieldRelativeInverted = new ChassisSpeeds(fieldRelative.vxMetersPerSecond*-1, fieldRelative.vxMetersPerSecond, fieldRelative.omegaRadiansPerSecond);
+        double robotX = swerve.getRobotPose().getX();
+        boolean inversion;
+
+        if(robotX < 4){ //if in blue alliance zone going to neutral
+            inversion = false;
+        }else if(robotX < 8.25){ // in the neutral zone on the side of blue alliance moving towards the red alliance
+                inversion = true;
+        }else if(robotX < 12.5){ // if moving towards red alliance zone and in the red alliance side of the neutral zone
+            inversion = false;
+        }else{
+            inversion = true;
+        }
+        if(fieldRelative.vxMetersPerSecond < 0){
+            return inversion ? fieldRelativeInverted : fieldRelative;
+        }else{
+            return inversion ? fieldRelative : fieldRelativeInverted;
+        }
+    }
+
+    /**
+     * Is the robot in a position to which it could drive through the trench(or enter the trench)
+     * <p>
+     * 
+     * Uses the method {@link #getXToTarget()} to calclate the distance between the hood and both sets of trenches(red and blue) and compares them to get the least distance.
+     *
+     * @return whether or not the turret is in a place in which we could enter the trench from
+     */
+    public double getDistanceToClosestTrench(){
+        Pose2d robotPose = swerve.getRobotPose();
+        double distToRedTrench = Math.abs(getXToTarget(Constants.redTrenchX));
+        double distToBlueTrench = Math.abs(getXToTarget(Constants.blueTrenchX));
+        if(distToBlueTrench < distToRedTrench){
+            return distToBlueTrench;
+        }
+        return distToRedTrench;
+    }
+     /**
+     * Is the robot in a position to which it could drive through the trench(or enter the trench)
+     * <p>
+     * 
+     * Checks if the robot is in the X areas that correspond with the width of the trench
+     *
+     * @return whether or not the turret is in a place in which we could enter the trench from
+     */
+    public boolean inEnterTrenchZone(){
+        if(swerve.getRobotPose().getMeasureY().in(Units.Meters) < 2 || swerve.getRobotPose().getMeasureY().in(Units.Meters) > 6){
+            return true;
+        }
+        return false;
+    }
+
     public boolean cantShoot(){
         if (isAimedAtHub && swerve.isInAllianceZone() && isHubActive() && !swerve.isTilted(0, 3))
             return false;
@@ -388,14 +539,15 @@ public class Shooter extends SubsystemBase {
             return true;
     }
 
-    //used in hub and autohub for logging and setting the ball and flywheel speed
-    public void scaleFlywheel(){
-        hubBallSpeed = 0.5*(getDistanceToHub())+6;//8;//12;//6.5361+ 0.96897 * (getDistanceToHub()); // first change
-        hubFlywheelSpeed = 1.333333*getDistanceToHub()+5.133333;//7;//8.5;//6.3677 + 0.56653 * (getDistanceToHub()); // second change
-        Logger.recordOutput("hubBallSpeed",hubBallSpeed);
-        Logger.recordOutput("hubFlywheelSpeed",hubFlywheelSpeed);
-    }
-
+    /**
+     * Get the distance from the turret to the hub
+     * <p>
+     * 
+     * Uses the helper methods {@link #getXToTarget()} and {@link #getYToTarget()} to calculate the individual distances
+     * and then uses the pythagorean theorem to calculate the distance between the two points
+     *
+     * @return the distance from the turret to the hub
+     */
     public double getDistanceToHub(){
         double XToHub;
         double YToHub;
@@ -408,7 +560,16 @@ public class Shooter extends SubsystemBase {
         }
         return Math.sqrt(YToHub*YToHub+XToHub*XToHub);
     }
-
+    /**
+     * Get the difference in the Y component of the field relative positions of a target and the turret.
+     * <p>
+     * 
+     * Calculates the current position of the turret from robot position, rotation, and distance from the center 
+     * then gets the difference in the Y components of the positions
+     *
+     * @param poseY the y component of the target field relative position
+     * @return the difference in the y components of the turret and target
+     */
     public double getYToTarget(double poseY){
         ChassisSpeeds fieldRelative = ChassisSpeeds.fromRobotRelativeSpeeds(swerve.io.getChassisSpeeds(), swerve.io.getPose2d().getRotation());
         return poseY - (swerve.io.getPose2d().getY()
@@ -416,12 +577,23 @@ public class Shooter extends SubsystemBase {
                 * Math.sin(((swerve.io.getPose2d().getRotation().getRadians() + fieldRelative.omegaRadiansPerSecond * ShooterAngleCalculator.lagTime) + Constants.TurretAngleFromCenter)) + fieldRelative.vyMetersPerSecond * ShooterAngleCalculator.lagTime);
     }
 
+    /**
+     * Get the difference in the X component of the field relative positions of a target and the turret.
+     * <p>
+     * 
+     * Calculates the current position of the turret from robot position, rotation, and distance from the center 
+     * then gets the difference in the X components of the positions
+     *
+     * @param poseX the X component of the target field relative position
+     * @return the difference in the X components of the turret and target
+     */
     public double getXToTarget(double poseX){
         ChassisSpeeds fieldRelative = ChassisSpeeds.fromRobotRelativeSpeeds(swerve.io.getChassisSpeeds(), swerve.io.getPose2d().getRotation());
         return poseX - (swerve.io.getPose2d().getX()
             + Constants.TurretDistFromCenter
                 * Math.cos(((swerve.io.getPose2d().getRotation().getRadians() + fieldRelative.omegaRadiansPerSecond * ShooterAngleCalculator.lagTime) + Constants.TurretAngleFromCenter)) + fieldRelative.vxMetersPerSecond * ShooterAngleCalculator.lagTime);
     }
+
 
     public double getVXOfRobot(ChassisSpeeds fieldRelative){
         return fieldRelative.vxMetersPerSecond -
@@ -457,6 +629,15 @@ public class Shooter extends SubsystemBase {
                 * Math.cos(((swerve.io.getPose2d().getRotation().getRadians())) + Constants.TurretAngleFromCenter);
     }
 
+
+    /**
+     * Aims the turret and hood in order to make it into the hub.
+     * <p>
+     * 
+     * Uses the wrapped turret angle given by {@link #GetProposedAngle()} and the hood angle interpolated from the LUT to command the turret and hood to the positions required to make it in the hub.
+     *
+     * @return if the hood and turret are within tolerance of their setpoint given by the LUT
+     */
     public boolean isAimedAtHub() {
         double YToHub;
         double XToHub;
@@ -492,14 +673,22 @@ public class Shooter extends SubsystemBase {
         
         Logger.recordOutput("CalculatedCorrectedTurretAngle", 180*proposedAngle/(Math.PI));
 
-        turret.setHoodPosition(pastShooterAngle.hoodRotation/(2.0*Math.PI));
-
+        // turret.setHoodPosition(pastShooterAngle.hoodRotation/(2.0*Math.PI));
+        hoodTargetPosition = pastShooterAngle.hoodRotation/(2.0*Math.PI);
         Logger.recordOutput("CalculatedHoodAngle", pastShooterAngle.hoodRotation/(2*Math.PI));
 
         // return true;
         return (turret.hoodInTolerance(.05) && turret.turretInTolerance(0.05));
     }
 
+    /**
+     * Uses the LUT to determine the turret angle to aim towards the hub and then wraps it to be in the ROM of the turret on our robot
+     * <p>
+     * 
+     * Uses the calculated angle from Newtons method with a LUT to get the field relative rotation, then converts that to be robot relative so it always aims no matter the rotation.
+     *
+     * @return the turret angle required to make it in the hub
+     */
     public double GetProposedAngle(){
         double rotation = SwerveSubsystem.getInstance().getRobotPose().getRotation().getRadians();
 
@@ -527,6 +716,15 @@ public class Shooter extends SubsystemBase {
         return proposedAngle;
     }
 
+
+    /**
+     * Aims the turret and hood in order to make it into the hub.
+     * <p>
+     * 
+     * Uses the wrapped turret angle given by {@link #GetProposedAngle()} and the hood angle interpolated from the LUT to command the turret and hood to the positions required to make it in the hub.
+     *
+     * @return if the hood and turret are within tolerance of their setpoint given by the LUT
+     */
     public boolean aimFerry() {
         double YToHub;
         double XToHub;
@@ -573,47 +771,23 @@ public class Shooter extends SubsystemBase {
         double proposedAngle = GetProposedAngle();
 
         turret.setTurretPosition(proposedAngle/(2*Math.PI));
-        turret.setHoodPosition(pastShooterAngle.hoodRotation/(2.0*Math.PI));
+        hoodTargetPosition = pastShooterAngle.hoodRotation/(2.0*Math.PI);
 
         return (turret.hoodInTolerance(.05) && turret.turretInTolerance(0.05));
     }
 
     public boolean isHubActive() {
         double timer = Constants.timer.get();
-        gameData = DriverStation.getGameSpecificMessage();
-        if (gameData.length() > 0) {
-            switch (gameData.charAt(0)) {
-                case 'B':
-                if(Robot.TeleopStarted){
-                    if (Constants.isBlueAlliance) {
-                        return (Constants.timer.get() <= 10 || (timer >= (35 - prefire) && timer <= 60)
+        if(Robot.TeleopStarted){
+            if (Robot.WonAuto()) {
+                return (Constants.timer.get() <= 10 || (timer >= (35 - prefire) && timer <= 60)
                                 || (timer >= (85 - prefire)));
-                    } else {
-                        return (timer <= 35) || (timer >= (60 - prefire) && timer <= 85)
-                                || (timer >= (110 - prefire));
-                    }
                 }else{
-                    return true;
+                    return (timer <= 35) || (timer >= (60 - prefire) && timer <= 85)
+                        || (timer >= (110 - prefire));               
                 }
-
-                case 'R':
-                if(Robot.TeleopStarted){
-                    if (!Constants.isBlueAlliance) {
-                        return (Constants.timer.get() <= 10 || (timer >= (35 - prefire) && timer <= 60)
-                                || (timer >= (85 - prefire)));
-                    } else {
-                        return (timer <= 35) || (timer >= (60 - prefire) && timer <= 85)
-                                || (timer >= (110 - prefire));
-                    }
-                }else{
-                    return true;
-                }
-                default:
-                    return true;
-            }
-        } else {
+        }else{
             return true;
         }
     }
-
 }

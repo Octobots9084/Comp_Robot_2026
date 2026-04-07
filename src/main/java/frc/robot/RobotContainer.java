@@ -14,7 +14,6 @@ import frc.robot.subsystems.Intake.IntakeIOTalonFX;
 import frc.robot.subsystems.Lights.Lights;
 import frc.robot.Constants.RobotTypes;
 import frc.robot.subsystems.Superstructure;
-import frc.robot.subsystems.Climb.Climb;
 import frc.robot.subsystems.Drive.BetaConstants;
 import frc.robot.subsystems.Drive.CompConstants;
 import frc.robot.subsystems.Drive.SwerveSubsystem;
@@ -38,7 +37,6 @@ public class RobotContainer {
   // Subsystems
   public Shooter shooter;
   public Intake intake;
-  public Climb climb;
   public Vision vision;
   public Lights lights;
   private SwerveSubsystem swerve;

@@ -114,24 +114,20 @@ public class SwerveSubsystem extends SubsystemBase {
         Math.acos(this.io.getRotation3d().toMatrix().get(2, 2)));
         SmartDashboard.putBoolean("onRamp", isTilted(0, 3));
         applyStates();
+        Logger.recordOutput("isInAllianceZone",this.isInAllianceZone());
         // Logger.recordOutput("front left absolute", io.getAbsoluteEncoderPositions(0));
         // Logger.recordOutput("front right absolute", io.getAbsoluteEncoderPositions(1));
         // Logger.recordOutput("back left absolute", io.getAbsoluteEncoderPositions(2));
         // Logger.recordOutput("back right absolute", io.getAbsoluteEncoderPositions(3));
     }
 
-    // TODO: move somewhere important
     public boolean isTilted(double wanted, double tolerance) { /////////////////////
-        boolean inTolerance = false;
         tolerance = Units.degreesToRadians(tolerance);
-        Rotation3d gyroRotation = this.io.getRotation3d();
-        Matrix<N3,N3> gyroMatrix = gyroRotation.toMatrix();
-        double tilt = Math.acos(gyroMatrix.get(2, 2)) - 0.015 - Math.PI; // gyro mounted upside down so subtact PI radians out
-        SmartDashboard.putNumber("Tilt", Units.radiansToDegrees(tilt));
-        if (tilt <= (wanted + tolerance) && tilt >= (wanted - tolerance)) {
-            inTolerance = true;
-        }
-        return !inTolerance;
+        Matrix<N3,N3> gyroMatrix = this.io.getRotation3d().toMatrix();
+        
+        // gyro mounted upside down so subtact PI radians out
+        double tilt = Math.acos(gyroMatrix.get(2, 2)) - 0.015 - Math.PI; 
+        return !MathUtil.isNear(wanted, tilt, tolerance);
     }
 
     public void registerNamedCommands () {

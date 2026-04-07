@@ -17,6 +17,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.util.sendable.SendableBuilder.BackendKind;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Constants;
 
@@ -25,11 +26,13 @@ public class VisionIOSystem implements VisionIO {
     private final PhotonCamera frontRightCamera;
     private final PhotonCamera leftCamera;
     private final PhotonCamera rightCamera;
+    private final PhotonCamera backCamera;
     // private final PhotonCamera intakeCamera;
     private final PhotonPoseEstimator photonEstimatorFrontRight;
     private final PhotonPoseEstimator photonEstimatorFrontLeft;
     private final PhotonPoseEstimator photonEstimatorLeft;
     private final PhotonPoseEstimator photonEstimatorRight;
+    private final PhotonPoseEstimator photonEstimatorBack;
     private Matrix<N3, N1> curStdDevs;
     private final EstimateConsumer estConsumer;
     private double visonCycleTime;
@@ -51,10 +54,12 @@ public class VisionIOSystem implements VisionIO {
         frontLeftCamera = new PhotonCamera(Constants.frontleftCameraName);
         leftCamera = new PhotonCamera(Constants.leftCameraName);
         rightCamera = new PhotonCamera(Constants.rightCameraName);
+        backCamera = new PhotonCamera(Constants.backCameraName);
         photonEstimatorFrontRight = new PhotonPoseEstimator(Constants.kTagLayout, Constants.robotToCamFrontRight);
         photonEstimatorFrontLeft = new PhotonPoseEstimator(Constants.kTagLayout, Constants.robotToCamFrontLeft);
         photonEstimatorRight = new PhotonPoseEstimator(Constants.kTagLayout, Constants.robotToCamRight);
         photonEstimatorLeft = new PhotonPoseEstimator(Constants.kTagLayout, Constants.robotToCamLeft);
+        photonEstimatorBack = new PhotonPoseEstimator(Constants.kTagLayout, Constants.robotToCamBack);
         this.estConsumer = estConsumer; // Lamba that will accept a pose estimate and pass it to your desired {@link
     }
 
@@ -65,9 +70,17 @@ public class VisionIOSystem implements VisionIO {
         inputs.frontRightCameraConected = frontRightCamera.isConnected();
         inputs.rightCameraConected = rightCamera.isConnected();
         inputs.leftCameraConected = leftCamera.isConnected();
+        inputs.backCameraConected = backCamera.isConnected();
+
     }
 
-
+    public boolean CamerasConnected(){
+        if(frontLeftCamera.isConnected() && frontRightCamera.isConnected() && rightCamera.isConnected() && leftCamera.isConnected() && backCamera.isConnected()){
+            return true;
+        }else{
+            return false;
+        }
+    }
     /*
      * the periodic seaches all cameras for a hub mutitag pose and if found uses only that pose however if it is not found it adds togeter all the other tag poses to get a sutable estimate.
     */
