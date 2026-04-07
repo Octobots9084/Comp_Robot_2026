@@ -3,19 +3,12 @@ package frc.robot.subsystems.Vision;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.DoubleBinaryOperator;
-
 import org.littletonrobotics.junction.Logger;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
-import org.photonvision.targeting.proto.PhotonTrackedTargetProto;
-
-import com.ctre.phoenix6.Utils;
-
-import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
@@ -80,332 +73,117 @@ public class VisionIOSystem implements VisionIO {
     */
     @Override
     public void periodic() {
-        double camConfidance = 0;
 
         double startTime = Timer.getFPGATimestamp();
-        //determines of a mutlitag hub pose was found
-        boolean foundSutableMultiTagPoseOnCamRight = false;
 
-        //multitag hub visionmesurment for the right camera
-        Optional<EstimatedRobotPose> rightHubMultiTagResult = Optional.empty();
-        //multitag hub targets for the visionmesurment for the right camera
-        Optional<List<PhotonTrackedTarget>> rightHubMultiTagTargets = Optional.empty();
-        //list of all single tag visionmesurments for the right camera
-        ArrayList<Optional<EstimatedRobotPose>> rightResults = new ArrayList<Optional<EstimatedRobotPose>>();
-        //list of all lists of single tag targets per visionmesurment for the right camera
-        ArrayList<List<PhotonTrackedTarget>> rightTargets = new ArrayList<List<PhotonTrackedTarget>>();
+        boolean doSingletag = true;
 
-        //determines of a mutlitag hub pose was found
-        boolean foundSutableMultiTagPoseOnCamLeft = false;
+        FilteredCameraResults leftFilteredResults = filterPhotonResults(leftCamera, photonEstimatorLeft, doSingletag);
+        FilteredCameraResults frontLeftFilteredResults = filterPhotonResults(frontLeftCamera, photonEstimatorFrontLeft, doSingletag);
+        FilteredCameraResults rightFilteredResults = filterPhotonResults(rightCamera, photonEstimatorRight, doSingletag);
+        FilteredCameraResults frontRightFilteredResults = filterPhotonResults(frontRightCamera, photonEstimatorFrontRight, doSingletag);
 
-        //multitag hub visionmesurment for the right camera
-        Optional<EstimatedRobotPose> leftHubMultiTagResult = Optional.empty();
-        //multitag hub targets for the visionmesurment for the right camera
-        Optional<List<PhotonTrackedTarget>> leftHubMultiTagTargets = Optional.empty();
-        //list of all single tag visionmesurments for the right camera
-        ArrayList<Optional<EstimatedRobotPose>> leftResults = new ArrayList<Optional<EstimatedRobotPose>>();
-        //list of all lists of single tag targets per visionmesurment for the right camera
-        ArrayList<List<PhotonTrackedTarget>> leftTargets = new ArrayList<List<PhotonTrackedTarget>>();
+        int qualityOfBestCamera;
+        if (
+            leftFilteredResults.multiTagHubResults.size()>0 || 
+            frontLeftFilteredResults.multiTagHubResults.size()>0 || 
+            rightFilteredResults.multiTagHubResults.size()>0 || 
+            frontRightFilteredResults.multiTagHubResults.size()>0
+        ){
+            addVisionEstemation(leftFilteredResults.multiTagHubResults, leftFilteredResults.multiTagHubTargets, false, photonEstimatorLeft);
+            addVisionEstemation(rightFilteredResults.multiTagHubResults, leftFilteredResults.multiTagHubTargets, false, photonEstimatorRight);
+            addVisionEstemation(frontRightFilteredResults.multiTagHubResults, leftFilteredResults.multiTagHubTargets, false, photonEstimatorFrontRight);
+            addVisionEstemation(frontLeftFilteredResults.multiTagHubResults, leftFilteredResults.multiTagHubTargets, false, photonEstimatorFrontLeft);
+            qualityOfBestCamera = 3;
+        }
+        else if (
+            leftFilteredResults.multiTagResults.size()>0 || 
+            frontLeftFilteredResults.multiTagResults.size()>0 || 
+            rightFilteredResults.multiTagResults.size()>0 || 
+            frontRightFilteredResults.multiTagResults.size()>0
+        )
+        {
+            addVisionEstemation(leftFilteredResults.multiTagResults, leftFilteredResults.multiTagTargets, false, photonEstimatorLeft);
+            addVisionEstemation(rightFilteredResults.multiTagResults, leftFilteredResults.multiTagTargets, false, photonEstimatorRight);
+            addVisionEstemation(frontRightFilteredResults.multiTagResults, leftFilteredResults.multiTagTargets, false, photonEstimatorFrontRight);
+            addVisionEstemation(frontLeftFilteredResults.multiTagResults, leftFilteredResults.multiTagTargets, false, photonEstimatorFrontLeft);
+            qualityOfBestCamera = 2;
+        }
+        else if (
+            leftFilteredResults.singleTagResults.size()>0 || 
+            frontLeftFilteredResults.singleTagResults.size()>0 || 
+            rightFilteredResults.singleTagResults.size()>0 || 
+            frontRightFilteredResults.singleTagResults.size()>0
+        )
+        {
+            addVisionEstemation(leftFilteredResults.singleTagResults, leftFilteredResults.singleTagTargets, false, photonEstimatorLeft);
+            addVisionEstemation(rightFilteredResults.singleTagResults, leftFilteredResults.singleTagTargets, false, photonEstimatorRight);
+            addVisionEstemation(frontRightFilteredResults.singleTagResults, leftFilteredResults.singleTagTargets, false, photonEstimatorFrontRight);
+            addVisionEstemation(frontLeftFilteredResults.singleTagResults, leftFilteredResults.singleTagTargets, false, photonEstimatorFrontLeft);
+            qualityOfBestCamera = 1;
+        }
+        else
+            qualityOfBestCamera = 0;
         
-        //determines of a mutlitag hub pose was found
-        boolean foundSutableMultiTagPoseOnCamFrontRight = false;
+        Logger.recordOutput("camera Quality", qualityOfBestCamera);
+        this.visonCycleTime = Timer.getFPGATimestamp() - startTime;
+    }
 
-        //multitag hub visionmesurment for the right camera
-        Optional<EstimatedRobotPose> frontRightHubMultiTagResult = Optional.empty();
-        //multitag hub targets for the visionmesurment for the right camera
-        Optional<List<PhotonTrackedTarget>> frontRightHubMultiTagTargets = Optional.empty();
-        //list of all single tag visionmesurments for the right camera
-        ArrayList<Optional<EstimatedRobotPose>> frontRightResults = new ArrayList<Optional<EstimatedRobotPose>>();
-        //list of all lists of single tag targets per visionmesurment for the right camera
-        ArrayList<List<PhotonTrackedTarget>> frontRightTargets = new ArrayList<List<PhotonTrackedTarget>>();
-
-        //determines of a mutlitag hub pose was found
-        boolean foundSutableMultiTagPoseOnCamFrontLeft = false;
-
-        //multitag hub visionmesurment for the right camera
-        Optional<EstimatedRobotPose> frontLeftHubMultiTagResult = Optional.empty();
-        //multitag hub targets for the visionmesurment for the right camera
-        Optional<List<PhotonTrackedTarget>> frontLeftHubMultiTagTargets = Optional.empty();
-        //list of all single tag visionmesurments for the right camera
-        ArrayList<Optional<EstimatedRobotPose>> frontLeftResults = new ArrayList<Optional<EstimatedRobotPose>>();
-        //list of all lists of single tag targets per visionmesurment for the right camera
-        ArrayList<List<PhotonTrackedTarget>> frontLeftTargets = new ArrayList<List<PhotonTrackedTarget>>();
-
-        //creates an optionavl variable to store the camera vision estemation
+    //loops through all camera results for each caemra and checkes sorts them between hub multitag, multitag, and singletag
+    private FilteredCameraResults filterPhotonResults(PhotonCamera camera, PhotonPoseEstimator photonEstimator, boolean doSingletag){
         Optional<EstimatedRobotPose> visionEst = Optional.empty();
-        boolean addedGoodMultiTagReslt = false;
-        //loops through all camera results for each caemra and checkes for a hub multitage result if one is found then no other cameras a cheaked
-        for (var result : frontLeftCamera.getAllUnreadResults()) {
+        
+        ArrayList<Optional<List<PhotonTrackedTarget>>> hubMultiTagTargets = new ArrayList<Optional<List<PhotonTrackedTarget>>>();
+        ArrayList<Optional<EstimatedRobotPose>> hubMultiTagResults = new ArrayList<Optional<EstimatedRobotPose>>();
+
+        ArrayList<Optional<List<PhotonTrackedTarget>>> multiTagTargets = new ArrayList<Optional<List<PhotonTrackedTarget>>>();
+        ArrayList<Optional<EstimatedRobotPose>> multiTagResults = new ArrayList<Optional<EstimatedRobotPose>>();
+
+        ArrayList<Optional<List<PhotonTrackedTarget>>> singleTagTargets = new ArrayList<Optional<List<PhotonTrackedTarget>>>();
+        ArrayList<Optional<EstimatedRobotPose>> singleTagResults = new ArrayList<Optional<EstimatedRobotPose>>();
+
+        for (var result : camera.getAllUnreadResults()) {
             if(result.hasTargets()) {
                 result.targets = removeAmbigousTargets(result.targets);
 
-                visionEst = photonEstimatorFrontLeft.estimateCoprocMultiTagPose(result);
+                visionEst = photonEstimator.estimateCoprocMultiTagPose(result);
                 if (visionEst.isEmpty()) {
-                    visionEst = photonEstimatorFrontLeft.estimateLowestAmbiguityPose(result);
-                    if(!visionEst.isEmpty()) {
-                        if (camConfidance == 0)
-                            camConfidance = 1;
-                        frontLeftResults.add(visionEst);
+                    if (doSingletag){
+                        visionEst = photonEstimator.estimateLowestAmbiguityPose(result);
+                        if(!visionEst.isEmpty()) {
+                            singleTagResults.add(visionEst);
+                            singleTagTargets.add(Optional.of(result.getTargets()));
+                        }
                     }
                 } else {
-                    camConfidance = 2;
                     int numberOfHubTags = 0;
                     for(int i = 0; i < result.getTargets().size(); i++)
                         if(addToHubTagNumber(result, i)){
                             numberOfHubTags+=1;
                         }
                     if (numberOfHubTags>=2){
-                        frontLeftHubMultiTagResult = visionEst;
-                        frontLeftHubMultiTagTargets = Optional.of(result.getTargets());
-                        foundSutableMultiTagPoseOnCamFrontLeft = true;
-                        addedGoodMultiTagReslt = true;
+                        doSingletag=false;
+                        hubMultiTagResults.add(visionEst);
+                        hubMultiTagTargets.add(Optional.of(result.getTargets()));
                         break;
                     }
                     else{
-                        frontLeftResults.add(visionEst);
+                        multiTagResults.add(visionEst);
+                        multiTagTargets.add(Optional.of(result.getTargets()));
                     }
                     
                 }
-                frontLeftTargets.add(result.getTargets());
-            }
-        }
-        if (!addedGoodMultiTagReslt)
-            for (var result : frontRightCamera.getAllUnreadResults()) {
-            if(result.hasTargets()) {
-                result.targets = removeAmbigousTargets(result.targets);
-
-                visionEst = photonEstimatorFrontRight.estimateCoprocMultiTagPose(result);
-                if (visionEst.isEmpty()) {
-                    visionEst = photonEstimatorFrontRight.estimateLowestAmbiguityPose(result);
-                    if(!visionEst.isEmpty()) {
-                        if (camConfidance == 0)
-                            camConfidance = 1;
-                        frontRightResults.add(visionEst);
-                    }
-                } else {
-                    camConfidance = 2;
-                    int numberOfHubTags = 0;
-                    for(int i = 0; i < result.getTargets().size(); i++)
-                        if(addToHubTagNumber(result, i)){
-                            numberOfHubTags+=1;
-                        }
-                    if (numberOfHubTags>=2){
-                        frontRightHubMultiTagResult = visionEst;
-                        frontRightHubMultiTagTargets = Optional.of(result.getTargets());
-                        foundSutableMultiTagPoseOnCamFrontRight = true;
-                        addedGoodMultiTagReslt = true;
-                        break;
-                    }
-                    else{
-                        frontRightResults.add(visionEst);
-                    }
-                    
-                }
-                frontRightTargets.add(result.getTargets());
-            }
-        }
-        if (!addedGoodMultiTagReslt)
-            for (var result : rightCamera.getAllUnreadResults()) {
-            if(result.hasTargets()) {
-                result.targets = removeAmbigousTargets(result.targets);
-
-                visionEst = photonEstimatorRight.estimateCoprocMultiTagPose(result);
-                if (visionEst.isEmpty()) {
-                    visionEst = photonEstimatorRight.estimateLowestAmbiguityPose(result);
-                    if(!visionEst.isEmpty()) {
-                        if (camConfidance == 0)
-                            camConfidance = 1;
-                        rightResults.add(visionEst);
-                    }
-                } else {
-                    camConfidance = 2;
-                    int numberOfHubTags = 0;
-                    for(int i = 0; i < result.getTargets().size(); i++)
-                        if(addToHubTagNumber(result, i)){
-                            numberOfHubTags+=1;
-                        }
-                    if (numberOfHubTags>=2){
-                        rightHubMultiTagResult = visionEst;
-                        rightHubMultiTagTargets = Optional.of(result.getTargets());
-                        foundSutableMultiTagPoseOnCamRight = true;
-                        addedGoodMultiTagReslt = true;
-                        break;
-                    }
-                    else{
-                        rightResults.add(visionEst);
-                    }
-                    
-                }
-                rightTargets.add(result.getTargets());
-            }
-        }
-        if (!addedGoodMultiTagReslt)
-            for (var result : leftCamera.getAllUnreadResults()) {
-            if(result.hasTargets()) {
-                result.targets = removeAmbigousTargets(result.targets);
-
-                visionEst = photonEstimatorLeft.estimateCoprocMultiTagPose(result);
-                if (visionEst.isEmpty()) {
-                    visionEst = photonEstimatorLeft.estimateLowestAmbiguityPose(result);
-                    if(!visionEst.isEmpty()) {
-                        if (camConfidance == 0)
-                            camConfidance = 1;
-                        leftResults.add(visionEst);
-                    }
-                } else {
-                    camConfidance = 2;
-                    int numberOfHubTags = 0;
-                    for(int i = 0; i < result.getTargets().size(); i++)
-                        if(addToHubTagNumber(result, i)){
-                            numberOfHubTags+=1;
-                        }
-                    if (numberOfHubTags>=2){
-                        leftHubMultiTagResult = visionEst;
-                        leftHubMultiTagTargets = Optional.of(result.getTargets());
-                        foundSutableMultiTagPoseOnCamLeft = true;
-                        addedGoodMultiTagReslt = true;
-                        break;
-                    }
-                    else{
-                        leftResults.add(visionEst);
-                    }
-                    
-                }
-                leftTargets.add(result.getTargets());
             }
         }
 
-        //loops thouhg all saved camera results and adds them to pose unless the last section found a hub multi tag pose in witch case that is the only pose added
-        if (foundSutableMultiTagPoseOnCamRight){
-            Logger.recordOutput("useing Cam Right",true);
-            Logger.recordOutput("useing Cam Left",false);
-            Logger.recordOutput("useing Cam Front Right",false);
-            Logger.recordOutput("useing Cam Front Left",false);
-            updateEstimationStdDevs(rightHubMultiTagResult, rightHubMultiTagTargets.get());
-
-            rightHubMultiTagResult.ifPresent(
-                    est -> {
-                        // Change our trust in the measurement based on the tags we can see
-                        var estStdDevs = getEstimationStdDevs();
-                        estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
-                    });
-        }
-        else if (!addedGoodMultiTagReslt && !rightResults.isEmpty()){
-            Logger.recordOutput("useing Cam Right",false);
-            Logger.recordOutput("useing Cam Left",false);
-            Logger.recordOutput("useing Cam Front Right",false);
-            Logger.recordOutput("useing Cam Front Left",false);
-            for(int i = 0; i<rightResults.size();i++){
-                updateEstimationStdDevs(rightResults.get(i), rightTargets.get(i));
-
-                rightResults.get(i).ifPresent(
-                        est -> {
-                            // Change our trust in the measurement based on the tags we can see
-                            var estStdDevs = getEstimationStdDevs();
-                            estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
-                        });
-            }
-        }
-
-        if (foundSutableMultiTagPoseOnCamLeft){
-            Logger.recordOutput("useing Cam Right",false);
-            Logger.recordOutput("useing Cam Left",true);
-            Logger.recordOutput("useing Cam Front Right",false);
-            Logger.recordOutput("useing Cam Front Left",false);
-            updateEstimationStdDevs(leftHubMultiTagResult, leftHubMultiTagTargets.get());
-
-            leftHubMultiTagResult.ifPresent(
-                    est -> {
-                        // Change our trust in the measurement based on the tags we can see
-                        var estStdDevs = getEstimationStdDevs();
-                        estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
-                    });
-        }
-        else if (!addedGoodMultiTagReslt && !leftResults.isEmpty()){
-            Logger.recordOutput("useing Cam Right",false);
-            Logger.recordOutput("useing Cam Left",false);
-            Logger.recordOutput("useing Cam Front Right",false);
-            Logger.recordOutput("useing Cam Front Left",false);
-            for(int i = 0; i<leftResults.size();i++){
-                updateEstimationStdDevs(leftResults.get(i), leftTargets.get(i));
-
-                leftResults.get(i).ifPresent(
-                        est -> {
-                            // Change our trust in the measurement based on the tags we can see
-                            var estStdDevs = getEstimationStdDevs();
-                            estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
-                        });
-            }
-        }
-
-        if (foundSutableMultiTagPoseOnCamFrontRight){
-            Logger.recordOutput("useing Cam Right",false);
-            Logger.recordOutput("useing Cam Left",false);
-            Logger.recordOutput("useing Cam Front Right",true);
-            Logger.recordOutput("useing Cam Front Left",false);
-            updateEstimationStdDevs(frontRightHubMultiTagResult, frontRightHubMultiTagTargets.get());
-
-            frontRightHubMultiTagResult.ifPresent(
-                    est -> {
-                        // Change our trust in the measurement based on the tags we can see
-                        var estStdDevs = getEstimationStdDevs();
-                        estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
-                    });
-        }
-        else if (!addedGoodMultiTagReslt && !frontRightResults.isEmpty()){
-            Logger.recordOutput("useing Cam Right",false);
-            Logger.recordOutput("useing Cam Left",false);
-            Logger.recordOutput("useing Cam Front Right",false);
-            Logger.recordOutput("useing Cam Front Left",false);
-            for(int i = 0; i<frontRightResults.size();i++){
-                updateEstimationStdDevs(frontRightResults.get(i), frontRightTargets.get(i));
-
-                frontRightResults.get(i).ifPresent(
-                        est -> {
-                            // Change our trust in the measurement based on the tags we can see
-                            var estStdDevs = getEstimationStdDevs();
-                            estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
-                        });
-            }
-        }
-
-        if (foundSutableMultiTagPoseOnCamFrontLeft){
-            Logger.recordOutput("useing Cam Right",false);
-            Logger.recordOutput("useing Cam Left",false);
-            Logger.recordOutput("useing Cam Front Right",false);
-            Logger.recordOutput("useing Cam Front Left",true);
-            updateEstimationStdDevs(frontLeftHubMultiTagResult, frontLeftHubMultiTagTargets.get());
-
-            frontLeftHubMultiTagResult.ifPresent(
-                    est -> {
-                        // Change our trust in the measurement based on the tags we can see
-                        var estStdDevs = getEstimationStdDevs();
-                        estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
-                    });
-        }
-        else if (!addedGoodMultiTagReslt  && !frontLeftResults.isEmpty()){
-            Logger.recordOutput("useing Cam Right",false);
-            Logger.recordOutput("useing Cam Left",false);
-            Logger.recordOutput("useing Cam Front Right",false);
-            Logger.recordOutput("useing Cam Front Left",false);
-            for(int i = 0; i<frontLeftResults.size();i++){
-                updateEstimationStdDevs(frontLeftResults.get(i), frontLeftTargets.get(i));
-
-                frontLeftResults.get(i).ifPresent(
-                        est -> {
-                            // Change our trust in the measurement based on the tags we can see
-                            var estStdDevs = getEstimationStdDevs();
-                            estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
-                        });
-            }
-        }
-        if (addedGoodMultiTagReslt){
-            Logger.recordOutput("cam confidance",3);
-        }
-        else {
-            Logger.recordOutput("cam confidance",camConfidance);
-        }
-        this.visonCycleTime = Timer.getFPGATimestamp()-startTime;
+        return new FilteredCameraResults(
+            hubMultiTagResults,
+            multiTagResults,
+            singleTagResults,
+            hubMultiTagTargets,
+            multiTagTargets,
+            singleTagTargets
+        );
     }
 
     private boolean addToHubTagNumber(PhotonPipelineResult result, int i){
@@ -432,6 +210,19 @@ public class VisionIOSystem implements VisionIO {
         return false;
     }
 
+    private void addVisionEstemation(ArrayList<Optional<EstimatedRobotPose>> filteredResults, ArrayList<Optional<List<PhotonTrackedTarget>>> filteredTargets, boolean ishub, PhotonPoseEstimator photonEstimator){
+        for (int i =0;i < filteredResults.size(); i++){
+            updateEstimationStdDevs(filteredResults.get(i), filteredTargets.get(i).get(), ishub, photonEstimator);
+
+            filteredResults.get(i).ifPresent(
+                est -> {
+                    // Change our trust in the measurement based on the tags we can see
+                    var estStdDevs = getEstimationStdDevs();
+                    estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+                });
+        }
+    }
+    
     private List<PhotonTrackedTarget> removeAmbigousTargets(List<PhotonTrackedTarget> allTargets){
         List<PhotonTrackedTarget> optimizedTargets = new ArrayList<PhotonTrackedTarget>();
         for(var target : allTargets){
@@ -451,8 +242,7 @@ public class VisionIOSystem implements VisionIO {
      * @param estimatedPose The estimated pose to guess standard deviations for.
      * @param targets       All targets in this camera frame
      */
-    private void updateEstimationStdDevs(Optional<EstimatedRobotPose> estimatedPose,
-            List<PhotonTrackedTarget> targets) {
+    private void updateEstimationStdDevs(Optional<EstimatedRobotPose> estimatedPose, List<PhotonTrackedTarget> targets, boolean ishub ,PhotonPoseEstimator photonEstimator) {
         if (estimatedPose.isEmpty()) {
             // No pose input. Default to single-tag std devs
             curStdDevs = Constants.kSingleTagStdDevs;
@@ -466,7 +256,7 @@ public class VisionIOSystem implements VisionIO {
             // Precalculation - see how many tags we found, and calculate an
             // average-distance metric
             for (var tgt : targets) {
-                var tagPose = photonEstimatorFrontRight.getFieldTags().getTagPose(tgt.getFiducialId());
+                var tagPose = photonEstimator.getFieldTags().getTagPose(tgt.getFiducialId());
                 if (tagPose.isEmpty())
                     continue;
                 numTags++;
@@ -485,7 +275,7 @@ public class VisionIOSystem implements VisionIO {
                 avgDist /= numTags;
                 // Decrease std devs if multiple targets are visible
                 if (numTags > 1)
-                    estStdDevs = Constants.kMultiTagStdDevs;
+                    estStdDevs = ishub ? Constants.kMultiTagHubStdDevs : Constants.kMultiTagStdDevs;
                 // Increase std devs based on (average) distance
                 if (numTags == 1 && avgDist > 4)
                     estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
@@ -496,98 +286,6 @@ public class VisionIOSystem implements VisionIO {
         }
     }
 
-    public static ChassisSpeeds allignClimb(Pose2d pose){ //stage -1 is the first interation of this function stage 0 is climbOptionalPreStartPosition stage 1 is climbPrePosition stage 2 is climbEngagedPosition
-        Translation2d climbPrePosition;
-        Translation2d climbEngagedPosition;
-        double TargetRotationRadians;
-        
-        Translation2d targetPosition;
-
-        double xVelocity;
-        double YVelocity;
-        double RotVelocity;
-        
-        if(Constants.isBlueAlliance){
-            if(pose.getY() > Constants.fieldCenterY){
-                TargetRotationRadians = Constants.climbStartRotationBluePosY;
-                climbPrePosition = Constants.climbStartPositionBluePosY;
-                climbEngagedPosition = Constants.climbEngagedPositionBluePosY;
-            } else {
-                TargetRotationRadians = Constants.climbStartRotationBlueNegY;
-                climbPrePosition = Constants.climbStartPositionBlueNegY;
-                climbEngagedPosition = Constants.climbEngagedPositionBlueNegY;
-            }
-        } else {
-            if(pose.getY() > Constants.fieldCenterY){
-                TargetRotationRadians = Constants.climbStartRotationRedPosY;
-                climbPrePosition = Constants.climbStartPositionRedPosY;
-                climbEngagedPosition = Constants.climbEngagedPositionRedPosY;
-            } else {
-                TargetRotationRadians = Constants.climbStartRotationRedNegY;
-                climbPrePosition = Constants.climbStartPositionRedNegY;
-                climbEngagedPosition = Constants.climbEngagedPositionRedNegY;
-            }
-        }
-
-        Logger.recordOutput("climbAlignStage",climbAlignStage);
-
-        //getting x/y velocitys
-        if (climbAlignStage == 0){
-            targetPosition = climbPrePosition;
-            double xErr = pose.getX() - targetPosition.getX();
-            double yErr = pose.getY() - targetPosition.getY();
-            double rotErr = pose.getRotation().getRadians() - TargetRotationRadians;
-
-            if(Math.abs(xErr) < Constants.VisionSubStateAllignTollerance
-                && Math.abs(yErr) < Constants.VisionSubStateAllignTollerance
-                && Math.abs(rotErr) < Constants.VisionAllignRotationTollerance){
-                    climbAlignStage = 1;
-            }
-        } else if (climbAlignStage == 1){
-            targetPosition = climbEngagedPosition;
-            double xErr = pose.getX() - targetPosition.getX();
-            double yErr = pose.getY() - targetPosition.getY();
-            double rotErr = pose.getRotation().getRadians() - TargetRotationRadians;
-
-            if(Math.abs(xErr) < Constants.VisionSubStateAllignTollerance
-                && Math.abs(yErr) < Constants.VisionSubStateAllignTollerance
-                && Math.abs(rotErr) < Constants.VisionAllignRotationTollerance){
-                climbAlignStage = 2;
-            }
-        }
-        else if(climbAlignStage == 2) {
-            return new ChassisSpeeds(0,0,0);
-        } 
-        else {
-            throw new ArithmeticException("climb allign stage:"+climbAlignStage+" invalid");
-        }
-
-        double disToWantedPose = 0;
-        if (climbAlignStage == 0){
-            disToWantedPose = getDistBetweenPoints(pose.getTranslation(),climbPrePosition);
-        } else if (climbAlignStage == 1) {
-            disToWantedPose = getDistBetweenPoints(pose.getTranslation(),climbEngagedPosition);
-        }
-
-        double approatchspeed = Constants.VisionAllignspeed;
-        if (disToWantedPose < Constants.VisionAllignTollerance){ //TODO test these tolerances
-            xVelocity = xPidcontroller.calculate(pose.getX(),targetPosition.getX());
-            YVelocity = yPidcontroller.calculate(pose.getY(),targetPosition.getY());
-        }
-        else{
-            approatchspeed = Constants.VisionAllignspeed;
-        }
-            
-        Logger.recordOutput("climbAlignTargetX",targetPosition.getX());
-        Logger.recordOutput("climbAlignTargetY",targetPosition.getY());
-        Logger.recordOutput("climbAlignTargetRotation",TargetRotationRadians);
-        xVelocity = Constants.VisionAllignspeed * (targetPosition.getX() - pose.getX())/getDistBetweenPoints(targetPosition,pose.getTranslation());
-        YVelocity = Constants.VisionAllignspeed * (targetPosition.getY() - pose.getY())/getDistBetweenPoints(targetPosition,pose.getTranslation());
-        RotVelocity = angularPidcontroller.calculate(pose.getRotation().getRadians(),TargetRotationRadians);
-        
-        return new ChassisSpeeds(xVelocity, YVelocity, RotVelocity);
-    }
-
     public static double getDistBetweenPoints(Translation2d pose1,Translation2d pose2){
         return Math.sqrt((
                 pose1.getY() - pose2.getY())
@@ -596,31 +294,6 @@ public class VisionIOSystem implements VisionIO {
                 pose1.getX() - pose2.getX())
                 * (pose1.getX() - pose2.getX()
             ));
-    }
-
-    public boolean isAlligned(Pose2d pose){
-        Translation2d climbEngagedPosition;
-        double TargetRotationRadians;
-
-        if(Constants.isBlueAlliance){
-            if(pose.getY() > Constants.fieldCenterY){
-                TargetRotationRadians = Constants.climbStartRotationBluePosY;
-                climbEngagedPosition = Constants.climbEngagedPositionBluePosY;
-            } else {
-                TargetRotationRadians = Constants.climbStartRotationBlueNegY;
-                climbEngagedPosition = Constants.climbEngagedPositionBlueNegY;
-            }
-        } else {
-            if(pose.getY() > Constants.fieldCenterY){
-                TargetRotationRadians = Constants.climbStartRotationRedPosY;
-                climbEngagedPosition = Constants.climbEngagedPositionRedPosY;
-            } else {
-                TargetRotationRadians = Constants.climbStartRotationRedNegY;
-                climbEngagedPosition = Constants.climbEngagedPositionRedNegY;
-            }
-        }
-
-        return (Math.abs(pose.getRotation().getRadians() - TargetRotationRadians) < Constants.VisionAllignRotationTollerance) && (getDistBetweenPoints(pose.getTranslation(),climbEngagedPosition)<Constants.VisionAllignTollerance);
     }
 
     public Matrix<N3, N1> getEstimationStdDevs() {

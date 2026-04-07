@@ -69,6 +69,7 @@ public final class Constants {
   // (Fake values. Experiment anl;y   y y    +        u'  d determine estimation noise on an actual robot.)
   public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
   public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
+  public static final Matrix<N3, N1> kMultiTagHubStdDevs = VecBuilder.fill(0.3, 0.3, 0.6);
 
   public static final Mode simMode = Mode.SIM;
   public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;
@@ -84,11 +85,6 @@ public final class Constants {
   public static final double maxAngularVelocity = 4.5;// TODO
   // public static final enum currentMode = 1;//TODO
   public static final double maxVelocity = 3.75;// TODO
-
-  public static Translation2d swerveModuleOneOffset = new Translation2d(1, 1);
-  public static Translation2d swerveModuleTwoOffset = new Translation2d(1, -1);
-  public static Translation2d swerveModuleThreeOffset = new Translation2d(-1, 1);
-  public static Translation2d swerveModuleFourOffset = new Translation2d(-1, -1);
 
   public static boolean isZeroed = false;
 
