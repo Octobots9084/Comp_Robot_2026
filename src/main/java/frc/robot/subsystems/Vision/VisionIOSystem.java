@@ -95,6 +95,7 @@ public class VisionIOSystem implements VisionIO {
         FilteredCameraResults frontLeftFilteredResults = filterPhotonResults(frontLeftCamera, photonEstimatorFrontLeft, doSingletag);
         FilteredCameraResults rightFilteredResults = filterPhotonResults(rightCamera, photonEstimatorRight, doSingletag);
         FilteredCameraResults frontRightFilteredResults = filterPhotonResults(frontRightCamera, photonEstimatorFrontRight, doSingletag);
+        FilteredCameraResults backFilteredResults = filterPhotonResults(backCamera, photonEstimatorBack, doSingletag);
 
         int qualityOfBestCamera;
         if (
@@ -107,6 +108,7 @@ public class VisionIOSystem implements VisionIO {
             addVisionEstemation(rightFilteredResults.multiTagHubResults, leftFilteredResults.multiTagHubTargets, false, photonEstimatorRight);
             addVisionEstemation(frontRightFilteredResults.multiTagHubResults, leftFilteredResults.multiTagHubTargets, false, photonEstimatorFrontRight);
             addVisionEstemation(frontLeftFilteredResults.multiTagHubResults, leftFilteredResults.multiTagHubTargets, false, photonEstimatorFrontLeft);
+            addVisionEstemation(backFilteredResults.multiTagHubResults, backFilteredResults.multiTagHubTargets, false, photonEstimatorBack);
             qualityOfBestCamera = 3;
         }
         else if (
@@ -120,6 +122,7 @@ public class VisionIOSystem implements VisionIO {
             addVisionEstemation(rightFilteredResults.multiTagResults, leftFilteredResults.multiTagTargets, false, photonEstimatorRight);
             addVisionEstemation(frontRightFilteredResults.multiTagResults, leftFilteredResults.multiTagTargets, false, photonEstimatorFrontRight);
             addVisionEstemation(frontLeftFilteredResults.multiTagResults, leftFilteredResults.multiTagTargets, false, photonEstimatorFrontLeft);
+            addVisionEstemation(backFilteredResults.multiTagResults, backFilteredResults.multiTagTargets, false, photonEstimatorBack);
             qualityOfBestCamera = 2;
         }
         else if (
@@ -133,6 +136,7 @@ public class VisionIOSystem implements VisionIO {
             addVisionEstemation(rightFilteredResults.singleTagResults, leftFilteredResults.singleTagTargets, false, photonEstimatorRight);
             addVisionEstemation(frontRightFilteredResults.singleTagResults, leftFilteredResults.singleTagTargets, false, photonEstimatorFrontRight);
             addVisionEstemation(frontLeftFilteredResults.singleTagResults, leftFilteredResults.singleTagTargets, false, photonEstimatorFrontLeft);
+            addVisionEstemation(backFilteredResults.singleTagResults, backFilteredResults.singleTagTargets, false, photonEstimatorBack);
             qualityOfBestCamera = 1;
         }
         else
