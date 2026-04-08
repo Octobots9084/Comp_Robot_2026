@@ -62,6 +62,7 @@ public class Robot extends LoggedRobot {
   private static String gameData;
   private boolean lastHubPeriod = false;
   public static boolean TeleopStarted = false;
+  public static boolean isAllianceSet = false;
   public Robot() {
     // Set up data receivers & replay source
     switch (Constants.currentMode) {
@@ -145,8 +146,8 @@ public class Robot extends LoggedRobot {
     PhoenixUtil.refreshAll();
     LoggedTracer.record("PhoenixRefresh");
     Logger.recordOutput("IsBlueAlliance",Constants.isBlueAlliance);
-    DriverCommunications.pushToElastic();
-    DriverCommunications.fieldPose.setRobotPose(SwerveSubsystem.getInstance().getRobotPose());
+    // DriverCommunications.pushToElastic();
+    // DriverCommunications.fieldPose.setRobotPose(SwerveSubsystem.getInstance().getRobotPose());
 
     // Return to non-RT thread priority (do not modify the first argument)
     // Threads.setCurrentThreadPriority(false, 10);
@@ -164,26 +165,24 @@ public class Robot extends LoggedRobot {
   /** This function is called periodically when disabled. */
   @Override
   public void disabledPeriodic() {
-    Optional<Alliance> ally = DriverStation.getAlliance();
-   if(!Turret.getInstance().getLimitSwitchPressed()){
-      Shooter.getInstance().turretAlreadyZeroed = true;   
-      Turret.getInstance().zeroTurretPosition();
-      }
-    if (ally.isPresent()) {
-      if (ally.get() == Alliance.Red) {
-        Constants.isBlueAlliance = false;
-      }
-      if (ally.get() == Alliance.Blue) {
-        Constants.isBlueAlliance = true;
+    if (!isAllianceSet) {
+      Optional<Alliance> ally = DriverStation.getAlliance();
+      if (ally.isPresent()) {
+        if (ally.get() == Alliance.Red) {
+          Constants.isBlueAlliance = false;
+        }
+        if (ally.get() == Alliance.Blue) {
+          Constants.isBlueAlliance = true;
+        }
       }
     }
-    if(Vision.getInstance().io.CamerasConnected()){
+
+    if (Vision.getInstance().io.CamerasConnected()) {
       Lights.getLightInstance().lightsWantedState = LightAnimations.DISABLED;
-    }else{
+    } else {
       Lights.getLightInstance().lightsWantedState = LightAnimations.DISCONNECTEDCAMERA;
     }
-    
-  
+
   }
 
   /**

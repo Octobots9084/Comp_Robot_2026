@@ -80,7 +80,7 @@ public class Shooter extends SubsystemBase {
     public double ferryBallSpeed = 6.7;
     public double ferryFlywheelSpeed = 10;
 
-    public double manuelHood = 74; 
+    public double manuelHood = 77; 
     public double manuelFlywheel = 40;
 
     public double hoodTargetPosition = Constants.maximumHoodPosition;
@@ -131,6 +131,7 @@ public class Shooter extends SubsystemBase {
                 feeder.setFeederVelocity(FeederStates.OFF);
                 flywheel.setFlywheelVelocity(FlywheelStates.SAFE);
                 flywheelInToleranceOnce = false;
+                turret.setHoodPosition(Constants.maximumHoodPosition);
                 break;
             case MANUAL:
                 // joystick controlls turret and hood
@@ -158,6 +159,9 @@ public class Shooter extends SubsystemBase {
                         flywheel.setFlywheelVelocity(manuelFlywheel);
                         activateFeeder();
                     }
+                }else{
+                    feeder.setFeederVelocity(FeederStates.OFF);
+                    flywheel.setFlywheelVelocity(FlywheelStates.SAFE);
                 }
                 break;
             case FERRY:
@@ -200,12 +204,14 @@ public class Shooter extends SubsystemBase {
                         turret.setHoodPosition(hoodTargetPosition);
                         flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
                         if(isAimedAtHub){
-                            if(flywheel.FlywheelInTolerance(1)){
+                            if(flywheel.FlywheelInTolerance(0.75)){
                                 //Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTHUB;
-                                feeder.setFeederVelocity(FeederStates.SCORING);
+                                feeder.setFeederVelocity(FeederStates.OFF);
                                 flywheelDebouncer = 0;
-                            }else if (flywheelDebouncer<10){
+                            }else if (flywheelDebouncer<15){
                                 flywheelDebouncer ++;
+                                feeder.setFeederVelocity(FeederStates.OFF);
+                            } else if (flywheelDebouncer > 15) {
                                 feeder.setFeederVelocity(FeederStates.SCORING);
                             }
                             else{
@@ -258,6 +264,7 @@ public class Shooter extends SubsystemBase {
                 if(swerve.isInAllianceZone()){
 
                     flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
+                    turret.setHoodPosition(hoodTargetPosition);
                     if(isAimedAtHub){
                         //Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTHUB;
                         Intake.getInstance().wantedState = IntakeStates.ELEPHANTIASISPART2;
@@ -283,28 +290,34 @@ public class Shooter extends SubsystemBase {
                 }
                 break;
             case AUTODEPOTSHOOT:
-                isAimedAtHub = isAimedAtHub();
+            isAimedAtHub = isAimedAtHub();
 
                 if(swerve.isInAllianceZone()){
 
                     flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
+                    turret.setHoodPosition(hoodTargetPosition);
                     if(isAimedAtHub){
                         //Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTHUB;
                         Intake.getInstance().wantedState = IntakeStates.INTAKING;
                         if(flywheel.FlywheelInTolerance(1)){
                             feeder.setFeederVelocity(FeederStates.SCORING);
                             flywheelDebouncer = 0;
-                        }else if (flywheelDebouncer<10){  
+                        }else if (flywheelDebouncer<10){
                             flywheelDebouncer ++;
                             feeder.setFeederVelocity(FeederStates.SCORING);
                         }
                         else{
                             feeder.setFeederVelocity(FeederStates.OFF);
                         }
+                    }else{
+                        //Lights.getLightInstance().lightsWantedState = LightAnimations.CANTSHOOT;
+
                     }
 
                 }else{
                     wantedShooterState = ShooterStates.BUMP;
+                    //Lights.getLightInstance().lightsWantedState = LightAnimations.CANTSHOOT;
+
                 }
                 break;
             case BUMP:

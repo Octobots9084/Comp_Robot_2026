@@ -60,6 +60,7 @@ public class ButtonConfig {
         // driverController.b().onTrue(new SetStateClimbL3()); //remove climb
         // driverController.a().onTrue(new SetStateUnclimb());
 
+        //TODO add back
         driverController.rightTrigger(0.5).onTrue(new SetStateShooter());
         driverController.rightTrigger(0.5).onTrue(new InstantCommand(
                 () -> Shooter.driverOverride = true))
@@ -70,11 +71,7 @@ public class ButtonConfig {
         //coDriverController.leftTrigger(0.5).onTrue(new SetStateSafe());
         driverController.a().onTrue(new Spit());
         driverController.y().onTrue(new InstantCommand(() -> superstructure.wantedState = States.FIXEDFIRE)).onFalse(new InstantCommand(() -> superstructure.wantedState = States.SHOOTER));
-        coDriverController.rightTrigger(0.5).onTrue(new SetStateShooter());
-        coDriverController.rightTrigger().onTrue(new InstantCommand(
-                () -> Shooter.driverOverride = true))
-                 .onFalse(new InstantCommand(
-                         () -> Shooter.driverOverride = false));
+        
 
         //X : TODO add unstuck
         // driverController.rightBumper().onTrue(new InstantCommand(

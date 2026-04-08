@@ -57,7 +57,7 @@ public final class Constants {
   private static final double highCamPitch = Units.degreesToRadians(20);
   private static final double LowCamPitch = Units.degreesToRadians(28.5);
   //-20 -26.57
-  public static final Transform3d robotToCamFrontRight = new Transform3d(new Translation3d(-0.28,0.195,0.19),
+  public static final Transform3d robotToCamFrontRight = new Transform3d(new Translation3d(-0.28,0.195,0.41),
       new Rotation3d(0, -highCamPitch, (-30/180.0)*Math.PI+Math.PI));
   //-20 +30
   public static final Transform3d robotToCamFrontLeft = new Transform3d(new Translation3d(-0.28,-0.135,0.24),
@@ -108,6 +108,7 @@ public final class Constants {
   public static int hoodID = 13;
   public static int turretID = 17;
   public static int spindexerID = 26;
+  public static int spindexerFollowerID = 27; //TODO remember to set the motor to 27
   public static int verticalFeederID = 15;
 
   public static double turretZeroPosition = 197.75/360.0;
@@ -115,7 +116,7 @@ public final class Constants {
   public static double minimumHoodPosition = 58/360.0;
   public static double maximumTurretPosition = 0.8; // TODO set this to an actual value so sinjin doesnt cry
   public static double turretGearRatio = (60 / 14.0) * (156 / 20.0); //it is flipped to allign turret and gyro yaw rotation
-  public static double hoodGearRatio = 738/23.0;
+  public static double hoodGearRatio = 522/21.0;
 
   public static double flywheelGearRatio = 1;//29/33.0;
   public static double flywheelToTopRollerRatio = 28/23.0;
@@ -125,8 +126,9 @@ public final class Constants {
   public static double feederGearRatio = 21/34.0;
   public static double feederWheelRadius = 1.5*0.0254;
 
-  public static double spindexerRadius = 3.25*0.0254;
-  public static double spindexerGearRatio = 1;
+  // public static double spindexerRadius = 3.25*0.0254;
+  public static double spindexerRadius = 1;
+  public static double spindexerGearRatio = 4;
 
   public static double rotateGearRatio = 12.0;// TODO fix this gear ratio
 

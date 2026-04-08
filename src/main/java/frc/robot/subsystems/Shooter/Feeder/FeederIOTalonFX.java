@@ -2,9 +2,11 @@ package frc.robot.subsystems.Shooter.Feeder;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.MotorAlignmentValue;
 
 import frc.robot.Constants;
 import frc.robot.subsystems.States;
@@ -22,16 +24,25 @@ public class FeederIOTalonFX implements FeederIO {
 
     public TalonFX spindexerMotor;
     public TalonFX verticalFeederMotor;
+    public TalonFX spindexerFollower;
     public ShooterConfigurator shooterConfigs;
     private VelocityVoltage spindexerRequest = new VelocityVoltage(0);
     private VelocityVoltage verticalFeederRequest = new VelocityVoltage(0);
 
+    private Follower followSpindexer = new Follower(Constants.spindexerID, MotorAlignmentValue.Aligned);
+
+
     public FeederIOTalonFX() {
         shooterConfigs = new ShooterConfigurator();
         spindexerMotor = new TalonFX(Constants.spindexerID, Constants.krakenBus);
+        spindexerFollower = new TalonFX(Constants.spindexerFollowerID, Constants.krakenBus);
         verticalFeederMotor = new TalonFX(Constants.verticalFeederID, Constants.krakenBus);
 
         spindexerMotor.getConfigurator().apply(shooterConfigs.spindexerConfig);
+
+          spindexerFollower.setControl(followSpindexer);
+
+
         verticalFeederMotor.getConfigurator().apply(shooterConfigs.verticalFeederConfig);
 
         feederVelocity = verticalFeederMotor.getVelocity();
