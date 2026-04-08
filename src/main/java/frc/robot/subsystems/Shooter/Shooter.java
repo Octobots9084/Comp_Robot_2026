@@ -204,12 +204,14 @@ public class Shooter extends SubsystemBase {
                         turret.setHoodPosition(hoodTargetPosition);
                         flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
                         if(isAimedAtHub){
-                            if(flywheel.FlywheelInTolerance(1)){
+                            if(flywheel.FlywheelInTolerance(0.75)){
                                 //Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTHUB;
-                                feeder.setFeederVelocity(FeederStates.SCORING);
+                                feeder.setFeederVelocity(FeederStates.OFF);
                                 flywheelDebouncer = 0;
-                            }else if (flywheelDebouncer<10){
+                            }else if (flywheelDebouncer<15){
                                 flywheelDebouncer ++;
+                                feeder.setFeederVelocity(FeederStates.OFF);
+                            } else if (flywheelDebouncer > 15) {
                                 feeder.setFeederVelocity(FeederStates.SCORING);
                             }
                             else{

@@ -52,7 +52,7 @@ public class ButtonConfig {
         // driverController.a().onTrue(new SetStateUnclimb());
 
         //TODO add back
-        // driverController.rightTrigger(0.5).onTrue(new SetStateShooter());
+        driverController.rightTrigger(0.5).onTrue(new SetStateShooter());
         driverController.rightTrigger(0.5).onTrue(new InstantCommand(
                 () -> Shooter.driverOverride = true))
                 .onFalse(new InstantCommand(
