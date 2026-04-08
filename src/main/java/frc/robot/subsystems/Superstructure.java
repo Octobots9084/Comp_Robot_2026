@@ -2,12 +2,15 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.Drive.SwerveStates;
 import frc.robot.subsystems.Drive.SwerveSubsystem;
 import frc.robot.subsystems.Intake.*;//same
 import frc.robot.subsystems.Lights.LightAnimations;
 import frc.robot.subsystems.Lights.Lights;
 import frc.robot.subsystems.Shooter.*;//same here
+import frc.robot.subsystems.Shooter.Turret.Turret;
+
 import org.littletonrobotics.junction.Logger;
 
 public class Superstructure extends SubsystemBase {
@@ -143,6 +146,8 @@ public class Superstructure extends SubsystemBase {
             case AUTONONFIRE:
                 swerve.wantedState = SwerveStates.IDLE;
                 shooter.wantedShooterState = ShooterStates.SAFE;
+                intake.wantedState = IntakeStates.INTAKING;
+                Turret.getInstance().setHoodPosition(Constants.maximumHoodPosition);
                 break;
             case AUTO:
                 swerve.wantedState = SwerveStates.IDLE;

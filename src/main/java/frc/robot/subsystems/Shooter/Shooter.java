@@ -131,6 +131,7 @@ public class Shooter extends SubsystemBase {
                 feeder.setFeederVelocity(FeederStates.OFF);
                 flywheel.setFlywheelVelocity(FlywheelStates.SAFE);
                 flywheelInToleranceOnce = false;
+                turret.setHoodPosition(Constants.maximumHoodPosition);
                 break;
             case MANUAL:
                 // joystick controlls turret and hood
@@ -261,6 +262,7 @@ public class Shooter extends SubsystemBase {
                 if(swerve.isInAllianceZone()){
 
                     flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
+                    turret.setHoodPosition(hoodTargetPosition);
                     if(isAimedAtHub){
                         //Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTHUB;
                         Intake.getInstance().wantedState = IntakeStates.ELEPHANTIASISPART2;
