@@ -130,8 +130,9 @@ public final class Constants {
   public static double feederGearRatio = 21/34.0;
   public static double feederWheelRadius = 1.5*0.0254;
 
-  public static double spindexerRadius = 3.25*0.0254;
-  public static double spindexerGearRatio = 1;
+  // public static double spindexerRadius = 3.25*0.0254;
+  public static double spindexerRadius = 1;
+  public static double spindexerGearRatio = 4;
 
   public static double rotateGearRatio = 12.0;// TODO fix this gear ratio
 

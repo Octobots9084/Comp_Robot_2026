@@ -21,7 +21,7 @@ public class ShooterConfigurator {
                 .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(Constants.turretGearRatio));
         hoodConfig = new TalonFXConfiguration()
                 .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(Constants.hoodGearRatio));
-        spindexerConfig = new TalonFXConfiguration();
+        spindexerConfig = new TalonFXConfiguration().withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(Constants.spindexerGearRatio));
         verticalFeederConfig = new TalonFXConfiguration().withFeedback(new FeedbackConfigs().withSensorToMechanismRatio((1)/(2*Math.PI*Constants.feederGearRatio*Constants.feederWheelRadius)));
         // fly wheel right config
         flyWheelRightConfig.CurrentLimits.SupplyCurrentLimit = 20;
@@ -101,18 +101,18 @@ public class ShooterConfigurator {
         spindexerConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
         spindexerConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
         // create PID gains
-        spindexerConfig.Slot0.kP = 0.3;
+        spindexerConfig.Slot0.kP = 2;
         spindexerConfig.Slot0.kI = 0.0;
         spindexerConfig.Slot0.kD = 0.0;
         spindexerConfig.Slot0.kA = 0.0;
-        spindexerConfig.Slot0.kV = 0.127;
+        spindexerConfig.Slot0.kV = 0.5;
         spindexerConfig.Slot0.kS = 0.0;
         spindexerConfig.Slot0.kG = 0.0;
 
         
-        spindexerConfig.MotionMagic.MotionMagicAcceleration = 10;
-        spindexerConfig.MotionMagic.MotionMagicJerk = 100;
-        spindexerConfig.MotionMagic.MotionMagicCruiseVelocity = 2.75;
+        // spindexerConfig.MotionMagic.MotionMagicAcceleration = 10;
+        // spindexerConfig.MotionMagic.MotionMagicJerk = 100;
+        // spindexerConfig.MotionMagic.MotionMagicCruiseVelocity = 2.75;
         
 
         // vertical Feeder config(rural road)
