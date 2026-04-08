@@ -8,6 +8,7 @@ import frc.robot.commands.auto.ControllerInputs.Spit;
 import frc.robot.commands.auto.StateChange.*;
 import frc.robot.subsystems.States;
 import frc.robot.subsystems.Superstructure;
+import frc.robot.subsystems.Drive.SwerveStates;
 import frc.robot.subsystems.Drive.SwerveSubsystem;
 import frc.robot.subsystems.Intake.Intake;
 import frc.robot.subsystems.Intake.IntakeStates;
@@ -35,6 +36,14 @@ public class ButtonConfig {
         })).onFalse(new InstantCommand(() -> {
                 superstructure.wantedState = States.SHOOTER;
         }));
+
+        driverController.b().onTrue(new InstantCommand(() -> {
+                                                                if (SwerveSubsystem.getInstance().wantedState == SwerveStates.ROTATION_LOCK) {
+                                                                        SwerveSubsystem.getInstance().wantedState = SwerveStates.MANUAL;
+                                                                } else {
+                                                                        SwerveSubsystem.getInstance().wantedState = SwerveStates.ROTATION_LOCK;
+                                                                }
+                                                        }));
 
         // coDriverController.a().onTrue(new InstantCommand(() ->
         // {SwerveSubsystem.getInstance().io.zeroGyro();}));

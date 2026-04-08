@@ -37,6 +37,7 @@ public class VisionIOSystem implements VisionIO {
     private final EstimateConsumer estConsumer;
     private double visonCycleTime;
     public static int climbAlignStage = 0;
+    public static double timeAtLastMultiTagPose= -1000;
 
     public static PIDController xPidcontroller = new PIDController(2,0.2,0.01);
     public static PIDController yPidcontroller = new PIDController(2,0.2,0.01);
@@ -164,7 +165,7 @@ public class VisionIOSystem implements VisionIO {
                 result.targets = removeAmbigousTargets(result.targets);
 
                 visionEst = photonEstimator.estimateCoprocMultiTagPose(result);
-                if (visionEst.isEmpty()) {
+                if (visionEst.isEmpty() && timeAtLastMultiTagPose < Timer.getFPGATimestamp() - 0.1) {
                     if (doSingletag){
                         visionEst = photonEstimator.estimateLowestAmbiguityPose(result);
                         if(!visionEst.isEmpty()) {
@@ -173,6 +174,7 @@ public class VisionIOSystem implements VisionIO {
                         }
                     }
                 } else {
+                    timeAtLastMultiTagPose = Timer.getFPGATimestamp();
                     int numberOfHubTags = 0;
                     for(int i = 0; i < result.getTargets().size(); i++)
                         if(addToHubTagNumber(result, i)){

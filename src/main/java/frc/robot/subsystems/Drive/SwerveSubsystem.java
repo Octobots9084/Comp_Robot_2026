@@ -10,8 +10,10 @@ import com.ctre.phoenix6.swerve.SwerveModule;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.numbers.N1;
@@ -52,7 +54,10 @@ public class SwerveSubsystem extends SubsystemBase {
     public CommandXboxController driverController;
     public double maxVelocity;
     public double maxAngularVelocity;
+    public double rotLockAngle = 0;
     // The robot pose estimator for tracking swerve odometry and applying vision corrections.
+
+    public static PIDController angularPidcontroller = new PIDController(3, 0.5, 0);
 
     private final SwerveIOInputsAutoLogged inputs = new SwerveIOInputsAutoLogged();
 
@@ -166,6 +171,9 @@ public class SwerveSubsystem extends SubsystemBase {
         switch (wantedState) {
             //redid how we handle the states that we switch to without modifications
             case MANUAL, IDLE, ROTATION_LOCK, REVERSE: 
+                if (wantedState == SwerveStates.ROTATION_LOCK && currentState != SwerveStates.ROTATION_LOCK){
+                    rotLockAngle = (Math.PI/2)*Math.round(getRobotPose().getRotation().getRadians()/(Math.PI/2));
+                }
                 return wantedState;
             case SLOW:
                 if (currentState != SwerveStates.IDLE)
@@ -198,7 +206,9 @@ public class SwerveSubsystem extends SubsystemBase {
 
                 break;
             case ROTATION_LOCK:
-
+                io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds()
+                        .withSpeeds(calculateRotLockSpeedsBasedOnJoystickInputs())
+                        .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
                 break;
             case REVERSE:
                 io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(-0.3, 0, 0))
@@ -230,6 +240,36 @@ public class SwerveSubsystem extends SubsystemBase {
             return new ChassisSpeeds(-xVelocity, -yVelocity, angularVelocity);
         }
         return new ChassisSpeeds(xVelocity, yVelocity, angularVelocity);
+    }
+
+    public ChassisSpeeds calculateRotLockSpeedsBasedOnJoystickInputs() {
+        // double yMagnitude = MathUtil.applyDeadband(driverLeft.getRawAxis(0),
+        // Constants.leftYDeadband);
+        // double xMagnitude = -MathUtil.applyDeadband(driverLeft.getRawAxis(1),
+        // Constants.leftXDeadband);
+        // double angularMagnitude = -MathUtil.applyDeadband(driverRight.getRawAxis(0),
+        // Constants.rightXDeadband);
+        double yMagnitude = MathUtil.applyDeadband(driverController.getLeftX(), Constants.leftYDeadband);
+        double xMagnitude = MathUtil.applyDeadband(driverController.getLeftY(), Constants.leftXDeadband);
+        if (getRobotPose().getRotation().getRadians()-rotLockAngle<0.3){
+            if (-MathUtil.applyDeadband(driverController.getRightX(), Constants.rightXDeadband)>0.9){
+                rotLockAngle = (rotLockAngle + Math.PI/2) % (Math.PI*2);
+            }
+            else if (-MathUtil.applyDeadband(driverController.getRightX(), Constants.rightXDeadband)<-0.9){
+                rotLockAngle = (rotLockAngle - Math.PI/2) % (Math.PI*2);
+                
+            }
+        }
+        double angularMagnitude = -MathUtil.applyDeadband(driverController.getRightX(), Constants.rightXDeadband);
+        double xVelocity = xMagnitude * maxVelocity;
+        double yVelocity = yMagnitude * maxVelocity;
+
+        double RotVelocity = angularPidcontroller.calculate(getRobotPose().getRotation().getRadians(),rotLockAngle);
+
+        if (Constants.isBlueAlliance) {   
+            return new ChassisSpeeds(-xVelocity, -yVelocity, RotVelocity);
+        }
+        return new ChassisSpeeds(xVelocity, yVelocity, RotVelocity);
     }
 
     public void driveFieldRelative(ChassisSpeeds fieldRelativeSpeeds) {
