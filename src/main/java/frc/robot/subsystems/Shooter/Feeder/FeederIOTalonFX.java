@@ -29,7 +29,7 @@ public class FeederIOTalonFX implements FeederIO {
     private VelocityVoltage spindexerRequest = new VelocityVoltage(0);
     private VelocityVoltage verticalFeederRequest = new VelocityVoltage(0);
 
-    private Follower followSpindexer = new Follower(Constants.spindexerID, MotorAlignmentValue.Opposed);
+    private Follower followSpindexer = new Follower(Constants.spindexerID, MotorAlignmentValue.Aligned);
 
 
     public FeederIOTalonFX() {
