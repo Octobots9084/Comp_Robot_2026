@@ -31,42 +31,50 @@ public class ShooterAngleCalculator {
     public static final InterpolatingDoubleTreeMap timeOfFlightMapFerry =
         new InterpolatingDoubleTreeMap();
 
+
+    /*
+    1.442809759
+5.506476197
+2.01922287
+2.511019912
+3.034157419
+3.518755036
+4.076567183
+4.515152268
+5.098166337
+    */ 
     static {
         //distance, hoodangle
-        hoodAngleMapHub.put(1.593281206,new Rotation2d(74.0*Math.PI/180.0));
-        hoodAngleMapHub.put(2.051194774,new Rotation2d(72.5*Math.PI/180.0));
-        hoodAngleMapHub.put(2.550176464,new Rotation2d(71.0*Math.PI/180.0));
-        hoodAngleMapHub.put(3.034000659,new Rotation2d(69.5*Math.PI/180.0));
-        hoodAngleMapHub.put(3.502676691,new Rotation2d(68.0*Math.PI/180.0));
-        hoodAngleMapHub.put(3.95562435,new Rotation2d(65.0*Math.PI/180.0));
-        hoodAngleMapHub.put(4.516425578,new Rotation2d(63.5*Math.PI/180.0));
-        hoodAngleMapHub.put(4.981967483,new Rotation2d(62.0*Math.PI/180.0));
-        hoodAngleMapHub.put(5.515886148,new Rotation2d(60.5*Math.PI/180.0));
-        hoodAngleMapHub.put(5.841232747,new Rotation2d(59.0*Math.PI/180.0));
+        hoodAngleMapHub.put(1.442809759,new Rotation2d(75.0*Math.PI/180.0));
+        hoodAngleMapHub.put(2.01922287,new Rotation2d(73.0*Math.PI/180.0));
+        hoodAngleMapHub.put(2.511019912,new Rotation2d(71.0*Math.PI/180.0));
+        hoodAngleMapHub.put(3.034157419,new Rotation2d(69*Math.PI/180.0));
+        hoodAngleMapHub.put(3.518755036,new Rotation2d(67.0*Math.PI/180.0));
+        hoodAngleMapHub.put(4.076567183,new Rotation2d(65.0*Math.PI/180.0));
+        hoodAngleMapHub.put(4.515152268,new Rotation2d(63.0*Math.PI/180.0));
+        hoodAngleMapHub.put(5.098166337,new Rotation2d(61.0*Math.PI/180.0));
+        hoodAngleMapHub.put(5.506476197,new Rotation2d(58.0*Math.PI/180.0));
 
         //distance, flywheel speed
-        flywheelSpeedMapHub.put(1.593281206,26.5-0.2);
-        flywheelSpeedMapHub.put(2.051194774,28.5-0.2);
-        flywheelSpeedMapHub.put(2.550176464,30.0-0.2);
-        flywheelSpeedMapHub.put(3.034000659,30.5-0.2);
-        flywheelSpeedMapHub.put(3.502676691,32.0-0.2);
-        flywheelSpeedMapHub.put(3.955624350,33.5-0.2);
-        flywheelSpeedMapHub.put(4.516425578,35.0-0.3);
-        flywheelSpeedMapHub.put(4.981967483,36.5-0.5);
-        flywheelSpeedMapHub.put(5.515886148,37.0-0.7);
-        flywheelSpeedMapHub.put(5.841232747,38.0-1);
+        flywheelSpeedMapHub.put(1.442809759,26.0);
+        flywheelSpeedMapHub.put(2.01922287,27.5);
+        flywheelSpeedMapHub.put(2.511019912,29.0);
+        flywheelSpeedMapHub.put(3.034157419,30.0);
+        flywheelSpeedMapHub.put(3.518755036,31.0);
+        flywheelSpeedMapHub.put(4.076567183,32.5);
+        flywheelSpeedMapHub.put(4.515152268,33.5);
+        flywheelSpeedMapHub.put(5.098166337,35.0);
+        flywheelSpeedMapHub.put(5.506476197,35.5);
 
         //distance, time
-        timeOfFlightMapHub.put(1.593281206,0.916);
-        timeOfFlightMapHub.put(2.051194774,1.092);
-        timeOfFlightMapHub.put(2.550176464,1.166666667);
-        timeOfFlightMapHub.put(3.034000659,1.17);
-        timeOfFlightMapHub.put(3.502676691,1.226);
-        timeOfFlightMapHub.put(3.955624350,1.262);
-        timeOfFlightMapHub.put(4.516425578,1.31);
-        timeOfFlightMapHub.put(4.981967483,1.36);
-        timeOfFlightMapHub.put(5.515886148,1.352);
-        timeOfFlightMapHub.put(5.841232747,1.348);
+        timeOfFlightMapHub.put(1.442809759,1.103235);
+        timeOfFlightMapHub.put(2.511019912,1.185075);
+        timeOfFlightMapHub.put(2.550176464,1.225);
+        timeOfFlightMapHub.put(3.034157419,1.2666825);
+        timeOfFlightMapHub.put(3.518755036,1.28165);
+        timeOfFlightMapHub.put(4.076567183,1.3475);
+        timeOfFlightMapHub.put(4.515152268,1.3514925);
+        timeOfFlightMapHub.put(5.506476197,1.374175);
 
         //distance, hoodangle TODO MUST GATER DATA!
         hoodAngleMapFerry.put(3.05239922,new Rotation2d(58.0*Math.PI/180.0));
