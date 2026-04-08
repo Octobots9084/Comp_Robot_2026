@@ -112,6 +112,7 @@ public final class Constants {
   public static int hoodID = 13;
   public static int turretID = 17;
   public static int spindexerID = 26;
+  public static int spindexerFollowerID = 27; //TODO remember to set the motor to 27
   public static int verticalFeederID = 15;
 
   public static double turretZeroPosition = 197.75/360.0;
