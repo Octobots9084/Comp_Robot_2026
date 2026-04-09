@@ -191,7 +191,7 @@ public class SwerveSubsystem extends SubsystemBase {
                         .withSpeeds(calculateSpeedsBasedOnJoystickInputs())
                         .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
 
-                if (Shooter.driverOverride) 
+                if (Shooter.driverOverride && this.isInAllianceZone())
                     wantedState = SwerveStates.SLOW;
                 break;
             case SLOW:
@@ -199,7 +199,7 @@ public class SwerveSubsystem extends SubsystemBase {
                         .withSpeeds(calculateSpeedsBasedOnJoystickInputs().div(1.5))
                         .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
 
-                if (!Shooter.driverOverride) 
+                if (!Shooter.driverOverride && !this.isInAllianceZone()) 
                     wantedState = SwerveStates.MANUAL;
                 break;
             case IDLE:

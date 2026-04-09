@@ -67,4 +67,7 @@ public interface TurretIO {
     }
 
     public default void zeroHoodMotor(){}
+
+    public default void setTurretZeroVoltage() {
+    }
 }

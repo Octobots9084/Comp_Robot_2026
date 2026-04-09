@@ -158,12 +158,17 @@ public class TurretIOTalonFX implements TurretIO {
                 this.setTurretPosition(0);
                 Shooter.getInstance().turretAlreadyZeroed = true;
             } else {
-                turretMotor.setVoltage(1);// was 3v
+                turretMotor.setVoltage(0.75);// was 3v
 
                 Shooter.getInstance().turretAlreadyZeroed = false;
             }
         }
         return Shooter.getInstance().turretAlreadyZeroed;
+    }
+
+    @Override
+    public void setTurretZeroVoltage() {
+        turretMotor.setVoltage(0.0);
     }
 
     // TODO add later gravity zeroing is fine for now

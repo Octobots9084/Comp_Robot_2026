@@ -65,7 +65,7 @@ public class ShooterConfigurator {
         turretConfig.Slot0.kS = 0; //0.5;
         turretConfig.Slot0.kG = 0.0;
 
-        turretConfig.MotionMagic.MotionMagicAcceleration = 30;
+        turretConfig.MotionMagic.MotionMagicAcceleration = 15;
         turretConfig.MotionMagic.MotionMagicJerk = 0;
         turretConfig.MotionMagic.MotionMagicCruiseVelocity = 7;
 

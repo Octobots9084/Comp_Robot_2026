@@ -38,12 +38,12 @@ public class ButtonConfig {
         }));
 
         driverController.b().onTrue(new InstantCommand(() -> {
-                                                                if (SwerveSubsystem.getInstance().wantedState == SwerveStates.ROTATION_LOCK) {
-                                                                        SwerveSubsystem.getInstance().wantedState = SwerveStates.MANUAL;
-                                                                } else {
-                                                                        SwerveSubsystem.getInstance().wantedState = SwerveStates.ROTATION_LOCK;
-                                                                }
-                                                        }));
+                if (SwerveSubsystem.getInstance().wantedState == SwerveStates.ROTATION_LOCK) {
+                        SwerveSubsystem.getInstance().wantedState = SwerveStates.MANUAL;
+                } else {
+                        SwerveSubsystem.getInstance().wantedState = SwerveStates.ROTATION_LOCK;
+                }
+        }));
 
         // coDriverController.a().onTrue(new InstantCommand(() ->
         // {SwerveSubsystem.getInstance().io.zeroGyro();}));
