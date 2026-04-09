@@ -12,6 +12,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -65,12 +66,20 @@ public class SwerveSubsystem extends SubsystemBase {
 
     private final SwerveIOInputsAutoLogged inputs = new SwerveIOInputsAutoLogged();
 
+    /**Handles the bot turning too quickly while shooting. */
+    public SlewRateLimiter poslimiter;
+    public SlewRateLimiter rotlimiter;
+
+
     public SwerveSubsystem(
             SwerveIO io, CommandXboxController driverController, double maxAngularVelocity, double maxVelocity) {
         this.io = io;
         this.driverController = driverController;
         this.maxAngularVelocity = maxAngularVelocity;
         this.maxVelocity = maxVelocity;
+
+        this.poslimiter = new SlewRateLimiter(1.5);
+        this.rotlimiter = new SlewRateLimiter(Math.toRadians(90));
 
         var stateStdDevs = VecBuilder.fill(0.1, 0.1, 0.1);///i uncommented all this and maybe it broke it idk
         var visionStdDevs = VecBuilder.fill(1, 1, 1);
@@ -215,9 +224,28 @@ public class SwerveSubsystem extends SubsystemBase {
                 if (Shooter.driverOverride) 
                     wantedState = SwerveStates.SLOW;
                 break;
-            case SLOW:
+            case SLOW:        
+
+                //TODO test
+                ChassisSpeeds speeds = calculateSpeedsBasedOnJoystickInputs().div(1.5);
+
+                double absolute = Math.sqrt(Math.pow(speeds.vxMetersPerSecond, 2) + Math.pow(speeds.vyMetersPerSecond, 2));
+                double limited = poslimiter.calculate(absolute);
+
+                double x = limited * (speeds.vxMetersPerSecond / absolute);
+                double y = limited * (speeds.vyMetersPerSecond / absolute);
+
+                speeds.vxMetersPerSecond = x;
+                speeds.vyMetersPerSecond = y;
+
+
+
+                speeds.omegaRadiansPerSecond = rotlimiter.calculate(speeds.omegaRadiansPerSecond);
+
+                //end segment
+
                 io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds()
-                        .withSpeeds(calculateSpeedsBasedOnJoystickInputs().div(1.5))
+                        .withSpeeds(speeds)
                         .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
 
                 if (!Shooter.driverOverride) 
