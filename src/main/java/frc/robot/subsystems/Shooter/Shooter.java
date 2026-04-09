@@ -152,7 +152,8 @@ public class Shooter extends SubsystemBase {
             case MANUEL:
                 Logger.recordOutput("manuel hood position", manuelHood); 
                 Logger.recordOutput("manuel flywheel position", manuelFlywheel); 
-                isAimedAtHub = isAimedAtHub(); 
+                // isAimedAtHub = isAimedAtHub(); 
+                turret.setTurretPosition(90/360.0);
                 turret.setHoodPosition(manuelHood/360.0);
                 if(driverOverride){
                     if(isAimedAtHub){
@@ -204,14 +205,12 @@ public class Shooter extends SubsystemBase {
                         turret.setHoodPosition(hoodTargetPosition);
                         flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
                         if(isAimedAtHub){
-                            if(flywheel.FlywheelInTolerance(0.75)){
+                            if(flywheel.FlywheelInTolerance(1)){
                                 //Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTHUB;
-                                feeder.setFeederVelocity(FeederStates.OFF);
+                                feeder.setFeederVelocity(FeederStates.SCORING);
                                 flywheelDebouncer = 0;
                             }else if (flywheelDebouncer<15){
                                 flywheelDebouncer ++;
-                                feeder.setFeederVelocity(FeederStates.OFF);
-                            } else if (flywheelDebouncer > 15) {
                                 feeder.setFeederVelocity(FeederStates.SCORING);
                             }
                             else{
