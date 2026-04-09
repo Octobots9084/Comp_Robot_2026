@@ -105,7 +105,7 @@ public class VisionIOSystem implements VisionIO {
             FilteredResults[4].multiTagHubResults.size()>0
         ){
             for(int i = 0;i < 5;i++)
-                addVisionEstemation(FilteredResults[i].multiTagHubResults, FilteredResults[i].multiTagHubTargets, false, photonEstimators[0]);
+                addVisionEstemation(FilteredResults[i].multiTagHubResults, FilteredResults[i].multiTagHubTargets, true, photonEstimators[0]);
             qualityOfBestCamera = 3;
         }
         else if (
@@ -166,7 +166,7 @@ public class VisionIOSystem implements VisionIO {
                         }
                     }
                 } else {
-                    timeAtLastMultiTagPose = Timer.getFPGATimestamp();
+                        timeAtLastMultiTagPose = result.getTimestampSeconds();
                     int numberOfHubTags = 0;
                     for(int i = 0; i < result.getTargets().size(); i++)
                         if(addToHubTagNumber(result, i)){
