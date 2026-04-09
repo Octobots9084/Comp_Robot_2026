@@ -170,8 +170,8 @@ public final class Constants {
 
     public static double fieldCenterY = 4.02082;
 
-    public static final double maxTurretAngle = (480/360.0)*Math.PI;
-    public static final double minTurretAngle = -(480/360.0)*Math.PI;
+    public static final double maxTurretAngle = (208/180.0)*Math.PI;
+    public static final double minTurretAngle = -(274/180.0)*Math.PI;
 
   // set to ALPHA later
   public static enum RobotTypes {

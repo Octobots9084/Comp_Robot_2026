@@ -7,6 +7,7 @@ public enum ShooterStates {
     TRENCH,
     HUB,
     AUTOHUB,
+    AUTONONFIRE,
     AUTOFERRY,
     SPIT,
     ZERO,
