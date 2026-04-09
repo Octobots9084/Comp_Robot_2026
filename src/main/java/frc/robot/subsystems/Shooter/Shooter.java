@@ -241,23 +241,6 @@ public class Shooter extends SubsystemBase {
                     }
                 }
                 break;
-            case AUTOFERRY:
-                //shoots balls from neutral to our zone
-                isAimedAtFerry = aimFerry();
-
-                if(!swerve.isInAllianceZone()){
-                        if(isAimedAtFerry){
-                            //Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTFERRY;
-                            activateFeeder();
-                        }else{
-                            //Lights.getLightInstance().lightsWantedState = LightAnimations.CANTSHOOT;
-
-                        }
-                }else{
-                    wantedShooterState = ShooterStates.BUMP;
-                    //Lights.getLightInstance().lightsWantedState = LightAnimations.CANTSHOOT;
-                }
-                break;
             case AUTOHUB:
                 isAimedAtHub = isAimedAtHub();
 
@@ -288,6 +271,12 @@ public class Shooter extends SubsystemBase {
                     //Lights.getLightInstance().lightsWantedState = LightAnimations.CANTSHOOT;
 
                 }
+                break;
+            case AUTONONFIRE:
+                isAimedAtHub = isAimedAtHub();
+                turret.setHoodPosition(Constants.maximumHoodPosition);
+                flywheel.setFlywheelVelocity(FlywheelStates.OFF);
+                feeder.setFeederVelocity(FeederStates.OFF);
                 break;
             case AUTODEPOTSHOOT:
             isAimedAtHub = isAimedAtHub();
@@ -331,7 +320,7 @@ public class Shooter extends SubsystemBase {
                         }
                     } else {
                         if (DriverStation.isAutonomousEnabled()){
-                        wantedShooterState = ShooterStates.AUTOFERRY;
+                        wantedShooterState = ShooterStates.AUTONONFIRE;
                         } else {
                         wantedShooterState = ShooterStates.FERRY;
                         }
@@ -391,8 +380,12 @@ public class Shooter extends SubsystemBase {
                 // if (!swerve.isTilted(0, 3) && swerve.isInAllianceZone()) {
                 if(swerve.isInAllianceZone()){
                     currentShooterState = ShooterStates.AUTOHUB;
+                } else {
+                    currentShooterState = ShooterStates.AUTONONFIRE;
                 }
                 break;
+            case AUTONONFIRE:
+                currentShooterState = ShooterStates.AUTONONFIRE;
             case AUTODEPOTSHOOT:
                 // if we're on our side of the field
                 // if (!swerve.isTilted(0, 3) && swerve.isInAllianceZone()) {

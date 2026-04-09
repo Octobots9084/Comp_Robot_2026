@@ -145,9 +145,7 @@ public class Superstructure extends SubsystemBase {
                 break;
             case AUTONONFIRE:
                 swerve.wantedState = SwerveStates.IDLE;
-                shooter.wantedShooterState = ShooterStates.SAFE;
-                intake.wantedState = IntakeStates.INTAKING;
-                Turret.getInstance().setHoodPosition(Constants.maximumHoodPosition);
+                shooter.wantedShooterState = ShooterStates.AUTONONFIRE;
                 break;
             case AUTO:
                 swerve.wantedState = SwerveStates.IDLE;

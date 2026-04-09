@@ -1,6 +1,7 @@
 package frc.robot.subsystems.Shooter.Flywheel;
 
 public enum FlywheelStates {
+    OFF(0),
     SAFE(0),
     FERRY(0),
     BUMP(0),
