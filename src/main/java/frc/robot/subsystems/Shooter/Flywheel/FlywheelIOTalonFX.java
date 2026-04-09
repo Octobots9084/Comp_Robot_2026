@@ -26,6 +26,7 @@ public class FlywheelIOTalonFX implements FlywheelIO {
     public static TalonFX FlywheelLeftMotor;
     public static TalonFX FlywheelRightMotor;
     public ShooterConfigurator shooterConfigs;
+    public double targetRPS = 0.0;
     private VelocityVoltage FlywheelRightMotorRequest = new VelocityVoltage(0);
 
     private Follower follow = new Follower(Constants.flyWheelRightID, MotorAlignmentValue.Aligned);
@@ -56,17 +57,19 @@ public class FlywheelIOTalonFX implements FlywheelIO {
         inputs.FlywheelRightRPS = getRightMotorVelocity();
         // inputs.FlywheelLeftCurrent = FlywheelLeftMotor.getStatorCurrent().getValueAsDouble();
         // inputs.FlywheelRightCurrent = FlywheelRightMotor.getStatorCurrent().getValueAsDouble();
-        inputs.flywheelWantedSpeed = FlywheelRightMotorRequest.getVelocityMeasure().in(Units.RevolutionsPerSecond);
+        inputs.flywheelWantedSpeed = targetRPS;
     }
 
     @Override
     public void setFlywheelVelocity(FlywheelStates state) {
         Logger.recordOutput("flywheelWantedSpeed", state.FlywheelRightRPS);
+        targetRPS  = state.FlywheelRightRPS;
         FlywheelRightMotor.setControl(FlywheelRightMotorRequest.withVelocity(state.FlywheelRightRPS));
     }
     @Override
     public void setFlywheelVelocity(double rps) {
         Logger.recordOutput("flywheelWantedSpeed", rps);
+        targetRPS = rps;
         FlywheelRightMotor.setControl(FlywheelRightMotorRequest.withVelocity(rps));
     }
 
@@ -76,8 +79,7 @@ public class FlywheelIOTalonFX implements FlywheelIO {
 
     @Override
     public boolean FlywheelInTolerance(double tolerance){
-        double requestedFlywheelVelocity = FlywheelRightMotorRequest.getVelocityMeasure().in(Units.RevolutionsPerSecond);
-        return MathUtil.isNear(requestedFlywheelVelocity, FlywheelRightMotor.getVelocity().getValueAsDouble(),tolerance)&& requestedFlywheelVelocity > 0;
+        return MathUtil.isNear(targetRPS, FlywheelRightMotor.getVelocity().getValueAsDouble(),tolerance)&& targetRPS > 0;
     }
 
 }

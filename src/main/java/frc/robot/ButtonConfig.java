@@ -8,6 +8,7 @@ import frc.robot.commands.auto.ControllerInputs.Spit;
 import frc.robot.commands.auto.StateChange.*;
 import frc.robot.subsystems.States;
 import frc.robot.subsystems.Superstructure;
+import frc.robot.subsystems.Drive.SwerveStates;
 import frc.robot.subsystems.Drive.SwerveSubsystem;
 import frc.robot.subsystems.Intake.Intake;
 import frc.robot.subsystems.Intake.IntakeStates;
@@ -18,7 +19,7 @@ import frc.robot.subsystems.Shooter.ShooterStates;
 
 public class ButtonConfig {
     public static CommandXboxController driverController = new CommandXboxController(0);
-    public static CommandXboxController coDriverController = new CommandXboxController(1);
+//     public static CommandXboxController coDriverController = new CommandXboxController(1);
     public Superstructure superstructure = Superstructure.getInstance();
 
     public void initTeleop() {
@@ -36,31 +37,33 @@ public class ButtonConfig {
                 superstructure.wantedState = States.SHOOTER;
         }));
 
+        driverController.b().onTrue(new InstantCommand(() -> {
+                if (SwerveSubsystem.getInstance().wantedState == SwerveStates.ROTATION_LOCK) {
+                        SwerveSubsystem.getInstance().wantedState = SwerveStates.MANUAL;
+                } else {
+                        SwerveSubsystem.getInstance().wantedState = SwerveStates.ROTATION_LOCK;
+                }
+        }));
+
         // coDriverController.a().onTrue(new InstantCommand(() ->
         // {SwerveSubsystem.getInstance().io.zeroGyro();}));
-        coDriverController.a().onTrue(new InstantCommand(() ->
-        {Shooter.getInstance().manuelHood+=0.25;}));
-        coDriverController.b().onTrue(new InstantCommand(() ->
-        {Shooter.getInstance().manuelHood-=0.25;}));
-        coDriverController.x().onTrue(new InstantCommand(() ->
-        {Shooter.getInstance().manuelFlywheel+=0.25;}));
-        coDriverController.y().onTrue(new InstantCommand(() ->
-        {Shooter.getInstance().manuelFlywheel-=0.25;}));
-
-        // Climb currently not implemented
-        // driverController.b().onTrue(new SetStateClimbL3()); //remove climb
-        // driverController.a().onTrue(new SetStateUnclimb());
-
+        // coDriverController.a().onTrue(new InstantCommand(() ->
+        // {Shooter.getInstance().manuelHood+=0.25;}));
+        // coDriverController.b().onTrue(new InstantCommand(() ->
+        // {Shooter.getInstance().manuelHood-=0.25;}));
+        // coDriverController.x().onTrue(new InstantCommand(() ->
+        // {Shooter.getInstance().manuelFlywheel+=0.25;}));
+        // coDriverController.y().onTrue(new InstantCommand(() ->
+        // {Shooter.getInstance().manuelFlywheel-=0.25;}));
         //TODO add back
         driverController.rightTrigger(0.5).onTrue(new SetStateShooter());
         driverController.rightTrigger(0.5).onTrue(new InstantCommand(
                 () -> Shooter.driverOverride = true))
                 .onFalse(new InstantCommand(
-                        () -> Shooter.driverOverride = false));
+                        () -> Shooter.driverOverride = false)).onFalse(new InstantCommand(() -> {Shooter.flywheelDebouncer = Shooter.flywheelToleranceThreshold;}));
+        
 
-        coDriverController.b().onTrue(new SetStateManual());
         //coDriverController.leftTrigger(0.5).onTrue(new SetStateSafe());
-        driverController.a().onTrue(new Spit());
         driverController.y().onTrue(new InstantCommand(() -> superstructure.wantedState = States.FIXEDFIRE)).onFalse(new InstantCommand(() -> superstructure.wantedState = States.SHOOTER));
         
 
@@ -89,16 +92,6 @@ public class ButtonConfig {
                         Intake.getInstance().setWantedState(IntakeStates.EXTENDED);
 
         }));
-
-        if(Shooter.getInstance().currentShooterState != ShooterStates.MANUEL){
-                driverController.povUp().onTrue(new InstantCommand( () -> {
-                        Shooter.getInstance().wantedShooterState = ShooterStates.MANUEL;
-                }));
-        }else{
-                driverController.povUp().onTrue(new InstantCommand( () -> {
-                        Shooter.getInstance().wantedShooterState = ShooterStates.HUB;
-                }));
-        }
 
 
         //TODO remove this after testing

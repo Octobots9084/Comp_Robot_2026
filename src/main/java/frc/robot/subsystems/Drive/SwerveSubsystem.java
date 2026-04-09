@@ -1,7 +1,6 @@
 package frc.robot.subsystems.Drive;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
-import com.ctre.phoenix6.swerve.SwerveDrivetrain.SwerveDriveState;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import org.littletonrobotics.junction.Logger;
@@ -11,33 +10,28 @@ import com.ctre.phoenix6.swerve.SwerveModule;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
-import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
-import frc.robot.subsystems.Vision.VisionIOSystem;
 import frc.robot.subsystems.States;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Intake.Intake;
 import frc.robot.subsystems.Intake.IntakeStates;
 import frc.robot.subsystems.Shooter.Shooter;
-import frc.robot.subsystems.Shooter.ShooterStates;
 
 public class SwerveSubsystem extends SubsystemBase {
 
@@ -61,8 +55,10 @@ public class SwerveSubsystem extends SubsystemBase {
     public CommandXboxController driverController;
     public double maxVelocity;
     public double maxAngularVelocity;
+    public double rotLockAngle = 0;
     // The robot pose estimator for tracking swerve odometry and applying vision corrections.
-    private final SwerveDrivePoseEstimator poseEstimator;
+
+    public static PIDController angularPidcontroller = new PIDController(3, 0.5, 0);
 
     private final SwerveIOInputsAutoLogged inputs = new SwerveIOInputsAutoLogged();
 
@@ -83,19 +79,6 @@ public class SwerveSubsystem extends SubsystemBase {
 
         var stateStdDevs = VecBuilder.fill(0.1, 0.1, 0.1);///i uncommented all this and maybe it broke it idk
         var visionStdDevs = VecBuilder.fill(1, 1, 1);
-        poseEstimator =
-        new SwerveDrivePoseEstimator(
-        new SwerveDriveKinematics(
-        Constants.swerveModuleOneOffset,
-        Constants.swerveModuleTwoOffset,
-        Constants.swerveModuleThreeOffset,
-        Constants.swerveModuleFourOffset),
-        io.getGyroYaw(),
-        io.getModulePositions(),
-        new Pose2d(),
-        stateStdDevs,
-        visionStdDevs
-        );
         instance = this;
         registerNamedCommands();
     }
@@ -197,17 +180,13 @@ public class SwerveSubsystem extends SubsystemBase {
         switch (wantedState) {
             //redid how we handle the states that we switch to without modifications
             case MANUAL, IDLE, ROTATION_LOCK, REVERSE: 
+                if (wantedState == SwerveStates.ROTATION_LOCK && currentState != SwerveStates.ROTATION_LOCK){
+                    rotLockAngle = (Math.PI/2)*Math.round(getRobotPose().getRotation().getRadians()/(Math.PI/2));
+                }
                 return wantedState;
-             
             case SLOW:
                 if (currentState != SwerveStates.IDLE)
                     return wantedState;
-                
-            case ALIGNCLIMB:
-                if (this.currentState != SwerveStates.ALIGNCLIMB)
-                    VisionIOSystem.climbAlignStage = 0;
-                return SwerveStates.ALIGNCLIMB;
-
             default:
                 return this.currentState;
 
@@ -221,7 +200,7 @@ public class SwerveSubsystem extends SubsystemBase {
                         .withSpeeds(calculateSpeedsBasedOnJoystickInputs())
                         .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
 
-                if (Shooter.driverOverride) 
+                if (Shooter.driverOverride && this.isInAllianceZone())
                     wantedState = SwerveStates.SLOW;
                 break;
             case SLOW:        
@@ -248,21 +227,19 @@ public class SwerveSubsystem extends SubsystemBase {
                         .withSpeeds(speeds)
                         .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
 
-                if (!Shooter.driverOverride) 
+                if (!Shooter.driverOverride && !this.isInAllianceZone()) 
                     wantedState = SwerveStates.MANUAL;
                 break;
             case IDLE:
 
                 break;
             case ROTATION_LOCK:
-
+                io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds()
+                        .withSpeeds(calculateRotLockSpeedsBasedOnJoystickInputs())
+                        .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
                 break;
             case REVERSE:
                 io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(-0.3, 0, 0))
-                        .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
-                break;
-            case ALIGNCLIMB:
-                io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(VisionIOSystem.allignClimb(getRobotPose()))
                         .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
                 break;
             default:
@@ -291,6 +268,36 @@ public class SwerveSubsystem extends SubsystemBase {
             return new ChassisSpeeds(-xVelocity, -yVelocity, angularVelocity);
         }
         return new ChassisSpeeds(xVelocity, yVelocity, angularVelocity);
+    }
+
+    public ChassisSpeeds calculateRotLockSpeedsBasedOnJoystickInputs() {
+        // double yMagnitude = MathUtil.applyDeadband(driverLeft.getRawAxis(0),
+        // Constants.leftYDeadband);
+        // double xMagnitude = -MathUtil.applyDeadband(driverLeft.getRawAxis(1),
+        // Constants.leftXDeadband);
+        // double angularMagnitude = -MathUtil.applyDeadband(driverRight.getRawAxis(0),
+        // Constants.rightXDeadband);
+        double yMagnitude = MathUtil.applyDeadband(driverController.getLeftX(), Constants.leftYDeadband);
+        double xMagnitude = MathUtil.applyDeadband(driverController.getLeftY(), Constants.leftXDeadband);
+        if (getRobotPose().getRotation().getRadians()-rotLockAngle<0.3){
+            if (-MathUtil.applyDeadband(driverController.getRightX(), Constants.rightXDeadband)>0.9){
+                rotLockAngle = (rotLockAngle + Math.PI/2) % (Math.PI*2);
+            }
+            else if (-MathUtil.applyDeadband(driverController.getRightX(), Constants.rightXDeadband)<-0.9){
+                rotLockAngle = (rotLockAngle - Math.PI/2) % (Math.PI*2);
+                
+            }
+        }
+        double angularMagnitude = -MathUtil.applyDeadband(driverController.getRightX(), Constants.rightXDeadband);
+        double xVelocity = xMagnitude * maxVelocity;
+        double yVelocity = yMagnitude * maxVelocity;
+
+        double RotVelocity = angularPidcontroller.calculate(getRobotPose().getRotation().getRadians(),rotLockAngle);
+
+        if (Constants.isBlueAlliance) {   
+            return new ChassisSpeeds(-xVelocity, -yVelocity, RotVelocity);
+        }
+        return new ChassisSpeeds(xVelocity, yVelocity, RotVelocity);
     }
 
     public void driveFieldRelative(ChassisSpeeds fieldRelativeSpeeds) {
