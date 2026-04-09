@@ -48,26 +48,26 @@ public class ShooterConfigurator {
 
         
         // turret config
-        turretConfig.CurrentLimits.SupplyCurrentLimit = 20;
+        turretConfig.CurrentLimits.SupplyCurrentLimit = 40;
         turretConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-        turretConfig.CurrentLimits.StatorCurrentLimit = 40;
+        turretConfig.CurrentLimits.StatorCurrentLimit = 60;
         turretConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 
         // set break mode and inversion
         turretConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
         turretConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
         // create PID gains
-        turretConfig.Slot0.kP = 1125; //1125;
+        turretConfig.Slot0.kP = 200; //1125;
         turretConfig.Slot0.kI = 0.0;
-        turretConfig.Slot0.kD = 5.0;
+        turretConfig.Slot0.kD = 0;
         turretConfig.Slot0.kA = 0.0;
-        turretConfig.Slot0.kV = 0.0;
+        turretConfig.Slot0.kV = 1;
         turretConfig.Slot0.kS = 0; //0.5;
         turretConfig.Slot0.kG = 0.0;
 
-        turretConfig.MotionMagic.MotionMagicAcceleration = 10;
-        turretConfig.MotionMagic.MotionMagicJerk = 100;
-        turretConfig.MotionMagic.MotionMagicCruiseVelocity = 2.75;
+        turretConfig.MotionMagic.MotionMagicAcceleration = 30;
+        turretConfig.MotionMagic.MotionMagicJerk = 0;
+        turretConfig.MotionMagic.MotionMagicCruiseVelocity = 7;
 
         // hood config
         hoodConfig.CurrentLimits.SupplyCurrentLimit = 40;
