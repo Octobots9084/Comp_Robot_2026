@@ -74,11 +74,14 @@ public class Shooter extends SubsystemBase {
     public boolean isAimedAtHub;
     public boolean isAimedAtFerry;
     public static boolean flywheelInToleranceOnce = false;
-    public int flywheelDebouncer = 10;
+    public static int flywheelDebouncer = 10;
     public double hubBallSpeed = 6.7;
     public double hubFlywheelSpeed = 10;
     public double ferryBallSpeed = 6.7;
     public double ferryFlywheelSpeed = 10;
+
+    public static int flywheelToleranceThreshold = 10;
+    public double flywheelTolerance = 3;
 
     public double manuelHood = 77; 
     public double manuelFlywheel = 40;
@@ -167,9 +170,10 @@ public class Shooter extends SubsystemBase {
                 break;
             case FERRY:
                 isAimedAtFerry = aimFerry();
+                Logger.recordOutput("flywheel in tolerance", flywheel.FlywheelInTolerance(flywheelTolerance));
                 turret.setHoodPosition(Constants.maximumHoodPosition);
                 if(!swerve.isInAllianceZone()){
-                    if(inEnterTrenchZone()){
+                    if(inEnterTrenchZone()){ 
                         if(inTrenchDangerZone()){
                             wantedShooterState = ShooterStates.TRENCH;
                         }
@@ -178,8 +182,18 @@ public class Shooter extends SubsystemBase {
                         turret.setHoodPosition(hoodTargetPosition);
                         flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
                         if(isAimedAtFerry){
-                            //Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTFERRY;
-                            activateFeeder();
+                            if(flywheel.FlywheelInTolerance(flywheelTolerance)){
+                                //Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTHUB;
+                                feeder.setFeederVelocity(FeederStates.SCORING);
+                                flywheelDebouncer = 0;
+                            }else if (flywheelDebouncer<flywheelToleranceThreshold){
+                                flywheelDebouncer ++;
+                                feeder.setFeederVelocity(FeederStates.SCORING);
+                            }
+                            else{
+                                feeder.setFeederVelocity(FeederStates.OFF);
+                            }
+                            
                         }
                     }else{
                         feeder.setFeederVelocity(FeederStates.OFF);
@@ -193,6 +207,7 @@ public class Shooter extends SubsystemBase {
                 }
                 break;
             case HUB:
+                Logger.recordOutput("rui is bouncing wrong", flywheelDebouncer);
                 isAimedAtHub = isAimedAtHub();
                 turret.setHoodPosition(Constants.maximumHoodPosition);
                 if(swerve.isInAllianceZone()){
@@ -205,11 +220,11 @@ public class Shooter extends SubsystemBase {
                         turret.setHoodPosition(hoodTargetPosition);
                         flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
                         if(isAimedAtHub){
-                            if(flywheel.FlywheelInTolerance(1)){
+                            if(flywheel.FlywheelInTolerance(flywheelTolerance)){
                                 //Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTHUB;
                                 feeder.setFeederVelocity(FeederStates.SCORING);
                                 flywheelDebouncer = 0;
-                            }else if (flywheelDebouncer<15){
+                            }else if (flywheelDebouncer<flywheelToleranceThreshold){
                                 flywheelDebouncer ++;
                                 feeder.setFeederVelocity(FeederStates.SCORING);
                             }
@@ -250,10 +265,10 @@ public class Shooter extends SubsystemBase {
                     if(isAimedAtHub){
                         //Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTHUB;
                         Intake.getInstance().wantedState = IntakeStates.ELEPHANTIASISPART2;
-                        if(flywheel.FlywheelInTolerance(1)){
+                        if(flywheel.FlywheelInTolerance(flywheelTolerance)){
                             feeder.setFeederVelocity(FeederStates.SCORING);
                             flywheelDebouncer = 0;
-                        }else if (flywheelDebouncer<10){
+                        }else if (flywheelDebouncer<flywheelToleranceThreshold){
                             flywheelDebouncer ++;
                             feeder.setFeederVelocity(FeederStates.SCORING);
                         }
@@ -287,10 +302,10 @@ public class Shooter extends SubsystemBase {
                     if(isAimedAtHub){
                         //Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTHUB;
                         Intake.getInstance().wantedState = IntakeStates.INTAKING;
-                        if(flywheel.FlywheelInTolerance(1)){
+                        if(flywheel.FlywheelInTolerance(flywheelTolerance)){
                             feeder.setFeederVelocity(FeederStates.SCORING);
                             flywheelDebouncer = 0;
-                        }else if (flywheelDebouncer<10){
+                        }else if (flywheelDebouncer<flywheelToleranceThreshold){
                             flywheelDebouncer ++;
                             feeder.setFeederVelocity(FeederStates.SCORING);
                         }
@@ -336,7 +351,7 @@ public class Shooter extends SubsystemBase {
             case FIXEDFIRE:
                 //second button that shoots the same shot everytime
                 flywheel.setFlywheelVelocity(FlywheelStates.FIXEDFIRE);
-                if(flywheel.io.FlywheelInTolerance(3.0))
+                if(flywheel.io.FlywheelInTolerance(flywheelTolerance))
                     feeder.setFeederVelocity(FeederStates.FIXEDFIRE);
                 else
                     feeder.setFeederVelocity(FeederStates.OFF);
@@ -361,9 +376,6 @@ public class Shooter extends SubsystemBase {
 
     // state transitions for spit and manual needed
     public void handleStateTransitions() {
-        if ((wantedShooterState != ShooterStates.HUB && currentShooterState == ShooterStates.HUB)|| (wantedShooterState != ShooterStates.FERRY && currentShooterState == ShooterStates.FERRY)){
-            flywheelDebouncer = 10;
-        }
         switch (wantedShooterState) {
             case HUB:
                 // if we're on our side of the field
@@ -442,7 +454,7 @@ public class Shooter extends SubsystemBase {
      * Turns on the feeder if the flywheel is up to speed
      */
     public void activateFeeder(){
-        if(flywheel.FlywheelInTolerance(1) || flywheelInToleranceOnce){
+        if(flywheel.FlywheelInTolerance(flywheelTolerance) || flywheelInToleranceOnce){
             feeder.setFeederVelocity(FeederStates.SCORING);
             flywheelInToleranceOnce = true;
         }
@@ -683,7 +695,7 @@ public class Shooter extends SubsystemBase {
         Logger.recordOutput("CalculatedHoodAngle", pastShooterAngle.hoodRotation/(2*Math.PI));
 
         // return true;
-        return (turret.hoodInTolerance(.05) && turret.turretInTolerance(0.05));
+        return (turret.hoodInTolerance(.005) && turret.turretInTolerance(0.01));
     }
 
     /**
@@ -778,7 +790,7 @@ public class Shooter extends SubsystemBase {
         turret.setTurretPosition(proposedAngle/(2*Math.PI));
         hoodTargetPosition = pastShooterAngle.hoodRotation/(2.0*Math.PI);
 
-        return (turret.hoodInTolerance(.05) && turret.turretInTolerance(0.05));
+        return (turret.hoodInTolerance(.005) && turret.turretInTolerance(0.01));
     }
 
     public boolean isHubActive() {
