@@ -72,6 +72,7 @@ public class VisionIOSystem implements VisionIO {
         inputs.rightCameraConected = rightCamera.isConnected();
         inputs.leftCameraConected = leftCamera.isConnected();
         inputs.backCameraConected = backCamera.isConnected();
+        inputs.visonCycleTime = visonCycleTime;
 
     }
 
@@ -106,9 +107,9 @@ public class VisionIOSystem implements VisionIO {
             frontRightFilteredResults.multiTagHubResults.size()>0
         ){
             addVisionEstemation(leftFilteredResults.multiTagHubResults, leftFilteredResults.multiTagHubTargets, false, photonEstimatorLeft);
-            addVisionEstemation(rightFilteredResults.multiTagHubResults, leftFilteredResults.multiTagHubTargets, false, photonEstimatorRight);
-            addVisionEstemation(frontRightFilteredResults.multiTagHubResults, leftFilteredResults.multiTagHubTargets, false, photonEstimatorFrontRight);
-            addVisionEstemation(frontLeftFilteredResults.multiTagHubResults, leftFilteredResults.multiTagHubTargets, false, photonEstimatorFrontLeft);
+            addVisionEstemation(rightFilteredResults.multiTagHubResults, rightFilteredResults.multiTagHubTargets, false, photonEstimatorRight);
+            addVisionEstemation(frontRightFilteredResults.multiTagHubResults, frontRightFilteredResults.multiTagHubTargets, false, photonEstimatorFrontRight);
+            addVisionEstemation(frontLeftFilteredResults.multiTagHubResults, frontLeftFilteredResults.multiTagHubTargets, false, photonEstimatorFrontLeft);
             addVisionEstemation(backFilteredResults.multiTagHubResults, backFilteredResults.multiTagHubTargets, false, photonEstimatorBack);
             qualityOfBestCamera = 3;
         }
@@ -120,9 +121,9 @@ public class VisionIOSystem implements VisionIO {
         )
         {
             addVisionEstemation(leftFilteredResults.multiTagResults, leftFilteredResults.multiTagTargets, false, photonEstimatorLeft);
-            addVisionEstemation(rightFilteredResults.multiTagResults, leftFilteredResults.multiTagTargets, false, photonEstimatorRight);
-            addVisionEstemation(frontRightFilteredResults.multiTagResults, leftFilteredResults.multiTagTargets, false, photonEstimatorFrontRight);
-            addVisionEstemation(frontLeftFilteredResults.multiTagResults, leftFilteredResults.multiTagTargets, false, photonEstimatorFrontLeft);
+            addVisionEstemation(rightFilteredResults.multiTagResults, rightFilteredResults.multiTagTargets, false, photonEstimatorRight);
+            addVisionEstemation(frontRightFilteredResults.multiTagResults, frontRightFilteredResults.multiTagTargets, false, photonEstimatorFrontRight);
+            addVisionEstemation(frontLeftFilteredResults.multiTagResults, frontLeftFilteredResults.multiTagTargets, false, photonEstimatorFrontLeft);
             addVisionEstemation(backFilteredResults.multiTagResults, backFilteredResults.multiTagTargets, false, photonEstimatorBack);
             qualityOfBestCamera = 2;
         }
@@ -134,9 +135,9 @@ public class VisionIOSystem implements VisionIO {
         )
         {
             addVisionEstemation(leftFilteredResults.singleTagResults, leftFilteredResults.singleTagTargets, false, photonEstimatorLeft);
-            addVisionEstemation(rightFilteredResults.singleTagResults, leftFilteredResults.singleTagTargets, false, photonEstimatorRight);
-            addVisionEstemation(frontRightFilteredResults.singleTagResults, leftFilteredResults.singleTagTargets, false, photonEstimatorFrontRight);
-            addVisionEstemation(frontLeftFilteredResults.singleTagResults, leftFilteredResults.singleTagTargets, false, photonEstimatorFrontLeft);
+            addVisionEstemation(rightFilteredResults.singleTagResults, rightFilteredResults.singleTagTargets, false, photonEstimatorRight);
+            addVisionEstemation(frontRightFilteredResults.singleTagResults, frontRightFilteredResults.singleTagTargets, false, photonEstimatorFrontRight);
+            addVisionEstemation(frontLeftFilteredResults.singleTagResults, frontLeftFilteredResults.singleTagTargets, false, photonEstimatorFrontLeft);
             addVisionEstemation(backFilteredResults.singleTagResults, backFilteredResults.singleTagTargets, false, photonEstimatorBack);
             qualityOfBestCamera = 1;
         }
