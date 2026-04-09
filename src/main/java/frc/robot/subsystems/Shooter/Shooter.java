@@ -259,7 +259,11 @@ public class Shooter extends SubsystemBase {
                 isAimedAtHub = isAimedAtHub();
 
                 if(swerve.isInAllianceZone()){
-
+                    if(inEnterTrenchZone()){
+                        if(inTrenchDangerZone()){
+                            wantedShooterState = ShooterStates.TRENCH;
+                        }
+                    }
                     flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
                     turret.setHoodPosition(hoodTargetPosition);
                     if(isAimedAtHub){
@@ -277,7 +281,7 @@ public class Shooter extends SubsystemBase {
                         }
                     }else{
                         //Lights.getLightInstance().lightsWantedState = LightAnimations.CANTSHOOT;
-
+                        feeder.setFeederVelocity(FeederStates.OFF);
                     }
 
                 }else{
@@ -326,6 +330,7 @@ public class Shooter extends SubsystemBase {
             case BUMP:
                 //figures out if were on our side our in the neutral zone and if were in auto
                 // if (!swerve.isTilted(0, 3)) { 
+                turret.setHoodPosition(Constants.maximumHoodPosition);
                     if (swerve.isInAllianceZone()) {
                         if (DriverStation.isAutonomousEnabled()){
                         wantedShooterState = ShooterStates.AUTOHUB;
@@ -402,6 +407,8 @@ public class Shooter extends SubsystemBase {
                 // if (!swerve.isTilted(0, 3) && swerve.isInAllianceZone()) {
                 if(swerve.isInAllianceZone()){
                     currentShooterState = ShooterStates.AUTODEPOTSHOOT;
+                } else {
+                    currentShooterState = ShooterStates.AUTONONFIRE;
                 }
                 break;
             case FERRY:
@@ -685,7 +692,7 @@ public class Shooter extends SubsystemBase {
 
         double proposedAngle = GetProposedAngle();
 
-        turret.setTurretPosition(proposedAngle/(2*Math.PI));
+        turret.setTurretPosition((proposedAngle - fieldRelative.omegaRadiansPerSecond * ShooterAngleCalculator.turretLagTime)/(2*Math.PI));
         // turret.setTurretPosition(-0.25);
         
         Logger.recordOutput("CalculatedCorrectedTurretAngle", 180*proposedAngle/(Math.PI));
@@ -695,7 +702,7 @@ public class Shooter extends SubsystemBase {
         Logger.recordOutput("CalculatedHoodAngle", pastShooterAngle.hoodRotation/(2*Math.PI));
 
         // return true;
-        return (turret.hoodInTolerance(.005) && turret.turretInTolerance(0.01));
+        return (turret.hoodInTolerance(.005) && turret.turretInTolerance(0.03));
     }
 
     /**
