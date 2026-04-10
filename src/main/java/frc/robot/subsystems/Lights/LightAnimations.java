@@ -7,6 +7,7 @@ import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.subsystems.Drive.SwerveSubsystem;
 import frc.robot.subsystems.Shooter.Shooter;
+import frc.robot.subsystems.Vision.Vision;
 
 import com.ctre.phoenix6.controls.RainbowAnimation;
 import com.ctre.phoenix6.controls.SolidColor;
@@ -49,24 +50,29 @@ public enum LightAnimations {
            new RainbowAnimation(0, 65);
     }
     public static void Lights(){
-        if(!Robot.zeroingLights){
-            if(SwerveSubsystem.getInstance().isInAllianceZone()){
-                if(Shooter.getInstance().isAimedAtHub && Shooter.getInstance().isHubActive()){
+        if(Vision.getInstance().io.CamerasConnected()){
+        if(!Robot.zeroingLights) {
+            if (SwerveSubsystem.getInstance().isInAllianceZone()) {
+                if (Shooter.getInstance().isAimedAtHub && Shooter.getInstance().isHubActive()) {
                     Lights.getLightInstance().lightsWantedState = SHOOTHUB;
-                }else{
+                } else {
                     Lights.getLightInstance().lightsWantedState = CANTSHOOT;
                 }
-            }else{
-                if(Shooter.getInstance().isAimedAtFerry){
+            } else {
+                if (Shooter.getInstance().isAimedAtFerry) {
                     Lights.getLightInstance().lightsWantedState = SHOOTFERRY;
-                }else{
+                } else {
                     Lights.getLightInstance().lightsWantedState = CANTSHOOT;
 
                 }
             }
+             } else {
+                Lights.getLightInstance().lightsWantedState = ZEROED;
+         }
         }else{
-            Lights.getLightInstance().lightsWantedState = ZEROED;
+            Lights.getLightInstance().lightsWantedState = DISCONNECTEDCAMERA;
         }
+
 
     }
 }
