@@ -366,8 +366,8 @@ public class Shooter extends SubsystemBase {
                     feeder.setFeederVelocity(FeederStates.FIXEDFIRE);
                 else
                     feeder.setFeederVelocity(FeederStates.OFF);
-                turret.setHoodPosition(85 / 360.0);
-                turret.setTurretPosition(-90 / 360.0);
+                turret.setHoodPosition(75 / 360.0);
+                turret.setTurretPosition(90 / 360.0);
                 
                 break;
             case ZERO:
