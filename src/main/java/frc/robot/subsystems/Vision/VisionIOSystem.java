@@ -69,17 +69,16 @@ public class VisionIOSystem implements VisionIO {
         inputs.frontRightCameraConected = cameras[1].isConnected();
         inputs.leftCameraConected = cameras[2].isConnected();
         inputs.rightCameraConected = cameras[3].isConnected();
-        inputs.backCameraConected = cameras[5].isConnected();
+        inputs.backCameraConected = cameras[4].isConnected();
         inputs.visonCycleTime = visonCycleTime;
 
     }
 
     public boolean CamerasConnected(){
-        if(cameras[0].isConnected() && cameras[1].isConnected() && cameras[2].isConnected() && cameras[3].isConnected() && cameras[4].isConnected()){
-            return true;
-        }else{
-            return false;
-        }
+        for(int i =0;i<cameras.length;i++)
+            if(!cameras[i].isConnected())
+                return false;
+        return true;
     }
     /*
      * the periodic seaches all cameras for a hub mutitag pose and if found uses only that pose however if it is not found it adds togeter all the other tag poses to get a sutable estimate.
@@ -91,44 +90,43 @@ public class VisionIOSystem implements VisionIO {
 
         boolean doSingletag = true;
 
-        FilteredCameraResults[] FilteredResults = new FilteredCameraResults[5];
+        FilteredCameraResults[] FilteredResults = new FilteredCameraResults[cameras.length];
         
-        for(int i = 0;i < 5;i++)
+        for(int i = 0;i < FilteredResults.length;i++)
             FilteredResults[i]=filterPhotonResults(cameras[i], photonEstimators[i], doSingletag);
 
         int qualityOfBestCamera;
-        if (
-            FilteredResults[0].multiTagHubResults.size()>0 ||
-            FilteredResults[1].multiTagHubResults.size()>0 ||
-            FilteredResults[2].multiTagHubResults.size()>0 ||
-            FilteredResults[3].multiTagHubResults.size()>0 ||
-            FilteredResults[4].multiTagHubResults.size()>0
-        ){
-            for(int i = 0;i < 5;i++)
-                addVisionEstemation(FilteredResults[i].multiTagHubResults, FilteredResults[i].multiTagHubTargets, true, photonEstimators[0]);
+        boolean foundMultiTagHubResult = false;
+        boolean foundMultiTagResult = false;
+        boolean foundsingleTagResult = false;
+        for(int i =0; i<FilteredResults.length;i++)
+            if (FilteredResults[i].multiTagHubResults.size()>0)
+                foundMultiTagHubResult=true;
+        if(!foundMultiTagHubResult)
+            for(int i =0; i<FilteredResults.length;i++)
+                if (FilteredResults[i].multiTagResults.size()>0)
+                    foundMultiTagResult=true;
+        if(!foundMultiTagResult)
+            for(int i =0; i<FilteredResults.length;i++)
+                if (FilteredResults[i].singleTagResults.size()>0)
+                    foundsingleTagResult=true;
+
+
+
+        if (foundMultiTagHubResult){
+            for(int i = 0;i < FilteredResults.length;i++)
+                addVisionEstemation(FilteredResults[i].multiTagHubResults, FilteredResults[i].multiTagHubTargets, true, photonEstimators[i]);
             qualityOfBestCamera = 3;
         }
-        else if (
-            FilteredResults[0].multiTagResults.size()>0 || 
-            FilteredResults[1].multiTagResults.size()>0 || 
-            FilteredResults[2].multiTagResults.size()>0 || 
-            FilteredResults[3].multiTagResults.size()>0 || 
-            FilteredResults[4].multiTagResults.size()>0
-        )
+        else if (foundMultiTagResult)
         {
-            for(int i = 0;i < 5;i++)
+            for(int i = 0;i < FilteredResults.length;i++)
                 addVisionEstemation(FilteredResults[i].multiTagResults, FilteredResults[i].multiTagTargets, false, photonEstimators[i]);
             qualityOfBestCamera = 2;
         }
-        else if (
-            FilteredResults[0].singleTagResults.size()>0 || 
-            FilteredResults[1].singleTagResults.size()>0 || 
-            FilteredResults[2].singleTagResults.size()>0 || 
-            FilteredResults[3].singleTagResults.size()>0 || 
-            FilteredResults[4].singleTagResults.size()>0
-        )
+        else if (foundsingleTagResult)
         {
-            for(int i = 0;i < 5;i++)
+            for(int i = 0;i < FilteredResults.length;i++)
                 addVisionEstemation(FilteredResults[i].singleTagResults, FilteredResults[i].singleTagTargets, false, photonEstimators[i]);
             qualityOfBestCamera = 1;
         }
