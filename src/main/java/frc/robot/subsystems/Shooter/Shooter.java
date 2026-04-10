@@ -195,6 +195,9 @@ public class Shooter extends SubsystemBase {
                                 feeder.setFeederVelocity(FeederStates.OFF);
                             }
                             
+                        } else {
+                            flywheelDebouncer ++;
+                            feeder.setFeederVelocity(FeederStates.OFF);
                         }
                     }else{
                         feeder.setFeederVelocity(FeederStates.OFF);
@@ -232,6 +235,9 @@ public class Shooter extends SubsystemBase {
                             else{
                                 feeder.setFeederVelocity(FeederStates.OFF);
                             }
+                        } else {
+                            flywheelDebouncer ++;
+                            feeder.setFeederVelocity(FeederStates.OFF);
                         }
                     }else{
                         feeder.setFeederVelocity(FeederStates.OFF);
@@ -278,6 +284,9 @@ public class Shooter extends SubsystemBase {
                             else{
                                 feeder.setFeederVelocity(FeederStates.OFF);
                             }
+                        } else {
+                            flywheelDebouncer ++;
+                            feeder.setFeederVelocity(FeederStates.OFF);
                         }
                     }
 
@@ -701,7 +710,7 @@ public class Shooter extends SubsystemBase {
         Logger.recordOutput("CalculatedHoodAngle", pastShooterAngle.hoodRotation/(2*Math.PI));
 
         // return true;
-        return (turret.hoodInTolerance(.005) && turret.turretInTolerance(0.03));
+        return (turret.hoodInTolerance(.005) && turret.turretInTolerance(0.06));
     }
 
     /**

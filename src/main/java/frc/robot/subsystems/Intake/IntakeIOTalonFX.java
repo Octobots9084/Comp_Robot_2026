@@ -9,10 +9,13 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import Utils.FPGA.currentTime;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.Current;
+import edu.wpi.first.units.measure.Voltage;
 import frc.robot.Constants;
 import frc.robot.subsystems.Lights.LightAnimations;
 import frc.robot.subsystems.Lights.Lights;
@@ -21,6 +24,9 @@ import frc.robot.util.PhoenixUtil;
 public class IntakeIOTalonFX implements IntakeIO {
      private final StatusSignal<AngularVelocity> rollerVelocity;
      private final StatusSignal<Angle> pivotAngle;
+     private final StatusSignal<Current> rollerCurrent;
+     private final StatusSignal<Voltage> rollerVoltage;
+     private final StatusSignal<Current> pivotCurrent;
 
      public DigitalInput zeroingSwitch = new DigitalInput(0);
      public IntakeConfigurator config;
@@ -54,6 +60,9 @@ public class IntakeIOTalonFX implements IntakeIO {
 
           rollerVelocity = roller.getVelocity();
           pivotAngle = pivot.getPosition();
+          rollerCurrent = roller.getStatorCurrent();
+          rollerVoltage = roller.getMotorVoltage();
+          pivotCurrent = pivot.getStatorCurrent();
 
           PhoenixUtil.tryUntilOk(5, () -> BaseStatusSignal.setUpdateFrequencyForAll(50,rollerVelocity,pivotAngle));
           PhoenixUtil.tryUntilOk(5, () -> roller.optimizeBusUtilization(0,1.0));
@@ -62,15 +71,19 @@ public class IntakeIOTalonFX implements IntakeIO {
           PhoenixUtil.registerSignals(
                Constants.krakenBus.isNetworkFD(),
                rollerVelocity,
-               pivotAngle);
+               pivotAngle,
+               rollerCurrent,
+               rollerVoltage,
+               pivotCurrent);
      }
 
      public void updateInputs(IntakeIOInputs inputs) {
           inputs.intakePosition = getIntakePosition();
           inputs.rollerRPS = getRollerRPS();
           inputs.pivotRequest = pivotRequest.getPositionMeasure().in(Units.Rotations);
-          // inputs.pivotCurrent = pivot.getStatorCurrent().getValueAsDouble();
-
+          inputs.rollerCurrent = rollerCurrent.getValueAsDouble();
+          inputs.rollerVoltage = rollerVoltage.getValueAsDouble();
+          inputs.pivotCurrent = pivotCurrent.getValueAsDouble();
           inputs.pivotLimitSwitch = this.isZeroingSwitchPressed();
      }
 

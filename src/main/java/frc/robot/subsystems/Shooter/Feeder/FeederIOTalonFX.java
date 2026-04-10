@@ -17,10 +17,16 @@ import frc.robot.util.PhoenixUtil;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.Current;
+import edu.wpi.first.units.measure.Voltage;
 
 public class FeederIOTalonFX implements FeederIO {
     private final StatusSignal<AngularVelocity> feederVelocity;
     private final StatusSignal<AngularVelocity> spindexerVelocity;
+    private final StatusSignal<Voltage> feederVoltage;
+    private final StatusSignal<Voltage> spindexerVoltage;
+    private final StatusSignal<Current> feederCurrent;
+    private final StatusSignal<Current> spindexerCurrent;
 
     public TalonFX spindexerMotor;
     public TalonFX verticalFeederMotor;
@@ -47,6 +53,10 @@ public class FeederIOTalonFX implements FeederIO {
 
         feederVelocity = verticalFeederMotor.getVelocity();
         spindexerVelocity = spindexerMotor.getVelocity();
+        feederVoltage = verticalFeederMotor.getMotorVoltage();
+        feederCurrent = verticalFeederMotor.getStatorCurrent();
+        spindexerVoltage = spindexerMotor.getMotorVoltage();
+        spindexerCurrent = spindexerMotor.getStatorCurrent();
 
         PhoenixUtil.tryUntilOk(5, () -> BaseStatusSignal.setUpdateFrequencyForAll(50,feederVelocity,spindexerVelocity));
         PhoenixUtil.tryUntilOk(5, () -> verticalFeederMotor.optimizeBusUtilization(0,1.0));
@@ -55,7 +65,11 @@ public class FeederIOTalonFX implements FeederIO {
         PhoenixUtil.registerSignals(
             Constants.krakenBus.isNetworkFD(),
             feederVelocity,
-            spindexerVelocity);
+            spindexerVelocity,
+            feederVoltage,
+            feederCurrent,
+            spindexerVoltage,
+            spindexerCurrent);
     }
 
     public void updateInputs(FeederIOInputs inputs) {
@@ -64,8 +78,10 @@ public class FeederIOTalonFX implements FeederIO {
         inputs.verticalFeederRPS = getVerticalFeederVelocity();
         inputs.wantedSpindexerRPS = spindexerRequest.Velocity;
         inputs.wantedVerticalFeederRPS = verticalFeederRequest.Velocity;
-        // inputs.SpindexerCurrent = spindexerMotor.getStatorCurrent().getValueAsDouble();
-        // inputs.verticalFeederCurrent = verticalFeederMotor.getStatorCurrent().getValueAsDouble();
+        inputs.spindexerCurrent = spindexerCurrent.getValueAsDouble();
+        inputs.feederCurrent = feederCurrent.getValueAsDouble();
+        inputs.spindexerVoltage = spindexerVoltage.getValueAsDouble();
+        inputs.feederVoltage = feederVoltage.getValueAsDouble();
 
     }
 

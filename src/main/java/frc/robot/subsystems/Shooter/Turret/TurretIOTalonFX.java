@@ -125,8 +125,12 @@ public class TurretIOTalonFX implements TurretIO {
 
     @Override
     public boolean turretInTolerance(double tolerance) {
-        return MathUtil.isNear(turretRequest.getPositionMeasure().in(Units.Revolution), this.getTurretPosition(),
+        boolean turretInTolerance = MathUtil.isNear(turretRequest.getPositionMeasure().in(Units.Revolution), this.getTurretPosition(),
                 tolerance);
+        Logger.recordOutput("turretRequest for tolerance",turretRequest.getPositionMeasure().in(Units.Revolution));
+        Logger.recordOutput("getTurretPosition for tolerance",this.getTurretPosition());
+        Logger.recordOutput("turretInTolerance", turretInTolerance);
+        return turretInTolerance;
     }
 
     @Override

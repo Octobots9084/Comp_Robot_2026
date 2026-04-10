@@ -19,9 +19,13 @@ import edu.wpi.first.units.AngularVelocityUnit;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.AngularAcceleration;
 import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.Current;
+import edu.wpi.first.units.measure.Voltage;
 
 public class FlywheelIOTalonFX implements FlywheelIO {
     private final StatusSignal<AngularVelocity> flywheelVelocity;
+    private final StatusSignal<Voltage> flywheelVoltage;
+    private final StatusSignal<Current> flywheelCurrent;
 
     public static TalonFX FlywheelLeftMotor;
     public static TalonFX FlywheelRightMotor;
@@ -42,21 +46,25 @@ public class FlywheelIOTalonFX implements FlywheelIO {
         FlywheelLeftMotor.setControl(follow);
 
         flywheelVelocity = FlywheelRightMotor.getVelocity();
+        flywheelCurrent = FlywheelRightMotor.getStatorCurrent();
+        flywheelVoltage = FlywheelRightMotor.getMotorVoltage();
 
         PhoenixUtil.tryUntilOk(5, () -> BaseStatusSignal.setUpdateFrequencyForAll(50,flywheelVelocity));
         PhoenixUtil.tryUntilOk(5, () -> FlywheelRightMotor.optimizeBusUtilization(0,1.0));
 
         PhoenixUtil.registerSignals(
             Constants.krakenBus.isNetworkFD(),
-            flywheelVelocity);
+            flywheelVelocity,
+            flywheelCurrent,
+            flywheelVoltage);
     }
 
     @Override
     public void updateInputs(FlywheelIOInputs inputs) {
         inputs.flywheelCurrentState = Flywheel.getInstance().getCurrentState();
         inputs.FlywheelRightRPS = getRightMotorVelocity();
-        // inputs.FlywheelLeftCurrent = FlywheelLeftMotor.getStatorCurrent().getValueAsDouble();
-        // inputs.FlywheelRightCurrent = FlywheelRightMotor.getStatorCurrent().getValueAsDouble();
+        inputs.flywheelRightCurrent = flywheelCurrent.getValueAsDouble();
+        inputs.flywheelRightVoltage = flywheelVoltage.getValueAsDouble();
         inputs.flywheelWantedSpeed = targetRPS;
     }
 

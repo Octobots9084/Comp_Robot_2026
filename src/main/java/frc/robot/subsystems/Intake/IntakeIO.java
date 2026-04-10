@@ -20,6 +20,7 @@ public interface IntakeIO {
         public double pivotCurrent = 0.0;
         public double pivotRequest = 0.0;
         public boolean pivotLimitSwitch = false;
+        public double rollerVoltage;
     }
 
     /** The mechanism by which values are updated with.*/

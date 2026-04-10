@@ -13,7 +13,7 @@ public class DriverCommunications {
     static boolean CurrentHubState = Shooter.getInstance().isHubActive();
     static String NextPhaseIndication = "Transition Period";
     static String PhaseIndication = "Autonomous";
-    static double TeleopAccounted = -0.5;
+    static double TeleopAccounted = 1.2;
     static double PhaseClock = 0;
     public static Field2d fieldPose = new Field2d();
     public static double TeleopTimer = Constants.timer.get() - TeleopAccounted;

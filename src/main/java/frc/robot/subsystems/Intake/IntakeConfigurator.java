@@ -32,7 +32,7 @@ public class IntakeConfigurator {
         intakeRollerConfig.Slot0.kI = 0.0;
         intakeRollerConfig.Slot0.kD = 0.0;
         intakeRollerConfig.Slot0.kA = 0.0;
-        intakeRollerConfig.Slot0.kV = 0.205;
+        intakeRollerConfig.Slot0.kV = 0.25;
         intakeRollerConfig.Slot0.kS = 0.0;
         intakeRollerConfig.Slot0.kG = 0.0;
 
