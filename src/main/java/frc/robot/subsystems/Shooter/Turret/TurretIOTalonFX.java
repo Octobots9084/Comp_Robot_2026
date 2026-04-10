@@ -158,7 +158,7 @@ public class TurretIOTalonFX implements TurretIO {
                 this.setTurretPosition(0);
                 Shooter.getInstance().turretAlreadyZeroed = true;
             } else {
-                turretMotor.setVoltage(0.75);// was 3v
+                turretMotor.setVoltage(1.25);// was 3v
 
                 Shooter.getInstance().turretAlreadyZeroed = false;
             }
