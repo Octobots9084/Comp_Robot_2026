@@ -74,6 +74,14 @@ public class VisionIOSystem implements VisionIO {
 
     }
 
+    public boolean CameraConnect(int camera){
+        if(cameras[camera].isConnected()){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     public boolean CamerasConnected(){
         for(int i =0;i<cameras.length;i++)
             if(!cameras[i].isConnected())

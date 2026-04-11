@@ -55,7 +55,7 @@ public class FeederIOTalonFX implements FeederIO {
         spindexerVelocity = spindexerMotor.getVelocity();
         feederVoltage = verticalFeederMotor.getMotorVoltage();
         feederCurrent = verticalFeederMotor.getStatorCurrent();
-        PhoenixUtil.tryUntilOk,(5, () -> spindexerMotor.optimizeBusUtilization(0,1.0));
+        PhoenixUtil.tryUntilOk(5, () -> spindexerMotor.optimizeBusUtilization(0,1.0));
         spindexerVoltage = spindexerMotor.getMotorVoltage();
         spindexerCurrent = spindexerMotor.getStatorCurrent();
 
