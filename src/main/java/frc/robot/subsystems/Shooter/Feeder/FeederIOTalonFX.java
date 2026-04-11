@@ -102,7 +102,7 @@ public class FeederIOTalonFX implements FeederIO {
         }else{
             spindexerMotor.setControl(spindexerRequest.withVelocity(state.spindexerRPS));
             verticalFeederMotor.setControl(verticalFeederRequest.withVelocity(state.feederRPS));
-            if (state == FeederStates.SCORING){
+            if (state == FeederStates.SCORING || state == FeederStates.FIXEDFIRE){
                 if ((this.getSpindexerVelocity()< 0.4 && upToSpeed) || (this.getSpindexerVelocity() < 0.4 && Timer.getFPGATimestamp()-timeToGetToSpeed > 2) ){
                     reveseTimer = Timer.getFPGATimestamp() + 1;
                     upToSpeed = false;

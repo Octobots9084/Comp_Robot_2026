@@ -21,7 +21,7 @@ public class Feeder extends SubsystemBase {
     }
 
     public void setFeederVelocity(FeederStates currentState) {
-        if (this.currentState != currentState && currentState == FeederStates.SCORING)
+        if (this.currentState != currentState && (currentState == FeederStates.SCORING||currentState == FeederStates.FIXEDFIRE))
             io.resetUpToSpeed();
         this.currentState = currentState;
         io.setFeederVelocity(currentState);
