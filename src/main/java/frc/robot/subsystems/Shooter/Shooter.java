@@ -805,7 +805,7 @@ public class Shooter extends SubsystemBase {
         turret.setTurretPosition(proposedAngle/(2*Math.PI));
         hoodTargetPosition = pastShooterAngle.hoodRotation/(2.0*Math.PI);
 
-        return (turret.hoodInTolerance(.005) && turret.turretInTolerance(0.01));
+        return (turret.hoodInTolerance(.005) && turret.turretInTolerance(0.06));
     }
 
     public boolean isHubActive() {

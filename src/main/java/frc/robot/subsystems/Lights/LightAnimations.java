@@ -50,7 +50,6 @@ public enum LightAnimations {
            new RainbowAnimation(0, 65);
     }
     public static void Lights(){
-        if(Vision.getInstance().io.CamerasConnected()){
         if(!Robot.zeroingLights) {
             if (SwerveSubsystem.getInstance().isInAllianceZone()) {
                 if (Shooter.getInstance().isAimedAtHub && Shooter.getInstance().isHubActive()) {
@@ -68,11 +67,7 @@ public enum LightAnimations {
             }
              } else {
                 Lights.getLightInstance().lightsWantedState = ZEROED;
-         }
-        }else{
-            Lights.getLightInstance().lightsWantedState = DISCONNECTEDCAMERA;
-        }
+         }        }
 
 
     }
-}

@@ -65,13 +65,21 @@ public class VisionIOSystem implements VisionIO {
     @Override
     public void updateInputs(VisionIOInputs inputs) {
         // inputs.intakeCameraConected = intakeCamera.isConnected();
-        inputs.frontLeftCameraConected = cameras[0].isConnected();
-        inputs.frontRightCameraConected = cameras[1].isConnected();
+        inputs.frontRightCameraConected = cameras[0].isConnected();
+        inputs.frontLeftCameraConected = cameras[1].isConnected();
         inputs.leftCameraConected = cameras[2].isConnected();
         inputs.rightCameraConected = cameras[3].isConnected();
         inputs.backCameraConected = cameras[4].isConnected();
         inputs.visonCycleTime = visonCycleTime;
 
+    }
+
+    public boolean CameraConnect(int camera){
+        if(cameras[camera].isConnected()){
+            return true;
+        }else{
+            return false;
+        }
     }
 
     public boolean CamerasConnected(){

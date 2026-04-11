@@ -37,13 +37,13 @@ public class ButtonConfig {
                 superstructure.wantedState = States.SHOOTER;
         }));
 
-        driverController.b().onTrue(new InstantCommand(() -> {
-                if (SwerveSubsystem.getInstance().wantedState == SwerveStates.ROTATION_LOCK) {
-                        SwerveSubsystem.getInstance().wantedState = SwerveStates.MANUAL;
-                } else {
-                        SwerveSubsystem.getInstance().wantedState = SwerveStates.ROTATION_LOCK;
-                }
-        }));
+        // driverController.b().onTrue(new InstantCommand(() -> {
+        //         if (SwerveSubsystem.getInstance().wantedState == SwerveStates.ROTATION_LOCK) {
+        //                 SwerveSubsystem.getInstance().wantedState = SwerveStates.MANUAL;
+        //         } else {
+        //                 SwerveSubsystem.getInstance().wantedState = SwerveStates.ROTATION_LOCK;
+        //         }
+        // }));
 
         // coDriverController.a().onTrue(new InstantCommand(() ->
         // {SwerveSubsystem.getInstance().io.zeroGyro();}));

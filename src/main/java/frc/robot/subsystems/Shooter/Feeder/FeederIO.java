@@ -20,10 +20,6 @@ public interface FeederIO {
 
   }
 
-  public default void resetUpToSpeed(){
-
-  }
-
   public default void updateInputs(FeederIOInputs inputs) {
   }
 
