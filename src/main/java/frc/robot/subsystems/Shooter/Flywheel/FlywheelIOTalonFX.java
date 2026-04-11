@@ -87,7 +87,7 @@ public class FlywheelIOTalonFX implements FlywheelIO {
 
     @Override
     public boolean FlywheelInTolerance(double tolerance){
-        return MathUtil.isNear(targetRPS, FlywheelRightMotor.getVelocity().getValueAsDouble(),tolerance)&& targetRPS > 0;
+        return MathUtil.isNear(targetRPS, flywheelVelocity.getValueAsDouble(),tolerance)&& targetRPS > 0;
     }
 
 }

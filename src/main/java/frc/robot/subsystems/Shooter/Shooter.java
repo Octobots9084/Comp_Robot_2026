@@ -171,7 +171,6 @@ public class Shooter extends SubsystemBase {
                 break;
             case FERRY:
                 isAimedAtFerry = aimFerry();
-                Logger.recordOutput("flywheel in tolerance", flywheel.FlywheelInTolerance(flywheelTolerance));
                 turret.setHoodPosition(Constants.maximumHoodPosition);
                 if(!swerve.isInAllianceZone()){
                     if(inEnterTrenchZone()){ 
@@ -212,6 +211,7 @@ public class Shooter extends SubsystemBase {
                 break;
             case HUB:
                 Logger.recordOutput("rui is bouncing wrong", flywheelDebouncer);
+                
                 isAimedAtHub = isAimedAtHub();
                 turret.setHoodPosition(Constants.maximumHoodPosition);
                 if(swerve.isInAllianceZone()){
@@ -805,7 +805,7 @@ public class Shooter extends SubsystemBase {
         turret.setTurretPosition(proposedAngle/(2*Math.PI));
         hoodTargetPosition = pastShooterAngle.hoodRotation/(2.0*Math.PI);
 
-        return (turret.hoodInTolerance(.005) && turret.turretInTolerance(0.06));
+        return (turret.hoodInTolerance(.005) && turret.turretInTolerance(0.1));
     }
 
     public boolean isHubActive() {

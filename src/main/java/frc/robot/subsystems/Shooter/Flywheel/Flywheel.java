@@ -1,5 +1,7 @@
 package frc.robot.subsystems.Shooter.Flywheel;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Shooter.Flywheel.Flywheel;
 
@@ -40,6 +42,8 @@ public class Flywheel extends SubsystemBase {
     }
 
     public boolean FlywheelInTolerance(double tolerance) {
-        return io.FlywheelInTolerance(tolerance);
+        boolean inTolerance = io.FlywheelInTolerance(tolerance);
+        Logger.recordOutput("flywheel in tolerance", inTolerance);
+        return inTolerance;
     }
 }
