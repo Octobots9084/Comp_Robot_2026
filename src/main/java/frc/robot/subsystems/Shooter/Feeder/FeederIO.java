@@ -16,6 +16,10 @@ public interface FeederIO {
     public double spindexerVoltage = 0.0;
   }
 
+  public default void resetUpToSpeed(){
+
+  }
+
   public default void updateInputs(FeederIOInputs inputs) {
   }
 

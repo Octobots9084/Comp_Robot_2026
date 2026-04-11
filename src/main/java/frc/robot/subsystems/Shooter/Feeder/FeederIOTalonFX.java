@@ -15,8 +15,10 @@ import frc.robot.subsystems.Shooter.Flywheel.FlywheelIOTalonFX;
 import frc.robot.subsystems.Shooter.Flywheel.FlywheelStates;
 import frc.robot.util.PhoenixUtil;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Voltage;
 
@@ -34,9 +36,16 @@ public class FeederIOTalonFX implements FeederIO {
     public ShooterConfigurator shooterConfigs;
     private VelocityVoltage spindexerRequest = new VelocityVoltage(0);
     private VelocityVoltage verticalFeederRequest = new VelocityVoltage(0);
+    public boolean upToSpeed = false;
+    public double timeToGetToSpeed = 0;
+    public double reveseTimer = 0;
 
     private Follower followSpindexer = new Follower(Constants.spindexerID, MotorAlignmentValue.Aligned);
 
+    public void resetUpToSpeed(){
+        this.upToSpeed = false;
+        timeToGetToSpeed = Timer.getFPGATimestamp();
+    }
 
     public FeederIOTalonFX() {
         shooterConfigs = new ShooterConfigurator();
@@ -87,8 +96,23 @@ public class FeederIOTalonFX implements FeederIO {
 
     @Override
     public void setFeederVelocity(FeederStates state) {
-        spindexerMotor.setControl(spindexerRequest.withVelocity(state.spindexerRPS));
-        verticalFeederMotor.setControl(verticalFeederRequest.withVelocity(state.feederRPS));
+        if (reveseTimer > Timer.getFPGATimestamp()){
+            spindexerMotor.setControl(spindexerRequest.withVelocity(FeederStates.UNJAM.feederRPS));
+            verticalFeederMotor.setControl(verticalFeederRequest.withVelocity(FeederStates.UNJAM.feederRPS));
+        }else{
+            spindexerMotor.setControl(spindexerRequest.withVelocity(state.spindexerRPS));
+            verticalFeederMotor.setControl(verticalFeederRequest.withVelocity(state.feederRPS));
+            if (state == FeederStates.SCORING){
+                if ((this.getSpindexerVelocity()< 0.4 && upToSpeed) || (this.getSpindexerVelocity() < 0.4 && Timer.getFPGATimestamp()-timeToGetToSpeed > 2) ){
+                    reveseTimer = Timer.getFPGATimestamp() + 1;
+                    upToSpeed = false;
+                }
+                else if (this.getSpindexerVelocity()>1.0){
+                    upToSpeed = true;
+                    timeToGetToSpeed = Timer.getFPGATimestamp();
+                }
+            }
+        }
         // spindexerMotor.setVoltage(state.spindexerRPS);
         // verticalFeederMotor.setVoltage(state.feederRPS);
     }
