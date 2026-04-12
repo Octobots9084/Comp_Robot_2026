@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 4.505706618962432,
+        "y": 0.67
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.951845753532096,
+        "y": 0.6815999999999995
+      },
+      "isLocked": false,
+      "linkedName": "Trench Right Start"
+    },
+    {
+      "anchor": {
+        "x": 3.3016555555555556,
+        "y": 0.67
+      },
+      "prevControl": {
+        "x": 3.966788888888889,
+        "y": 0.6715222222222224
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Comp Right Start End"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 2.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 720.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 90.0
+  },
+  "reversed": false,
+  "folder": "Right Side",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 90.0
+  },
+  "useDefaultConstraints": false
+}
