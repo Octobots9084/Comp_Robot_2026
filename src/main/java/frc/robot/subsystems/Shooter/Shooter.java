@@ -62,6 +62,7 @@ public class Shooter extends SubsystemBase {
     public Flywheel flywheel = new Flywheel();
     public final static double prefire = 0;
     public static boolean driverOverride = false;
+    public static boolean ferryOverride = false;
     private String gameData;
     public double turretAim = -0.1;
     private ShooterAngle shooterAngle;
@@ -79,6 +80,8 @@ public class Shooter extends SubsystemBase {
     public double hubFlywheelSpeed = 10;
     public double ferryBallSpeed = 6.7;
     public double ferryFlywheelSpeed = 10;
+
+    public Pose2d aimpose;
 
     public static int flywheelToleranceThreshold = 10;
     public double flywheelTolerance = 3;
@@ -178,7 +181,7 @@ public class Shooter extends SubsystemBase {
                             wantedShooterState = ShooterStates.TRENCH;
                         }
                     }
-                    if(driverOverride){
+                    if(driverOverride || ferryOverride){
                         turret.setHoodPosition(hoodTargetPosition);
                         flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
                         if(isAimedAtFerry){
@@ -391,6 +394,7 @@ public class Shooter extends SubsystemBase {
             flywheelDebouncer = flywheelToleranceThreshold;
         switch (wantedShooterState) {
             case HUB:
+                ferryOverride = false;
                 // if we're on our side of the field
                 // if (!swerve.isTilted(0, 3) && swerve.isInAllianceZone()) {// !tilted and in alliance
                 if(swerve.isInAllianceZone()){
