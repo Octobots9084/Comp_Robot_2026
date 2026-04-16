@@ -16,12 +16,12 @@ public class ShooterConfigurator {
     public TalonFXConfiguration topRollerConfig;
 
     public ShooterConfigurator() {
-        flyWheelRightConfig = new TalonFXConfiguration().withFeedback(new FeedbackConfigs().withSensorToMechanismRatio((1)/((Constants.flywheelRadius*Constants.flywheelGearRatio+Constants.topRollerRadius*Constants.flywheelGearRatio*Constants.flywheelToTopRollerRatio)*Math.PI)));
+        flyWheelRightConfig = new TalonFXConfiguration().withFeedback(new FeedbackConfigs().withSensorToMechanismRatio((1)));
         turretConfig = new TalonFXConfiguration()
                 .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(Constants.turretGearRatio));
         hoodConfig = new TalonFXConfiguration()
                 .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(Constants.hoodGearRatio));
-        spindexerConfig = new TalonFXConfiguration();
+        spindexerConfig = new TalonFXConfiguration().withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(Constants.spindexerGearRatio));
         verticalFeederConfig = new TalonFXConfiguration().withFeedback(new FeedbackConfigs().withSensorToMechanismRatio((1)/(2*Math.PI*Constants.feederGearRatio*Constants.feederWheelRadius)));
         // fly wheel right config
         flyWheelRightConfig.CurrentLimits.SupplyCurrentLimit = 20;
@@ -31,14 +31,14 @@ public class ShooterConfigurator {
 
         // set break mode and inversion
         flyWheelRightConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-        flyWheelRightConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+        flyWheelRightConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
         // create PID gains
-        flyWheelRightConfig.Slot0.kP = 2;
+        flyWheelRightConfig.Slot0.kP = 0.65;
         flyWheelRightConfig.Slot0.kI = 0.0;
         flyWheelRightConfig.Slot0.kD = 0.0;
         flyWheelRightConfig.Slot0.kA = 0.0;
-        flyWheelRightConfig.Slot0.kV = 0.6;
+        flyWheelRightConfig.Slot0.kV = 0.15;
         flyWheelRightConfig.Slot0.kS = 0.0;
         flyWheelRightConfig.Slot0.kG = 0.0;
 
@@ -48,89 +48,93 @@ public class ShooterConfigurator {
 
         
         // turret config
-        turretConfig.CurrentLimits.SupplyCurrentLimit = 20;
+        turretConfig.CurrentLimits.SupplyCurrentLimit = 40;
         turretConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-        turretConfig.CurrentLimits.StatorCurrentLimit = 40;
+        turretConfig.CurrentLimits.StatorCurrentLimit = 60;
         turretConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 
         // set break mode and inversion
         turretConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
         turretConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
         // create PID gains
-        turretConfig.Slot0.kP = 1125; //1125;
+        turretConfig.Slot0.kP = 200; //1125;
         turretConfig.Slot0.kI = 0.0;
-        turretConfig.Slot0.kD = 0.0;
+        turretConfig.Slot0.kD = 0;
         turretConfig.Slot0.kA = 0.0;
-        turretConfig.Slot0.kV = 0.0;
+        turretConfig.Slot0.kV = 1;
         turretConfig.Slot0.kS = 0; //0.5;
         turretConfig.Slot0.kG = 0.0;
 
-        turretConfig.MotionMagic.MotionMagicAcceleration = 10;
-        turretConfig.MotionMagic.MotionMagicJerk = 100;
-        turretConfig.MotionMagic.MotionMagicCruiseVelocity = 2.75;
+        turretConfig.MotionMagic.MotionMagicAcceleration = 15;
+        turretConfig.MotionMagic.MotionMagicJerk = 0;
+        turretConfig.MotionMagic.MotionMagicCruiseVelocity = 7;
 
         // hood config
-        hoodConfig.CurrentLimits.SupplyCurrentLimit = 20;
+        hoodConfig.CurrentLimits.SupplyCurrentLimit = 40;
         hoodConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-        hoodConfig.CurrentLimits.StatorCurrentLimit = 20;
+        hoodConfig.CurrentLimits.StatorCurrentLimit = 60;
         hoodConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 
         // set break mode and inversion
         hoodConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-        hoodConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+        hoodConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
         // create PID gains
-        hoodConfig.Slot0.kP = 125;//5;
-        hoodConfig.Slot0.kI = 0.0;
+        hoodConfig.Slot0.kP = 800;//100
+        hoodConfig.Slot0.kI = 0;
         hoodConfig.Slot0.kD = 0.0;
         hoodConfig.Slot0.kA = 0.0;
-        hoodConfig.Slot0.kV = 0.0;
+        hoodConfig.Slot0.kV =
+         0.0;
         hoodConfig.Slot0.kS = 0.0;
-        hoodConfig.Slot0.kG = -0.3;
+        hoodConfig.Slot0.kG = 0.0;
 
-        hoodConfig.MotionMagic.MotionMagicAcceleration = 10;
-        hoodConfig.MotionMagic.MotionMagicJerk = 100;
-        hoodConfig.MotionMagic.MotionMagicCruiseVelocity = 4;
+        hoodConfig.MotionMagic.MotionMagicAcceleration = 8;
+        hoodConfig.MotionMagic.MotionMagicCruiseVelocity = 8;
 
         // spindexer config(four lane highway)
-        spindexerConfig.CurrentLimits.SupplyCurrentLimit = 20;
+        spindexerConfig.CurrentLimits.SupplyCurrentLimit = 60;
         spindexerConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-        spindexerConfig.CurrentLimits.StatorCurrentLimit = 40;
+        spindexerConfig.CurrentLimits.StatorCurrentLimit = 100;
         spindexerConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 
         // set break mode and inversion
         spindexerConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+        spindexerConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
         // create PID gains
-        spindexerConfig.Slot0.kP = 0.3;
+        spindexerConfig.Slot0.kP = 2;
         spindexerConfig.Slot0.kI = 0.0;
         spindexerConfig.Slot0.kD = 0.0;
         spindexerConfig.Slot0.kA = 0.0;
-        spindexerConfig.Slot0.kV = 0.0;
+        spindexerConfig.Slot0.kV = 0.5;
         spindexerConfig.Slot0.kS = 0.0;
         spindexerConfig.Slot0.kG = 0.0;
 
-        spindexerConfig.MotionMagic.MotionMagicAcceleration = 0;
-        spindexerConfig.MotionMagic.MotionMagicJerk = 0;
-        spindexerConfig.MotionMagic.MotionMagicCruiseVelocity = 0;
+        
+        // spindexerConfig.MotionMagic.MotionMagicAcceleration = 10;
+        // spindexerConfig.MotionMagic.MotionMagicJerk = 100;
+        // spindexerConfig.MotionMagic.MotionMagicCruiseVelocity = 2.75;
+        
 
         // vertical Feeder config(rural road)
         verticalFeederConfig.CurrentLimits.SupplyCurrentLimit = 20;
         verticalFeederConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-        verticalFeederConfig.CurrentLimits.StatorCurrentLimit = 60;
+        verticalFeederConfig.CurrentLimits.StatorCurrentLimit = 80;
         verticalFeederConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 
         // set break mode and inversion
         verticalFeederConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+        verticalFeederConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
         // create PID gains
-        verticalFeederConfig.Slot0.kP = 0.1;
+        verticalFeederConfig.Slot0.kP = 3;
         verticalFeederConfig.Slot0.kI = 0.0;
         verticalFeederConfig.Slot0.kD = 0.0;
         verticalFeederConfig.Slot0.kA = 0.0;
-        verticalFeederConfig.Slot0.kV = 0.14;
+        verticalFeederConfig.Slot0.kV = 0.82;
         verticalFeederConfig.Slot0.kS = 0.0;
         verticalFeederConfig.Slot0.kG = 0.0;
 
-        verticalFeederConfig.MotionMagic.MotionMagicAcceleration = 0;
+        verticalFeederConfig.MotionMagic.MotionMagicAcceleration = 1;
         verticalFeederConfig.MotionMagic.MotionMagicJerk = 0;
-        verticalFeederConfig.MotionMagic.MotionMagicCruiseVelocity = 0;
+        verticalFeederConfig.MotionMagic.MotionMagicCruiseVelocity = 0.04;
     }
 }

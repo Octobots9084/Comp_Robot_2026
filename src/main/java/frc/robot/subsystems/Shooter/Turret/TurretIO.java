@@ -7,7 +7,6 @@ import com.ctre.phoenix6.hardware.TalonFX;
 public interface TurretIO {
     @AutoLog
     public static class TurretIOInputs {
-        public boolean turretLimitSwitch;
         public double hoodPosition;
         // public double hoodCurrent;
         public double turretPosition;
@@ -18,6 +17,7 @@ public interface TurretIO {
         // public double turretVoltage;
         // public double turretCurrent;
         public double turretPositionErr;
+        public boolean turretLimitSwitch;
     }
 
     public default void updateInputs(TurretIOInputs inputs) {
@@ -30,11 +30,17 @@ public interface TurretIO {
     public default void setTurretPosition(double turretAngle) {
     }
 
+    public default void zeroTurretPosition() {
+    }
+
     public default void setHoodPosition(double hoodAngle) {
     }
 
     public default double getHoodPosition() {
         return 0.0;
+    }
+    public default boolean getMagnetBreakValue(){
+            return false;
     }
 
     public default double getTurretPosition() {
@@ -49,7 +55,10 @@ public interface TurretIO {
         return false;
     }
 
-    public default boolean turretZeroed() {
+    public default void moveTurretAndHoodToZero(){}
+
+
+    public default boolean zeroTurret() {
         return false;
     }
 
@@ -58,4 +67,7 @@ public interface TurretIO {
     }
 
     public default void zeroHoodMotor(){}
+
+    public default void setTurretZeroVoltage() {
+    }
 }

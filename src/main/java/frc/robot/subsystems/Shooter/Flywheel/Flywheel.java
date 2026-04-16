@@ -1,5 +1,7 @@
 package frc.robot.subsystems.Shooter.Flywheel;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Shooter.Flywheel.Flywheel;
 
@@ -35,19 +37,13 @@ public class Flywheel extends SubsystemBase {
         io.setFlywheelVelocity(rps);
     }
 
-    public double[] getFlywheelVelocity() {
-        return io.getFlywheelVelocity();
-    }
-
-    public double getLeftMotorVelocity() {
-        return io.getLeftMotorVelocity();
-    }
-
     public double getRightMotorVelocity() {
         return io.getRightMotorVelocity();
     }
 
     public boolean FlywheelInTolerance(double tolerance) {
-        return io.FlywheelInTolerance(tolerance);
+        boolean inTolerance = io.FlywheelInTolerance(tolerance);
+        Logger.recordOutput("flywheel in tolerance", inTolerance);
+        return inTolerance;
     }
 }

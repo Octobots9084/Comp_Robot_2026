@@ -2,161 +2,158 @@ package frc.robot.subsystems.Vision;
 
 import org.littletonrobotics.junction.Logger;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
+import edu.wpi.first.math.interpolation.InterpolatingTreeMap;
+import edu.wpi.first.math.interpolation.InverseInterpolator;
+import frc.robot.subsystems.Shooter.Flywheel.Flywheel;
 
 public class ShooterAngleCalculator {
     
     //contants
-    private static final double g = 9.81; // gravity
-    private static final double hubHeight = 1.52; // hub height
-    private static final double ferryHeight = 0.5; // hub height
-    private static final double minHoodAngle = 1.012; // 58 deg
-    private static final double shooterHeight = 0.53; // shooter height
-    private static final double hubRadius = 1.27; // radius of the hub
     private static final int maxNewtonsMethodIterations = 30; // prevents an ifinate loop 
+    public static final double lagTime = 0.1;
+    public static final double turretLagTime = 0.03;
     
+    // Hub LOTs
+    public static final InterpolatingTreeMap<Double, Rotation2d> hoodAngleMapHub =
+        new InterpolatingTreeMap<>(InverseInterpolator.forDouble(), Rotation2d::interpolate);
+    public static final InterpolatingDoubleTreeMap flywheelSpeedMapHub =
+        new InterpolatingDoubleTreeMap();
+    public static final InterpolatingDoubleTreeMap timeOfFlightMapHub =
+        new InterpolatingDoubleTreeMap();
+
+    // Ferrying LOTs
+    public static final InterpolatingTreeMap<Double, Rotation2d> hoodAngleMapFerry =
+        new InterpolatingTreeMap<>(InverseInterpolator.forDouble(), Rotation2d::interpolate);
+    public static final InterpolatingDoubleTreeMap flywheelSpeedMapFerry =
+        new InterpolatingDoubleTreeMap();
+    public static final InterpolatingDoubleTreeMap timeOfFlightMapFerry =
+        new InterpolatingDoubleTreeMap();
 
 
+    /*
+    1.442809759
+5.506476197
+2.01922287
+2.511019912
+3.034157419
+3.518755036
+4.076567183
+4.515152268
+5.098166337
+    */ 
+    static {
+        //distance, hoodangle
+        hoodAngleMapHub.put(1.442809759,new Rotation2d(75.0*Math.PI/180.0));
+        hoodAngleMapHub.put(2.01922287,new Rotation2d(73.0*Math.PI/180.0));
+        hoodAngleMapHub.put(2.511019912,new Rotation2d(71.0*Math.PI/180.0));
+        hoodAngleMapHub.put(3.034157419,new Rotation2d(69*Math.PI/180.0));
+        hoodAngleMapHub.put(3.518755036,new Rotation2d(67.0*Math.PI/180.0));
+        hoodAngleMapHub.put(4.076567183,new Rotation2d(65.0*Math.PI/180.0));
+        hoodAngleMapHub.put(4.515152268,new Rotation2d(63.0*Math.PI/180.0));
+        hoodAngleMapHub.put(5.098166337,new Rotation2d(61.0*Math.PI/180.0));
+        hoodAngleMapHub.put(5.506476197,new Rotation2d(58.0*Math.PI/180.0));
+
+        //distance, flywheel speed
+        flywheelSpeedMapHub.put(1.442809759,26.0);
+        flywheelSpeedMapHub.put(2.01922287,27.5);
+        flywheelSpeedMapHub.put(2.511019912,29.0);
+        flywheelSpeedMapHub.put(3.034157419,30.0);
+        flywheelSpeedMapHub.put(3.518755036,31.0);
+        flywheelSpeedMapHub.put(4.076567183,32.5);
+        flywheelSpeedMapHub.put(4.515152268,33.5);
+        flywheelSpeedMapHub.put(5.098166337,35.0);
+        flywheelSpeedMapHub.put(5.506476197,35.5);
+
+        //distance, time
+        timeOfFlightMapHub.put(1.442809759,1.103235);
+        timeOfFlightMapHub.put(2.511019912,1.185075);
+        timeOfFlightMapHub.put(2.550176464,1.225);
+        timeOfFlightMapHub.put(3.034157419,1.2666825);
+        timeOfFlightMapHub.put(3.518755036,1.28165);
+        timeOfFlightMapHub.put(4.076567183,1.3475);
+        timeOfFlightMapHub.put(4.515152268,1.3514925);
+        timeOfFlightMapHub.put(5.506476197,1.374175);
+
+        timeOfFlightMapFerry.put(1.47,0.772);
+        timeOfFlightMapFerry.put(6.39,1.583);
+        timeOfFlightMapFerry.put(12.38,1.026);
+
+        flywheelSpeedMapFerry.put(1.47,14.0);
+        flywheelSpeedMapFerry.put(6.39,35.0);
+        flywheelSpeedMapFerry.put(12.38,50.0);
+
+        hoodAngleMapFerry.put(1.47,new Rotation2d(58.0*Math.PI/180.0));
+        hoodAngleMapFerry.put(6.39,new Rotation2d(58.0*Math.PI/180.0));
+        hoodAngleMapFerry.put(12.38,new Rotation2d(58.0*Math.PI/180.0));
+        
+    }
     
-    public static ShooterAngle getShooterAngleToFerry(double vx, double vy, double pfx, double pfy, double s){
-        
-        // needed height
-        double pfz = ferryHeight - shooterHeight;
+    // d, vx,vy are robot to hub reletive
+    public static ShooterAngle getShooterAngle(double vx, double vy, double XToHub, double YToHub, InterpolatingDoubleTreeMap flywheelSpeedMap, InterpolatingDoubleTreeMap timeOfFlightMap, InterpolatingTreeMap<Double, Rotation2d> hoodAngleMap){
+        double d = Pythgorian(XToHub, YToHub);
+        double T = timeOfFlightMap.get(d);
+        double TOFError = 90000;
+        int count = 0;
+        while(TOFError > 0.001){
+            
+            T = T - (getTOFError(T, XToHub, YToHub, vx, vy, timeOfFlightMap) / getTOFErrorDerivative(T, XToHub, YToHub, vx, vy));
 
-        // estimate t and theta for inital guess
-        // first estimate theta
-        double R = Math.sqrt(pfx * pfx + pfy * pfy);
-        double theta = Math.atan((s * s + Math.sqrt(s*s*s*s - g*g*R*R - 2*pfz*g*s*s)) / (g * R));
+            TOFError = getTOFError(T, XToHub, YToHub, vx, vy, timeOfFlightMap);
 
-        Logger.recordOutput("hood Ferry", theta);
-
-        // // then estimate t
-        double T = 0;//R / (s * Math.cos(theta));
-
-        // double T = 0.3;
-
-        // Newton's method
-        double f = Integer.MAX_VALUE;
-        int newtonsMethodIterations = 0;
-        while (Math.abs(f) > 0.1){
-            f = quarticFunction(T, vx, vy, pfx, pfy, pfz, s);
-            T = T - f / quarticDerivative(T, vx, vy, pfx, pfy, pfz, s);
-            newtonsMethodIterations = newtonsMethodIterations + 1;
-            if (newtonsMethodIterations > maxNewtonsMethodIterations){
-                return null;
-            }  
+            if (count >= maxNewtonsMethodIterations)
+                break;
+            else
+                count++;
+            Logger.recordOutput("Newtons method iterations",count);
         }
 
-        double phxAim = pfx - vx * T;
-        double phyAim = pfy - vy * T;
+        double RealX = XToHub - vx * T;
+        double RealY = YToHub - vy * T;
+        double RealD = Pythgorian(RealX, RealY);
 
-        R = Math.sqrt((phxAim*phxAim) + (phyAim*phyAim));
-        theta = Math.atan(((s*s) + Math.sqrt((s*s*s*s) - (g*g) * (R*R) - 2 * pfz * g * (s*s))) / (g * R));
-        
-        //time when in front of the hub
-        double th = (R-hubRadius)/(s * Math.cos(theta));
-        //height when in front of the hub
-        double ht = shooterHeight + th * s * Math.sin(theta) - 0.5 * T*T * g;
-
-        if (theta > minHoodAngle){
-                double phi;
-            if (phyAim > 0){
-                phi = Math.atan(phyAim / phxAim);
-            } else {
-                phi = Math.atan(phyAim / phxAim)+Math.PI;
-            }
-                
-            return new ShooterAngle(phi, theta);
-        }
+        double angleToHub;
+        if (XToHub> 0 )
+            angleToHub = Math.atan(RealY/RealX);
         else
-            return null;
-        
+            angleToHub = (Math.atan(RealY/RealX)+ Math.PI);
+
+        return new ShooterAngle(angleToHub , hoodAngleMap.get(RealD).getRadians(), flywheelSpeedMap.get(RealD));
     }
-// paramaters are vx is the x velocity of the robot vy is the y velocity of the robot 
-// phx is the x position of the hub in relation to the robot phy is the same for the y 
-// s is the speed of the flywheels
-    public static ShooterAngle getShooterAngleToHub(double vx, double vy, double phx, double phy, double s){
-        // needed height
-        double phz = hubHeight - shooterHeight;
 
-        // SmartDashboard.putNumber("relativePositionToHubX",phx);
-        // SmartDashboard.putNumber("relativePositionToHubY",phy);
-
-        // estimate t and theta for inital guess
-        // first estimate theta
-        double R = Math.sqrt(phx * phx + phy * phy);
-        double theta = Math.atan((s * s + Math.sqrt(s*s*s*s - g*g*R*R - 2*phz*g*s*s)) / (g * R));
-        Logger.recordOutput("hood hub", theta);
-
-        // then estimate t
-        double T = R / (s * Math.cos(theta));
-
-        // Newton's method
-        double f = Integer.MAX_VALUE;
-        int newtonsMethodIterations = 0;
-        double[] newtons_method_results= new double[maxNewtonsMethodIterations];
-        double[] newtons_method_derivative_results= new double[maxNewtonsMethodIterations];
-        while (Math.abs(f) > 1e-2){
-            f = quarticFunction(T, vx, vy, phx, phy, phz, s);
-            double qd = quarticDerivative(T, vx, vy, phx, phy, phz, s);
-            if (qd != 0)
-                T = T - f / qd;
-            newtonsMethodIterations = newtonsMethodIterations + 1;
-            if (newtonsMethodIterations >= maxNewtonsMethodIterations){
-                double phxAim = phx - vx * T;
-                double phyAim = phy - vy * T;
-                
-                R = Math.sqrt((phxAim * phxAim) + (phyAim * phyAim));
-
-                theta = Math.atan(((s*s) + Math.sqrt((s*s*s*s) - (g*g) * (R*R) - 2 * phz * g * (s*s))) / (g * R));
-                Logger.recordOutput("hasSolution", false);
-                return null;
-            }
-            newtons_method_results[newtonsMethodIterations] = f;
-            newtons_method_derivative_results[newtonsMethodIterations] = qd;
-        }
-
-        //larger problums in our math than i thought (here we assume newtons method found the right angle)
-        double phxAim = phx - vx * T;
-        double phyAim = phy - vy * T;
-
-        R = Math.sqrt((phxAim*phxAim) + (phyAim*phyAim));
-
-        theta = Math.atan(((s*s) + Math.sqrt((s*s*s*s) - (g*g) * (R*R) - 2 * phz * g * (s*s))) / (g * R));
-
-        // SmartDashboard.putString("ShooterAngleCalkDebug", "final val:" + f+" theta:"+theta);
-
-        //time when in front of the hub
-        double th = (R-hubRadius)/(s * Math.cos(theta));
-        //height when in front of the hub
-        double ht = shooterHeight + th * s * Math.sin(theta) - 0.5 * th*th * g;
-
-        // SmartDashboard.putString("ShooterAngleCalkDebug", "ht" + ht +" theta:"+theta);
-
-        if (ht > hubHeight){
-                double phi;
-            if (phxAim > 0){
-                phi = Math.atan(phyAim / phxAim);
-            } else {
-                phi = Math.atan(phyAim / phxAim)+Math.PI;
-            }
-            //TODO needs be concerted to turret and hood relative values 
-            Logger.recordOutput("hasSolution", true);  
-            return new ShooterAngle(phi, theta);
-            //phi is the angle of the turrent with respect to the field
-            //theta is the angle of elevation of the hood
-        }
+    public static ShooterAngle getShooterAngle(double XToHub, double YToHub){
+        double d = Pythgorian(XToHub, YToHub);
+        if (XToHub == 0)
+            return new ShooterAngle(0 , 0, 0);
+        double angleToHub;
+        if (XToHub> 0 )
+            angleToHub = Math.atan(YToHub/XToHub);
         else
-            Logger.recordOutput("hasSolution", false);
-            return null;
+            angleToHub = (Math.atan(YToHub/XToHub)+ Math.PI);
+        
+        return new ShooterAngle(angleToHub , hoodAngleMapHub.get(d).getRadians(), flywheelSpeedMapHub.get(d));
     }
 
-    private static double quarticFunction(double t, double vx, double vy, double phx, double phy, double phz, double s){
-        return (0.25) * (g*g) * (t*t*t*t) + ((vx*vx) + (vy*vy) + g*phz - (s*s)) * (t*t) - 2 * (phx*vx + phy*vy) * t + (phx*phx) + (phy*phy) + (phz*phz);
+
+    public static double getTOFError(double t,double x,double y,double vx,double vy, InterpolatingDoubleTreeMap timeOfFlightMap){
+        double predDist = Pythgorian(x-vx*t,y-vy*t);
+        double predTime = timeOfFlightMap.get(predDist);
+        double error = t - predTime;
+        return error;
     }
 
-    private static double quarticDerivative(double t, double vx, double vy, double phx, double phy, double phz, double s){
-        return (g*g) * (t*t*t) + 2 * t * ((vx*vx) + (vy*vy) + g * phz - (s*s)) - 2 * (phx * vx + phy * vy);
+
+    public static double getTOFErrorDerivative(double t,double x,double y,double vx,double vy){
+        double d = Pythgorian(x, y);
+        double errorDerivative = 1 + (x*vx+y*vy)/((d*d/t));
+
+        return errorDerivative;
     }
 
+    public static double Pythgorian(double a,double b){
+        return Math.sqrt(a*a+b*b);
+    }
+        
 }

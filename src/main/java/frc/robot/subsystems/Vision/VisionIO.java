@@ -11,8 +11,7 @@ import edu.wpi.first.math.numbers.N3;
 public interface VisionIO {
     @AutoLog
     public static class VisionIOInputs {
-        public boolean intakeCameraConected = false;
-        public boolean frontCameraConected = false;
+        public boolean backCameraConected = false;
         public boolean rightCameraConected = false;
         public boolean frontLeftCameraConected = false;
         public boolean frontRightCameraConected = false;
@@ -20,9 +19,15 @@ public interface VisionIO {
         public double visonCycleTime = -1;
     }
 
-
+    public default boolean CameraConnect(int camera){
+        return false;
+    }
     public default void updateInputs(VisionIOInputs inputs) {
     }
+
+    public default boolean CamerasConnected(){
+            return true;
+        }
 
     public default void addVisionReading(String cameraName, EstimatedRobotPose pose,
             Matrix<N3, N1> visionMeasurementStdDevs) {

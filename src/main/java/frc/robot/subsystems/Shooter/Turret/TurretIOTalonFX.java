@@ -2,17 +2,27 @@ package frc.robot.subsystems.Shooter.Turret;
 
 import org.littletonrobotics.junction.Logger;
 
+import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.BaseStatusSignal; 
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Constants;
+import frc.robot.subsystems.Lights.LightAnimations;
+import frc.robot.subsystems.Lights.Lights;
 import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.ShooterConfigurator;
+import frc.robot.util.PhoenixUtil;
 
 public class TurretIOTalonFX implements TurretIO {
+    private final StatusSignal<Angle> turretPosition;
+    private final StatusSignal<Angle> hoodPosition;
+
     public TalonFX hoodMotor;
     public TalonFX turretMotor;
     public double zeroTurret;
@@ -30,10 +40,20 @@ public class TurretIOTalonFX implements TurretIO {
         shooterConfigs = new ShooterConfigurator();
         hoodMotor = new TalonFX(Constants.hoodID, Constants.krakenBus);
         turretMotor = new TalonFX(Constants.turretID, Constants.krakenBus);
-        turretMotor.setPosition(0);
         hoodMotor.getConfigurator().apply(shooterConfigs.hoodConfig);
         turretMotor.getConfigurator().apply(shooterConfigs.turretConfig);
         
+        hoodPosition = hoodMotor.getPosition();
+        turretPosition = turretMotor.getPosition();
+
+        PhoenixUtil.tryUntilOk(5, () -> BaseStatusSignal.setUpdateFrequencyForAll(50,turretPosition,hoodPosition));
+        PhoenixUtil.tryUntilOk(5, () -> hoodMotor.optimizeBusUtilization(0,1.0));
+        PhoenixUtil.tryUntilOk(5, () -> turretMotor.optimizeBusUtilization(0,1.0));
+
+        PhoenixUtil.registerSignals(
+            Constants.krakenBus.isNetworkFD(),
+            hoodPosition,
+            turretPosition);
     }
 
     @Override
@@ -72,10 +92,6 @@ public class TurretIOTalonFX implements TurretIO {
 
     @Override
     public void setHoodPosition(double hoodAngle) {
-        // double hoodAngleAfterCompensation = 1.39131*hoodAngle -32.83666;
-        // hoodAngle*=360.0;
-        // hoodAngle = (0.4383*hoodAngle) + 49.696883356;
-        // hoodAngle /=360.0;
         hoodAngle = Math.max(hoodAngle, Constants.minimumHoodPosition);
         hoodAngle = Math.min(hoodAngle, Constants.maximumHoodPosition);
         hoodMotor.setControl(hoodRequest.withPosition(hoodAngle));
@@ -83,13 +99,22 @@ public class TurretIOTalonFX implements TurretIO {
 
     @Override
     public double getHoodPosition() {
-        return hoodMotor.getPosition().getValueAsDouble();
+        return hoodPosition.getValueAsDouble();
         
+    }
+    public boolean getMagnetBreakValue(){
+            return turretMagnetBreak.get();
     }
 
     @Override
     public double getTurretPosition() {
-        return turretMotor.getPosition().getValueAsDouble();
+        return turretPosition.getValueAsDouble();
+    }
+
+    @Override
+    public void moveTurretAndHoodToZero(){
+        this.setHoodPosition(74/360.0);
+        this.setTurretPosition(0);
     }
 
     @Override
@@ -100,14 +125,22 @@ public class TurretIOTalonFX implements TurretIO {
 
     @Override
     public boolean turretInTolerance(double tolerance) {
-        return MathUtil.isNear(turretRequest.getPositionMeasure().in(Units.Revolution), this.getTurretPosition(),
+        boolean turretInTolerance = MathUtil.isNear(turretRequest.getPositionMeasure().in(Units.Revolution), this.getTurretPosition(),
                 tolerance);
+        Logger.recordOutput("turretRequest for tolerance",turretRequest.getPositionMeasure().in(Units.Revolution));
+        Logger.recordOutput("getTurretPosition for tolerance",this.getTurretPosition());
+        Logger.recordOutput("turretInTolerance", turretInTolerance);
+        return turretInTolerance;
     }
 
     @Override
     public void zeroHoodMotor(){
-        hoodMotor.setVoltage(0.1);
-        hoodMotor.setPosition(90/360.0);
+        hoodMotor.setVoltage(0.5);
+        hoodMotor.setPosition(Constants.maximumHoodPosition);
+    }
+    @Override
+    public void zeroTurretPosition() {
+        turretMotor.setPosition(Constants.turretZeroPosition);
     }
 
     /** loop this if it is being used */
@@ -120,21 +153,26 @@ public class TurretIOTalonFX implements TurretIO {
     }
 
     @Override
-    public boolean turretZeroed() {
+    public boolean zeroTurret() {
         Logger.recordOutput("turretAlreadyZeroed", Shooter.getInstance().turretAlreadyZeroed);
         if(!Shooter.getInstance().turretAlreadyZeroed){
             if (!turretMagnetBreak.get()) {
                 turretMotor.setVoltage(0);
-                turretMotor.setPosition(192/360.0);
+                turretMotor.setPosition(Constants.turretZeroPosition);
                 this.setTurretPosition(0);
                 Shooter.getInstance().turretAlreadyZeroed = true;
             } else {
-                turretMotor.setVoltage(1);// was 3v
+                turretMotor.setVoltage(1.25);// was 3v
 
                 Shooter.getInstance().turretAlreadyZeroed = false;
             }
-        }    
+        }
         return Shooter.getInstance().turretAlreadyZeroed;
+    }
+
+    @Override
+    public void setTurretZeroVoltage() {
+        turretMotor.setVoltage(0.0);
     }
 
     // TODO add later gravity zeroing is fine for now

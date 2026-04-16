@@ -2,10 +2,15 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.Drive.SwerveStates;
 import frc.robot.subsystems.Drive.SwerveSubsystem;
 import frc.robot.subsystems.Intake.*;//same
+import frc.robot.subsystems.Lights.LightAnimations;
+import frc.robot.subsystems.Lights.Lights;
 import frc.robot.subsystems.Shooter.*;//same here
+import frc.robot.subsystems.Shooter.Turret.Turret;
+
 import org.littletonrobotics.junction.Logger;
 
 public class Superstructure extends SubsystemBase {
@@ -71,17 +76,11 @@ public class Superstructure extends SubsystemBase {
                     currentState = States.SAFE;
                 // }
                 break;
-            case CLIMB_L3:
-                currentState = States.CLIMB_L3;
-                break;
-            case CLIMB_L1:
-                currentState = States.CLIMB_L1;
-                break;
             case SHOOTER:
-                // if (climb.getClimbState() != ClimbStates.CLIMBEDL1 || climb.getClimbState() != ClimbStates.CLIMBEDL3) {
-                    currentState = States.SHOOTER;
-                    
-                // }
+                if(currentState != States.SHOOTER){
+                    shooter.wantedShooterState = ShooterStates.HUB;
+                }
+                currentState = States.SHOOTER;
                 break;
             case ZERO:
                 if (!shooter.turretAlreadyZeroed || !intake.alreadyZeroed){
@@ -99,6 +98,11 @@ public class Superstructure extends SubsystemBase {
                     this.currentState = States.AUTO;
                 }
                 break;
+            case AUTODEPOTSHOOT:
+                if(DriverStation.isAutonomous()){
+                    this.currentState = States.AUTODEPOTSHOOT;
+                }
+                break;
             case AUTONONFIRE:
                 if(DriverStation.isAutonomous()){
                     this.currentState = States.AUTONONFIRE;
@@ -110,6 +114,9 @@ public class Superstructure extends SubsystemBase {
             case FIXEDFIRE:
                 this.currentState=States.FIXEDFIRE;
             break;
+            case SPITTOCONTAINER:
+                this.currentState = States.SPITTOCONTAINER;
+                break;
             default:
                 break; // do nothing
         }
@@ -123,16 +130,11 @@ public class Superstructure extends SubsystemBase {
             case MANUAL:
                 stateMANUAL();
                 break;
-            case CLIMB_L3:
-                stateCLIMBL3();
-                break;
-            case CLIMB_L1:
-                stateCLIMBL1();
-                break;
             case SHOOTER:
                 stateSHOOTER();
                 break;
             case ZERO:
+                //Lights.getLightInstance().lightsWantedState = LightAnimations.ZEROED;
                 if(stateZERO()){
                     if(DriverStation.isAutonomousEnabled()){
                         wantedState = States.AUTONONFIRE;
@@ -143,23 +145,31 @@ public class Superstructure extends SubsystemBase {
                 break;
             case AUTONONFIRE:
                 swerve.wantedState = SwerveStates.IDLE;
-                shooter.wantedShooterState = ShooterStates.SAFE;
+                shooter.wantedShooterState = ShooterStates.AUTONONFIRE;
                 break;
             case AUTO:
                 swerve.wantedState = SwerveStates.IDLE;
                 shooter.wantedShooterState = ShooterStates.AUTOHUB;
                 break;
-            case FIXEDFIRE:
+            case AUTODEPOTSHOOT:
                 swerve.wantedState = SwerveStates.IDLE;
+                shooter.wantedShooterState = ShooterStates.AUTODEPOTSHOOT;
+                break;
+            case FIXEDFIRE:
                 shooter.wantedShooterState = ShooterStates.FIXEDFIRE;
-            break;
+                break;
             case UNJAM:
                 stateUnJam();
                 break;
-            default:
-                // throw an exception
+            case SPITTOCONTAINER:
+                swerve.wantedState = SwerveStates.IDLE;
+                shooter.wantedShooterState = ShooterStates.SPITTOCONTAINER;
                 break;
+            default:
+                throw new RuntimeException("Superstructure state is invalid! : " + currentState.toString());
         }
+
+
     }
 
     private void stateSAFE() {
@@ -172,49 +182,30 @@ public class Superstructure extends SubsystemBase {
     private void stateMANUAL() {
         // TODO map buttons to direct inputs
         // turn off intake when starting
-        // turn off shooter when starting
+        // turn off shooter when starting        
     }
-    private void stateCLIMBL3() {
-        stowForClimb();
-        // climb.setClimbState(ClimbStates.DEPLOYEDL3);
-        // // TODO align to bar(use button before alignment)
-        // climb.setClimbState(ClimbStates.ENGAGEDL3);
-        // //TODO align to vertical pole(button before alignment)
-        // climb.setClimbState(ClimbStates.CLIMBEDL3);
-        boolean climbAligned = true; //TODO when rui finishes alignment put this when it finishes
-
-    }
-    private void stateCLIMBL1() {
-        stowForClimb();
-        // climb.setClimbState(ClimbStates.DEPLOYEDL1);
-        // //TODO align to bar(button before alignment)
-        // climb.setClimbState(ClimbStates.CLIMBEDL1);
-    }
-   
 
     private void stateSHOOTER() {
         // if (userRequestedIntakeState != Intake.getInstance().currentState) {
         //     Intake.getInstance().wantedState = userRequestedIntakeState;
         // }
-        swerve.wantedState = SwerveStates.MANUAL;
         // if(prevState != States.SHOOTER){
         //     shooter.wantedShooterState = ShooterStates.HUB;
         //     prevState = States.SHOOTER;
 
         // }
-        shooter.wantedShooterState = ShooterStates.HUB;  
+        // shooter.wantedShooterState = ShooterStates.HUB;  
     }
 
     private void stateUnJam(){
-        swerve.wantedState = SwerveStates.MANUAL;
         shooter.wantedShooterState = ShooterStates.UNJAM;
     }
 
     private boolean stateZERO(){
-        swerve.wantedState = SwerveStates.MANUAL;
         shooter.wantedShooterState = ShooterStates.ZERO;
-        intake.wantedState = IntakeStates.ZERO; 
-        // climb.wantedState = ClimbStates.ZERO;
+        if (!intake.alreadyZeroed) {
+            intake.wantedState = IntakeStates.ZERO; 
+        }
         return (shooter.turretAlreadyZeroed && intake.alreadyZeroed);//&& climb.alreadyZeroed);
     }
 

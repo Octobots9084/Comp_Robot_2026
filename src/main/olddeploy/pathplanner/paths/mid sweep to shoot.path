@@ -1,0 +1,89 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 8.432254025044722,
+        "y": 0.6844543828264751
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 7.63720930232558,
+        "y": 5.324919499105546
+      },
+      "isLocked": false,
+      "linkedName": "outpost sweep"
+    },
+    {
+      "anchor": {
+        "x": 6.517656529516995,
+        "y": 2.50169946332737
+      },
+      "prevControl": {
+        "x": 7.685885509838998,
+        "y": 2.4854740608228973
+      },
+      "nextControl": {
+        "x": 5.203125141725733,
+        "y": 2.5199568437133606
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.5646332737030413,
+        "y": 2.50169946332737
+      },
+      "prevControl": {
+        "x": 5.519643825968018,
+        "y": 2.514707560627676
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "after sweep outpost"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.45,
+      "rotationDegrees": 180.0
+    }
+  ],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.0,
+      "maxWaypointRelativePos": 0.9314285714285713,
+      "constraints": {
+        "maxVelocity": 0.75,
+        "maxAcceleration": 1.5,
+        "maxAngularVelocity": 720.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 720.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0.5,
+    "rotation": -178.413059601992
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 2.0,
+    "rotation": 100.0
+  },
+  "useDefaultConstraints": true
+}

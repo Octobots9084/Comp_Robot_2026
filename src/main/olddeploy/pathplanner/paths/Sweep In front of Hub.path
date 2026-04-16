@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 5.7019879518072285,
+        "y": 2.9
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.186875891583452,
+        "y": 2.915805991440799
+      },
+      "isLocked": false,
+      "linkedName": "Bump 2 TR"
+    },
+    {
+      "anchor": {
+        "x": 5.721084165477888,
+        "y": 5.167
+      },
+      "prevControl": {
+        "x": 6.225691868758915,
+        "y": 5.167
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Bump 1 BR"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 720.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 90.0
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": true
+}

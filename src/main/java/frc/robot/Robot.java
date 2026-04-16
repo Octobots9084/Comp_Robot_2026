@@ -15,15 +15,22 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.States;
 import frc.robot.subsystems.Superstructure;
-import frc.robot.subsystems.Climb.Climb;
-import frc.robot.subsystems.Climb.ClimbStates;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.Drive.SwerveStates;
 import frc.robot.subsystems.Drive.SwerveSubsystem;
 import frc.robot.subsystems.Intake.Intake;
 import frc.robot.subsystems.Intake.IntakeStates;
+import frc.robot.subsystems.Lights.LightAnimations;
+import frc.robot.subsystems.Lights.Lights;
 import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.ShooterStates;
 import frc.robot.subsystems.Shooter.Turret.Turret;
+import frc.robot.subsystems.Shooter.Turret.TurretIO;
+import frc.robot.subsystems.Vision.Vision;
+import frc.robot.subsystems.Vision.VisionIOSystem;
+import frc.robot.subsystems.Vision.VisionIO.VisionIOInputs;
+import frc.robot.util.LoggedTracer;
+import frc.robot.util.PhoenixUtil;
 
 import java.util.Optional;
 
@@ -49,11 +56,13 @@ public class Robot extends LoggedRobot {
   private Command autonomousCommand;
   private RobotContainer robotContainer;
   public Shooter shooter;
-  public Climb climb;
+  public static boolean zeroingLights = false;
   public Intake intake;
-
+  double timer = Constants.timer.get();
+  private static String gameData;
   private boolean lastHubPeriod = false;
-
+  public static boolean TeleopStarted = false;
+  public static boolean isAllianceSet = false;
   public Robot() {
     // Set up data receivers & replay source
     switch (Constants.currentMode) {
@@ -133,7 +142,12 @@ public class Robot extends LoggedRobot {
     // This must be called from the robot's periodic block in order for anything in
     // the Command-based framework to work.
     CommandScheduler.getInstance().run();
+    LoggedTracer.reset();
+    PhoenixUtil.refreshAll();
+    LoggedTracer.record("PhoenixRefresh");
     Logger.recordOutput("IsBlueAlliance",Constants.isBlueAlliance);
+    DriverCommunications.pushToElastic();
+    DriverCommunications.fieldPose.setRobotPose(SwerveSubsystem.getInstance().getRobotPose());
 
     // Return to non-RT thread priority (do not modify the first argument)
     // Threads.setCurrentThreadPriority(false, 10);
@@ -151,15 +165,24 @@ public class Robot extends LoggedRobot {
   /** This function is called periodically when disabled. */
   @Override
   public void disabledPeriodic() {
-    Optional<Alliance> ally = DriverStation.getAlliance();
-    if (ally.isPresent()) {
-      if (ally.get() == Alliance.Red) {
-        Constants.isBlueAlliance = false;
-      }
-      if (ally.get() == Alliance.Blue) {
-        Constants.isBlueAlliance = true;
+    if (!isAllianceSet) {
+      Optional<Alliance> ally = DriverStation.getAlliance();
+      if (ally.isPresent()) {
+        if (ally.get() == Alliance.Red) {
+          Constants.isBlueAlliance = false;
+        }
+        if (ally.get() == Alliance.Blue) {
+          Constants.isBlueAlliance = true;
+        }
       }
     }
+
+    if (Vision.getInstance().io.CamerasConnected()) {
+      Lights.getLightInstance().lightsWantedState = LightAnimations.DISABLED;
+    } else {
+      Lights.getLightInstance().lightsWantedState = LightAnimations.DISCONNECTEDCAMERA;
+    }
+
   }
 
   /**
@@ -171,11 +194,14 @@ public class Robot extends LoggedRobot {
     setAllianceColor();
     autonomousCommand = robotContainer.getAutonomousCommand();
     Superstructure.getInstance().wantedState = States.ZERO;
+    swerve.wantedState = SwerveStates.IDLE;
+        TeleopStarted = false;
 
     // schedule the autonomous command (example)
     if (autonomousCommand != null) {
       CommandScheduler.getInstance().schedule(autonomousCommand);// TODO: not command
     }
+    Constants.timer.restart();
   }
 
   /** This function is called periodically during autonomous. */
@@ -186,11 +212,19 @@ public class Robot extends LoggedRobot {
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
+    if (Intake.getInstance().autoIntaked) {
+      Intake.getInstance().wantedState = IntakeStates.EXTENDED;
+    }    Constants.timer.restart();
     // // if (!shooter.turretAlreadyZeroed){
     //   SmartDashboard.putNumber("hubBallSpeed", 6.7);
     // //   SmartDashboard.putNumber("hubFlywheelSpeed", 9.5);
     // // }
-    
+    TeleopStarted = true;
+    Constants.timer.restart();
+    // if (shooter.turretAlreadyZeroed && intake.alreadyZeroed){
+    //   LightAnimations.Lights();
+    // }
+
     setAllianceColor();
     //only automaticly zeros if we havent already zeroed while still allowing a zero button
     Superstructure.getInstance().wantedState = States.ZERO;
@@ -199,13 +233,17 @@ public class Robot extends LoggedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    Logger.recordOutput("EXECUTING!!!!", false);
+
+
+    
+    // if(Shooter.getInstance().turretAlreadyZeroed){
+    //   Shooter.getInstance().wantedShooterState = ShooterStates.HUB;
+    // }
 
     if (autonomousCommand != null) {
       CommandScheduler.getInstance().cancel(autonomousCommand);
     }
-    Constants.timer.reset();
-    Constants.timer.start();
+  
   }
   int rumbleTimer;
   /** This function is called periodically during operator control. */
@@ -222,15 +260,44 @@ public class Robot extends LoggedRobot {
         ButtonConfig.driverController.setRumble(RumbleType.kBothRumble, 0);
     }
     lastHubPeriod = Shooter.getInstance().isHubActive();
+    WonAuto();
+    Shooter.getInstance().isHubActive();
+    LightAnimations.Lights();
+
+   
+
+      
   }
+  public static boolean WonAuto(){
+      gameData = DriverStation.getGameSpecificMessage();
+        if (gameData.length() > 0) {
+            switch (gameData.charAt(0)) {
+                case 'B':
+                    if (Constants.isBlueAlliance) {
+                      return true;
+                    }else{
+                      return false;
+                    }
+                case 'R':
+                    if (!Constants.isBlueAlliance) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+
+                default:
+                    return true;
+            }
+        } else {
+            return true;
+        }
+      }
 
   /** This function is called once when test mode is enabled. */
   @Override
   public void testInit() {
     // Cancels all running commands at the start of test mode.
-    Shooter.getInstance().wantedShooterState = ShooterStates.ZERO;
-    // Climb.getInstance().wantedState = ClimbStates.ZERO;
-    // Intake.getInstance().wantedState = IntakeStates.ZERO;
+    Superstructure.getInstance().wantedState = States.ZERO;
     CommandScheduler.getInstance().cancelAll();
   }
 

@@ -12,26 +12,27 @@ public class IntakeConfigurator {
     public TalonFXConfiguration intakePivotConfig;
 
     public IntakeConfigurator() {
-        intakeRollerConfig = new TalonFXConfiguration();
+        intakeRollerConfig = new TalonFXConfiguration()
+                .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(Constants.intakeRollerGearRatio));
         intakePivotConfig = new TalonFXConfiguration()
                 .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(Constants.intakePivotGearRatio));
 
         // intake roller config
         intakeRollerConfig.CurrentLimits.SupplyCurrentLimit = 20;
         intakeRollerConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-        intakeRollerConfig.CurrentLimits.StatorCurrentLimit = 80;
+        intakeRollerConfig.CurrentLimits.StatorCurrentLimit = 59.99;
         intakeRollerConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 
         // set break mode and inversion
         intakeRollerConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-        intakeRollerConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+        intakeRollerConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
         // create PID gains
-        intakeRollerConfig.Slot0.kP = 0.4;
+        intakeRollerConfig.Slot0.kP = 0.25;
         intakeRollerConfig.Slot0.kI = 0.0;
         intakeRollerConfig.Slot0.kD = 0.0;
         intakeRollerConfig.Slot0.kA = 0.0;
-        intakeRollerConfig.Slot0.kV = 0.14;
+        intakeRollerConfig.Slot0.kV = 0.25;
         intakeRollerConfig.Slot0.kS = 0.0;
         intakeRollerConfig.Slot0.kG = 0.0;
 
@@ -47,7 +48,7 @@ public class IntakeConfigurator {
         intakePivotConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
         // create PID gains
-        intakePivotConfig.Slot0.kP = 100;
+        intakePivotConfig.Slot0.kP = 125;
         intakePivotConfig.Slot0.kI = 0.1;
         intakePivotConfig.Slot0.kD = 0.0;
         intakePivotConfig.Slot0.kA = 0.0;
@@ -55,7 +56,7 @@ public class IntakeConfigurator {
         intakePivotConfig.Slot0.kS = 0.0;
         intakePivotConfig.Slot0.kG = 0.0;
 
-        intakePivotConfig.MotionMagic.MotionMagicAcceleration = 40;
-        intakePivotConfig.MotionMagic.MotionMagicCruiseVelocity = 300;
+        intakePivotConfig.MotionMagic.MotionMagicAcceleration = 2;
+        intakePivotConfig.MotionMagic.MotionMagicCruiseVelocity = 1;
     }
 }

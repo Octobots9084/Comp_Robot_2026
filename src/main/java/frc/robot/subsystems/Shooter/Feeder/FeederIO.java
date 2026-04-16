@@ -8,6 +8,15 @@ public interface FeederIO {
     public FeederStates feederCurrentState;
     public double spindexerRPS = 0.0;
     public double verticalFeederRPS = 0.0;
+    public double wantedSpindexerRPS = 0.0;
+    public double wantedVerticalFeederRPS = 0.0;
+    public double feederCurrent = 0.0;
+    public double spindexerCurrent = 0.0;
+    public double feederVoltage = 0.0;
+    public double spindexerVoltage = 0.0;
+  }
+
+  public default void resetUpToSpeed(){
 
   }
 

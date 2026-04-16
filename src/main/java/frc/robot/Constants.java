@@ -43,37 +43,37 @@ public final class Constants {
   public static final double VisionAllignRotationTollerance = 0.2;
   public static final double VisionAllignspeed = 1;
   public static final double VisionAllignRotspeed = 3;
-  public static final double FlywheelDiamiter = 0.1016;
+  public static final double FlywheelDiamiter = 4*0.0254;
   public static final double TurretDistFromCenter = 0.21841;
   public static final double TurretAngleFromCenter = -2.1524498;
   public static final String frontRightCameraName = "FrontRightCamera";
   public static final String frontleftCameraName = "FrontLeftCamera";
   public static final String rightCameraName = "RightCamera";
   public static final String leftCameraName = "LeftCamera";
+  public static final String backCameraName = "BackCamera";
+
   // public static final String intakeCameraName = "IntakeCamera";
   public static final AprilTagFieldLayout kTagLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded);
-  private static final double camPitch = Units.degreesToRadians(20);
+  private static final double highCamPitch = Units.degreesToRadians(20);
+  private static final double LowCamPitch = Units.degreesToRadians(28.5);
   //-20 -26.57
-  public static final Transform3d robotToCamFrontRight = new Transform3d(new Translation3d(-0.31,-0.16,0.245),
-      new Rotation3d(0, 0, (-26.57/180.0)*Math.PI).plus(
-      new Rotation3d(0, (-20/180.0)*Math.PI, 0).plus(
-      new Rotation3d(0,0,Math.PI)
-  )));
+  public static final Transform3d robotToCamFrontRight = new Transform3d(new Translation3d(-0.28,0.195,0.41),
+      new Rotation3d(0, -highCamPitch, (-30/180.0)*Math.PI+Math.PI));
   //-20 +30
-  public static final Transform3d robotToCamFrontLeft = new Transform3d(new Translation3d(-0.31,-0.16,0.185),
-      new Rotation3d(0, 0, (30/180.0)*Math.PI).plus(
-      new Rotation3d(0, (-20/180.0)*Math.PI, 0).plus(
-      new Rotation3d(0,0,Math.PI)
-  )));
-  public static final Transform3d robotToCamRight = new Transform3d(new Translation3d(-0.09, 0.37, .30),
-      new Rotation3d(0, -camPitch, Math.PI/2));
-  public static final Transform3d robotToCamLeft = new Transform3d(new Translation3d(-0.12,-0.37, 0.20),
-      new Rotation3d(0, -camPitch, 3.0*Math.PI/2.0));
+  public static final Transform3d robotToCamFrontLeft = new Transform3d(new Translation3d(-0.28,-0.135,0.24),
+      new Rotation3d(0, -LowCamPitch, (30/180.0)*Math.PI + Math.PI));
+  public static final Transform3d robotToCamRight = new Transform3d(new Translation3d(-0.265, 0.36, .465),
+      new Rotation3d(0, -highCamPitch, Math.PI/2));
+  public static final Transform3d robotToCamLeft = new Transform3d(new Translation3d(-0.04,-0.36, 0.26),
+      new Rotation3d(0, -LowCamPitch, 3.0*Math.PI/2.0));
+  public static final Transform3d robotToCamBack = new Transform3d(new Translation3d(-0.28,0.09, 0.42), //set these values
+      new Rotation3d(0, -highCamPitch,0));  //and() these
   // The standard deviations of our vision estimated poses, which affect
-  // correction rate
+  // correction rate    
   // (Fake values. Experiment anl;y   y y    +        u'  d determine estimation noise on an actual robot.)
   public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
   public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
+  public static final Matrix<N3, N1> kMultiTagHubStdDevs = VecBuilder.fill(0.3, 0.3, 0.6);
 
   public static final Mode simMode = Mode.SIM;
   public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;
@@ -86,14 +86,9 @@ public final class Constants {
   public static final double leftYDeadband = 0.1;// TODO
   public static final double leftXDeadband = 0.1;// TODO
   public static final double rightXDeadband = 0.15;// TODO
-  public static final double maxAngularVelocity = 3.75;// TODO
+  public static final double maxAngularVelocity = 4.5;// TODO
   // public static final enum currentMode = 1;//TODO
   public static final double maxVelocity = 3.75;// TODO
-
-  public static Translation2d swerveModuleOneOffset = new Translation2d(1, 1);
-  public static Translation2d swerveModuleTwoOffset = new Translation2d(1, -1);
-  public static Translation2d swerveModuleThreeOffset = new Translation2d(-1, 1);
-  public static Translation2d swerveModuleFourOffset = new Translation2d(-1, -1);
 
   public static boolean isZeroed = false;
 
@@ -112,33 +107,49 @@ public final class Constants {
   public static int flyWheelLeftID = 16;
   public static int hoodID = 13;
   public static int turretID = 17;
-  public static int spindexerID = 18;
+  public static int spindexerID = 26;
+  public static int spindexerFollowerID = 27; //TODO remember to set the motor to 27
   public static int verticalFeederID = 15;
 
-  public static double maximumHoodPosition = 90/360.0;
-  public static double minimumHoodPosition = 60/360.0;
+  public static double turretZeroPosition = 197.75/360.0;
+  public static double maximumHoodPosition = 77/360.0;
+  public static double minimumHoodPosition = 58/360.0;
   public static double maximumTurretPosition = 0.8; // TODO set this to an actual value so sinjin doesnt cry
-
   public static double turretGearRatio = (60 / 14.0) * (156 / 20.0); //it is flipped to allign turret and gyro yaw rotation
-  public static double hoodGearRatio = 19/12.0 *(18/0.9);
-  public static double flywheelGearRatio = 29/33.0;
-  public static double flywheelToTopRollerRatio = 24/18.0;
+  public static double hoodGearRatio = 522/21.0;
+
+  public static double flywheelGearRatio = 1;//29/33.0;
+  public static double flywheelToTopRollerRatio = 28/23.0;
   public static double flywheelRadius = 0.0508;
   public static double topRollerRadius = 0.0254;
 
-  public static double feederGearRatio = 12/33;
-  public static double feederWheelRadius = 0.0381;
+  public static double feederGearRatio = 21/34.0;
+  public static double feederWheelRadius = 1.5*0.0254;
 
-  public static double rotateGearRatio = 12;// TODO fix this gear ratio
+  // public static double spindexerRadius = 3.25*0.0254;
+  public static double spindexerRadius = 1;
+  public static double spindexerGearRatio = 4;
 
-  public static double intakePivotGearRatio = 25;
+  public static double rotateGearRatio = 12.0;// TODO fix this gear ratio
 
-  public static int intakePivotID = 20;
-  public static int intakeRollerID = 19;
+  public static double intakePivotGearRatio = 25; 
+  public static double intakeRollerGearRatio = 2;
+  public static int intakePivotFollowerID = 22;
+  public static int intakeRollerFollowerID = 24;
+
+  public static int intakePivotID = 19;
+  public static int intakeRollerID = 23;
 
   public static int climbRotateControlledID = 14;
 
   public static RobotTypes robotType = RobotTypes.COMP;
+
+  public static double redTrenchX = 11.7;
+  public static double blueTrenchX = 4.8;
+  public static double outpostTrenchY = 7.4375;
+  public static double depotTrenchY = 0.625;
+
+  
 
   //climb positions Red
     public static Translation2d climbStartPositionRedPosY = new Translation2d(15.500,6.106); //TODO get a real value
@@ -159,8 +170,8 @@ public final class Constants {
 
     public static double fieldCenterY = 4.02082;
 
-    public static final double maxTurretAngle = (480/360.0)*Math.PI;
-    public static final double minTurretAngle = -(480/360.0)*Math.PI;
+    public static final double maxTurretAngle = (208/180.0)*Math.PI;
+    public static final double minTurretAngle = -(274/180.0)*Math.PI;
 
   // set to ALPHA later
   public static enum RobotTypes {
