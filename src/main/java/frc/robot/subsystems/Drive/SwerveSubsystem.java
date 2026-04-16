@@ -5,6 +5,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 
 import org.littletonrobotics.junction.Logger;
 
+import com.ctre.phoenix6.swerve.SwerveDrivetrain;
 import com.ctre.phoenix6.swerve.SwerveModule;
 
 import edu.wpi.first.math.MathUtil;
@@ -17,6 +18,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
@@ -27,6 +29,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.subsystems.States;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Intake.Intake;
@@ -127,6 +130,7 @@ public class SwerveSubsystem extends SubsystemBase {
         Logger.recordOutput("Tilt",
         Math.acos(this.io.getRotation3d().toMatrix().get(2, 2)));
         SmartDashboard.putBoolean("onRamp", isTilted(0, 3));
+        
         applyStates();
         Logger.recordOutput("isInAllianceZone",this.isInAllianceZone());
         // Logger.recordOutput("front left absolute", io.getAbsoluteEncoderPositions(0));
@@ -193,15 +197,33 @@ public class SwerveSubsystem extends SubsystemBase {
         }
     }
 
+    
     public void applyStates() {
         switch (currentState) {
             case MANUAL:
+                
+                if (Shooter.driverOverride && this.isInAllianceZone()) {
+                    wantedState = SwerveStates.SLOW;  
+                    break;
+                }
+
+                boolean braking = false; 
+
+                if ((io.getChassisSpeeds().vxMetersPerSecond <= 0.05) 
+                && (io.getChassisSpeeds().vyMetersPerSecond <= 0.05)
+                && (driverController.getLeftX() <= Constants.leftYDeadband)
+                && (driverController.getLeftY() <= Constants.leftXDeadband)) {
+                    
+                    
+                    braking = true;
+                    io.setSwerveState(new SwerveRequest.SwerveDriveBrake());
+                } else {
+                
                 io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds()
                         .withSpeeds(calculateSpeedsBasedOnJoystickInputs())
                         .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
+                }
 
-                if (Shooter.driverOverride && this.isInAllianceZone())
-                    wantedState = SwerveStates.SLOW;
                 break;
             case SLOW:        
 
