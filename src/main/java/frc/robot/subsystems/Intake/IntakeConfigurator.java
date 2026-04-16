@@ -25,7 +25,7 @@ public class IntakeConfigurator {
 
         // set break mode and inversion
         intakeRollerConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-        intakeRollerConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+        intakeRollerConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
         // create PID gains
         intakeRollerConfig.Slot0.kP = 0.25;

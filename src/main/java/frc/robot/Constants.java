@@ -135,10 +135,10 @@ public final class Constants {
   public static double intakePivotGearRatio = 25; 
   public static double intakeRollerGearRatio = 2;
   public static int intakePivotFollowerID = 22;
-  public static int intakeRollerFollowerID = 23;
+  public static int intakeRollerFollowerID = 24;
 
   public static int intakePivotID = 19;
-  public static int intakeRollerID = 24;
+  public static int intakeRollerID = 23;
 
   public static int climbRotateControlledID = 14;
 

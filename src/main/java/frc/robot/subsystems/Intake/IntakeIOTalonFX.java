@@ -48,7 +48,7 @@ public class IntakeIOTalonFX implements IntakeIO {
 
           rollerfollower = new TalonFX(Constants.intakeRollerFollowerID, Constants.krakenBus);
           pivotfollower = new TalonFX(Constants.intakePivotFollowerID, Constants.krakenBus);
-          pivotfollower.setNeutralMode(NeutralModeValue.Brake);
+          pivotfollower.setNeutralMode(NeutralModeValue.Coast);
 
           roller.setNeutralMode(NeutralModeValue.Coast);
 
