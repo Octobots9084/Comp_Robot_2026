@@ -7,7 +7,10 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.math.interpolation.InterpolatingTreeMap;
 import edu.wpi.first.math.interpolation.InverseInterpolator;
+import frc.robot.subsystems.Drive.SwerveSubsystem;
+import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.Flywheel.Flywheel;
+import frc.robot.subsystems.Shooter.Turret.Turret;
 
 public class ShooterAngleCalculator {
     
@@ -131,6 +134,19 @@ public class ShooterAngleCalculator {
         double RealX = XToHub - vx * T;
         double RealY = YToHub - vy * T;
         double RealD = Pythgorian(RealX, RealY);
+
+        double currentD;
+        if (flywheelSpeedMap == ShooterAngleCalculator.flywheelSpeedMapHub){
+            currentD = ShooterAngleCalculator.flywheelSpeedMapHubInverse.get(Flywheel.getInstance().io.getRightMotorVelocity());
+        }
+        else {
+            currentD = ShooterAngleCalculator.flywheelSpeedMapHubInverse.get(Flywheel.getInstance().io.getRightMotorVelocity());
+        }
+
+        double currentX = currentD * Math.sin(Turret.getInstance().getTurretPosition()*Math.PI/180.0) - vx * T + SwerveSubsystem.getInstance().getRobotPose().getX();
+        double currentY = currentD * Math.cos(Turret.getInstance().getTurretPosition()*Math.PI/180.0) - vy * T + SwerveSubsystem.getInstance().getRobotPose().getY();
+
+        Logger.recordOutput("curret real target", new Pose2d(currentX, currentY, new Rotation2d(Turret.getInstance().getTurretPosition()*Math.PI/180.0)));
 
         double angleToHub;
         if (XToHub> 0 )
