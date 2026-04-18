@@ -97,6 +97,14 @@ public class Lights extends SubsystemBase{
     }
 
     public void applyStates() {
-            device.candle.setControl(lightsCurrentState.color);
+        if(lightsCurrentState == LightAnimations.DISCONNECTEDCAMERA){
+
+        }else{
+            if(lightsCurrentState == LightAnimations.DISABLED){
+                device.candle.setControl(LightAnimations.rainbowAnim);
+            }else{
+                device.candle.setControl(lightsCurrentState.color);
+            }
+        }
     }
 }
