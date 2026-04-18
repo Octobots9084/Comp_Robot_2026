@@ -1,6 +1,7 @@
 package frc.robot.subsystems.Drive;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.ctre.phoenix6.swerve.SwerveRequest.SwerveDriveBrake;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import org.littletonrobotics.junction.Logger;
@@ -16,9 +17,11 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -55,6 +58,9 @@ public class SwerveSubsystem extends SubsystemBase {
     public double maxVelocity;
     public double maxAngularVelocity;
     public double rotLockAngle = 0;
+    public SwerveDriveBrake xLockbrake = new SwerveRequest.SwerveDriveBrake();
+    public static Timer xLockTimer = new Timer();
+    //we need to figure out what to call it on
     // The robot pose estimator for tracking swerve odometry and applying vision corrections.
 
     public static PIDController angularPidcontroller = new PIDController(3, 0.5, 0);
@@ -159,7 +165,6 @@ public class SwerveSubsystem extends SubsystemBase {
       NamedCommands.registerCommand("StopElephant", new InstantCommand(() -> {
         Intake.getInstance().wantedState = IntakeStates.EXTENDED;
       }));
-
       NamedCommands.registerCommand("StopIntake", new InstantCommand(() -> {Intake.getInstance().wantedState = IntakeStates.EXTENDED;}));
     //   NamedCommands.registerCommand("StartIntake", new InstantCommand(() -> {Intake.getInstance().autonomousIntake = true;}));
     //   NamedCommands.registerCommand("StopIntake", new InstantCommand(() -> {Intake.getInstance().autonomousIntake = false;}));
@@ -178,6 +183,12 @@ public class SwerveSubsystem extends SubsystemBase {
             case SLOW:
                 if (currentState != SwerveStates.IDLE)
                     return wantedState;
+            case XLOCK:
+                if(MathUtil.applyDeadband(driverController.getLeftX(), Constants.leftXDeadband) != 0 || MathUtil.applyDeadband(driverController.getLeftY(), Constants.leftYDeadband) != 0){
+                    wantedState = SwerveStates.MANUAL;
+                }
+                return wantedState;
+                
             default:
                 return this.currentState;
 
@@ -187,6 +198,7 @@ public class SwerveSubsystem extends SubsystemBase {
     public void applyStates() {
         switch (currentState) {
             case MANUAL:
+                shouldXLock();
                 io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds()
                         .withSpeeds(calculateSpeedsBasedOnJoystickInputs())
                         .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
@@ -214,6 +226,14 @@ public class SwerveSubsystem extends SubsystemBase {
                 io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(-0.3, 0, 0))
                         .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
                 break;
+            case XLOCK:
+                //array of each angle we want the module to be in
+                // new swervemodule states with desired angles
+
+                //swervemodules. set control with swerve module states
+                io.setSwerveState(xLockbrake);
+                break;
+                
             default:
                 break;
 
@@ -286,6 +306,19 @@ public class SwerveSubsystem extends SubsystemBase {
         // poseEstimator.resetPose(visionMeasurement);
 
         io.addVisionMeasurement(visionMeasurement, timestampSeconds, stdDevs);
+    }
+
+    public void shouldXLock(){
+        if(MathUtil.applyDeadband(driverController.getLeftX(), Constants.leftXDeadband) != 0 || MathUtil.applyDeadband(driverController.getLeftY(), Constants.leftYDeadband) != 0){
+            if (xLockTimer.get() >= 0.5){
+                xLockTimer.stop();
+                wantedState = SwerveStates.XLOCK;
+            }else{
+                xLockTimer.start();
+            }
+        }else{
+            xLockTimer.reset();
+        }
     }
 
     public SwerveStates getCurrentState() {
