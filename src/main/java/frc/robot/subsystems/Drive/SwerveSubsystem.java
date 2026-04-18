@@ -57,6 +57,7 @@ public class SwerveSubsystem extends SubsystemBase {
     public CommandXboxController driverController;
     public double maxVelocity;
     public double maxAngularVelocity;
+    public double xLockWaitTime = 0.5;
     public double rotLockAngle = 0;
     public SwerveDriveBrake xLockbrake = new SwerveRequest.SwerveDriveBrake();
     public static Timer xLockTimer = new Timer();
@@ -322,7 +323,7 @@ public class SwerveSubsystem extends SubsystemBase {
             && MathUtil.applyDeadband(driverController.getRightY(), Constants.rightYDeadband) == 0)
         {
             xLockTimer.start();
-            if (xLockTimer.get() >= 0.5){
+            if (xLockTimer.get() >= xLockWaitTime){
                 xLockTimer.stop();
                 wantedState = SwerveStates.XLOCK;
             }
