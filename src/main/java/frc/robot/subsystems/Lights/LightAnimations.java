@@ -13,7 +13,6 @@ import com.ctre.phoenix6.controls.RainbowAnimation;
 import com.ctre.phoenix6.controls.SolidColor;
 import com.ctre.phoenix6.controls.StrobeAnimation;
 
-
 public enum LightAnimations {
 
     DEFAULT(new SolidColor(0,65).withColor(new RGBWColor(255, 200, 0, 0))), // Yellow
@@ -33,7 +32,7 @@ public enum LightAnimations {
     /*  The strobe animation
 >>>>>>> Stashed changes
    */
-    
+
     static RainbowAnimation rainbowAnim = new RainbowAnimation(0, 65);
        /**
        * The time
@@ -50,24 +49,33 @@ public enum LightAnimations {
            new RainbowAnimation(0, 65);
     }
     public static void Lights(){
-        if(!Robot.zeroingLights) {
-            if (SwerveSubsystem.getInstance().isInAllianceZone()) {
-                if (Shooter.getInstance().isAimedAtHub && Shooter.getInstance().isHubActive()) {
-                    Lights.getLightInstance().lightsWantedState = SHOOTHUB;
+        if(Vision.getInstance().io.CamerasConnected()){
+            if(!Robot.zeroingLights) {
+                if (SwerveSubsystem.getInstance().isInAllianceZone()) {
+                    if (Shooter.getInstance().isAimedAtHub && Shooter.getInstance().isHubActive()) {
+                        Lights.getLightInstance().lightsWantedState = SHOOTHUB;
+                    } else {
+                        Lights.getLightInstance().lightsWantedState = CANTSHOOT;
+                    }
                 } else {
-                    Lights.getLightInstance().lightsWantedState = CANTSHOOT;
-                }
-            } else {
-                if (Shooter.getInstance().isAimedAtFerry) {
-                    Lights.getLightInstance().lightsWantedState = SHOOTFERRY;
-                } else {
-                    Lights.getLightInstance().lightsWantedState = CANTSHOOT;
+                    if (Shooter.getInstance().isAimedAtFerry) {
+                        Lights.getLightInstance().lightsWantedState = SHOOTFERRY;
+                    } else {
+                        Lights.getLightInstance().lightsWantedState = CANTSHOOT;
 
+                    }
+                }
+                } else {
+                    Lights.getLightInstance().lightsWantedState = ZEROED;
+            }
+        }else{
+            for(int i = 0; i < 5; i++){
+                if(Vision.getInstance().io.CameraConnect(i)){
+                    CameraLEDs DisconnectedCam = CameraLEDs.forIndex(i);
+                    Lights.device.candle.setControl(new SolidColor(DisconnectedCam.StartLED, DisconnectedCam.EndLED).withColor(new RGBWColor(255, 0, 0, 0)));
                 }
             }
-             } else {
-                Lights.getLightInstance().lightsWantedState = ZEROED;
-         }        }
-
-
+           
+        }
     }
+}

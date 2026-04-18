@@ -14,12 +14,11 @@ public class DriverCommunications {
     static boolean CurrentHubState = Shooter.getInstance().isHubActive();
     static String NextPhaseIndication = "Transition Period";
     static String PhaseIndication = "Autonomous";
-    static double TeleopAccounted = 1.6;
-    static double PhaseClock = 0;
     public static Field2d fieldPose = new Field2d();
-    public static double TeleopTimer = Constants.timer.get() - TeleopAccounted;
+    public static double PhaseClock = 0;
+    public static double TeleopTimer = Timer.getMatchTime();
     static void allianceShift(int ShiftEndTime){
-        PhaseClock = Math.round(ShiftEndTime - TeleopTimer);
+        PhaseClock = Math.round(PhaseClock - ShiftEndTime);
         if(!Shooter.getInstance().isHubActive()){
             NextPhaseIndication = "Our Shift";
             PhaseIndication = "Opposing Shift";
@@ -31,11 +30,10 @@ public class DriverCommunications {
     }
     
     public static void pushToElastic() {
-        TeleopTimer = Constants.timer.get() - TeleopAccounted;
         if(Robot.TeleopStarted){ //if in teleop
-            if (TeleopTimer < 10) { //in transition period
-                PhaseClock = Math.round(10 -TeleopTimer);
+            if (TeleopTimer > 130) { //in transition period
                 PhaseIndication = "Transition Period";
+                PhaseClock = Math.round(TeleopTimer - 130);
                 //Changing the "Next phase" indicator based on who won auto
                  if (Robot.WonAuto()){
                     NextPhaseIndication = "Opposing Shift";
@@ -43,23 +41,23 @@ public class DriverCommunications {
                     NextPhaseIndication = "Our Shift";
                 }
 
-            }else if (TeleopTimer < 35) { //in alliance shift 1
-                allianceShift(35);
-            }else if (TeleopTimer < 60) { //in alliance shift 2
-                allianceShift(60);
-            }else if (TeleopTimer < 85) { //in alliance shift 3
-                allianceShift(85);
-            }else if (TeleopTimer < 110) { //in alliance shift 4
+            }else if (TeleopTimer < 105) { //in alliance shift 1
+                allianceShift(105);
+            }else if (TeleopTimer < 80) { //in alliance shift 2
+                allianceShift(80);
+            }else if (TeleopTimer < 55) { //in alliance shift 3
+                allianceShift(55);
+            }else if (TeleopTimer < 30) { //in alliance shift 4
+                PhaseClock = Math.round(TeleopTimer - 30);
                 NextPhaseIndication = "Endgame";
-                PhaseClock = Math.round(110 - TeleopTimer);
             }else{
-                PhaseClock = Math.round(140 - TeleopTimer);
+                PhaseClock = TeleopTimer;
                 NextPhaseIndication = "Match End";
                 PhaseIndication = "Endgame";
             }
 
         }else{ //if in auto
-            PhaseClock = Math.round(20 - TeleopTimer);
+            PhaseClock = Math.round(TeleopTimer - 140);
             NextPhaseIndication = "Transition Phase";
             PhaseIndication = "Autonomous";
 
