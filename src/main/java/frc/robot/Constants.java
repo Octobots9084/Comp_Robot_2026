@@ -86,6 +86,7 @@ public final class Constants {
   public static final double leftYDeadband = 0.1;// TODO
   public static final double leftXDeadband = 0.1;// TODO
   public static final double rightXDeadband = 0.15;// TODO
+  public static final double rightYDeadband = 0.15;
   public static final double maxAngularVelocity = 4.5;// TODO
   // public static final enum currentMode = 1;//TODO
   public static final double maxVelocity = 3.75;// TODO

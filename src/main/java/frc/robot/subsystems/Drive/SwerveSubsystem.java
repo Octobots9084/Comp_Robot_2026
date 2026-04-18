@@ -184,7 +184,11 @@ public class SwerveSubsystem extends SubsystemBase {
                 if (currentState != SwerveStates.IDLE)
                     return wantedState;
             case XLOCK:
-                if(MathUtil.applyDeadband(driverController.getLeftX(), Constants.leftXDeadband) != 0 || MathUtil.applyDeadband(driverController.getLeftY(), Constants.leftYDeadband) != 0){
+                if(MathUtil.applyDeadband(driverController.getLeftX(), Constants.leftXDeadband) != 0 || 
+                MathUtil.applyDeadband(driverController.getLeftY(), Constants.leftYDeadband) != 0 ||
+                 MathUtil.applyDeadband(driverController.getRightX(), Constants.rightXDeadband) != 0 ||
+                  MathUtil.applyDeadband(driverController.getRightY(), Constants.rightYDeadband) != 0)
+                {
                     wantedState = SwerveStates.MANUAL;
                 }
                 return wantedState;
@@ -309,14 +313,18 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public void shouldXLock(){
-        if(MathUtil.applyDeadband(driverController.getLeftX(), Constants.leftXDeadband) != 0 || MathUtil.applyDeadband(driverController.getLeftY(), Constants.leftYDeadband) != 0){
+        if(MathUtil.applyDeadband(driverController.getLeftX(), Constants.leftXDeadband) == 0
+            && MathUtil.applyDeadband(driverController.getLeftY(), Constants.leftYDeadband) == 0
+            && MathUtil.applyDeadband(driverController.getRightX(), Constants.rightXDeadband) == 0
+            && MathUtil.applyDeadband(driverController.getRightY(), Constants.rightYDeadband) == 0)
+        {
+            xLockTimer.start();
             if (xLockTimer.get() >= 0.5){
                 xLockTimer.stop();
                 wantedState = SwerveStates.XLOCK;
-            }else{
-                xLockTimer.start();
             }
         }else{
+            xLockTimer.stop();
             xLockTimer.reset();
         }
     }
