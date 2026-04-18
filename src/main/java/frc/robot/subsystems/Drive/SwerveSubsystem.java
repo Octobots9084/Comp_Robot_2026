@@ -146,7 +146,10 @@ public class SwerveSubsystem extends SubsystemBase {
       NamedCommands.registerCommand("StartShoot", new InstantCommand(() -> {Superstructure.getInstance().wantedState = States.AUTO;}));
       NamedCommands.registerCommand("StopShoot", new InstantCommand(() -> {Superstructure.getInstance().wantedState = States.AUTONONFIRE;}));
       
-      NamedCommands.registerCommand("DepotShoot", new InstantCommand(() -> {Superstructure.getInstance().wantedState = States.AUTODEPOTSHOOT;}));
+      NamedCommands.registerCommand("StartFerry", new InstantCommand(() -> {Superstructure.getInstance().wantedState = States.AUTOFERRY;}));
+      NamedCommands.registerCommand("StopFerry", new InstantCommand(() -> {Superstructure.getInstance().wantedState = States.AUTONONFIRE;}));
+      
+      NamedCommands.registerCommand("DepotShoot", new InstantCommand(() -> {Superstructure.getInstance().wantedState = States.AUTODEPOTSHOOT;}).asProxy());
         
         NamedCommands.registerCommand("StartIntake", 
             new SequentialCommandGroup(

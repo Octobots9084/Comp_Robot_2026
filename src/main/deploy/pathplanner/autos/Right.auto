@@ -17,15 +17,9 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "DepotShoot"
-          }
-        },
-        {
           "type": "wait",
           "data": {
-            "waitTime": 2.0
+            "waitTime": 1.0
           }
         },
         {
@@ -65,9 +59,21 @@
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
           "type": "named",
           "data": {
-            "name": "DepotShoot"
+            "name": "StopShoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StartShoot"
           }
         }
       ]

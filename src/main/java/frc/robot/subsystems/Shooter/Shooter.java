@@ -149,7 +149,7 @@ public class Shooter extends SubsystemBase {
                 break;
             case UNJAM:
                 //stops the flywheel
-                flywheel.setFlywheelVelocity(0);
+                // flywheel.setFlywheelVelocity(0);
                 feeder.setFeederVelocity(FeederStates.UNJAM);
                 break;
             case SPITTOCONTAINER:
@@ -214,6 +214,41 @@ public class Shooter extends SubsystemBase {
                     }
                 }
                 break;
+            case AUTOFERRY:
+                isAimedAtFerry = aimFerry();
+                SmartDashboard.putBoolean("IsAimedAtFerry", isAimedAtFerry);
+                turret.setHoodPosition(Constants.maximumHoodPosition);
+                if(!swerve.isInAllianceZone()){
+                    if(inEnterTrenchZone()){ 
+                        if(inTrenchDangerZone()){
+                            wantedShooterState = ShooterStates.TRENCH;
+                        }
+                    }
+                        turret.setHoodPosition(hoodTargetPosition);
+                        flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
+                        if(isAimedAtFerry){
+                            if(flywheel.FlywheelInTolerance(flywheelTolerance)){
+                                //Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTHUB;
+                                feeder.setFeederVelocity(FeederStates.SCORING);
+                                flywheelDebouncer = 0;
+                            }else if (flywheelDebouncer<flywheelToleranceThreshold){
+                                flywheelDebouncer ++;
+                                feeder.setFeederVelocity(FeederStates.SCORING);
+                            }
+                            else{
+                                feeder.setFeederVelocity(FeederStates.OFF);
+                            }
+                            
+                        } else {
+                            flywheelDebouncer ++;
+                            feeder.setFeederVelocity(FeederStates.OFF);
+                        }
+                }else{
+                    if(!inEnterTrenchZone()){
+                    wantedShooterState = ShooterStates.BUMP;
+                    }
+                }
+                break;
             case HUB:
                 Logger.recordOutput("rui is bouncing wrong", flywheelDebouncer);
                 
@@ -268,7 +303,7 @@ public class Shooter extends SubsystemBase {
                 }
                 break;
             case AUTOHUB:
-            isAimedAtHub = isAimedAtHub();
+                isAimedAtHub = isAimedAtHub();
 
                 if(swerve.isInAllianceZone()){
                     if(inEnterTrenchZone() && inTrenchDangerZone()){
@@ -434,6 +469,11 @@ public class Shooter extends SubsystemBase {
                     currentShooterState = ShooterStates.HUB;
                 }
                 break;
+            case AUTOFERRY:
+                if(!swerve.isInAllianceZone()){
+                    currentShooterState = ShooterStates.AUTOFERRY;
+                }
+                break;
             case BUMP:
                 // if we're on the bump
                 currentShooterState = ShooterStates.BUMP;
@@ -571,7 +611,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public boolean cantShoot(){
-        if (isAimedAtHub && swerve.isInAllianceZone() && isHubActive() && !swerve.isTilted(0, 3))
+        if ((isAimedAtHub || isAimedAtFerry) && swerve.isInAllianceZone() && isHubActive() && !swerve.isTilted(0, 3))
             return false;
         else
             return true;
