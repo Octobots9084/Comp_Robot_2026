@@ -143,10 +143,10 @@ public class ShooterAngleCalculator {
             currentD = ShooterAngleCalculator.flywheelSpeedMapHubInverse.get(Flywheel.getInstance().io.getRightMotorVelocity());
         }
 
-        double currentX = currentD * Math.sin(Turret.getInstance().getTurretPosition()*Math.PI/180.0) - vx * T + SwerveSubsystem.getInstance().getRobotPose().getX();
-        double currentY = currentD * Math.cos(Turret.getInstance().getTurretPosition()*Math.PI/180.0) - vy * T + SwerveSubsystem.getInstance().getRobotPose().getY();
+        double currentX = currentD * Math.sin(Turret.getInstance().getTurretPosition()*Math.PI*2) - vx * T + SwerveSubsystem.getInstance().getRobotPose().getX();
+        double currentY = currentD * Math.cos(Turret.getInstance().getTurretPosition()*Math.PI*2) - vy * T + SwerveSubsystem.getInstance().getRobotPose().getY();
 
-        Logger.recordOutput("curret real target", new Pose2d(currentX, currentY, new Rotation2d(Turret.getInstance().getTurretPosition()*Math.PI/180.0)));
+        Logger.recordOutput("curret real target", new Pose2d(currentX, currentY, new Rotation2d(Turret.getInstance().getTurretPosition()*Math.PI*2.0)));
 
         double angleToHub;
         if (XToHub> 0 )
