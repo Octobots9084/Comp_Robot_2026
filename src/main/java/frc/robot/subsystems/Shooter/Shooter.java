@@ -1,5 +1,7 @@
 package frc.robot.subsystems.Shooter;
 
+import javax.lang.model.util.ElementScanner14;
+
 import org.littletonrobotics.junction.Logger;
 import org.photonvision.estimation.RotTrlTransform3d;
 
@@ -54,7 +56,7 @@ public class Shooter extends SubsystemBase {
     public final TurretIO tIO;
     public final ShooterIO sIO;
     public SwerveSubsystem swerve = SwerveSubsystem.getInstance();
-    // public final CommandXboxController coDriverController;
+    public final CommandXboxController DriverController;
     // public final CommandXboxController coDriverController;
     public Feeder feeder = new Feeder();
     public Turret turret;
@@ -291,8 +293,18 @@ public class Shooter extends SubsystemBase {
                 }
                 break;
             case TRENCH:
+            //7.5
+                if((swerve.getRobotPose().getY() < 7.5 && Constants.isBlueAlliance) || (swerve.getRobotPose().getY() > 7.5 && !Constants.isBlueAlliance)){
+                    isAimedAtHub();
+                }else{
+                    aimFerry();
+                }
                 turret.setHoodPosition(Constants.maximumHoodPosition);
-                flywheel.setFlywheelVelocity(FlywheelStates.SAFE);
+                if (driverOverride) {
+                    flywheel.setFlywheelVelocity(FlywheelStates.HUB);
+                } else {
+                    flywheel.setFlywheelVelocity(FlywheelStates.SAFE);
+                }
                 feeder.setFeederVelocity(FeederStates.OFF);
                 if(!inTrenchDangerZone()){
                     if(swerve.isInAllianceZone()){
