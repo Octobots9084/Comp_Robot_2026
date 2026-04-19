@@ -98,25 +98,25 @@ public class FeederIOTalonFX implements FeederIO {
 
     @Override
     public void setFeederVelocity(FeederStates state) {
-        if (reveseTimer > Timer.getFPGATimestamp()){
-            spindexerMotor.setControl(spindexerRequest.withVelocity(FeederStates.UNJAM.feederRPS));
-            verticalFeederMotor.setControl(verticalFeederRequest.withVelocity(FeederStates.UNJAM.feederRPS));
-        }else{
-            spindexerMotor.setControl(spindexerRequest.withVelocity(state.spindexerRPS));
-            verticalFeederMotor.setControl(verticalFeederRequest.withVelocity(state.feederRPS));
-            if (state == FeederStates.SCORING || state == FeederStates.FIXEDFIRE){
-                if ((this.getSpindexerVelocity()< 0.4 && upToSpeed) || (this.getSpindexerVelocity() < 0.4 && Timer.getFPGATimestamp()-timeToGetToSpeed > 2) ){
-                    reveseTimer = Timer.getFPGATimestamp() + 0.5;
-                    upToSpeed = false;
-                }
-                else if (this.getSpindexerVelocity()>1.0){
-                    upToSpeed = true;
-                    timeToGetToSpeed = Timer.getFPGATimestamp();
-                }
-            }
-        }
-        // spindexerMotor.setVoltage(state.spindexerRPS);
-        // verticalFeederMotor.setVoltage(state.feederRPS);
+        // if (reveseTimer > Timer.getFPGATimestamp()){
+        //     spindexerMotor.setControl(spindexerRequest.withVelocity(FeederStates.UNJAM.feederRPS));
+        //     verticalFeederMotor.setControl(verticalFeederRequest.withVelocity(FeederStates.UNJAM.feederRPS));
+        // }else{
+        //     spindexerMotor.setControl(spindexerRequest.withVelocity(state.spindexerRPS));
+        //     verticalFeederMotor.setControl(verticalFeederRequest.withVelocity(state.feederRPS));
+        //     if (state == FeederStates.SCORING || state == FeederStates.FIXEDFIRE){
+        //         if ((this.getSpindexerVelocity()< 0.4 && upToSpeed) || (this.getSpindexerVelocity() < 0.4 && Timer.getFPGATimestamp()-timeToGetToSpeed > 2) ){
+        //             reveseTimer = Timer.getFPGATimestamp() + 0.5;
+        //             upToSpeed = false;
+        //         }
+        //         else if (this.getSpindexerVelocity()>1.0){
+        //             upToSpeed = true;
+        //             timeToGetToSpeed = Timer.getFPGATimestamp();
+        //         }
+        //     }
+        // }
+        spindexerMotor.setControl(spindexerRequest.withVelocity(state.spindexerRPS));
+        verticalFeederMotor.setControl(verticalFeederRequest.withVelocity(state.feederRPS));
     }
 
     @Override

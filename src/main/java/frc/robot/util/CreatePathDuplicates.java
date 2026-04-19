@@ -18,7 +18,7 @@ import com.google.gson.GsonBuilder;
 
 public class CreatePathDuplicates {
     private static double m = 4;//meters, length of half way through the field (field length/2)
-    private static String oldPathName = "Left Sweep 1";//put the path name here to duplicate, it will go in Generated Flipped Paths
+    private static String oldPathName = "Right Sweep 1";//put the path name here to duplicate, it will go in Generated Flipped Paths
     private static String oldPath;
     private static String newPathName;
     private static String newPath;

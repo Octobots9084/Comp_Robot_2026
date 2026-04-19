@@ -373,6 +373,12 @@ public class Shooter extends SubsystemBase {
 
                 }
                 break;
+            case AUTOPRESHOOT:
+                isAimedAtHub = isAimedAtHub();
+
+                flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
+                turret.setHoodPosition(hoodTargetPosition);
+                break;
             case BUMP:
                 //figures out if were on our side our in the neutral zone and if were in auto
                 // if (!swerve.isTilted(0, 3)) { 
@@ -460,6 +466,8 @@ public class Shooter extends SubsystemBase {
                     currentShooterState = ShooterStates.AUTONONFIRE;
                 }
                 break;
+            case AUTOPRESHOOT:
+                currentShooterState = ShooterStates.AUTOPRESHOOT;
             case FERRY:
                 // if we're in neutral or enemy zone
                 // if (!swerve.isInAllianceZone() && !swerve.isTilted(0, 3)) {

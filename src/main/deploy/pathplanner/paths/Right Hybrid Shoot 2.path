@@ -1,0 +1,77 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.2756776034236803,
+        "y": 2.4758915834522113
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.4087874465049923,
+        "y": 1.4019828815977178
+      },
+      "isLocked": false,
+      "linkedName": "Bump Right Shoot 2"
+    },
+    {
+      "anchor": {
+        "x": 3.418002853067047,
+        "y": 0.7679885877318122
+      },
+      "prevControl": {
+        "x": 2.732253922967189,
+        "y": 1.0914550641940093
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "StopShoot",
+      "waypointRelativePos": 0.21877110060769545,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "StopShoot"
+        }
+      }
+    },
+    {
+      "name": "StartShoot",
+      "waypointRelativePos": 0.24037812288993773,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "StartShoot"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 0.75,
+    "maxAcceleration": 0.75,
+    "maxAngularVelocity": 720.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0.0,
+    "rotation": -31.607502246249002
+  },
+  "reversed": false,
+  "folder": "Right Side",
+  "idealStartingState": {
+    "velocity": 1.0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": false
+}

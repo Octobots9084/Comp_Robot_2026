@@ -34,6 +34,7 @@ import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Intake.Intake;
 import frc.robot.subsystems.Intake.IntakeStates;
 import frc.robot.subsystems.Shooter.Shooter;
+import frc.robot.subsystems.Shooter.ShooterStates;
 
 public class SwerveSubsystem extends SubsystemBase {
 
@@ -148,6 +149,9 @@ public class SwerveSubsystem extends SubsystemBase {
       
       NamedCommands.registerCommand("StartFerry", new InstantCommand(() -> {Superstructure.getInstance().wantedState = States.AUTOFERRY;}));
       NamedCommands.registerCommand("StopFerry", new InstantCommand(() -> {Superstructure.getInstance().wantedState = States.AUTONONFIRE;}));
+      
+      NamedCommands.registerCommand("StartPreShoot", new InstantCommand(() -> {Shooter.getInstance().wantedShooterState = ShooterStates.AUTOPRESHOOT;}));
+      NamedCommands.registerCommand("StopPreShoot", new InstantCommand(() -> {Shooter.getInstance().wantedShooterState = ShooterStates.AUTONONFIRE;}));
       
       NamedCommands.registerCommand("DepotShoot", new InstantCommand(() -> {Superstructure.getInstance().wantedState = States.AUTODEPOTSHOOT;}).asProxy());
         
