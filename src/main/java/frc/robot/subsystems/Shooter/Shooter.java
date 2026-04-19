@@ -1,7 +1,5 @@
 package frc.robot.subsystems.Shooter;
 
-import javax.lang.model.util.ElementScanner14;
-
 import org.littletonrobotics.junction.Logger;
 import org.photonvision.estimation.RotTrlTransform3d;
 
@@ -56,7 +54,7 @@ public class Shooter extends SubsystemBase {
     public final TurretIO tIO;
     public final ShooterIO sIO;
     public SwerveSubsystem swerve = SwerveSubsystem.getInstance();
-    public final CommandXboxController DriverController;
+    // public final CommandXboxController coDriverController;
     // public final CommandXboxController coDriverController;
     public Feeder feeder = new Feeder();
     public Turret turret;
@@ -209,7 +207,7 @@ public class Shooter extends SubsystemBase {
                         feeder.setFeederVelocity(FeederStates.OFF);
                         flywheel.setFlywheelVelocity(FlywheelStates.SAFE);
                         flywheelInToleranceOnce = false;
-                    }
+                }
                 }else{
                     if(!inEnterTrenchZone()){
                     wantedShooterState = ShooterStates.BUMP;
@@ -293,7 +291,7 @@ public class Shooter extends SubsystemBase {
                 }
                 break;
             case TRENCH:
-            //7.5
+             //7.5
                 if((swerve.getRobotPose().getY() < 7.5 && Constants.isBlueAlliance) || (swerve.getRobotPose().getY() > 7.5 && !Constants.isBlueAlliance)){
                     isAimedAtHub();
                 }else{
@@ -304,8 +302,7 @@ public class Shooter extends SubsystemBase {
                     flywheel.setFlywheelVelocity(FlywheelStates.HUB);
                 } else {
                     flywheel.setFlywheelVelocity(FlywheelStates.SAFE);
-                }
-                feeder.setFeederVelocity(FeederStates.OFF);
+                }                feeder.setFeederVelocity(FeederStates.OFF);
                 if(!inTrenchDangerZone()){
                     if(swerve.isInAllianceZone()){
                         wantedShooterState = ShooterStates.HUB;
@@ -315,7 +312,7 @@ public class Shooter extends SubsystemBase {
                 }
                 break;
             case AUTOHUB:
-                isAimedAtHub = isAimedAtHub();
+            isAimedAtHub = isAimedAtHub();
 
                 if(swerve.isInAllianceZone()){
                     if(inEnterTrenchZone() && inTrenchDangerZone()){
@@ -631,7 +628,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public boolean cantShoot(){
-        if ((isAimedAtHub || isAimedAtFerry) && swerve.isInAllianceZone() && isHubActive() && !swerve.isTilted(0, 3))
+            if ((isAimedAtHub || isAimedAtFerry) && swerve.isInAllianceZone() && isHubActive() && !swerve.isTilted(0, 3))
             return false;
         else
             return true;
@@ -833,6 +830,7 @@ public class Shooter extends SubsystemBase {
                 XToHub = getXToTarget(redFerryDepot.getX());
                 YToHub = getYToTarget(redFerryDepot.getY());
             }else{
+
                 XToHub = getXToTarget(redFerryOutpost.getX());
                 YToHub = getYToTarget(redFerryOutpost.getY());
             }
