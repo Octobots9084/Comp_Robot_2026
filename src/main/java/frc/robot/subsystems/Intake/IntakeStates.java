@@ -14,8 +14,10 @@ package frc.robot.subsystems.Intake;
    * <li>ELEPHANTIASISPART2 - 45 - 0.34</li>
    * </ul>
    */
+
 public enum IntakeStates {
     INTAKING(35, 0.332),
+    AUTOINTAKING(70, 0.332),
     EXTENDED(0, 0.332),
     PARTIALEXTENTION(25,0.15),
     SAFE(0, 0),
@@ -28,6 +30,7 @@ public enum IntakeStates {
    * The roller speed
    */
     public final double rollerRPS;
+
     /**
    * The intake position, like inside or outside the robot
    */

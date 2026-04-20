@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.4087874465049923,
-        "y": 1.4019828815977178
+        "x": 2.2664621968616263,
+        "y": 1.583124108416548
       },
       "isLocked": false,
       "linkedName": "Bump Right Shoot 2"
     },
     {
       "anchor": {
-        "x": 3.418002853067047,
-        "y": 0.7679885877318122
+        "x": 3.8061626248216838,
+        "y": 0.5609700427960058
       },
       "prevControl": {
-        "x": 2.732253922967189,
-        "y": 1.0914550641940093
+        "x": 2.628744650499286,
+        "y": 1.0138231098430812
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Trench Right Shoot"
     }
   ],
   "rotationTargets": [],
@@ -56,8 +56,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 0.75,
-    "maxAcceleration": 0.75,
+    "maxVelocity": 0.5,
+    "maxAcceleration": 0.5,
     "maxAngularVelocity": 720.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -65,7 +65,7 @@
   },
   "goalEndState": {
     "velocity": 0.0,
-    "rotation": -31.607502246249002
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": "Right Side",

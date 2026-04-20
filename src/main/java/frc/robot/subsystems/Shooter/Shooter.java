@@ -362,7 +362,7 @@ public class Shooter extends SubsystemBase {
                         turret.setHoodPosition(hoodTargetPosition);
                         if(isAimedAtHub){
                             //Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTHUB;
-                            Intake.getInstance().wantedState = IntakeStates.INTAKING;
+                            Intake.getInstance().wantedState = IntakeStates.AUTOINTAKING;
                             if(flywheel.FlywheelInTolerance(flywheelTolerance)){
                                 feeder.setFeederVelocity(FeederStates.SCORING);
                                 flywheelDebouncer = 0;
