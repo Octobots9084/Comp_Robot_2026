@@ -4,28 +4,28 @@
     {
       "anchor": {
         "x": 3.2756776034236803,
-        "y": 2.4758915834522113
+        "y": 5.524108416547788
       },
       "prevControl": null,
       "nextControl": {
         "x": 2.266462196861626,
-        "y": 1.6090014265335244
+        "y": 6.390998573466476
       },
       "isLocked": false,
-      "linkedName": "Bump Right Shoot"
+      "linkedName": null
     },
     {
       "anchor": {
         "x": 3.8061626248216838,
-        "y": 0.5609700427960058
+        "y": 7.439029957203994
       },
       "prevControl": {
         "x": 3.1432357301988727,
-        "y": 0.5771491531392677
+        "y": 7.422850846860732
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Trench Right Shoot"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -65,13 +65,13 @@
   },
   "goalEndState": {
     "velocity": 1.0,
-    "rotation": 180.0
+    "rotation": -180.0
   },
   "reversed": false,
-  "folder": "Right Side",
+  "folder": "Left Side",
   "idealStartingState": {
     "velocity": 1.0,
-    "rotation": 180.0
+    "rotation": -180.0
   },
   "useDefaultConstraints": false
 }

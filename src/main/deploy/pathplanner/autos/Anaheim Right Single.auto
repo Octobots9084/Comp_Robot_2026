@@ -5,21 +5,21 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "StartIntake"
+            "pathName": "Comp Right Start"
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Left Sweep 1"
+            "name": "DepotShoot"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 4.0
           }
         },
         {
@@ -29,9 +29,27 @@
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.1
+          }
+        },
+        {
           "type": "named",
           "data": {
-            "name": "StartShoot"
+            "name": "StartIntake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Comp Right Sweep Single"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "DepotShoot"
           }
         },
         {
@@ -49,19 +67,13 @@
         {
           "type": "named",
           "data": {
-            "name": "StartIntake"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Left Sweep 2"
+            "name": "StartShoot"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 3.0
           }
         },
         {
@@ -71,9 +83,9 @@
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "StartShoot"
+            "pathName": "Right Sweep 2"
           }
         }
       ]

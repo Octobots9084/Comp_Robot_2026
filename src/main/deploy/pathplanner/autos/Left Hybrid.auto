@@ -1,0 +1,43 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "StartIntake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left Sweep Hybrid 1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left Hybrid Shoot 1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left Sweep Hybrid 2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left Hybrid Shoot 2"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

@@ -8,7 +8,9 @@
     "Generated Flipped Paths",
     "Right Side"
   ],
-  "autoFolders": [],
+  "autoFolders": [
+    "Generated Flipped Autos"
+  ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 720.0,

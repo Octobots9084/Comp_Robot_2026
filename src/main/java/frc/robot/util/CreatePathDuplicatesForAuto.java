@@ -16,20 +16,18 @@ import com.google.gson.GsonBuilder;
 
 
 
-public class CreatePathDuplicates {
+public class CreatePathDuplicatesForAuto {
     private static double m = 4;//meters, length of half way through the field (field length/2)
-    private static String oldPathName = "Left Sweep 1";//put the path name here to duplicate, it will go in Generated Flipped Paths
+    private static String oldPathName = "";//put the path name here to duplicate, it will go in Generated Flipped Paths
     private static String oldPath;
     private static String newPathName;
     private static String newPath;
     
     public static void main(String[] args) {
         try {
-            if (args.length > 0) {
-              oldPathName = args[0];
-            }
+            oldPathName = args[0];// 0 = old name
             oldPath = "src/main/deploy/pathplanner/paths/" + oldPathName + ".path";
-            newPathName = "(Flipped) " + oldPathName;
+            newPathName = args[1];//1 = new name
             newPath = "src/main/deploy/pathplanner/paths/" + newPathName + ".path";
             Files.deleteIfExists(Path.of(newPath));
             // File newFile = new File(newPath);

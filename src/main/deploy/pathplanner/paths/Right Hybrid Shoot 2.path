@@ -9,7 +9,7 @@
       "prevControl": null,
       "nextControl": {
         "x": 2.2664621968616263,
-        "y": 1.583124108416548
+        "y": 1.5831241084165484
       },
       "isLocked": false,
       "linkedName": "Bump Right Shoot 2"
@@ -65,7 +65,7 @@
   },
   "goalEndState": {
     "velocity": 0.0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "reversed": false,
   "folder": "Right Side",
