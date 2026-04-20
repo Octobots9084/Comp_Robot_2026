@@ -21,7 +21,7 @@
       },
       "prevControl": {
         "x": 5.956175592058603,
-        "y": 0.7401715877109121
+        "y": 0.7401715877109117
       },
       "nextControl": {
         "x": 5.923890123743489,
@@ -169,7 +169,7 @@
     "rotation": -0.0
   },
   "reversed": false,
-  "folder": "Generated Flipped Paths",
+  "folder": "Right Side",
   "idealStartingState": {
     "velocity": 0,
     "rotation": -0.0

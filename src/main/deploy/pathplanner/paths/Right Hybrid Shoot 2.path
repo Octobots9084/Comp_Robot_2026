@@ -4,28 +4,28 @@
     {
       "anchor": {
         "x": 3.2756776034236803,
-        "y": 2.4758915834522113
+        "y": 2.4758915834522117
       },
       "prevControl": null,
       "nextControl": {
         "x": 2.2664621968616263,
-        "y": 1.5831241084165484
+        "y": 1.5831241084165488
       },
       "isLocked": false,
-      "linkedName": "Bump Right Shoot 2"
+      "linkedName": null
     },
     {
       "anchor": {
         "x": 3.8061626248216838,
-        "y": 0.5609700427960058
+        "y": 0.560970042796006
       },
       "prevControl": {
         "x": 2.628744650499286,
-        "y": 1.0138231098430812
+        "y": 1.0138231098430808
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Trench Right Shoot"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
