@@ -9,7 +9,7 @@
       "prevControl": null,
       "nextControl": {
         "x": 3.976866666666667,
-        "y": 0.5184000000000005
+        "y": 0.5184000000000006
       },
       "isLocked": false,
       "linkedName": null
@@ -45,7 +45,7 @@
     "rotation": 90.0
   },
   "reversed": false,
-  "folder": "Right Side",
+  "folder": "Generated Flipped Paths",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 90.0

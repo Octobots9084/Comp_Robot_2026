@@ -5,57 +5,33 @@
     "data": {
       "commands": [
         {
-          "type": "path",
-          "data": {
-            "pathName": "Comp Left Start"
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "DepotShoot"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 4.0
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StopShoot"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.1
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StartIntake"
+            "name": "StartShoot"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Comp Left Sweep Single"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "DepotShoot"
+            "pathName": "Wait Left Start"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 2.0
+            "waitTime": 3.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Wait Left Sweep Single"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
           }
         },
         {
@@ -92,6 +68,6 @@
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Left",
   "choreoAuto": false
 }

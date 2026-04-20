@@ -9,7 +9,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
 public class CreateAutoDuplicates {
-    private static String oldAutoName = "Anaheim Left Single";//put the path name here to duplicate, it will go in Generated Flipped Paths
+    private static String oldAutoName = "Left";//put the path name here to duplicate, it will go in Generated Flipped Paths
     private static String oldAuto;
     private static String newAutoName;
     private static String newAuto;

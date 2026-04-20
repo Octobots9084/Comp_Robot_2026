@@ -21,7 +21,7 @@
       },
       "prevControl": {
         "x": 5.956175592058603,
-        "y": 0.7401715877109117
+        "y": 0.7401715877109121
       },
       "nextControl": {
         "x": 5.923890123743489,
@@ -110,7 +110,52 @@
     }
   ],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "StopShoot",
+      "waypointRelativePos": 0.19446320054017668,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "StopShoot"
+        }
+      }
+    },
+    {
+      "name": "StartIntake",
+      "waypointRelativePos": 0.21607022282241106,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "StartIntake"
+        }
+      }
+    },
+    {
+      "name": "StartPreShoot",
+      "waypointRelativePos": 2.852126941255917,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "StartPreShoot"
+        }
+      }
+    },
+    {
+      "name": "DepotShoot",
+      "waypointRelativePos": 3.759621877110024,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "DepotShoot"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -124,10 +169,10 @@
     "rotation": -0.0
   },
   "reversed": false,
-  "folder": "Right Side",
+  "folder": "Generated Flipped Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": -0.0
   },
   "useDefaultConstraints": false
 }

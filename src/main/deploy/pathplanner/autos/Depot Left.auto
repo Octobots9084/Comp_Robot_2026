@@ -5,39 +5,45 @@
     "data": {
       "commands": [
         {
+          "type": "path",
+          "data": {
+            "pathName": "Depot Left Start"
+          }
+        },
+        {
           "type": "named",
           "data": {
-            "name": "StartIntake"
+            "name": "StartShoot"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Right Sweep Hybrid 1"
+            "pathName": "Depot Left Shoot"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Right Hybrid Shoot 1"
+            "pathName": "Depot Sweep 1"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 4.0
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Right Sweep Hybrid 2"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Right Hybrid Shoot 2"
+            "pathName": "Left Sweep 2"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "Right",
+  "folder": "Left",
   "choreoAuto": false
 }

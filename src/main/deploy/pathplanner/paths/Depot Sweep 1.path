@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.5307275320970035,
+        "x": 3.0,
         "y": 7.47
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.0612125534950065,
+        "x": 3.530485021398003,
         "y": 7.448459343794579
       },
       "isLocked": false,
-      "linkedName": "Trench Left Start"
+      "linkedName": "Trench Left Shoot 2"
     },
     {
       "anchor": {
@@ -145,8 +145,30 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
+      "name": "StopShoot",
+      "waypointRelativePos": 0.5131667792032368,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "StopShoot"
+        }
+      }
+    },
+    {
+      "name": "StartIntake",
+      "waypointRelativePos": 0.5401755570560449,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "StartIntake"
+        }
+      }
+    },
+    {
       "name": "StartPreShoot",
-      "waypointRelativePos": 3.335584064821057,
+      "waypointRelativePos": 1.6340310600945271,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -156,13 +178,13 @@
       }
     },
     {
-      "name": "DepotShoot",
-      "waypointRelativePos": 4.564483457123558,
+      "name": "StartShoot",
+      "waypointRelativePos": 4.699527346387503,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "DepotShoot"
+          "name": "StartShoot"
         }
       }
     }

@@ -4,12 +4,17 @@
   "holonomicMode": true,
   "pathFolders": [
     "Alliance Zone",
-    "Left Side",
     "Generated Flipped Paths",
+    "Left Side",
+    "Test",
     "Right Side"
   ],
   "autoFolders": [
-    "Generated Flipped Autos"
+    "Alliance Zone",
+    "Generated Flipped Autos",
+    "Left",
+    "Test",
+    "Right"
   ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,
