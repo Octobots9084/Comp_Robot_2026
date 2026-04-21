@@ -3,11 +3,19 @@
   "robotLength": 1.02,
   "holonomicMode": true,
   "pathFolders": [
-    "Left Side",
     "Alliance Zone",
+    "Generated Flipped Paths",
+    "Left Side",
+    "Test",
     "Right Side"
   ],
-  "autoFolders": [],
+  "autoFolders": [
+    "Alliance Zone",
+    "Generated Flipped Autos",
+    "Left",
+    "Test",
+    "Right"
+  ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 720.0,

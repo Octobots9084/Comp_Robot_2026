@@ -7,7 +7,10 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.math.interpolation.InterpolatingTreeMap;
 import edu.wpi.first.math.interpolation.InverseInterpolator;
+import frc.robot.subsystems.Drive.SwerveSubsystem;
+import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.Flywheel.Flywheel;
+import frc.robot.subsystems.Shooter.Turret.Turret;
 
 public class ShooterAngleCalculator {
     
@@ -28,6 +31,10 @@ public class ShooterAngleCalculator {
     public static final InterpolatingTreeMap<Double, Rotation2d> hoodAngleMapFerry =
         new InterpolatingTreeMap<>(InverseInterpolator.forDouble(), Rotation2d::interpolate);
     public static final InterpolatingDoubleTreeMap flywheelSpeedMapFerry =
+        new InterpolatingDoubleTreeMap();
+    public static final InterpolatingDoubleTreeMap flywheelSpeedMapFerryInverse =
+        new InterpolatingDoubleTreeMap();
+        public static final InterpolatingDoubleTreeMap flywheelSpeedMapHubInverse =
         new InterpolatingDoubleTreeMap();
     public static final InterpolatingDoubleTreeMap timeOfFlightMapFerry =
         new InterpolatingDoubleTreeMap();
@@ -67,6 +74,16 @@ public class ShooterAngleCalculator {
         flywheelSpeedMapHub.put(5.098166337,35.0);
         flywheelSpeedMapHub.put(5.506476197,35.5);
 
+        flywheelSpeedMapHubInverse.put(26.0, 1.442809759);
+        flywheelSpeedMapHubInverse.put(27.5, 2.01922287);
+        flywheelSpeedMapHubInverse.put(29.0, 2.511019912);
+        flywheelSpeedMapHubInverse.put(30.0, 3.034157419);
+        flywheelSpeedMapHubInverse.put(31.0, 3.518755036);
+        flywheelSpeedMapHubInverse.put(32.5, 4.076567183);
+        flywheelSpeedMapHubInverse.put(33.5, 4.515152268);
+        flywheelSpeedMapHubInverse.put(35.0, 5.098166337);
+        flywheelSpeedMapHubInverse.put(35.5, 5.506476197);
+
         //distance, time
         timeOfFlightMapHub.put(1.442809759,1.103235);
         timeOfFlightMapHub.put(2.511019912,1.185075);
@@ -84,6 +101,10 @@ public class ShooterAngleCalculator {
         flywheelSpeedMapFerry.put(1.47,14.0);
         flywheelSpeedMapFerry.put(6.39,35.0);
         flywheelSpeedMapFerry.put(12.38,50.0);
+
+        flywheelSpeedMapFerryInverse.put(14.0 ,1.47);
+        flywheelSpeedMapFerryInverse.put(35.0 ,6.39);
+        flywheelSpeedMapFerryInverse.put(50.0 ,12.38);
 
         hoodAngleMapFerry.put(1.47,new Rotation2d(58.0*Math.PI/180.0));
         hoodAngleMapFerry.put(6.39,new Rotation2d(58.0*Math.PI/180.0));
@@ -113,6 +134,19 @@ public class ShooterAngleCalculator {
         double RealX = XToHub - vx * T;
         double RealY = YToHub - vy * T;
         double RealD = Pythgorian(RealX, RealY);
+
+        double currentD;
+        if (flywheelSpeedMap == ShooterAngleCalculator.flywheelSpeedMapHub){
+            currentD = ShooterAngleCalculator.flywheelSpeedMapHubInverse.get(Flywheel.getInstance().io.getRightMotorVelocity());
+        }
+        else {
+            currentD = ShooterAngleCalculator.flywheelSpeedMapHubInverse.get(Flywheel.getInstance().io.getRightMotorVelocity());
+        }
+
+        double currentX = currentD * Math.sin(Turret.getInstance().getTurretPosition()*Math.PI*2) - vx * T + SwerveSubsystem.getInstance().getRobotPose().getX();
+        double currentY = currentD * Math.cos(Turret.getInstance().getTurretPosition()*Math.PI*2) - vy * T + SwerveSubsystem.getInstance().getRobotPose().getY();
+
+        Logger.recordOutput("curret real target", new Pose2d(currentX, currentY, new Rotation2d(Turret.getInstance().getTurretPosition()*Math.PI*2.0)));
 
         double angleToHub;
         if (XToHub> 0 )

@@ -38,7 +38,7 @@ public class ShooterConfigurator {
         flyWheelRightConfig.Slot0.kI = 0.0;
         flyWheelRightConfig.Slot0.kD = 0.0;
         flyWheelRightConfig.Slot0.kA = 0.0;
-        flyWheelRightConfig.Slot0.kV = 0.12;
+        flyWheelRightConfig.Slot0.kV = 0.15;
         flyWheelRightConfig.Slot0.kS = 0.0;
         flyWheelRightConfig.Slot0.kG = 0.0;
 

@@ -5,21 +5,27 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Left Sweep 1"
+            "name": "StartIntake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StartFerry"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Left Sweep 2"
+            "pathName": "TEST FERRY"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Test",
   "choreoAuto": false
 }

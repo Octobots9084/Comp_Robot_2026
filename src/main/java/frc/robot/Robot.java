@@ -146,8 +146,8 @@ public class Robot extends LoggedRobot {
     PhoenixUtil.refreshAll();
     LoggedTracer.record("PhoenixRefresh");
     Logger.recordOutput("IsBlueAlliance",Constants.isBlueAlliance);
-    // DriverCommunications.pushToElastic();
-    // DriverCommunications.fieldPose.setRobotPose(SwerveSubsystem.getInstance().getRobotPose());
+    DriverCommunications.pushToElastic();
+    DriverCommunications.fieldPose.setRobotPose(SwerveSubsystem.getInstance().getRobotPose());
 
     // Return to non-RT thread priority (do not modify the first argument)
     // Threads.setCurrentThreadPriority(false, 10);
@@ -195,7 +195,7 @@ public class Robot extends LoggedRobot {
     autonomousCommand = robotContainer.getAutonomousCommand();
     Superstructure.getInstance().wantedState = States.ZERO;
     swerve.wantedState = SwerveStates.IDLE;
-        TeleopStarted = false;
+    TeleopStarted = false;
 
     // schedule the autonomous command (example)
     if (autonomousCommand != null) {

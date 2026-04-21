@@ -9,6 +9,7 @@ public enum States {
     ZERO,
     AUTO,
     AUTONONFIRE,
+    AUTOFERRY,
     FIXEDFIRE,
     UNJAM,
     SPITTOCONTAINER,

@@ -19,7 +19,9 @@ public interface VisionIO {
         public double visonCycleTime = -1;
     }
 
-
+    public default boolean CameraConnect(int camera){
+        return false;
+    }
     public default void updateInputs(VisionIOInputs inputs) {
     }
 

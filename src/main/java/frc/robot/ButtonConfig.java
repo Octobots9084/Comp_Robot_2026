@@ -19,6 +19,7 @@ import frc.robot.subsystems.Shooter.ShooterStates;
 
 public class ButtonConfig {
     public static CommandXboxController driverController = new CommandXboxController(0);
+    public static CommandXboxController coDriverController = new CommandXboxController(1);
 //     public static CommandXboxController coDriverController = new CommandXboxController(1);
     public Superstructure superstructure = Superstructure.getInstance();
 
@@ -37,13 +38,13 @@ public class ButtonConfig {
                 superstructure.wantedState = States.SHOOTER;
         }));
 
-        driverController.b().onTrue(new InstantCommand(() -> {
-                if (SwerveSubsystem.getInstance().wantedState == SwerveStates.ROTATION_LOCK) {
-                        SwerveSubsystem.getInstance().wantedState = SwerveStates.MANUAL;
-                } else {
-                        SwerveSubsystem.getInstance().wantedState = SwerveStates.ROTATION_LOCK;
-                }
-        }));
+        // driverController.b().onTrue(new InstantCommand(() -> {
+        //         if (SwerveSubsystem.getInstance().wantedState == SwerveStates.ROTATION_LOCK) {
+        //                 SwerveSubsystem.getInstance().wantedState = SwerveStates.MANUAL;
+        //         } else {
+        //                 SwerveSubsystem.getInstance().wantedState = SwerveStates.ROTATION_LOCK;
+        //         }
+        // }));
 
         // coDriverController.a().onTrue(new InstantCommand(() ->
         // {SwerveSubsystem.getInstance().io.zeroGyro();}));
@@ -61,6 +62,37 @@ public class ButtonConfig {
                 () -> Shooter.driverOverride = true))
                 .onFalse(new InstantCommand(
                         () -> Shooter.driverOverride = false)).onFalse(new InstantCommand(() -> {Shooter.flywheelDebouncer = Shooter.flywheelToleranceThreshold;}));
+
+        coDriverController.rightTrigger(0.5).onTrue(new SetStateShooter());
+        coDriverController.rightTrigger(0.5).onTrue(new InstantCommand(
+                () -> Shooter.driverOverride = true))
+                .onFalse(new InstantCommand(
+                        () -> Shooter.driverOverride = false)).onFalse(new InstantCommand(() -> {Shooter.flywheelDebouncer = Shooter.flywheelToleranceThreshold;}));
+
+        driverController.a().onTrue(new InstantCommand(
+                () -> {
+                        if (Shooter.ferryOverride){
+                                Shooter.ferryOverride = false;
+                                Shooter.flywheelDebouncer = Shooter.flywheelToleranceThreshold;
+                        } else {
+                                Shooter.ferryOverride = true;
+                                Superstructure.getInstance().wantedState = States.SHOOTER;
+                                Shooter.getInstance().wantedShooterState = ShooterStates.FERRY;
+                        }
+                }));
+
+        coDriverController.a().onTrue(new InstantCommand(
+                () -> {
+                        if (Shooter.ferryOverride){
+                                Shooter.ferryOverride = false;
+                                Shooter.flywheelDebouncer = Shooter.flywheelToleranceThreshold;
+                        } else {
+                                Shooter.ferryOverride = true;
+                                Superstructure.getInstance().wantedState = States.SHOOTER;
+                                Shooter.getInstance().wantedShooterState = ShooterStates.FERRY;
+                        }
+                        
+                }));
         
 
         //coDriverController.leftTrigger(0.5).onTrue(new SetStateSafe());

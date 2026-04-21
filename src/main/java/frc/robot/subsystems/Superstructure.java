@@ -98,6 +98,11 @@ public class Superstructure extends SubsystemBase {
                     this.currentState = States.AUTO;
                 }
                 break;
+            case AUTOFERRY:
+                if(DriverStation.isAutonomous()){
+                    this.currentState = States.AUTOFERRY;
+                }
+                break;
             case AUTODEPOTSHOOT:
                 if(DriverStation.isAutonomous()){
                     this.currentState = States.AUTODEPOTSHOOT;
@@ -150,6 +155,10 @@ public class Superstructure extends SubsystemBase {
             case AUTO:
                 swerve.wantedState = SwerveStates.IDLE;
                 shooter.wantedShooterState = ShooterStates.AUTOHUB;
+                break;
+            case AUTOFERRY:
+                swerve.wantedState = SwerveStates.IDLE;
+                shooter.wantedShooterState = ShooterStates.AUTOFERRY;
                 break;
             case AUTODEPOTSHOOT:
                 swerve.wantedState = SwerveStates.IDLE;

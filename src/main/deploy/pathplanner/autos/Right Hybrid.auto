@@ -13,43 +13,31 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Example Path"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "DepotShoot"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 3.0
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StopShoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StartIntake"
+            "pathName": "Right Sweep Hybrid 1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Copy of Example Path"
+            "pathName": "Right Hybrid Shoot 1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Right Sweep Hybrid 2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Right Hybrid Shoot 2"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Right",
   "choreoAuto": false
 }

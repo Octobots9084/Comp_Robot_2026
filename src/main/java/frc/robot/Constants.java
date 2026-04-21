@@ -86,6 +86,7 @@ public final class Constants {
   public static final double leftYDeadband = 0.1;// TODO
   public static final double leftXDeadband = 0.1;// TODO
   public static final double rightXDeadband = 0.15;// TODO
+  public static final double rightYDeadband = 0.15;
   public static final double maxAngularVelocity = 4.5;// TODO
   // public static final enum currentMode = 1;//TODO
   public static final double maxVelocity = 3.75;// TODO
@@ -135,17 +136,17 @@ public final class Constants {
   public static double intakePivotGearRatio = 25; 
   public static double intakeRollerGearRatio = 2;
   public static int intakePivotFollowerID = 22;
-  public static int intakeRollerFollowerID = 23;
+  public static int intakeRollerFollowerID = 24;
 
   public static int intakePivotID = 19;
-  public static int intakeRollerID = 24;
+  public static int intakeRollerID = 23;
 
   public static int climbRotateControlledID = 14;
 
   public static RobotTypes robotType = RobotTypes.COMP;
 
   public static double redTrenchX = 11.7;
-  public static double blueTrenchX = 3.625;
+  public static double blueTrenchX = 4.8;
   public static double outpostTrenchY = 7.4375;
   public static double depotTrenchY = 0.625;
 

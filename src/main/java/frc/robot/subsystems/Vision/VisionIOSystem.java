@@ -22,17 +22,10 @@ import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Constants;
 
 public class VisionIOSystem implements VisionIO {
-    private final PhotonCamera frontLeftCamera;
-    private final PhotonCamera frontRightCamera;
-    private final PhotonCamera leftCamera;
-    private final PhotonCamera rightCamera;
-    private final PhotonCamera backCamera;
+    private final PhotonCamera[] cameras;
     // private final PhotonCamera intakeCamera;
-    private final PhotonPoseEstimator photonEstimatorFrontRight;
-    private final PhotonPoseEstimator photonEstimatorFrontLeft;
-    private final PhotonPoseEstimator photonEstimatorLeft;
-    private final PhotonPoseEstimator photonEstimatorRight;
-    private final PhotonPoseEstimator photonEstimatorBack;
+    private final PhotonPoseEstimator[] photonEstimators;
+
     private Matrix<N3, N1> curStdDevs;
     private final EstimateConsumer estConsumer;
     private double visonCycleTime;
@@ -51,37 +44,49 @@ public class VisionIOSystem implements VisionIO {
         // intakeCamera = new PhotonCamera(Constants.intakeCameraName);
         // intakeCamera.setDriverMode(true);
         // CameraServer.startAutomaticCapture(Constants.intakeCameraName, "/dev/video0");
-        frontRightCamera = new PhotonCamera(Constants.frontRightCameraName);
-        frontLeftCamera = new PhotonCamera(Constants.frontleftCameraName);
-        leftCamera = new PhotonCamera(Constants.leftCameraName);
-        rightCamera = new PhotonCamera(Constants.rightCameraName);
-        backCamera = new PhotonCamera(Constants.backCameraName);
-        photonEstimatorFrontRight = new PhotonPoseEstimator(Constants.kTagLayout, Constants.robotToCamFrontRight);
-        photonEstimatorFrontLeft = new PhotonPoseEstimator(Constants.kTagLayout, Constants.robotToCamFrontLeft);
-        photonEstimatorRight = new PhotonPoseEstimator(Constants.kTagLayout, Constants.robotToCamRight);
-        photonEstimatorLeft = new PhotonPoseEstimator(Constants.kTagLayout, Constants.robotToCamLeft);
-        photonEstimatorBack = new PhotonPoseEstimator(Constants.kTagLayout, Constants.robotToCamBack);
+        cameras = new PhotonCamera[] {
+            new PhotonCamera(Constants.frontRightCameraName), 
+            new PhotonCamera(Constants.frontleftCameraName),
+            new PhotonCamera(Constants.leftCameraName), 
+            new PhotonCamera(Constants.rightCameraName), 
+            new PhotonCamera(Constants.backCameraName)
+        };
+
+        photonEstimators = new PhotonPoseEstimator[] {
+            new PhotonPoseEstimator(Constants.kTagLayout, Constants.robotToCamFrontRight), 
+            new PhotonPoseEstimator(Constants.kTagLayout, Constants.robotToCamFrontLeft),
+            new PhotonPoseEstimator(Constants.kTagLayout, Constants.robotToCamLeft),
+            new PhotonPoseEstimator(Constants.kTagLayout, Constants.robotToCamRight),  
+            new PhotonPoseEstimator(Constants.kTagLayout, Constants.robotToCamBack)
+        };
         this.estConsumer = estConsumer; // Lamba that will accept a pose estimate and pass it to your desired {@link
     }
 
     @Override
     public void updateInputs(VisionIOInputs inputs) {
         // inputs.intakeCameraConected = intakeCamera.isConnected();
-        inputs.frontLeftCameraConected = frontLeftCamera.isConnected();
-        inputs.frontRightCameraConected = frontRightCamera.isConnected();
-        inputs.rightCameraConected = rightCamera.isConnected();
-        inputs.leftCameraConected = leftCamera.isConnected();
-        inputs.backCameraConected = backCamera.isConnected();
+        inputs.frontRightCameraConected = cameras[0].isConnected();
+        inputs.frontLeftCameraConected = cameras[1].isConnected();
+        inputs.leftCameraConected = cameras[2].isConnected();
+        inputs.rightCameraConected = cameras[3].isConnected();
+        inputs.backCameraConected = cameras[4].isConnected();
         inputs.visonCycleTime = visonCycleTime;
 
     }
 
-    public boolean CamerasConnected(){
-        if(frontLeftCamera.isConnected() && frontRightCamera.isConnected() && rightCamera.isConnected() && leftCamera.isConnected() && backCamera.isConnected()){
+    public boolean CameraConnect(int camera){
+        if(cameras[camera].isConnected()){
             return true;
         }else{
             return false;
         }
+    }
+
+    public boolean CamerasConnected(){
+        for(int i =0;i<cameras.length;i++)
+            if(!cameras[i].isConnected())
+                return false;
+        return true;
     }
     /*
      * the periodic seaches all cameras for a hub mutitag pose and if found uses only that pose however if it is not found it adds togeter all the other tag poses to get a sutable estimate.
@@ -93,52 +98,44 @@ public class VisionIOSystem implements VisionIO {
 
         boolean doSingletag = true;
 
-        FilteredCameraResults leftFilteredResults = filterPhotonResults(leftCamera, photonEstimatorLeft, doSingletag);
-        FilteredCameraResults frontLeftFilteredResults = filterPhotonResults(frontLeftCamera, photonEstimatorFrontLeft, doSingletag);
-        FilteredCameraResults rightFilteredResults = filterPhotonResults(rightCamera, photonEstimatorRight, doSingletag);
-        FilteredCameraResults frontRightFilteredResults = filterPhotonResults(frontRightCamera, photonEstimatorFrontRight, doSingletag);
-        FilteredCameraResults backFilteredResults = filterPhotonResults(backCamera, photonEstimatorBack, doSingletag);
+        FilteredCameraResults[] FilteredResults = new FilteredCameraResults[cameras.length];
+        
+        for(int i = 0;i < FilteredResults.length;i++)
+            FilteredResults[i]=filterPhotonResults(cameras[i], photonEstimators[i], doSingletag);
 
         int qualityOfBestCamera;
-        if (
-            leftFilteredResults.multiTagHubResults.size()>0 || 
-            frontLeftFilteredResults.multiTagHubResults.size()>0 || 
-            rightFilteredResults.multiTagHubResults.size()>0 || 
-            frontRightFilteredResults.multiTagHubResults.size()>0
-        ){
-            addVisionEstemation(leftFilteredResults.multiTagHubResults, leftFilteredResults.multiTagHubTargets, false, photonEstimatorLeft);
-            addVisionEstemation(rightFilteredResults.multiTagHubResults, rightFilteredResults.multiTagHubTargets, false, photonEstimatorRight);
-            addVisionEstemation(frontRightFilteredResults.multiTagHubResults, frontRightFilteredResults.multiTagHubTargets, false, photonEstimatorFrontRight);
-            addVisionEstemation(frontLeftFilteredResults.multiTagHubResults, frontLeftFilteredResults.multiTagHubTargets, false, photonEstimatorFrontLeft);
-            addVisionEstemation(backFilteredResults.multiTagHubResults, backFilteredResults.multiTagHubTargets, false, photonEstimatorBack);
+        boolean foundMultiTagHubResult = false;
+        boolean foundMultiTagResult = false;
+        boolean foundsingleTagResult = false;
+        for(int i =0; i<FilteredResults.length;i++)
+            if (FilteredResults[i].multiTagHubResults.size()>0)
+                foundMultiTagHubResult=true;
+        if(!foundMultiTagHubResult)
+            for(int i =0; i<FilteredResults.length;i++)
+                if (FilteredResults[i].multiTagResults.size()>0)
+                    foundMultiTagResult=true;
+        if(!foundMultiTagResult)
+            for(int i =0; i<FilteredResults.length;i++)
+                if (FilteredResults[i].singleTagResults.size()>0)
+                    foundsingleTagResult=true;
+
+
+
+        if (foundMultiTagHubResult){
+            for(int i = 0;i < FilteredResults.length;i++)
+                addVisionEstemation(FilteredResults[i].multiTagHubResults, FilteredResults[i].multiTagHubTargets, true, photonEstimators[i]);
             qualityOfBestCamera = 3;
         }
-        else if (
-            leftFilteredResults.multiTagResults.size()>0 || 
-            frontLeftFilteredResults.multiTagResults.size()>0 || 
-            rightFilteredResults.multiTagResults.size()>0 || 
-            frontRightFilteredResults.multiTagResults.size()>0
-        )
+        else if (foundMultiTagResult)
         {
-            addVisionEstemation(leftFilteredResults.multiTagResults, leftFilteredResults.multiTagTargets, false, photonEstimatorLeft);
-            addVisionEstemation(rightFilteredResults.multiTagResults, rightFilteredResults.multiTagTargets, false, photonEstimatorRight);
-            addVisionEstemation(frontRightFilteredResults.multiTagResults, frontRightFilteredResults.multiTagTargets, false, photonEstimatorFrontRight);
-            addVisionEstemation(frontLeftFilteredResults.multiTagResults, frontLeftFilteredResults.multiTagTargets, false, photonEstimatorFrontLeft);
-            addVisionEstemation(backFilteredResults.multiTagResults, backFilteredResults.multiTagTargets, false, photonEstimatorBack);
+            for(int i = 0;i < FilteredResults.length;i++)
+                addVisionEstemation(FilteredResults[i].multiTagResults, FilteredResults[i].multiTagTargets, false, photonEstimators[i]);
             qualityOfBestCamera = 2;
         }
-        else if (
-            leftFilteredResults.singleTagResults.size()>0 || 
-            frontLeftFilteredResults.singleTagResults.size()>0 || 
-            rightFilteredResults.singleTagResults.size()>0 || 
-            frontRightFilteredResults.singleTagResults.size()>0
-        )
+        else if (foundsingleTagResult)
         {
-            addVisionEstemation(leftFilteredResults.singleTagResults, leftFilteredResults.singleTagTargets, false, photonEstimatorLeft);
-            addVisionEstemation(rightFilteredResults.singleTagResults, rightFilteredResults.singleTagTargets, false, photonEstimatorRight);
-            addVisionEstemation(frontRightFilteredResults.singleTagResults, frontRightFilteredResults.singleTagTargets, false, photonEstimatorFrontRight);
-            addVisionEstemation(frontLeftFilteredResults.singleTagResults, frontLeftFilteredResults.singleTagTargets, false, photonEstimatorFrontLeft);
-            addVisionEstemation(backFilteredResults.singleTagResults, backFilteredResults.singleTagTargets, false, photonEstimatorBack);
+            for(int i = 0;i < FilteredResults.length;i++)
+                addVisionEstemation(FilteredResults[i].singleTagResults, FilteredResults[i].singleTagTargets, false, photonEstimators[i]);
             qualityOfBestCamera = 1;
         }
         else
@@ -175,7 +172,7 @@ public class VisionIOSystem implements VisionIO {
                         }
                     }
                 } else {
-                    timeAtLastMultiTagPose = Timer.getFPGATimestamp();
+                        timeAtLastMultiTagPose = result.getTimestampSeconds();
                     int numberOfHubTags = 0;
                     for(int i = 0; i < result.getTargets().size(); i++)
                         if(addToHubTagNumber(result, i)){
