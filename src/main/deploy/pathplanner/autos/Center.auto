@@ -9,6 +9,12 @@
           "data": {
             "pathName": "Center"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StartShoot"
+          }
         }
       ]
     }

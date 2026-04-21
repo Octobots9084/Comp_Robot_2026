@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 0.4938659058487873,
-        "y": 5.982268188302426
+        "y": 5.982
       },
       "prevControl": null,
       "nextControl": {
         "x": 2.188830242510699,
-        "y": 7.004422253922967
+        "y": 7.004154065620542
       },
       "isLocked": false,
       "linkedName": "Depot End"
@@ -17,11 +17,11 @@
     {
       "anchor": {
         "x": 3.0,
-        "y": 7.47
+        "y": 7.4
       },
       "prevControl": {
         "x": 0.9208416547788878,
-        "y": 6.292796005706133
+        "y": 6.222796005706134
       },
       "nextControl": null,
       "isLocked": false,

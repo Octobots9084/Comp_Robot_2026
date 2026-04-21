@@ -4,28 +4,28 @@
     {
       "anchor": {
         "x": 3.0,
-        "y": 7.47
+        "y": 7.4
       },
       "prevControl": null,
       "nextControl": {
         "x": 4.256785884718739,
-        "y": 7.464221824686941
+        "y": 7.394221824686942
       },
       "isLocked": false,
       "linkedName": "Trench Left Shoot 2"
     },
     {
       "anchor": {
-        "x": 5.824593437945791,
-        "y": 7.47
+        "x": 5.876348074179743,
+        "y": 7.4
       },
       "prevControl": {
-        "x": 5.021517025256534,
-        "y": 7.47
+        "x": 5.0732716614904865,
+        "y": 7.4
       },
       "nextControl": {
-        "x": 6.074593437945791,
-        "y": 7.47
+        "x": 6.126348074179743,
+        "y": 7.4
       },
       "isLocked": false,
       "linkedName": null

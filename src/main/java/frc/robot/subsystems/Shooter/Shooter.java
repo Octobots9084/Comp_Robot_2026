@@ -292,7 +292,7 @@ public class Shooter extends SubsystemBase {
                 break;
             case TRENCH:
              //7.5
-                if((swerve.getRobotPose().getY() < 7.5 && Constants.isBlueAlliance) || (swerve.getRobotPose().getY() > 7.5 && !Constants.isBlueAlliance)){
+                if((swerve.getRobotPose().getX() < 7.5 && Constants.isBlueAlliance) || (swerve.getRobotPose().getX() > 7.5 && !Constants.isBlueAlliance)){
                     isAimedAtHub();
                 }else{
                     aimFerry();

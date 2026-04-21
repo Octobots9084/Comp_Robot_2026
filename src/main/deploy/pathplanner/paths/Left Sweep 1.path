@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 4.5307275320970035,
-        "y": 7.47
+        "y": 7.4
       },
       "prevControl": null,
       "nextControl": {
         "x": 5.0612125534950065,
-        "y": 7.448459343794579
+        "y": 7.37845934379458
       },
       "isLocked": false,
       "linkedName": "Trench Left Start"
