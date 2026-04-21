@@ -143,16 +143,19 @@ public class ShooterAngleCalculator {
             currentD = ShooterAngleCalculator.flywheelSpeedMapHubInverse.get(Flywheel.getInstance().io.getRightMotorVelocity());
         }
 
-        double currentX = currentD * Math.sin(Turret.getInstance().getTurretPosition()*Math.PI*2) - vx * T + SwerveSubsystem.getInstance().getRobotPose().getX();
-        double currentY = currentD * Math.cos(Turret.getInstance().getTurretPosition()*Math.PI*2) - vy * T + SwerveSubsystem.getInstance().getRobotPose().getY();
-
-        Logger.recordOutput("curret real target", new Pose2d(currentX, currentY, new Rotation2d(Turret.getInstance().getTurretPosition()*Math.PI*2.0)));
-
         double angleToHub;
         if (XToHub> 0 )
             angleToHub = Math.atan(RealY/RealX);
         else
             angleToHub = (Math.atan(RealY/RealX)+ Math.PI);
+
+        double currentX = currentD * Math.sin(Turret.getInstance().getTurretPosition()*2*Math.PI) - vx * T + SwerveSubsystem.getInstance().getRobotPose().getX();
+        double currentY = currentD * Math.cos(Turret.getInstance().getTurretPosition()*2*Math.PI) - vy * T + SwerveSubsystem.getInstance().getRobotPose().getY();
+
+        double WantedX = RealD * Math.sin(angleToHub) - vx * T + SwerveSubsystem.getInstance().getRobotPose().getX();
+        double WantedY = RealD * Math.cos(angleToHub) - vy * T + SwerveSubsystem.getInstance().getRobotPose().getY();
+
+        Logger.recordOutput("curret real target", new Pose2d(currentX, currentY, new Rotation2d(Turret.getInstance().getTurretPosition()*Math.PI/180.0)));
 
         return new ShooterAngle(angleToHub , hoodAngleMap.get(RealD).getRadians(), flywheelSpeedMap.get(RealD));
     }

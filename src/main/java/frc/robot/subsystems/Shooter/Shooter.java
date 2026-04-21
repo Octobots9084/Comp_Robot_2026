@@ -63,6 +63,7 @@ public class Shooter extends SubsystemBase {
     public Flywheel flywheel = new Flywheel();
     public final static double prefire = 0;
     public static boolean driverOverride = false;
+    public static boolean flywheelOverride = false;
     public static boolean ferryOverride = false;
     private String gameData;
     public double turretAim = -0.1;
@@ -183,6 +184,9 @@ public class Shooter extends SubsystemBase {
                             wantedShooterState = ShooterStates.TRENCH;
                         }
                     }
+                    if (flywheelOverride){
+                        flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
+                    }
                     if(driverOverride || ferryOverride){
                         turret.setHoodPosition(hoodTargetPosition);
                         flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
@@ -260,6 +264,9 @@ public class Shooter extends SubsystemBase {
                             wantedShooterState = ShooterStates.TRENCH;
                         }
                     }
+                    if (flywheelOverride){
+                        flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
+                    }
                     if(driverOverride){
                         turret.setHoodPosition(hoodTargetPosition);
                         flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
@@ -298,11 +305,14 @@ public class Shooter extends SubsystemBase {
                     aimFerry();
                 }
                 turret.setHoodPosition(Constants.maximumHoodPosition);
-                if (driverOverride) {
-                    flywheel.setFlywheelVelocity(FlywheelStates.HUB);
-                } else {
+                
+                feeder.setFeederVelocity(FeederStates.OFF);
+                if (flywheelOverride||driverOverride) {
+                        flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
+                }
+                else {
                     flywheel.setFlywheelVelocity(FlywheelStates.SAFE);
-                }                feeder.setFeederVelocity(FeederStates.OFF);
+                }
                 if(!inTrenchDangerZone()){
                     if(swerve.isInAllianceZone()){
                         wantedShooterState = ShooterStates.HUB;
