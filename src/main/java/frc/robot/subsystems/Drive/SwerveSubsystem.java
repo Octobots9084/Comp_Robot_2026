@@ -210,7 +210,12 @@ public class SwerveSubsystem extends SubsystemBase {
                  MathUtil.applyDeadband(driverController.getRightX(), Constants.rightXDeadband) != 0 ||
                   MathUtil.applyDeadband(driverController.getRightY(), Constants.rightYDeadband) != 0)
                 {
-                    wantedState = SwerveStates.MANUAL;
+                    if(Shooter.driverOverride){
+                        wantedState = SwerveStates.SLOW;
+                    }
+                    else{
+                        wantedState = SwerveStates.MANUAL;
+                    }
                 }
                 return wantedState;
                 
@@ -302,6 +307,9 @@ public class SwerveSubsystem extends SubsystemBase {
 
         }
     }
+
+
+
 
     public ChassisSpeeds calculateSpeedsBasedOnJoystickInputs() {
         // double yMagnitude = MathUtil.applyDeadband(driverLeft.getRawAxis(0),
