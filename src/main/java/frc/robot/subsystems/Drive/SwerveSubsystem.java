@@ -212,8 +212,7 @@ public class SwerveSubsystem extends SubsystemBase {
                 {
                     if(Shooter.driverOverride){
                         wantedState = SwerveStates.SLOW;
-                    }
-                    else{
+                    } else {
                         wantedState = SwerveStates.MANUAL;
                     }
                 }
@@ -256,6 +255,11 @@ public class SwerveSubsystem extends SubsystemBase {
 
                 break;
             case SLOW:        
+
+                if (Shooter.driverOverride && this.isInAllianceZone()) {
+                    wantedState = SwerveStates.SLOW;  
+                    break;
+                }
 
                 //TODO test
                 ChassisSpeeds speeds = calculateSpeedsBasedOnJoystickInputs().div(1.5);
