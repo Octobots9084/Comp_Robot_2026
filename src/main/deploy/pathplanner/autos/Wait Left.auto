@@ -7,25 +7,31 @@
         {
           "type": "named",
           "data": {
-            "name": "StartIntake"
+            "name": "StartShoot"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Left Sweep 1"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "DepotShoot"
+            "pathName": "Wait Left Start"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 2.0
+            "waitTime": 3.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Wait Left Sweep Single"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
           }
         },
         {
@@ -43,7 +49,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 2.0
+            "waitTime": 3.0
           }
         },
         {
@@ -53,27 +59,15 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "StartIntake"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "Left Sweep 2"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "DepotShoot"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Left",
   "choreoAuto": false
 }

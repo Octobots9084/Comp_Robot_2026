@@ -108,6 +108,13 @@ public class Intake extends SubsystemBase {
             }
                 // Lights.getLightInstance().lightsWantedState = LightAnimations.INTAKING;
                 break;
+            case AUTOINTAKING:
+            if (currentState != IntakeStates.ZERO || alreadyZeroed == true) {
+                // only works if not climbing
+                currentState = IntakeStates.AUTOINTAKING;
+            }
+                // Lights.getLightInstance().lightsWantedState = LightAnimations.INTAKING;
+                break;
 
             case EXTENDED:
                 // only works if not climbing
@@ -142,6 +149,10 @@ public class Intake extends SubsystemBase {
         switch (currentState) {
 
             case INTAKING:
+            //motors on intake out
+            io.setIntakeState(currentState);
+            break;
+            case AUTOINTAKING:
             //motors on intake out
             io.setIntakeState(currentState);
             break;

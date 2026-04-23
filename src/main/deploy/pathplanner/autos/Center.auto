@@ -9,11 +9,17 @@
           "data": {
             "pathName": "Center"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StartShoot"
+          }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Alliance Zone",
   "choreoAuto": false
 }

@@ -17,15 +17,9 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "DepotShoot"
-          }
-        },
-        {
           "type": "wait",
           "data": {
-            "waitTime": 2.0
+            "waitTime": 1.0
           }
         },
         {
@@ -47,6 +41,18 @@
           }
         },
         {
+          "type": "path",
+          "data": {
+            "pathName": "Right Sweep 2"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "StopShoot"
@@ -55,25 +61,13 @@
         {
           "type": "named",
           "data": {
-            "name": "StartIntake"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Right Sweep 2"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "DepotShoot"
+            "name": "StartShoot"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Right",
   "choreoAuto": false
 }

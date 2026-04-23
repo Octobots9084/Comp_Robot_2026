@@ -1,6 +1,7 @@
 package frc.robot.subsystems.Shooter;
 
 import org.littletonrobotics.junction.Logger;
+import org.photonvision.estimation.RotTrlTransform3d;
 
 import com.ctre.phoenix6.hardware.CANrange;
 import com.ctre.phoenix6.swerve.SwerveRequest.SwerveDriveBrake;
@@ -62,6 +63,7 @@ public class Shooter extends SubsystemBase {
     public Flywheel flywheel = new Flywheel();
     public final static double prefire = 0;
     public static boolean driverOverride = false;
+    public static boolean flywheelOverride = false;
     public static boolean ferryOverride = false;
     private String gameData;
     public double turretAim = -0.1;
@@ -131,6 +133,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public void ApplyStates() {
+        Logger.recordOutput("turretPos",new Pose2d(getX(hubPoseRed.getX()),getY(hubPoseRed.getX()),new Rotation2d(turret.getTurretPosition())));
         switch (currentShooterState) {
             case SAFE:
                 // stop the flywheel
@@ -147,7 +150,7 @@ public class Shooter extends SubsystemBase {
                 break;
             case UNJAM:
                 //stops the flywheel
-                flywheel.setFlywheelVelocity(0);
+                // flywheel.setFlywheelVelocity(0);
                 feeder.setFeederVelocity(FeederStates.UNJAM);
                 break;
             case SPITTOCONTAINER:
@@ -181,6 +184,9 @@ public class Shooter extends SubsystemBase {
                             wantedShooterState = ShooterStates.TRENCH;
                         }
                     }
+                    if (flywheelOverride){
+                        flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
+                    }
                     if(driverOverride || ferryOverride){
                         turret.setHoodPosition(hoodTargetPosition);
                         flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
@@ -205,7 +211,42 @@ public class Shooter extends SubsystemBase {
                         feeder.setFeederVelocity(FeederStates.OFF);
                         flywheel.setFlywheelVelocity(FlywheelStates.SAFE);
                         flywheelInToleranceOnce = false;
+                }
+                }else{
+                    if(!inEnterTrenchZone()){
+                    wantedShooterState = ShooterStates.BUMP;
                     }
+                }
+                break;
+            case AUTOFERRY:
+                isAimedAtFerry = aimFerry();
+                SmartDashboard.putBoolean("IsAimedAtFerry", isAimedAtFerry);
+                turret.setHoodPosition(Constants.maximumHoodPosition);
+                if(!swerve.isInAllianceZone()){
+                    if(inEnterTrenchZone()){ 
+                        if(inTrenchDangerZone()){
+                            wantedShooterState = ShooterStates.TRENCH;
+                        }
+                    }
+                        turret.setHoodPosition(hoodTargetPosition);
+                        flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
+                        if(isAimedAtFerry){
+                            if(flywheel.FlywheelInTolerance(flywheelTolerance)){
+                                //Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTHUB;
+                                feeder.setFeederVelocity(FeederStates.SCORING);
+                                flywheelDebouncer = 0;
+                            }else if (flywheelDebouncer<flywheelToleranceThreshold){
+                                flywheelDebouncer ++;
+                                feeder.setFeederVelocity(FeederStates.SCORING);
+                            }
+                            else{
+                                feeder.setFeederVelocity(FeederStates.OFF);
+                            }
+                            
+                        } else {
+                            flywheelDebouncer ++;
+                            feeder.setFeederVelocity(FeederStates.OFF);
+                        }
                 }else{
                     if(!inEnterTrenchZone()){
                     wantedShooterState = ShooterStates.BUMP;
@@ -222,6 +263,9 @@ public class Shooter extends SubsystemBase {
                         if(inTrenchDangerZone()){
                             wantedShooterState = ShooterStates.TRENCH;
                         }
+                    }
+                    if (flywheelOverride){
+                        flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
                     }
                     if(driverOverride){
                         turret.setHoodPosition(hoodTargetPosition);
@@ -254,9 +298,21 @@ public class Shooter extends SubsystemBase {
                 }
                 break;
             case TRENCH:
+             //7.5
+                if((swerve.getRobotPose().getX() < 7.5 && Constants.isBlueAlliance) || (swerve.getRobotPose().getX() > 7.5 && !Constants.isBlueAlliance)){
+                    isAimedAtHub();
+                }else{
+                    aimFerry();
+                }
                 turret.setHoodPosition(Constants.maximumHoodPosition);
-                flywheel.setFlywheelVelocity(FlywheelStates.SAFE);
+                
                 feeder.setFeederVelocity(FeederStates.OFF);
+                if (flywheelOverride||driverOverride) {
+                        flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
+                }
+                else {
+                    flywheel.setFlywheelVelocity(FlywheelStates.SAFE);
+                }
                 if(!inTrenchDangerZone()){
                     if(swerve.isInAllianceZone()){
                         wantedShooterState = ShooterStates.HUB;
@@ -316,7 +372,7 @@ public class Shooter extends SubsystemBase {
                         turret.setHoodPosition(hoodTargetPosition);
                         if(isAimedAtHub){
                             //Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTHUB;
-                            Intake.getInstance().wantedState = IntakeStates.INTAKING;
+                            Intake.getInstance().wantedState = IntakeStates.AUTOINTAKING;
                             if(flywheel.FlywheelInTolerance(flywheelTolerance)){
                                 feeder.setFeederVelocity(FeederStates.SCORING);
                                 flywheelDebouncer = 0;
@@ -335,6 +391,12 @@ public class Shooter extends SubsystemBase {
                     //Lights.getLightInstance().lightsWantedState = LightAnimations.CANTSHOOT;
 
                 }
+                break;
+            case AUTOPRESHOOT:
+                isAimedAtHub = isAimedAtHub();
+
+                flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
+                turret.setHoodPosition(hoodTargetPosition);
                 break;
             case BUMP:
                 //figures out if were on our side our in the neutral zone and if were in auto
@@ -423,6 +485,8 @@ public class Shooter extends SubsystemBase {
                     currentShooterState = ShooterStates.AUTONONFIRE;
                 }
                 break;
+            case AUTOPRESHOOT:
+                currentShooterState = ShooterStates.AUTOPRESHOOT;
             case FERRY:
                 // if we're in neutral or enemy zone
                 // if (!swerve.isInAllianceZone() && !swerve.isTilted(0, 3)) {
@@ -430,6 +494,11 @@ public class Shooter extends SubsystemBase {
                     currentShooterState = ShooterStates.FERRY;
                 }else{
                     currentShooterState = ShooterStates.HUB;
+                }
+                break;
+            case AUTOFERRY:
+                if(!swerve.isInAllianceZone()){
+                    currentShooterState = ShooterStates.AUTOFERRY;
                 }
                 break;
             case BUMP:
@@ -569,7 +638,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public boolean cantShoot(){
-        if (isAimedAtHub && swerve.isInAllianceZone() && isHubActive() && !swerve.isTilted(0, 3))
+            if ((isAimedAtHub || isAimedAtFerry) && swerve.isInAllianceZone() && isHubActive() && !swerve.isTilted(0, 3))
             return false;
         else
             return true;
@@ -771,6 +840,7 @@ public class Shooter extends SubsystemBase {
                 XToHub = getXToTarget(redFerryDepot.getX());
                 YToHub = getYToTarget(redFerryDepot.getY());
             }else{
+
                 XToHub = getXToTarget(redFerryOutpost.getX());
                 YToHub = getYToTarget(redFerryOutpost.getY());
             }

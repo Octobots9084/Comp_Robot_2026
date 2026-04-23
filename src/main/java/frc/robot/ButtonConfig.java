@@ -81,6 +81,19 @@ public class ButtonConfig {
                         }
                 }));
 
+        coDriverController.b().onTrue(new InstantCommand(
+                () -> {
+                        Shooter.flywheelOverride = true;
+                })).onFalse(new InstantCommand(() -> {
+                        Shooter.flywheelOverride = false;
+                }));
+        driverController.b().onTrue(new InstantCommand(
+                () -> {
+                        Shooter.flywheelOverride = true;
+                })).onFalse(new InstantCommand(() -> {
+                        Shooter.flywheelOverride = false;
+                }));
+
         coDriverController.a().onTrue(new InstantCommand(
                 () -> {
                         if (Shooter.ferryOverride){

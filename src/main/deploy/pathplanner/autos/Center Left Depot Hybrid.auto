@@ -1,0 +1,49 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Depot Center Start"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Depot Center Shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Center Left Sweep Hybrid 1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left Hybrid Shoot 1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left Sweep Hybrid 2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left Hybrid Shoot 2"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Left",
+  "choreoAuto": false
+}

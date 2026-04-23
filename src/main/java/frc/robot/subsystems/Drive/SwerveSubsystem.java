@@ -1,10 +1,12 @@
 package frc.robot.subsystems.Drive;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.ctre.phoenix6.swerve.SwerveRequest.SwerveDriveBrake;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import org.littletonrobotics.junction.Logger;
 
+import com.ctre.phoenix6.swerve.SwerveDrivetrain;
 import com.ctre.phoenix6.swerve.SwerveModule;
 
 import edu.wpi.first.math.MathUtil;
@@ -12,13 +14,17 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -26,11 +32,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.subsystems.States;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Intake.Intake;
 import frc.robot.subsystems.Intake.IntakeStates;
 import frc.robot.subsystems.Shooter.Shooter;
+import frc.robot.subsystems.Shooter.ShooterStates;
 
 public class SwerveSubsystem extends SubsystemBase {
 
@@ -54,12 +62,21 @@ public class SwerveSubsystem extends SubsystemBase {
     public CommandXboxController driverController;
     public double maxVelocity;
     public double maxAngularVelocity;
+    public double xLockWaitTime = 0.5;
     public double rotLockAngle = 0;
+    public SwerveDriveBrake xLockbrake = new SwerveRequest.SwerveDriveBrake();
+    public static Timer xLockTimer = new Timer();
+    //we need to figure out what to call it on
     // The robot pose estimator for tracking swerve odometry and applying vision corrections.
 
     public static PIDController angularPidcontroller = new PIDController(3, 0.5, 0);
 
     private final SwerveIOInputsAutoLogged inputs = new SwerveIOInputsAutoLogged();
+
+    /**Handles the bot turning too quickly while shooting. */
+    public SlewRateLimiter poslimiter;
+    public SlewRateLimiter rotlimiter;
+
 
     public SwerveSubsystem(
             SwerveIO io, CommandXboxController driverController, double maxAngularVelocity, double maxVelocity) {
@@ -67,6 +84,9 @@ public class SwerveSubsystem extends SubsystemBase {
         this.driverController = driverController;
         this.maxAngularVelocity = maxAngularVelocity;
         this.maxVelocity = maxVelocity;
+
+        this.poslimiter = new SlewRateLimiter(1.5);
+        this.rotlimiter = new SlewRateLimiter(Math.toRadians(90));
 
         var stateStdDevs = VecBuilder.fill(0.1, 0.1, 0.1);///i uncommented all this and maybe it broke it idk
         var visionStdDevs = VecBuilder.fill(1, 1, 1);
@@ -118,6 +138,7 @@ public class SwerveSubsystem extends SubsystemBase {
         Logger.recordOutput("Tilt",
         Math.acos(this.io.getRotation3d().toMatrix().get(2, 2)));
         SmartDashboard.putBoolean("onRamp", isTilted(0, 3));
+        
         applyStates();
         Logger.recordOutput("isInAllianceZone",this.isInAllianceZone());
         // Logger.recordOutput("front left absolute", io.getAbsoluteEncoderPositions(0));
@@ -140,13 +161,19 @@ public class SwerveSubsystem extends SubsystemBase {
       NamedCommands.registerCommand("StartShoot", new InstantCommand(() -> {Superstructure.getInstance().wantedState = States.AUTO;}));
       NamedCommands.registerCommand("StopShoot", new InstantCommand(() -> {Superstructure.getInstance().wantedState = States.AUTONONFIRE;}));
       
-      NamedCommands.registerCommand("DepotShoot", new InstantCommand(() -> {Superstructure.getInstance().wantedState = States.AUTODEPOTSHOOT;}));
+      NamedCommands.registerCommand("StartFerry", new InstantCommand(() -> {Superstructure.getInstance().wantedState = States.AUTOFERRY;}));
+      NamedCommands.registerCommand("StopFerry", new InstantCommand(() -> {Superstructure.getInstance().wantedState = States.AUTONONFIRE;}));
+      
+      NamedCommands.registerCommand("StartPreShoot", new InstantCommand(() -> {Shooter.getInstance().wantedShooterState = ShooterStates.AUTOPRESHOOT;}));
+      NamedCommands.registerCommand("StopPreShoot", new InstantCommand(() -> {Shooter.getInstance().wantedShooterState = ShooterStates.AUTONONFIRE;}));
+      
+      NamedCommands.registerCommand("DepotShoot", new InstantCommand(() -> {Superstructure.getInstance().wantedState = States.AUTODEPOTSHOOT;}).asProxy());
         
         NamedCommands.registerCommand("StartIntake", 
             new SequentialCommandGroup(
                 new WaitUntilCommand(() -> Intake.getInstance().alreadyZeroed),//so it doedsnt override auto init wanted=zero
                 new InstantCommand(() -> {
-                    Intake.getInstance().wantedState = IntakeStates.INTAKING;
+                    Intake.getInstance().wantedState = IntakeStates.AUTOINTAKING;
                     Intake.getInstance().autoIntaked = true;
                 })//,
             ).withTimeout(5)
@@ -159,7 +186,6 @@ public class SwerveSubsystem extends SubsystemBase {
       NamedCommands.registerCommand("StopElephant", new InstantCommand(() -> {
         Intake.getInstance().wantedState = IntakeStates.EXTENDED;
       }));
-
       NamedCommands.registerCommand("StopIntake", new InstantCommand(() -> {Intake.getInstance().wantedState = IntakeStates.EXTENDED;}));
     //   NamedCommands.registerCommand("StartIntake", new InstantCommand(() -> {Intake.getInstance().autonomousIntake = true;}));
     //   NamedCommands.registerCommand("StopIntake", new InstantCommand(() -> {Intake.getInstance().autonomousIntake = false;}));
@@ -178,25 +204,83 @@ public class SwerveSubsystem extends SubsystemBase {
             case SLOW:
                 if (currentState != SwerveStates.IDLE)
                     return wantedState;
+            case XLOCK:
+                if(MathUtil.applyDeadband(driverController.getLeftX(), Constants.leftXDeadband) != 0 || 
+                MathUtil.applyDeadband(driverController.getLeftY(), Constants.leftYDeadband) != 0 ||
+                 MathUtil.applyDeadband(driverController.getRightX(), Constants.rightXDeadband) != 0 ||
+                  MathUtil.applyDeadband(driverController.getRightY(), Constants.rightYDeadband) != 0)
+                {
+                    if(Shooter.driverOverride){
+                        wantedState = SwerveStates.SLOW;
+                    } else {
+                        wantedState = SwerveStates.MANUAL;
+                    }
+                }
+                return wantedState;
+                
             default:
                 return this.currentState;
 
         }
     }
 
+    
     public void applyStates() {
         switch (currentState) {
             case MANUAL:
-                io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds()
-                        .withSpeeds(calculateSpeedsBasedOnJoystickInputs())
-                        .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
 
-                if (Shooter.driverOverride && this.isInAllianceZone())
-                    wantedState = SwerveStates.SLOW;
+
+                if (Shooter.driverOverride && this.isInAllianceZone()) {
+                    wantedState = SwerveStates.SLOW;  
+                    break;
+                }
+                
+                shouldXLock();
+
+
+                //without state transition
+                // if ((Math.abs(io.getChassisSpeeds().vxMetersPerSecond) <= 0.05) 
+                // && (Math.abs(io.getChassisSpeeds().vyMetersPerSecond) <= 0.05)
+                // && (Math.abs(driverController.getLeftX()) <= Constants.leftYDeadband)
+                // && (Math.abs(driverController.getLeftY()) <= Constants.leftXDeadband)) {
+                    
+                    
+                //     io.setSwerveState(new SwerveRequest.SwerveDriveBrake());
+                // } else {
+                
+                // io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds()
+                //         .withSpeeds(calculateSpeedsBasedOnJoystickInputs())
+                //         .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
+                // }
+
                 break;
-            case SLOW:
+            case SLOW:        
+
+                if (Shooter.driverOverride && this.isInAllianceZone()) {
+                    wantedState = SwerveStates.SLOW;  
+                    break;
+                }
+
+                //TODO test
+                ChassisSpeeds speeds = calculateSpeedsBasedOnJoystickInputs().div(1.5);
+
+                double absolute = Math.sqrt(Math.pow(speeds.vxMetersPerSecond, 2) + Math.pow(speeds.vyMetersPerSecond, 2));
+                double limited = poslimiter.calculate(absolute);
+
+                double x = limited * (speeds.vxMetersPerSecond / absolute);
+                double y = limited * (speeds.vyMetersPerSecond / absolute);
+
+                speeds.vxMetersPerSecond = x;
+                speeds.vyMetersPerSecond = y;
+
+
+
+                speeds.omegaRadiansPerSecond = rotlimiter.calculate(speeds.omegaRadiansPerSecond);
+
+                //end segment
+
                 io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds()
-                        .withSpeeds(calculateSpeedsBasedOnJoystickInputs().div(1.5))
+                        .withSpeeds(speeds)
                         .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
 
                 if (!Shooter.driverOverride && !this.isInAllianceZone()) 
@@ -214,11 +298,22 @@ public class SwerveSubsystem extends SubsystemBase {
                 io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(-0.3, 0, 0))
                         .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
                 break;
+            case XLOCK:
+                //array of each angle we want the module to be in
+                // new swervemodule states with desired angles
+
+                //swervemodules. set control with swerve module states
+                io.setSwerveState(xLockbrake);
+                break;
+                
             default:
                 break;
 
         }
     }
+
+
+
 
     public ChassisSpeeds calculateSpeedsBasedOnJoystickInputs() {
         // double yMagnitude = MathUtil.applyDeadband(driverLeft.getRawAxis(0),
@@ -286,6 +381,25 @@ public class SwerveSubsystem extends SubsystemBase {
         // poseEstimator.resetPose(visionMeasurement);
 
         io.addVisionMeasurement(visionMeasurement, timestampSeconds, stdDevs);
+    }
+
+    public void shouldXLock(){
+        if(MathUtil.applyDeadband(driverController.getLeftX(), Constants.leftXDeadband) == 0
+        && MathUtil.applyDeadband(driverController.getLeftY(), Constants.leftYDeadband) == 0
+        && MathUtil.applyDeadband(driverController.getRightX(), Constants.rightXDeadband) == 0
+        && MathUtil.applyDeadband(driverController.getRightY(), Constants.rightYDeadband) == 0) {
+
+
+            xLockTimer.start();
+            if (xLockTimer.get() >= xLockWaitTime){
+                xLockTimer.stop();
+                wantedState = SwerveStates.XLOCK;
+            }
+        
+        } else {
+            xLockTimer.stop();
+            xLockTimer.reset();
+        }
     }
 
     public SwerveStates getCurrentState() {

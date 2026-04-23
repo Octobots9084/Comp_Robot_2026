@@ -5,57 +5,33 @@
     "data": {
       "commands": [
         {
-          "type": "path",
-          "data": {
-            "pathName": "Comp Left Start"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "DepotShoot"
-          }
-        },
-        {
           "type": "wait",
           "data": {
-            "waitTime": 4.0
+            "waitTime": 0.0
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "StopShoot"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.1
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StartIntake"
+            "name": "StartShoot"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Comp Left Sweep Single"
+            "pathName": "Center Right Start"
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "DepotShoot"
+            "pathName": "Center Right Sweep 1"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 2.0
+            "waitTime": 1.0
           }
         },
         {
@@ -73,7 +49,19 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 3.0
+            "waitTime": 2.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Right Sweep 2"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
           }
         },
         {
@@ -83,15 +71,15 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Left Sweep 2"
+            "name": "StartShoot"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Right",
   "choreoAuto": false
 }

@@ -105,8 +105,9 @@ public class FeederIOTalonFX implements FeederIO {
             spindexerMotor.setControl(spindexerRequest.withVelocity(state.spindexerRPS));
             verticalFeederMotor.setControl(verticalFeederRequest.withVelocity(state.feederRPS));
             if (state == FeederStates.SCORING || state == FeederStates.FIXEDFIRE){
-                if ((this.getSpindexerVelocity()< 0.4 && upToSpeed) || (this.getSpindexerVelocity() < 0.4 && Timer.getFPGATimestamp()-timeToGetToSpeed > 2) ){
-                    reveseTimer = Timer.getFPGATimestamp() + 0.5;
+                if ((this.getSpindexerVelocity()< 0.2 && upToSpeed) || (this.getSpindexerVelocity() < 0.2 && Timer.getFPGATimestamp()-timeToGetToSpeed > 3.5
+                ) ){
+                    reveseTimer = Timer.getFPGATimestamp() + 0.05;
                     upToSpeed = false;
                 }
                 else if (this.getSpindexerVelocity()>1.0){
@@ -115,8 +116,6 @@ public class FeederIOTalonFX implements FeederIO {
                 }
             }
         }
-        // spindexerMotor.setVoltage(state.spindexerRPS);
-        // verticalFeederMotor.setVoltage(state.feederRPS);
     }
 
     @Override
