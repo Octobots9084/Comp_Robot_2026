@@ -48,7 +48,7 @@ public class IntakeIOTalonFX implements IntakeIO {
 
           rollerfollower = new TalonFX(Constants.intakeRollerFollowerID, Constants.krakenBus);
           pivotfollower = new TalonFX(Constants.intakePivotFollowerID, Constants.krakenBus);
-          pivotfollower.setNeutralMode(NeutralModeValue.Coast);
+          pivotfollower.setNeutralMode(NeutralModeValue.Coast);//BRAKE NORMALLY, BUT LANE IS GONNA FART
 
           roller.setNeutralMode(NeutralModeValue.Coast);
 
@@ -85,6 +85,7 @@ public class IntakeIOTalonFX implements IntakeIO {
           inputs.rollerVoltage = rollerVoltage.getValueAsDouble();
           inputs.pivotCurrent = pivotCurrent.getValueAsDouble();
           inputs.pivotLimitSwitch = this.isZeroingSwitchPressed();
+          inputs.intakePivotStalled = this.intakePivotStalled();
      }
 
      @Override
@@ -116,6 +117,11 @@ public class IntakeIOTalonFX implements IntakeIO {
 
      public boolean isZeroingSwitchPressed() {
           // return zeroingSwitch.get();
+          return false;
+     }
+
+     public boolean intakePivotStalled() {
+          // return pivot.getFault_StatorCurrLimit().getValue();
           return false;
      }
 

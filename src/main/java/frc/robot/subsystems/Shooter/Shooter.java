@@ -117,6 +117,7 @@ public class Shooter extends SubsystemBase {
 
     @Override
     public void periodic() {
+        double startTime = Timer.getFPGATimestamp();
         ApplyStates();
         handleStateTransitions();
         fIO.updateInputs(feederInputs);
@@ -130,10 +131,11 @@ public class Shooter extends SubsystemBase {
         // SmartDashboard.putBoolean("HubAcivity", isHubActive());
         Logger.recordOutput("isInTrenchZone", inEnterTrenchZone());
         Logger.recordOutput("trench danger zone", inTrenchDangerZone());
+        Logger.recordOutput("Shooter/ShooterTimeMS", (Timer.getFPGATimestamp() - startTime)*1000.0);
     }
 
     public void ApplyStates() {
-        Logger.recordOutput("turretPos",new Pose2d(getX(hubPoseRed.getX()),getY(hubPoseRed.getX()),new Rotation2d(turret.getTurretPosition())));
+        Logger.recordOutput("turretPos",new Pose2d(getX(hubPoseRed.getX()),getY(hubPoseRed.getX()),new Rotation2d((turret.getTurretPosition()-0.25) * Math.PI * 2 + swerve.io.getPose2d().getRotation().getRadians())));
         switch (currentShooterState) {
             case SAFE:
                 // stop the flywheel
