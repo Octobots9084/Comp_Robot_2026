@@ -93,6 +93,16 @@ public class Shooter extends SubsystemBase {
 
     public double hoodTargetPosition = Constants.maximumHoodPosition;
 
+    //A couple variables designed to handle historisis.
+    public int historisis = 0;
+    public boolean lastSideDepot = false;
+    public boolean currentSideDepot = false;
+    public boolean allowSideSwap = false;
+
+    double YToHubFerry = 0;
+    double XToHubFerry = 0;
+
+
     public Shooter(FeederIO fIO, FlywheelIO fwIO, TurretIO tIO, ShooterIO sIO) {
         this.fIO = fIO;
         this.fwIO = fwIO;
@@ -222,24 +232,29 @@ public class Shooter extends SubsystemBase {
                 isAimedAtFerry = aimFerry();
                 SmartDashboard.putBoolean("IsAimedAtFerry", isAimedAtFerry);
                 turret.setHoodPosition(Constants.maximumHoodPosition);
+
                 if(!swerve.isInAllianceZone()){
                     if(inEnterTrenchZone()){ 
                         if(inTrenchDangerZone()){
                             wantedShooterState = ShooterStates.TRENCH;
                         }
                     }
+
                         turret.setHoodPosition(hoodTargetPosition);
                         flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
-                        if(isAimedAtFerry){
+
+                        if (isAimedAtFerry) {
+
                             if(flywheel.FlywheelInTolerance(flywheelTolerance)){
                                 //Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTHUB;
                                 feeder.setFeederVelocity(FeederStates.SCORING);
                                 flywheelDebouncer = 0;
-                            }else if (flywheelDebouncer<flywheelToleranceThreshold){
+
+                            } else if (flywheelDebouncer<flywheelToleranceThreshold){
                                 flywheelDebouncer ++;
                                 feeder.setFeederVelocity(FeederStates.SCORING);
                             }
-                            else{
+                            else {
                                 feeder.setFeederVelocity(FeederStates.OFF);
                             }
                             
@@ -569,6 +584,27 @@ public class Shooter extends SubsystemBase {
         }
         return getDistanceToClosestTrench() < zeroSpeedDistance;
     }
+    
+
+
+    /**Increments the timer for Historisis.
+    * <br></br>
+    *  This is used to stop the turret from violently and rapidly shifting between different ferry points when repeatedly crossing the center.
+    **/
+    
+    public void processHistorisisTimer() {
+        historisis++;
+
+        if (historisis > /*~1 second*/ 1 * 1000) allowSideSwap = true;
+
+        if (lastSideDepot == currentSideDepot) return;
+
+        allowSideSwap = false;
+        historisis = 0;
+    }
+
+
+
 
     /**
      * Gets the velocity of the robot relative to the trench(Trench Relative Velocity)
@@ -830,29 +866,45 @@ public class Shooter extends SubsystemBase {
      *
      * @return if the hood and turret are within tolerance of their setpoint given by the LUT
      */
+    
+
     public boolean aimFerry() {
-        double YToHub;
-        double XToHub;
+
+        lastSideDepot = currentSideDepot;
+
+        //Handles target based upon what alliance the bot is on
         if(!Constants.isBlueAlliance){
             double redFerryDepotDistance = Math.sqrt(Math.pow(redFerryDepot.getX() - swerve.io.getPose2d().getX(),2)+Math.pow((redFerryDepot.getY() - swerve.io.getPose2d().getY()),2));
             double redFerryOutpostDistance = Math.sqrt(Math.pow(redFerryOutpost.getX() - swerve.io.getPose2d().getX(),2)+Math.pow((redFerryOutpost.getY() - swerve.io.getPose2d().getY()),2));
-            if(redFerryDepotDistance <= redFerryOutpostDistance){
-                XToHub = getXToTarget(redFerryDepot.getX());
-                YToHub = getYToTarget(redFerryDepot.getY());
-            }else{
+            
+            if (redFerryDepotDistance <= redFerryOutpostDistance && allowSideSwap) {
+                XToHubFerry = getXToTarget(redFerryDepot.getX());
+                YToHubFerry = getYToTarget(redFerryDepot.getY());
 
-                XToHub = getXToTarget(redFerryOutpost.getX());
-                YToHub = getYToTarget(redFerryOutpost.getY());
+                currentSideDepot = true;
+
+            } else if (allowSideSwap) {
+                XToHubFerry = getXToTarget(redFerryOutpost.getX());
+                YToHubFerry = getYToTarget(redFerryOutpost.getY());
+
+                currentSideDepot = false;
             }
+
         }else{
             double blueFerryDepotDistance = Math.sqrt(Math.pow(blueFerryDepot.getX() - swerve.io.getPose2d().getX(),2)+Math.pow((blueFerryDepot.getY() - swerve.io.getPose2d().getY()),2));
             double blueFerryOutpostDistance = Math.sqrt(Math.pow(blueFerryOutpost.getX() - swerve.io.getPose2d().getX(),2)+Math.pow((blueFerryOutpost.getY() - swerve.io.getPose2d().getY()),2));
-            if(blueFerryDepotDistance <= blueFerryOutpostDistance){
-                XToHub = getXToTarget(blueFerryDepot.getX());
-                YToHub = getYToTarget(blueFerryDepot.getY());
-            }else{
-                XToHub = getXToTarget(blueFerryOutpost.getX());
-                YToHub = getYToTarget(blueFerryOutpost.getY());
+            
+            if(blueFerryDepotDistance <= blueFerryOutpostDistance && allowSideSwap){
+                XToHubFerry = getXToTarget(blueFerryDepot.getX());
+                YToHubFerry = getYToTarget(blueFerryDepot.getY());
+
+                currentSideDepot = true;
+            
+            }else if (allowSideSwap) {
+                XToHubFerry = getXToTarget(blueFerryOutpost.getX());
+                YToHubFerry = getYToTarget(blueFerryOutpost.getY());
+
+                currentSideDepot = false;
             }
         }
 
