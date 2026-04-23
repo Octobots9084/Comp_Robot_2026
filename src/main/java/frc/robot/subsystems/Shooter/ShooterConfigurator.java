@@ -35,7 +35,7 @@ public class ShooterConfigurator {
 
         // create PID gains
         flyWheelRightConfig.Slot0.kP = 0.3;
-        flyWheelRightConfig.Slot0.kI = 0.05;
+        flyWheelRightConfig.Slot0.kI = 0.0;
         flyWheelRightConfig.Slot0.kD = 0.0;
         flyWheelRightConfig.Slot0.kA = 0.0;
         flyWheelRightConfig.Slot0.kV = 0.13;

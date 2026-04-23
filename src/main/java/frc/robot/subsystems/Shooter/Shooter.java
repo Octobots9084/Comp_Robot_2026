@@ -127,6 +127,9 @@ public class Shooter extends SubsystemBase {
 
     @Override
     public void periodic() {
+        Logger.recordOutput("Shooter/ferryOverride", ferryOverride);
+        Logger.recordOutput("Shooter/ferryOverride", driverOverride);
+        Logger.recordOutput("Shooter/ferryOverride", flywheelOverride);
         double startTime = Timer.getFPGATimestamp();
         ApplyStates();
         handleStateTransitions();
@@ -585,6 +588,8 @@ public class Shooter extends SubsystemBase {
         double coefficientForDistance = 1.5;
         double hoodFullSwingTime = 0.5; //TODO
         double trenchRelativeXVelocity = getTrenchRelativeVelocity().vxMetersPerSecond;
+        Logger.recordOutput("dist to trench", getDistanceToClosestTrench());
+        Logger.recordOutput("velocity dist to trench", zeroSpeedDistance + coefficientForDistance*trenchRelativeXVelocity*hoodFullSwingTime);
         if(trenchRelativeXVelocity > 0){
             return getDistanceToClosestTrench()<(zeroSpeedDistance + coefficientForDistance*trenchRelativeXVelocity*hoodFullSwingTime);
         }

@@ -156,10 +156,7 @@ public class ShooterAngleCalculator {
         // Logger.recordOutput("curret real target", new Pose2d(currentX, currentY, new Rotation2d(Turret.getInstance().getTurretPosition()*Math.PI*2.0)));
 
         double angleToHub;
-        if (XToHub> 0 )
-            angleToHub = Math.atan(RealY/RealX);
-        else
-            angleToHub = (Math.atan(RealY/RealX)+ Math.PI);
+        angleToHub = Math.atan2(RealY,RealX);
 
         double currentX = currentD * Math.cos((turret.getTurretPosition()-0.25) * Math.PI * 2 + swerve.io.getPose2d().getRotation().getRadians()) + vx * T + SwerveSubsystem.getInstance().getRobotPose().getX();
         double currentY = currentD * Math.sin((turret.getTurretPosition()-0.25) * Math.PI * 2 + swerve.io.getPose2d().getRotation().getRadians()) + vy * T + SwerveSubsystem.getInstance().getRobotPose().getY();

@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.auto.runIntake;
 import frc.robot.commands.auto.runIntakeReverse;
 import frc.robot.commands.auto.ControllerInputs.Spit;
+import frc.robot.commands.auto.ControllerInputs.ToggleAutoFerry;
 import frc.robot.commands.auto.StateChange.*;
 import frc.robot.subsystems.States;
 import frc.robot.subsystems.Superstructure;
@@ -69,17 +70,7 @@ public class ButtonConfig {
                 .onFalse(new InstantCommand(
                         () -> Shooter.driverOverride = false)).onFalse(new InstantCommand(() -> {Shooter.flywheelDebouncer = Shooter.flywheelToleranceThreshold;}));
 
-        driverController.a().onTrue(new InstantCommand(
-                () -> {
-                        if (Shooter.ferryOverride){
-                                Shooter.ferryOverride = false;
-                                Shooter.flywheelDebouncer = Shooter.flywheelToleranceThreshold;
-                        } else {
-                                Shooter.ferryOverride = true;
-                                Superstructure.getInstance().wantedState = States.SHOOTER;
-                                Shooter.getInstance().wantedShooterState = ShooterStates.FERRY;
-                        }
-                }));
+        driverController.a().onTrue(new ToggleAutoFerry());
 
         coDriverController.b().onTrue(new InstantCommand(
                 () -> {
@@ -97,18 +88,7 @@ public class ButtonConfig {
         driverController.b().onTrue( new InstantCommand( () -> {
                 Intake.getInstance().wantedState = IntakeStates.PARTIALEXTENTION;
         }));
-        coDriverController.a().onTrue(new InstantCommand(
-                () -> {
-                        if (Shooter.ferryOverride){
-                                Shooter.ferryOverride = false;
-                                Shooter.flywheelDebouncer = Shooter.flywheelToleranceThreshold;
-                        } else {
-                                Shooter.ferryOverride = true;
-                                Superstructure.getInstance().wantedState = States.SHOOTER;
-                                Shooter.getInstance().wantedShooterState = ShooterStates.FERRY;
-                        }
-                        
-                }));
+        coDriverController.a().onTrue(new ToggleAutoFerry());
         
 
         //coDriverController.leftTrigger(0.5).onTrue(new SetStateSafe());
