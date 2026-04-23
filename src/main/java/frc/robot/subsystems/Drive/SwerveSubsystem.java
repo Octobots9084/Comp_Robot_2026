@@ -242,6 +242,7 @@ public class SwerveSubsystem extends SubsystemBase {
                 break;
             case SLOW:        
                 //TODO test
+                shouldXLock();
                 ChassisSpeeds speeds = calculateSpeedsBasedOnJoystickInputs().div(1.5);
 
                 double absolute = Math.sqrt(Math.pow(speeds.vxMetersPerSecond, 2) + Math.pow(speeds.vyMetersPerSecond, 2));
