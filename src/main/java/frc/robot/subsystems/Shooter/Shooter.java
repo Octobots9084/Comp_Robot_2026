@@ -915,8 +915,8 @@ public class Shooter extends SubsystemBase {
         shooterAngle = ShooterAngleCalculator.getShooterAngle(
                     getVXOfRobot(fieldRelative),
                     getVYOfRobot(fieldRelative),
-                    XToHub,
-                    YToHub,
+                    XToHubFerry,
+                    YToHubFerry,
                     ShooterAngleCalculator.flywheelSpeedMapFerry,
                     ShooterAngleCalculator.timeOfFlightMapFerry,
                     ShooterAngleCalculator.hoodAngleMapFerry
