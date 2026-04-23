@@ -34,11 +34,11 @@ public class ShooterConfigurator {
         flyWheelRightConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
         // create PID gains
-        flyWheelRightConfig.Slot0.kP = 0.65;
-        flyWheelRightConfig.Slot0.kI = 0.0;
+        flyWheelRightConfig.Slot0.kP = 0.3;
+        flyWheelRightConfig.Slot0.kI = 0.05;
         flyWheelRightConfig.Slot0.kD = 0.0;
         flyWheelRightConfig.Slot0.kA = 0.0;
-        flyWheelRightConfig.Slot0.kV = 0.15;
+        flyWheelRightConfig.Slot0.kV = 0.13;
         flyWheelRightConfig.Slot0.kS = 0.0;
         flyWheelRightConfig.Slot0.kG = 0.0;
 
@@ -65,9 +65,9 @@ public class ShooterConfigurator {
         turretConfig.Slot0.kS = 0; //0.5;
         turretConfig.Slot0.kG = 0.0;
 
-        turretConfig.MotionMagic.MotionMagicAcceleration = 15;
+        turretConfig.MotionMagic.MotionMagicAcceleration = 1500;
         turretConfig.MotionMagic.MotionMagicJerk = 0;
-        turretConfig.MotionMagic.MotionMagicCruiseVelocity = 7;
+        turretConfig.MotionMagic.MotionMagicCruiseVelocity = 7000;
 
         // hood config
         hoodConfig.CurrentLimits.SupplyCurrentLimit = 40;

@@ -73,8 +73,9 @@ public class SwerveSubsystem extends SubsystemBase {
 
     private final SwerveIOInputsAutoLogged inputs = new SwerveIOInputsAutoLogged();
 
-    /**Handles the bot turning too quickly while shooting. */
+    /**Handles the bot moving too quickly while shooting. */
     public SlewRateLimiter poslimiter;
+    /**Handles the bot turning too quickly while shooting. */
     public SlewRateLimiter rotlimiter;
 
 
@@ -86,7 +87,7 @@ public class SwerveSubsystem extends SubsystemBase {
         this.maxVelocity = maxVelocity;
 
         this.poslimiter = new SlewRateLimiter(1.5);
-        this.rotlimiter = new SlewRateLimiter(Math.toRadians(90));
+        this.rotlimiter = new SlewRateLimiter(Math.PI*10);
 
         var stateStdDevs = VecBuilder.fill(0.1, 0.1, 0.1);///i uncommented all this and maybe it broke it idk
         var visionStdDevs = VecBuilder.fill(1, 1, 1);
@@ -228,52 +229,31 @@ public class SwerveSubsystem extends SubsystemBase {
     public void applyStates() {
         switch (currentState) {
             case MANUAL:
-
-
                 if (Shooter.driverOverride && this.isInAllianceZone()) {
                     wantedState = SwerveStates.SLOW;  
-                    break;
                 }
                 
                 shouldXLock();
 
-
-                //without state transition
-                // if ((Math.abs(io.getChassisSpeeds().vxMetersPerSecond) <= 0.05) 
-                // && (Math.abs(io.getChassisSpeeds().vyMetersPerSecond) <= 0.05)
-                // && (Math.abs(driverController.getLeftX()) <= Constants.leftYDeadband)
-                // && (Math.abs(driverController.getLeftY()) <= Constants.leftXDeadband)) {
-                    
-                    
-                //     io.setSwerveState(new SwerveRequest.SwerveDriveBrake());
-                // } else {
-                
-                // io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds()
-                //         .withSpeeds(calculateSpeedsBasedOnJoystickInputs())
-                //         .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
-                // }
+                io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds()
+                        .withSpeeds(calculateSpeedsBasedOnJoystickInputs())
+                        .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
 
                 break;
             case SLOW:        
-
-                if (Shooter.driverOverride && this.isInAllianceZone()) {
-                    wantedState = SwerveStates.SLOW;  
-                    break;
-                }
-
                 //TODO test
                 ChassisSpeeds speeds = calculateSpeedsBasedOnJoystickInputs().div(1.5);
 
                 double absolute = Math.sqrt(Math.pow(speeds.vxMetersPerSecond, 2) + Math.pow(speeds.vyMetersPerSecond, 2));
                 double limited = poslimiter.calculate(absolute);
-
-                double x = limited * (speeds.vxMetersPerSecond / absolute);
-                double y = limited * (speeds.vyMetersPerSecond / absolute);
-
-                speeds.vxMetersPerSecond = x;
-                speeds.vyMetersPerSecond = y;
+                if (absolute != 0){
+                    double x = limited * (speeds.vxMetersPerSecond / absolute);
+                    double y = limited * (speeds.vyMetersPerSecond / absolute);
+                }
 
 
+                // speeds.vxMetersPerSecond = x;
+                // speeds.vyMetersPerSecond = y;
 
                 speeds.omegaRadiansPerSecond = rotlimiter.calculate(speeds.omegaRadiansPerSecond);
 
@@ -283,7 +263,7 @@ public class SwerveSubsystem extends SubsystemBase {
                         .withSpeeds(speeds)
                         .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
 
-                if (!Shooter.driverOverride && !this.isInAllianceZone()) 
+                if (!Shooter.driverOverride || !this.isInAllianceZone()) 
                     wantedState = SwerveStates.MANUAL;
                 break;
             case IDLE:

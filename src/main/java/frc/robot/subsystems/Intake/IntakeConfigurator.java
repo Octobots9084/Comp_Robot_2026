@@ -44,19 +44,19 @@ public class IntakeConfigurator {
         intakePivotConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 
         // set break mode and inversion
-        intakePivotConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        intakePivotConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;//BRAKE NORMALLY, BUT LANE IS GONNA FART
         intakePivotConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
         // create PID gains
-        intakePivotConfig.Slot0.kP = 125;
-        intakePivotConfig.Slot0.kI = 0.1;
+        intakePivotConfig.Slot0.kP = 8.0;
+        intakePivotConfig.Slot0.kI = 0.0;
         intakePivotConfig.Slot0.kD = 0.0;
         intakePivotConfig.Slot0.kA = 0.0;
         intakePivotConfig.Slot0.kV = 0.0;
         intakePivotConfig.Slot0.kS = 0.0;
         intakePivotConfig.Slot0.kG = 0.0;
 
-        intakePivotConfig.MotionMagic.MotionMagicAcceleration = 2;
-        intakePivotConfig.MotionMagic.MotionMagicCruiseVelocity = 1;
+        intakePivotConfig.MotionMagic.MotionMagicAcceleration = 64;
+        intakePivotConfig.MotionMagic.MotionMagicCruiseVelocity = 128;
     }
 }

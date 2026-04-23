@@ -87,13 +87,16 @@ public class ButtonConfig {
                 })).onFalse(new InstantCommand(() -> {
                         Shooter.flywheelOverride = false;
                 }));
-        driverController.b().onTrue(new InstantCommand(
+        driverController.povUp().onTrue(new InstantCommand(
                 () -> {
                         Shooter.flywheelOverride = true;
                 })).onFalse(new InstantCommand(() -> {
                         Shooter.flywheelOverride = false;
                 }));
 
+        driverController.b().onTrue( new InstantCommand( () -> {
+                Intake.getInstance().wantedState = IntakeStates.PARTIALEXTENTION;
+        }));
         coDriverController.a().onTrue(new InstantCommand(
                 () -> {
                         if (Shooter.ferryOverride){
@@ -131,12 +134,19 @@ public class ButtonConfig {
         // })).onFalse(new InstantCommand(() -> {
         //         Shooter.getInstance().wantedShooterState = ShooterStates.HUB;
         // }));
+
+
+
         driverController.leftBumper().whileTrue(new InstantCommand(() -> {
                 Intake.getInstance().setWantedState(IntakeStates.ELEPHANTIASISPART2);
         })).onFalse(new InstantCommand(() -> {
                         Intake.getInstance().setWantedState(IntakeStates.EXTENDED);
 
-        }));
+        }));//UNCOMMENT AFTER AUSTION TESTING OF INTAKE (its the real one)
+
+        // driverController.leftBumper().onTrue(new InstantCommand(() -> {
+        //         Intake.getInstance().setWantedState(IntakeStates.ELEPHANTIASISPART2);
+        // }));//for braking tha motors
 
 
         //TODO remove this after testing
