@@ -18,7 +18,7 @@ public class DriverCommunications {
     public static double PhaseClock = 0;
     public static double TeleopTimer = Timer.getMatchTime();
     static void allianceShift(int ShiftEndTime){
-        PhaseClock = Math.round(PhaseClock - ShiftEndTime);
+        PhaseClock = Math.floor(TeleopTimer - ShiftEndTime);
         if(!Shooter.getInstance().isHubActive()){
             NextPhaseIndication = "Our Shift";
             PhaseIndication = "Opposing Shift";
@@ -33,7 +33,7 @@ public class DriverCommunications {
         if(Robot.TeleopStarted){ //if in teleop
             if (TeleopTimer > 130) { //in transition period
                 PhaseIndication = "Transition Period";
-                PhaseClock = Math.round(TeleopTimer - 130);
+                PhaseClock = Math.floor(TeleopTimer - 130);
                 //Changing the "Next phase" indicator based on who won auto
                  if (Robot.WonAuto()){
                     NextPhaseIndication = "Opposing Shift";
@@ -41,23 +41,23 @@ public class DriverCommunications {
                     NextPhaseIndication = "Our Shift";
                 }
 
-            }else if (TeleopTimer < 105) { //in alliance shift 1
+            }else if (TeleopTimer > 105) { //in alliance shift 1
                 allianceShift(105);
-            }else if (TeleopTimer < 80) { //in alliance shift 2
+            }else if (TeleopTimer > 80) { //in alliance shift 2
                 allianceShift(80);
-            }else if (TeleopTimer < 55) { //in alliance shift 3
+            }else if (TeleopTimer > 55) { //in alliance shift 3
                 allianceShift(55);
-            }else if (TeleopTimer < 30) { //in alliance shift 4
-                PhaseClock = Math.round(TeleopTimer - 30);
+            }else if (TeleopTimer > 30) { //in alliance shift 4
+                PhaseClock = Math.floor(TeleopTimer - 30);
                 NextPhaseIndication = "Endgame";
             }else{
-                PhaseClock = TeleopTimer;
+                PhaseClock = Math.floor(TeleopTimer);
                 NextPhaseIndication = "Match End";
                 PhaseIndication = "Endgame";
             }
 
         }else{ //if in auto
-            PhaseClock = Math.round(TeleopTimer - 140);
+            PhaseClock = Math.floor(TeleopTimer - 140);
             NextPhaseIndication = "Transition Phase";
             PhaseIndication = "Autonomous";
 
@@ -77,6 +77,7 @@ public class DriverCommunications {
         SmartDashboard.putBoolean("Cam/Left", Vision.getInstance().io.CameraConnect(2));
         SmartDashboard.putBoolean("Cam/Right", Vision.getInstance().io.CameraConnect(3));
         SmartDashboard.putBoolean("Cam/Back", Vision.getInstance().io.CameraConnect(4));
+        SmartDashboard.putNumber("teleopTimer", TeleopTimer);
 
 
 
