@@ -196,9 +196,6 @@ public class Shooter extends SubsystemBase {
                             wantedShooterState = ShooterStates.TRENCH;
                         }
                     }
-                    if (flywheelOverride){
-                        flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
-                    }
                     if(driverOverride || ferryOverride){
                         turret.setHoodPosition(hoodTargetPosition);
                         flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
@@ -220,10 +217,15 @@ public class Shooter extends SubsystemBase {
                             feeder.setFeederVelocity(FeederStates.OFF);
                         }
                     }else{
+                        if (flywheelOverride){
+                            flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
+                        }
+                        else {
+                            flywheel.setFlywheelVelocity(FlywheelStates.SAFE);
+                        }
                         feeder.setFeederVelocity(FeederStates.OFF);
-                        flywheel.setFlywheelVelocity(FlywheelStates.SAFE);
                         flywheelInToleranceOnce = false;
-                }
+                    }
                 }else{
                     if(!inEnterTrenchZone()){
                     wantedShooterState = ShooterStates.BUMP;
@@ -281,9 +283,6 @@ public class Shooter extends SubsystemBase {
                             wantedShooterState = ShooterStates.TRENCH;
                         }
                     }
-                    if (flywheelOverride){
-                        flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
-                    }
                     if(driverOverride){
                         turret.setHoodPosition(hoodTargetPosition);
                         flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
@@ -305,7 +304,12 @@ public class Shooter extends SubsystemBase {
                         }
                     }else{
                         feeder.setFeederVelocity(FeederStates.OFF);
-                        flywheel.setFlywheelVelocity(FlywheelStates.SAFE);
+                        if (flywheelOverride){
+                            flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
+                        }
+                        else {
+                            flywheel.setFlywheelVelocity(FlywheelStates.SAFE);
+                        }
                     }
                 }else{
                     //TODO comment this out when testing
@@ -597,9 +601,12 @@ public class Shooter extends SubsystemBase {
     public void processHistorisisTimer() {
         historisis++;
 
-        if (historisis > /*~1 second*/ 1 * 1000) allowSideSwap = true;
+        // allow change if on different side for 1 second (50 cycles in 1 second)
+        if (historisis > 1 * 50)
+            allowSideSwap = true;
 
-        if (lastSideDepot == currentSideDepot) return;
+        if (lastSideDepot == currentSideDepot)
+            return;
 
         allowSideSwap = false;
         historisis = 0;
@@ -871,7 +878,7 @@ public class Shooter extends SubsystemBase {
     
 
     public boolean aimFerry() {
-
+        processHistorisisTimer();
         lastSideDepot = currentSideDepot;
 
         //Handles target based upon what alliance the bot is on
