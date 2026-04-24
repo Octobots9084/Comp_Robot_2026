@@ -68,14 +68,7 @@ public enum LightAnimations {
                 } else {
                     Lights.getLightInstance().lightsWantedState = ZEROED;
             }
-        }else{
-            for(int i = 0; i < 5; i++){
-                if(Vision.getInstance().io.CameraConnect(i)){
-                    CameraLEDs DisconnectedCam = CameraLEDs.forIndex(i);
-                    Lights.device.candle.setControl(new SolidColor(DisconnectedCam.StartLED, DisconnectedCam.EndLED).withColor(new RGBWColor(255, 0, 0, 0)));
-                }
-            }
-           
+        }
         }
     }
-}
+
