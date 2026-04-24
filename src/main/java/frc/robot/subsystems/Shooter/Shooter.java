@@ -584,7 +584,7 @@ public class Shooter extends SubsystemBase {
      * @return true or false dependig on if we are in danger of hitting the hood on the trench.
      */
     public boolean inTrenchDangerZone(){
-        double zeroSpeedDistance = 0.5;
+        double zeroSpeedDistance = 0.7;
         double coefficientForDistance = 1.5;
         double hoodFullSwingTime = 0.5; //TODO
         double trenchRelativeXVelocity = getTrenchRelativeVelocity().vxMetersPerSecond;
