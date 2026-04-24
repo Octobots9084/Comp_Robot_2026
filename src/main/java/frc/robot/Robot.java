@@ -179,9 +179,9 @@ public class Robot extends LoggedRobot {
     }
 
     if(!Vision.getInstance().io.CamerasConnected()) {
-
       Lights.getLightInstance().lightsWantedState = LightAnimations.DISCONNECTEDCAMERA;
-
+    }else{
+      Lights.getLightInstance().lightsWantedState = LightAnimations.DISABLED;
     }
 
  
