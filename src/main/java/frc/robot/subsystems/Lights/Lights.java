@@ -4,10 +4,12 @@ import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.configs.LEDConfigs;
 import com.ctre.phoenix6.controls.ColorFlowAnimation;
+import com.ctre.phoenix6.controls.RainbowAnimation;
 import com.ctre.phoenix6.controls.SolidColor;
 import com.ctre.phoenix6.signals.RGBWColor;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 import frc.robot.subsystems.Drive.SwerveSubsystem;
 import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Vision.Vision;
@@ -99,17 +101,10 @@ public class Lights extends SubsystemBase{
     }
 
     public void applyStates() {
-        if(lightsCurrentState == LightAnimations.DISCONNECTEDCAMERA){
-            for(int i = 0; i < 5; i++){
-                if(Vision.getInstance().io.CameraConnect(i)){
-                    CameraLEDs DisconnectedCam = CameraLEDs.forIndex(i);
-                    Lights.device.candle.setControl(new SolidColor(DisconnectedCam.StartLED, DisconnectedCam.EndLED).withColor(new RGBWColor(255, 0, 0, 0)));
-                }
-            }
-        }else if(lightsCurrentState == LightAnimations.DISABLED){
-                device.candle.setControl(LightAnimations.rainbowAnim);
-            }else{
-                device.candle.setControl(lightsCurrentState.color);
+        if(lightsCurrentState == LightAnimations.DISABLED){
+            device.candle.setControl(LightAnimations.rainbowAnim);
+        }else{
+            device.candle.setControl(lightsCurrentState.color);
             }
         }
     }

@@ -33,7 +33,7 @@ public enum LightAnimations {
 >>>>>>> Stashed changes
    */
 
-    static RainbowAnimation rainbowAnim = new RainbowAnimation(0, 65);
+    public static RainbowAnimation rainbowAnim = new RainbowAnimation(0, 65);
        /**
        * The time
        */
@@ -45,9 +45,7 @@ public enum LightAnimations {
                 private LightAnimations(SolidColor color) {
                     this.color = color;
         }
-        public static void RainbowAnim(){
-           new RainbowAnimation(0, 65);
-    }
+
     public static void Lights(){
         if(Vision.getInstance().io.CamerasConnected()){
             if(!Robot.zeroingLights) {
