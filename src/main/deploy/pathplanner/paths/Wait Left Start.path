@@ -12,20 +12,20 @@
         "y": 7.4116
       },
       "isLocked": false,
-      "linkedName": "Trench Left Start"
+      "linkedName": null
     },
     {
       "anchor": {
         "x": 3.3016555555555556,
-        "y": 7.47
+        "y": 7.4
       },
       "prevControl": {
         "x": 3.966788888888889,
-        "y": 7.471522222222222
+        "y": 7.401522222222223
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Comp Left Start End"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],

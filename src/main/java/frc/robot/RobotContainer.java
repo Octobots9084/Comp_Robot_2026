@@ -81,7 +81,6 @@ public class RobotContainer {
           superstructure = new Superstructure();
           buttons = new ButtonConfig();
           // SmartDashboard.putBoolean("rightrigger",true);
-          buttons.initTeleop();
           // superstructure.setInstance(new Superstructure());
 
         // The ModuleIOTalonFXS implementation provides an example implementation for
@@ -115,7 +114,6 @@ public class RobotContainer {
           superstructure = new Superstructure();
           buttons = new ButtonConfig();
           // SmartDashboard.putBoolean("rightrigger",true);
-          buttons.initTeleop();
         break;
 
       default:

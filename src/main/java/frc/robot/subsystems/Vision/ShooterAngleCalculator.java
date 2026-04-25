@@ -2,6 +2,8 @@ package frc.robot.subsystems.Vision;
 
 import org.littletonrobotics.junction.Logger;
 
+import com.ctre.phoenix6.swerve.SwerveDrivetrain.SwerveControlParameters;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
@@ -114,6 +116,9 @@ public class ShooterAngleCalculator {
     
     // d, vx,vy are robot to hub reletive
     public static ShooterAngle getShooterAngle(double vx, double vy, double XToHub, double YToHub, InterpolatingDoubleTreeMap flywheelSpeedMap, InterpolatingDoubleTreeMap timeOfFlightMap, InterpolatingTreeMap<Double, Rotation2d> hoodAngleMap){
+        Turret turret = Turret.getInstance();
+        SwerveSubsystem swerve = SwerveSubsystem.getInstance();
+
         double d = Pythgorian(XToHub, YToHub);
         double T = timeOfFlightMap.get(d);
         double TOFError = 90000;
@@ -143,17 +148,21 @@ public class ShooterAngleCalculator {
             currentD = ShooterAngleCalculator.flywheelSpeedMapHubInverse.get(Flywheel.getInstance().io.getRightMotorVelocity());
         }
 
+        double rotation = SwerveSubsystem.getInstance().getRobotPose().getRotation().getRadians();
+
+        // double currentX = currentD * Math.cos((turret.getTurretPosition()-0.25) * Math.PI * 2 + swerve.io.getPose2d().getRotation().getRadians()) + vx * T + SwerveSubsystem.getInstance().getRobotPose().getX();
+        // double currentY = currentD * Math.sin((turret.getTurretPosition()-0.25) * Math.PI * 2 + swerve.io.getPose2d().getRotation().getRadians()) + vy * T + SwerveSubsystem.getInstance().getRobotPose().getY();
+
+        // Logger.recordOutput("curret real target", new Pose2d(currentX, currentY, new Rotation2d(Turret.getInstance().getTurretPosition()*Math.PI*2.0)));
+
         double angleToHub;
-        if (XToHub> 0 )
-            angleToHub = Math.atan(RealY/RealX);
-        else
-            angleToHub = (Math.atan(RealY/RealX)+ Math.PI);
+        angleToHub = Math.atan2(RealY,RealX);
 
-        double currentX = currentD * Math.sin(Turret.getInstance().getTurretPosition()*2*Math.PI) - vx * T + SwerveSubsystem.getInstance().getRobotPose().getX();
-        double currentY = currentD * Math.cos(Turret.getInstance().getTurretPosition()*2*Math.PI) - vy * T + SwerveSubsystem.getInstance().getRobotPose().getY();
+        double currentX = currentD * Math.cos((turret.getTurretPosition()-0.25) * Math.PI * 2 + swerve.io.getPose2d().getRotation().getRadians()) + vx * T + SwerveSubsystem.getInstance().getRobotPose().getX();
+        double currentY = currentD * Math.sin((turret.getTurretPosition()-0.25) * Math.PI * 2 + swerve.io.getPose2d().getRotation().getRadians()) + vy * T + SwerveSubsystem.getInstance().getRobotPose().getY();
 
-        double WantedX = RealD * Math.sin(angleToHub) - vx * T + SwerveSubsystem.getInstance().getRobotPose().getX();
-        double WantedY = RealD * Math.cos(angleToHub) - vy * T + SwerveSubsystem.getInstance().getRobotPose().getY();
+        // double WantedX = RealD * Math.sin(angleToHub) - vx * T + SwerveSubsystem.getInstance().getRobotPose().getX();
+        // double WantedY = RealD * Math.cos(angleToHub) - vy * T + SwerveSubsystem.getInstance().getRobotPose().getY();
 
         Logger.recordOutput("curret real target", new Pose2d(currentX, currentY, new Rotation2d(Turret.getInstance().getTurretPosition()*Math.PI/180.0)));
 

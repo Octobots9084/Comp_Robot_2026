@@ -4,15 +4,15 @@
     {
       "anchor": {
         "x": 3.3016555555555556,
-        "y": 0.5300000000000002
+        "y": 0.6
       },
       "prevControl": null,
       "nextControl": {
         "x": 4.841893137182571,
-        "y": 0.5300000000000002
+        "y": 0.6
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Wait Right"
     },
     {
       "anchor": {
@@ -141,13 +141,13 @@
       }
     },
     {
-      "name": "DepotShoot",
+      "name": "StartShoot",
       "waypointRelativePos": 3.8460499662389673,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "DepotShoot"
+          "name": "StartShoot"
         }
       }
     }

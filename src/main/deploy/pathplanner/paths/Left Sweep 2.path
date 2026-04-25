@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.253405776936205,
-        "y": 7.52912343470483
+        "x": 4.979164961219167,
+        "y": 7.476168450082893
       },
       "isLocked": false,
-      "linkedName": "Trench Left Shoot"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.949767441860465,
-        "y": 7.009910554561718
+        "x": 5.850470756062768,
+        "y": 6.991483594864479
       },
       "prevControl": {
-        "x": 5.956175592058603,
-        "y": 7.259828412289088
+        "x": 5.418621262187717,
+        "y": 7.491935460586626
       },
       "nextControl": {
-        "x": 5.923890123743489,
-        "y": 6.000695147999664
+        "x": 6.437290349029936,
+        "y": 6.311443524636443
       },
       "isLocked": false,
       "linkedName": null
@@ -36,12 +36,12 @@
         "y": 4.089338103756709
       },
       "prevControl": {
-        "x": 5.576583184257603,
-        "y": 4.267817531305904
+        "x": 5.294419374630402,
+        "y": 4.5563987332830305
       },
       "nextControl": {
-        "x": 7.4238313085040435,
-        "y": 3.772214376020275
+        "x": 7.210843263413366,
+        "y": 3.611622367451509
       },
       "isLocked": false,
       "linkedName": null
@@ -49,15 +49,15 @@
     {
       "anchor": {
         "x": 7.491180679785331,
-        "y": 7.188389982110913
+        "y": 7.0
       },
       "prevControl": {
-        "x": 8.074368612127946,
-        "y": 6.721839636236819
+        "x": 8.342981021533815,
+        "y": 6.063694423419654
       },
       "nextControl": {
-        "x": 7.247799642218247,
-        "y": 7.38309481216458
+        "x": 6.872323624916628,
+        "y": 7.680252499535567
       },
       "isLocked": false,
       "linkedName": null
@@ -68,12 +68,12 @@
         "y": 7.47
       },
       "prevControl": {
-        "x": 5.037450714969376,
-        "y": 7.4966676687311145
+        "x": 4.925315975037212,
+        "y": 7.450550108535306
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Trench Left Shoot"
+      "linkedName": null
     }
   ],
   "rotationTargets": [
@@ -145,13 +145,13 @@
       }
     },
     {
-      "name": "DepotShoot",
+      "name": "StartShoot",
       "waypointRelativePos": 3.759621877110024,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "DepotShoot"
+          "name": "StartShoot"
         }
       }
     }

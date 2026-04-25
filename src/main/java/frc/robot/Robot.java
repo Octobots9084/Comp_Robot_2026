@@ -214,9 +214,10 @@ public class Robot extends LoggedRobot {
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
-    if (Intake.getInstance().autoIntaked) {
+    // if (Intake.getInstance().autoIntaked) {
       Intake.getInstance().wantedState = IntakeStates.EXTENDED;
-    }    Constants.timer.restart();
+    // }   
+    Constants.timer.restart();
     // // if (!shooter.turretAlreadyZeroed){
     //   SmartDashboard.putNumber("hubBallSpeed", 6.7);
     // //   SmartDashboard.putNumber("hubFlywheelSpeed", 9.5);

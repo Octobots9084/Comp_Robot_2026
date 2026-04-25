@@ -31,30 +31,7 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "StopShoot",
-      "waypointRelativePos": 0.21877110060769545,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "StopShoot"
-        }
-      }
-    },
-    {
-      "name": "StartShoot",
-      "waypointRelativePos": 0.24037812288993773,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "StartShoot"
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 0.75,
     "maxAcceleration": 0.75,

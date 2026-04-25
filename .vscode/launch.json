@@ -6,6 +6,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "CreatePathDuplicatesForAuto",
+      "request": "launch",
+      "mainClass": "frc.robot.util.CreatePathDuplicatesForAuto",
+      "projectName": "Comp_Robot_2026"
+    },
+    {
+      "type": "java",
       "name": "CreateAutoDuplicates",
       "request": "launch",
       "mainClass": "frc.robot.util.CreateAutoDuplicates",

@@ -64,16 +64,16 @@
     },
     {
       "anchor": {
-        "x": 6.468980322003578,
-        "y": 7.5
+        "x": 6.562097004279188,
+        "y": 7.211440798861429
       },
       "prevControl": {
-        "x": 6.792446798465774,
-        "y": 7.504336661911556
+        "x": 7.198491557444471,
+        "y": 6.936252264876084
       },
       "nextControl": {
-        "x": 4.540810504925879,
-        "y": 7.474149344018007
+        "x": 5.853016824928551,
+        "y": 7.518059914413301
       },
       "isLocked": false,
       "linkedName": null
@@ -174,13 +174,13 @@
       }
     },
     {
-      "name": "DepotShoot",
+      "name": "StartShoot",
       "waypointRelativePos": 4.564483457123558,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "DepotShoot"
+          "name": "StartShoot"
         }
       }
     }
@@ -200,7 +200,7 @@
   "reversed": false,
   "folder": "Left Side",
   "idealStartingState": {
-    "velocity": 0,
+    "velocity": 1.0,
     "rotation": 0.0
   },
   "useDefaultConstraints": false

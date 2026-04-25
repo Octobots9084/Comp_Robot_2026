@@ -21,6 +21,7 @@ public interface IntakeIO {
         public double pivotRequest = 0.0;
         public boolean pivotLimitSwitch = false;
         public double rollerVoltage;
+        public boolean intakePivotStalled;
     }
 
     /** The mechanism by which values are updated with.*/
@@ -49,6 +50,10 @@ public interface IntakeIO {
 
     /**Detects the zeroing switch, which may change.*/
     public default boolean isZeroingSwitchPressed() {// GAS_D
+        return false;
+    }
+
+    public default boolean intakePivotStalled() {// GAS_D
         return false;
     }
 

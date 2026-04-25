@@ -174,13 +174,13 @@
       }
     },
     {
-      "name": "DepotShoot",
+      "name": "StartShoot",
       "waypointRelativePos": 4.7805536799459585,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "DepotShoot"
+          "name": "StartShoot"
         }
       }
     }
@@ -200,7 +200,7 @@
   "reversed": false,
   "folder": "Left Side",
   "idealStartingState": {
-    "velocity": 0,
+    "velocity": 1.0,
     "rotation": -90.0
   },
   "useDefaultConstraints": false

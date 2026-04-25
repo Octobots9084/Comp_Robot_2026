@@ -4,15 +4,15 @@
     {
       "anchor": {
         "x": 3.3016555555555556,
-        "y": 7.47
+        "y": 7.4
       },
       "prevControl": null,
       "nextControl": {
         "x": 4.841893137182571,
-        "y": 7.47
+        "y": 7.4
       },
       "isLocked": false,
-      "linkedName": "Comp Left Start End"
+      "linkedName": null
     },
     {
       "anchor": {
@@ -37,11 +37,11 @@
       },
       "prevControl": {
         "x": 5.787453855604418,
-        "y": 3.6312651690086164
+        "y": 3.631265169008616
       },
       "nextControl": {
         "x": 8.538979833926454,
-        "y": 3.3733096085409255
+        "y": 3.373309608540925
       },
       "isLocked": false,
       "linkedName": null
@@ -73,7 +73,7 @@
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Trench Left Shoot"
+      "linkedName": null
     }
   ],
   "rotationTargets": [
@@ -141,13 +141,13 @@
       }
     },
     {
-      "name": "DepotShoot",
+      "name": "StartShoot",
       "waypointRelativePos": 3.8460499662389673,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "DepotShoot"
+          "name": "StartShoot"
         }
       }
     }
