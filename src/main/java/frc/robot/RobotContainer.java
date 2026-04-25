@@ -103,7 +103,7 @@ public class RobotContainer {
         break;
 
       case SIM:
-          shooter = new Shooter(
+          shooter = new Shooter(  
               new FeederIOTalonFX(),
               new FlywheelIOTalonFX(),
               new TurretIOTalonFX(),
@@ -123,7 +123,6 @@ public class RobotContainer {
     autoChooser = AutoBuilder.buildAutoChooser();
     // NAMED COMMANDS IN SWERVE
     SmartDashboard.putData("Auto", autoChooser);
-    ButtonConfig buttons = new ButtonConfig();
     buttons.initTeleop();
 
   }

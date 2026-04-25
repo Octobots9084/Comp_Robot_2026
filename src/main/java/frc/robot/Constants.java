@@ -64,7 +64,7 @@ public final class Constants {
       new Rotation3d(0, -LowCamPitch, (30/180.0)*Math.PI + Math.PI));
   public static final Transform3d robotToCamRight = new Transform3d(new Translation3d(-0.265, 0.36, .465),
       new Rotation3d(0, -highCamPitch, Math.PI/2));
-  public static final Transform3d robotToCamLeft = new Transform3d(new Translation3d(-0.04,-0.36, 0.26),
+  public static final Transform3d robotToCamLeft = new Transform3d(new Translation3d(-0.27,-0.36, 0.245),
       new Rotation3d(0, -LowCamPitch, 3.0*Math.PI/2.0));
   public static final Transform3d robotToCamBack = new Transform3d(new Translation3d(-0.28,0.09, 0.42), //set these values
       new Rotation3d(0, -highCamPitch,0));  //and() these
@@ -110,9 +110,10 @@ public final class Constants {
   public static int turretID = 17;
   public static int spindexerID = 26;
   public static int spindexerFollowerID = 27; //TODO remember to set the motor to 27
-  public static int verticalFeederID = 15;
+  public static int verticalFeederID = 18;
+  public static int gateFeederID = 15;
 
-  public static double turretZeroPosition = 197.75/360.0;
+  public static double turretZeroPosition = 200.25/360.0;
   public static double maximumHoodPosition = 77/360.0;
   public static double minimumHoodPosition = 58/360.0;
   public static double maximumTurretPosition = 0.8; // TODO set this to an actual value so sinjin doesnt cry
@@ -124,12 +125,13 @@ public final class Constants {
   public static double flywheelRadius = 0.0508;
   public static double topRollerRadius = 0.0254;
 
-  public static double feederGearRatio = 21/34.0;
-  public static double feederWheelRadius = 1.5*0.0254;
+  public static double feederGearRatio = 6.763;
+
+  public static double gateGearRatio = 3.87;
 
   // public static double spindexerRadius = 3.25*0.0254;
   public static double spindexerRadius = 1;
-  public static double spindexerGearRatio = 4;
+  public static double spindexerGearRatio = 4.07;
 
   public static double rotateGearRatio = 12.0;// TODO fix this gear ratio
 

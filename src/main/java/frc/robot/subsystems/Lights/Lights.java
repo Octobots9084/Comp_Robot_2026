@@ -100,3 +100,4 @@ public class Lights extends SubsystemBase{
             device.candle.setControl(lightsCurrentState.color);
     }
 }
+       

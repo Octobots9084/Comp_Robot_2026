@@ -13,6 +13,7 @@ public class ShooterConfigurator {
     public TalonFXConfiguration hoodConfig;
     public TalonFXConfiguration spindexerConfig;
     public TalonFXConfiguration verticalFeederConfig;
+    public TalonFXConfiguration gateFeederConfig;
     public TalonFXConfiguration topRollerConfig;
 
     public ShooterConfigurator() {
@@ -22,7 +23,8 @@ public class ShooterConfigurator {
         hoodConfig = new TalonFXConfiguration()
                 .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(Constants.hoodGearRatio));
         spindexerConfig = new TalonFXConfiguration().withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(Constants.spindexerGearRatio));
-        verticalFeederConfig = new TalonFXConfiguration().withFeedback(new FeedbackConfigs().withSensorToMechanismRatio((1)/(2*Math.PI*Constants.feederGearRatio*Constants.feederWheelRadius)));
+        verticalFeederConfig = new TalonFXConfiguration().withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(Constants.feederGearRatio));
+        gateFeederConfig = new TalonFXConfiguration().withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(Constants.gateGearRatio));
         // fly wheel right config
         flyWheelRightConfig.CurrentLimits.SupplyCurrentLimit = 20;
         flyWheelRightConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
@@ -136,5 +138,27 @@ public class ShooterConfigurator {
         verticalFeederConfig.MotionMagic.MotionMagicAcceleration = 1;
         verticalFeederConfig.MotionMagic.MotionMagicJerk = 0;
         verticalFeederConfig.MotionMagic.MotionMagicCruiseVelocity = 0.04;
+
+        // gate Feeder config(rural road)
+        gateFeederConfig.CurrentLimits.SupplyCurrentLimit = 20;
+        gateFeederConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+        gateFeederConfig.CurrentLimits.StatorCurrentLimit = 80;
+        gateFeederConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+
+        // set break mode and inversion
+        gateFeederConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+        gateFeederConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+        // create PID gains
+        gateFeederConfig.Slot0.kP = 1;
+        gateFeederConfig.Slot0.kI = 0.0;
+        gateFeederConfig.Slot0.kD = 0.0;
+        gateFeederConfig.Slot0.kA = 0.0;
+        gateFeederConfig.Slot0.kV = 0.5;
+        gateFeederConfig.Slot0.kS = 0.0;
+        gateFeederConfig.Slot0.kG = 0.0;
+
+        gateFeederConfig.MotionMagic.MotionMagicAcceleration = 1;
+        gateFeederConfig.MotionMagic.MotionMagicJerk = 0;
+        gateFeederConfig.MotionMagic.MotionMagicCruiseVelocity = 0.04;
     }
 }

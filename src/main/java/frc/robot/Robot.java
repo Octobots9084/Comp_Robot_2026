@@ -212,39 +212,21 @@ public class Robot extends LoggedRobot {
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
-    // if (Intake.getInstance().autoIntaked) {
-      Intake.getInstance().wantedState = IntakeStates.EXTENDED;
-    // }   
-    Constants.timer.restart();
-    // // if (!shooter.turretAlreadyZeroed){
-    //   SmartDashboard.putNumber("hubBallSpeed", 6.7);
-    // //   SmartDashboard.putNumber("hubFlywheelSpeed", 9.5);
-    // // }
-    TeleopStarted = true;
-    Constants.timer.restart();
-    // if (shooter.turretAlreadyZeroed && intake.alreadyZeroed){
-    //   LightAnimations.Lights();
-    // }
-
-    setAllianceColor();
     //only automaticly zeros if we havent already zeroed while still allowing a zero button
     Superstructure.getInstance().wantedState = States.ZERO;
     swerve.wantedState = SwerveStates.MANUAL;
+    TeleopStarted = true;
+    Constants.timer.restart();
+
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-
-
-    
-    // if(Shooter.getInstance().turretAlreadyZeroed){
-    //   Shooter.getInstance().wantedShooterState = ShooterStates.HUB;
-    // }
-
     if (autonomousCommand != null) {
       CommandScheduler.getInstance().cancel(autonomousCommand);
     }
-  
+    // setAllianceColor();
+
   }
   int rumbleTimer;
   /** This function is called periodically during operator control. */

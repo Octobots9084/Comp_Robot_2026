@@ -31,13 +31,17 @@ public class FeederIOTalonFX implements FeederIO {
     private final StatusSignal<Voltage> spindexerVoltage;
     private final StatusSignal<Current> feederCurrent;
     private final StatusSignal<Current> spindexerCurrent;
+    private final StatusSignal<AngularVelocity> gateVelocity;
 
     public TalonFX spindexerMotor;
     public TalonFX verticalFeederMotor;
+    public TalonFX gateFeederMotor;
+    public TalonFX verticalFeederFollower;
     public TalonFX spindexerFollower;
     public ShooterConfigurator shooterConfigs;
     private VelocityVoltage spindexerRequest = new VelocityVoltage(0);
     private VelocityVoltage verticalFeederRequest = new VelocityVoltage(0);
+    private VelocityVoltage gateFeederRequest = new VelocityVoltage(0);
     public boolean upToSpeed = false;
     public double timeToGetToSpeed = 0;
     public double reveseTimer = 0;
@@ -54,6 +58,7 @@ public class FeederIOTalonFX implements FeederIO {
         spindexerMotor = new TalonFX(Constants.spindexerID, Constants.krakenBus);
         spindexerFollower = new TalonFX(Constants.spindexerFollowerID, Constants.krakenBus);
         verticalFeederMotor = new TalonFX(Constants.verticalFeederID, Constants.krakenBus);
+        gateFeederMotor = new TalonFX(Constants.gateFeederID, Constants.krakenBus);
 
         spindexerMotor.getConfigurator().apply(shooterConfigs.spindexerConfig);
 
@@ -61,16 +66,19 @@ public class FeederIOTalonFX implements FeederIO {
 
 
         verticalFeederMotor.getConfigurator().apply(shooterConfigs.verticalFeederConfig);
+        gateFeederMotor.getConfigurator().apply(shooterConfigs.gateFeederConfig);
 
         feederVelocity = verticalFeederMotor.getVelocity();
         spindexerVelocity = spindexerMotor.getVelocity();
+        gateVelocity = gateFeederMotor.getVelocity();
         feederVoltage = verticalFeederMotor.getMotorVoltage();
         feederCurrent = verticalFeederMotor.getStatorCurrent();
+        PhoenixUtil.tryUntilOk(5, () -> gateFeederMotor.optimizeBusUtilization(0,1.0));
         PhoenixUtil.tryUntilOk(5, () -> spindexerMotor.optimizeBusUtilization(0,1.0));
         spindexerVoltage = spindexerMotor.getMotorVoltage();
         spindexerCurrent = spindexerMotor.getStatorCurrent();
 
-        PhoenixUtil.tryUntilOk(5, () -> BaseStatusSignal.setUpdateFrequencyForAll(50,feederVelocity,spindexerVelocity));
+        PhoenixUtil.tryUntilOk(5, () -> BaseStatusSignal.setUpdateFrequencyForAll(50,feederVelocity,spindexerVelocity,gateVelocity));
         PhoenixUtil.tryUntilOk(5, () -> verticalFeederMotor.optimizeBusUtilization(0,1.0));
 
         PhoenixUtil.registerSignals(
@@ -80,7 +88,8 @@ public class FeederIOTalonFX implements FeederIO {
             feederVoltage,
             feederCurrent,
             spindexerVoltage,
-            spindexerCurrent);
+            spindexerCurrent,
+            gateVelocity);
     }
 
     public void updateInputs(FeederIOInputs inputs) {
@@ -89,10 +98,12 @@ public class FeederIOTalonFX implements FeederIO {
         inputs.verticalFeederRPS = getVerticalFeederVelocity();
         inputs.wantedSpindexerRPS = spindexerRequest.Velocity;
         inputs.wantedVerticalFeederRPS = verticalFeederRequest.Velocity;
+        inputs.wantedGateRPS = gateFeederRequest.Velocity;
         inputs.spindexerCurrent = spindexerCurrent.getValueAsDouble();
         inputs.feederCurrent = feederCurrent.getValueAsDouble();
         inputs.spindexerVoltage = spindexerVoltage.getValueAsDouble();
         inputs.feederVoltage = feederVoltage.getValueAsDouble();
+        inputs.gateVelocity = gateVelocity.getValueAsDouble();
 
     }
 
@@ -101,9 +112,11 @@ public class FeederIOTalonFX implements FeederIO {
         if (reveseTimer > Timer.getFPGATimestamp()){
             spindexerMotor.setControl(spindexerRequest.withVelocity(FeederStates.UNJAM.feederRPS));
             verticalFeederMotor.setControl(verticalFeederRequest.withVelocity(FeederStates.UNJAM.feederRPS));
+            gateFeederMotor.setControl(gateFeederRequest.withVelocity(FeederStates.UNJAM.gateRPS));
         }else{
             spindexerMotor.setControl(spindexerRequest.withVelocity(state.spindexerRPS));
             verticalFeederMotor.setControl(verticalFeederRequest.withVelocity(state.feederRPS));
+            gateFeederMotor.setControl(gateFeederRequest.withVelocity(state.gateRPS));
             if (state == FeederStates.SCORING || state == FeederStates.FIXEDFIRE){
                 if ((this.getSpindexerVelocity()< 0.2 && upToSpeed) || (this.getSpindexerVelocity() < 0.2 && Timer.getFPGATimestamp()-timeToGetToSpeed > 3.5
                 ) ){

@@ -289,6 +289,7 @@ public class Shooter extends SubsystemBase {
                     if(driverOverride){
                         turret.setHoodPosition(hoodTargetPosition);
                         flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
+                        feeder.setFeederVelocity(FeederStates.SPINUP);
                         if(isAimedAtHub){
                             if(flywheel.FlywheelInTolerance(flywheelTolerance)){
                                 //Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTHUB;
