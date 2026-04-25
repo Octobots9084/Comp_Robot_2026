@@ -4,11 +4,15 @@ import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.configs.LEDConfigs;
 import com.ctre.phoenix6.controls.ColorFlowAnimation;
+import com.ctre.phoenix6.controls.RainbowAnimation;
 import com.ctre.phoenix6.controls.SolidColor;
+import com.ctre.phoenix6.signals.RGBWColor;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 import frc.robot.subsystems.Drive.SwerveSubsystem;
 import frc.robot.subsystems.Shooter.Shooter;
+import frc.robot.subsystems.Vision.Vision;
 
 public class Lights extends SubsystemBase{
 /**
@@ -97,7 +101,9 @@ public class Lights extends SubsystemBase{
     }
 
     public void applyStates() {
+
             device.candle.setControl(lightsCurrentState.color);
+
+        }
     }
-}
        
