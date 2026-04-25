@@ -101,11 +101,9 @@ public class Lights extends SubsystemBase{
     }
 
     public void applyStates() {
-        if(lightsCurrentState == LightAnimations.DISABLED){
-            device.candle.setControl(LightAnimations.rainbowAnim);
-        }else{
+
             device.candle.setControl(lightsCurrentState.color);
-            }
+
         }
     }
 
