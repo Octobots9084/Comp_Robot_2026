@@ -421,7 +421,7 @@ public class Shooter extends SubsystemBase {
                 isAimedAtHub = isAimedAtHub();
 
                 flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
-                turret.setHoodPosition(hoodTargetPosition);
+                turret.setHoodPosition(Constants.maximumHoodPosition);
                 break;
             case BUMP:
                 //figures out if were on our side our in the neutral zone and if were in auto
