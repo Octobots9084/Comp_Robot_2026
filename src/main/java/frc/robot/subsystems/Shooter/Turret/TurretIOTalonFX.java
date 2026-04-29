@@ -175,6 +175,13 @@ public class TurretIOTalonFX implements TurretIO {
         turretMotor.setVoltage(0.0);
     }
 
+    
+
+    //  public boolean intakePivotStalled() {
+    //       // return pivot.getFault_StatorCurrLimit().getValue();turretMotor
+    //       return false;
+    //  }
+
     // TODO add later gravity zeroing is fine for now
     // public boolean hoodZeroed() {
     //     if(!Shooter.getInstance().hoodAlreadyZeroed){

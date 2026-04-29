@@ -16,14 +16,14 @@ package frc.robot.subsystems.Intake;
    */
 
 public enum IntakeStates {
-    INTAKING(35, 11.5),//0,3.65
-    AUTOINTAKING(70, 11.5),
-    EXTENDED(0, 11.5),
-    PARTIALEXTENTION(15,5),//
+    INTAKING(35, 11),//0,3.65
+    AUTOINTAKING(50, 11),
+    EXTENDED(0, 11),
+    PARTIALEXTENTION(15,3),//
     SAFE(0, 0),
-    REVERSEINTAKING(-35, 11.5),
+    REVERSEINTAKING(-35, 11),
     ZERO(0, 0),
-    ELEPHANTIASISPART2(25,11.5);
+    ELEPHANTIASISPART2(25,11);
 
     //LINTAKE PIVOT MAX: 0 MIN 0.76
    /**

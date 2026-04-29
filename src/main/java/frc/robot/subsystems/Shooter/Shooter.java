@@ -63,6 +63,7 @@ public class Shooter extends SubsystemBase {
     public Flywheel flywheel = new Flywheel();
     public final static double prefire = 0;
     public static boolean driverOverride = false;
+    public static boolean coDriverOverride = false;
     public static boolean flywheelOverride = false;
     public static boolean ferryOverride = false;
     private String gameData;
@@ -128,8 +129,9 @@ public class Shooter extends SubsystemBase {
     @Override
     public void periodic() {
         Logger.recordOutput("Shooter/ferryOverride", ferryOverride);
-        Logger.recordOutput("Shooter/ferryOverride", driverOverride);
-        Logger.recordOutput("Shooter/ferryOverride", flywheelOverride);
+        Logger.recordOutput("Shooter/driverOverride", driverOverride);
+        Logger.recordOutput("Shooter/coDriverOverride", coDriverOverride);
+        Logger.recordOutput("Shooter/flywheelOverride", flywheelOverride);
         double startTime = Timer.getFPGATimestamp();
         ApplyStates();
         handleStateTransitions();
@@ -180,7 +182,7 @@ public class Shooter extends SubsystemBase {
                 // isAimedAtHub = isAimedAtHub(); 
                 turret.setTurretPosition(90/360.0);
                 turret.setHoodPosition(manuelHood/360.0);
-                if(driverOverride){
+                if(driverOverride||coDriverOverride){
                     if(isAimedAtHub){
                         flywheel.setFlywheelVelocity(manuelFlywheel);
                         activateFeeder();
@@ -199,7 +201,7 @@ public class Shooter extends SubsystemBase {
                             wantedShooterState = ShooterStates.TRENCH;
                         }
                     }
-                    if(driverOverride || ferryOverride){
+                    if(driverOverride || ferryOverride || coDriverOverride){
                         turret.setHoodPosition(hoodTargetPosition);
                         flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
                         if(isAimedAtFerry){
@@ -286,7 +288,7 @@ public class Shooter extends SubsystemBase {
                             wantedShooterState = ShooterStates.TRENCH;
                         }
                     }
-                    if(driverOverride){
+                    if(driverOverride || coDriverOverride){
                         turret.setHoodPosition(hoodTargetPosition);
                         flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
                         feeder.setFeederVelocity(FeederStates.SPINUP);
@@ -332,7 +334,7 @@ public class Shooter extends SubsystemBase {
                 turret.setHoodPosition(Constants.maximumHoodPosition);
                 
                 feeder.setFeederVelocity(FeederStates.OFF);
-                if (flywheelOverride||driverOverride) {
+                if (flywheelOverride||driverOverride||coDriverOverride) {
                         flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
                 }
                 else {

@@ -121,7 +121,7 @@ public class IntakeIOTalonFX implements IntakeIO {
      }
 
      public boolean intakePivotStalled() {
-          // return pivot.getFault_StatorCurrLimit().getValue();
+          // return pivot.getFault_StatorCurrLimit().getValue();turretMotor
           return false;
      }
 

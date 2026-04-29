@@ -30,8 +30,8 @@ public class ButtonConfig {
         // driverController.leftTrigger().onTrue(new SetIntakeStateIntaking()).onFalse(new SetIntakeStateSafe());
 
         driverController.rightBumper().whileTrue(new runIntakeReverse());
-        driverController.leftTrigger().whileTrue(new runIntake());
-
+        driverController.leftTrigger().onTrue(new InstantCommand(() -> {Intake.driverOverride = true;Intake.getInstance().wantedState=IntakeStates.INTAKING;})).onFalse(new InstantCommand(() -> {Intake.driverOverride = false;Intake.getInstance().wantedState=IntakeStates.EXTENDED;}));
+        // driverController.leftTrigger().onTrue(new InstantCommand(() -> {Intake.driverOverride = true;})).onFalse(new InstantCommand(() -> {Intake.driverOverride = false;}));
 
         driverController.x().onTrue(new InstantCommand(() -> {
                 superstructure.wantedState = States.UNJAM;
@@ -86,7 +86,9 @@ public class ButtonConfig {
                 }));
 
         driverController.b().onTrue( new InstantCommand( () -> {
-                Intake.getInstance().wantedState = IntakeStates.PARTIALEXTENTION;
+                Intake.driverHistoriasisOverride = true;
+        })).onFalse( new InstantCommand( () -> {
+                Intake.driverHistoriasisOverride = false;
         }));
         coDriverController.a().onTrue(new ToggleAutoFerry());
         

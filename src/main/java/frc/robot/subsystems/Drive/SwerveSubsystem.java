@@ -211,7 +211,7 @@ public class SwerveSubsystem extends SubsystemBase {
                  MathUtil.applyDeadband(driverController.getRightX(), Constants.rightXDeadband) != 0 ||
                   MathUtil.applyDeadband(driverController.getRightY(), Constants.rightYDeadband) != 0)
                 {
-                    if(Shooter.driverOverride){
+                    if(Shooter.driverOverride || Shooter.coDriverOverride){
                         wantedState = SwerveStates.SLOW;
                     } else {
                         wantedState = SwerveStates.MANUAL;
@@ -229,7 +229,7 @@ public class SwerveSubsystem extends SubsystemBase {
     public void applyStates() {
         switch (currentState) {
             case MANUAL:
-                if (Shooter.driverOverride && this.isInAllianceZone()) {
+                if ((Shooter.driverOverride || Shooter.coDriverOverride) && this.isInAllianceZone()) {
                     wantedState = SwerveStates.SLOW;  
                 }
                 
@@ -264,7 +264,7 @@ public class SwerveSubsystem extends SubsystemBase {
                         .withSpeeds(speeds)
                         .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
 
-                if (!Shooter.driverOverride || !this.isInAllianceZone()) 
+                if ((!Shooter.driverOverride && !Shooter.coDriverOverride) || !this.isInAllianceZone()) 
                     wantedState = SwerveStates.MANUAL;
                 break;
             case IDLE:

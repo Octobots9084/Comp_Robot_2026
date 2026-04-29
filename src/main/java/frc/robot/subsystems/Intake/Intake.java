@@ -44,6 +44,9 @@ public class Intake extends SubsystemBase {
      */
     public static Intake instance;
 
+    public static boolean driverOverride = false;
+    public static boolean driverHistoriasisOverride = false;
+
 
     /*True if the zeroing process has been completed. */
     public boolean alreadyZeroed = false;
@@ -103,8 +106,13 @@ public class Intake extends SubsystemBase {
 
             case INTAKING:
             if (currentState != IntakeStates.ZERO || alreadyZeroed == true) {
-                // only works if not climbing
-                currentState = IntakeStates.INTAKING;
+                if(driverHistoriasisOverride){
+                    currentState = IntakeStates.PARTIALEXTENTION;
+                } else if (driverOverride){
+                    currentState = IntakeStates.INTAKING;
+                } else {
+                    wantedState = IntakeStates.EXTENDED;
+                }
             }
                 // Lights.getLightInstance().lightsWantedState = LightAnimations.INTAKING;
                 break;
