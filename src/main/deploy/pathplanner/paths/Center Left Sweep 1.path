@@ -12,7 +12,7 @@
         "y": 7.409857346647646
       },
       "isLocked": false,
-      "linkedName": "Trench Left Start Center"
+      "linkedName": null
     },
     {
       "anchor": {
@@ -64,16 +64,16 @@
     },
     {
       "anchor": {
-        "x": 6.562097004279188,
-        "y": 7.211440798861429
+        "x": 6.468980322003578,
+        "y": 7.5
       },
       "prevControl": {
-        "x": 7.198491557444471,
-        "y": 6.936252264876084
+        "x": 6.792446798465774,
+        "y": 7.504336661911556
       },
       "nextControl": {
-        "x": 5.853016824928551,
-        "y": 7.518059914413301
+        "x": 4.540810504925879,
+        "y": 7.474149344018008
       },
       "isLocked": false,
       "linkedName": null
@@ -89,7 +89,7 @@
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Trench Left Shoot"
+      "linkedName": null
     }
   ],
   "rotationTargets": [
@@ -174,13 +174,13 @@
       }
     },
     {
-      "name": "StartShoot",
+      "name": "DepotShoot",
       "waypointRelativePos": 4.564483457123558,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "StartShoot"
+          "name": "DepotShoot"
         }
       }
     }
@@ -200,7 +200,7 @@
   "reversed": false,
   "folder": "Left Side",
   "idealStartingState": {
-    "velocity": 1.0,
+    "velocity": 0,
     "rotation": 0.0
   },
   "useDefaultConstraints": false

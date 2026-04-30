@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.4864194008559197,
-        "y": 5.697617689015692
+        "x": 3.055720399429386,
+        "y": 4.934236804564907
       },
       "isLocked": false,
       "linkedName": null
@@ -20,12 +20,12 @@
         "y": 7.431398002853067
       },
       "prevControl": {
-        "x": 2.5381740370898713,
-        "y": 7.094992867332382
+        "x": 2.9392724679029953,
+        "y": 7.0820542082738935
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Trench Left Start Center"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -33,15 +33,15 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 2.0,
-    "maxAcceleration": 2.0,
-    "maxAngularVelocity": 90.0,
+    "maxVelocity": 4.0,
+    "maxAcceleration": 4.0,
+    "maxAngularVelocity": 120.0,
     "maxAngularAcceleration": 120.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 1.0,
+    "velocity": 0,
     "rotation": 0.0
   },
   "reversed": false,

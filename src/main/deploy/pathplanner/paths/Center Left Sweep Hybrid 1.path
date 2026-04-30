@@ -12,7 +12,7 @@
         "y": 7.425619827540008
       },
       "isLocked": false,
-      "linkedName": "Trench Left Start Center"
+      "linkedName": null
     },
     {
       "anchor": {
@@ -53,7 +53,7 @@
       },
       "prevControl": {
         "x": 8.007436396809712,
-        "y": 5.209780322985202
+        "y": 5.209780322985203
       },
       "nextControl": {
         "x": 6.815136997774108,
@@ -174,13 +174,13 @@
       }
     },
     {
-      "name": "StartShoot",
+      "name": "DepotShoot",
       "waypointRelativePos": 4.7805536799459585,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "StartShoot"
+          "name": "DepotShoot"
         }
       }
     }
