@@ -159,6 +159,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public void registerNamedCommands () {
 
+        //DO THE INTAKE THING (5 sec) for shoot
       NamedCommands.registerCommand("StartShoot", new InstantCommand(() -> {Superstructure.getInstance().wantedState = States.AUTO;}));
       NamedCommands.registerCommand("StopShoot", new InstantCommand(() -> {Superstructure.getInstance().wantedState = States.AUTONONFIRE;}));
       

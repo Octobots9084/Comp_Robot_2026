@@ -66,6 +66,8 @@ public class ButtonConfig {
                 .onFalse(new InstantCommand(
                         () -> Shooter.driverOverride = false)).onFalse(new InstantCommand(() -> {Shooter.flywheelDebouncer = Shooter.flywheelToleranceThreshold;}));
 
+    
+        coDriverController.x().onTrue(new InstantCommand(() -> Superstructure.getInstance().wantedState = States.ZERO));
         coDriverController.rightTrigger(0.5).onTrue(new SetStateShooter());
         coDriverController.rightTrigger(0.5).onTrue(new InstantCommand(
                 () -> Shooter.driverOverride = true))
@@ -95,6 +97,9 @@ public class ButtonConfig {
         }));
         coDriverController.a().onTrue(new ToggleAutoFerry());
         
+        driverController.b().onTrue(new InstantCommand(() -> {
+                intake.wantedState = IntakeStates.SAFE;
+        }));
 
         //coDriverController.leftTrigger(0.5).onTrue(new SetStateSafe());
         driverController.y().onTrue(new InstantCommand(() -> superstructure.wantedState = States.FIXEDFIRE)).onFalse(new InstantCommand(() -> superstructure.wantedState = States.SHOOTER));

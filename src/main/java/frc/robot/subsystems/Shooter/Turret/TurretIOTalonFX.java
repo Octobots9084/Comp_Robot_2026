@@ -154,20 +154,20 @@ public class TurretIOTalonFX implements TurretIO {
 
     @Override
     public boolean zeroTurret() {
-        Logger.recordOutput("turretAlreadyZeroed", Shooter.getInstance().turretAlreadyZeroed);
+        Shooter shooterIntstance = Shooter.getInstance(); 
         if(!Shooter.getInstance().turretAlreadyZeroed){
             if (!turretMagnetBreak.get()) {
                 turretMotor.setVoltage(0);
                 turretMotor.setPosition(Constants.turretZeroPosition);
                 this.setTurretPosition(0);
-                Shooter.getInstance().turretAlreadyZeroed = true;
+                shooterIntstance.turretAlreadyZeroed = true;
             } else {
                 turretMotor.setVoltage(1.25);// was 3v
-
-                Shooter.getInstance().turretAlreadyZeroed = false;
+                shooterIntstance.turretAlreadyZeroed = false;//Int everything (sets the instanance to false tp show that the turrent has not been zerod)
             }
         }
-        return Shooter.getInstance().turretAlreadyZeroed;
+        Logger.recordOutput("turretAlreadyZeroed", Shooter.getInstance().turretAlreadyZeroed);
+        return shooterIntstance.turretAlreadyZeroed;
     }
 
     @Override

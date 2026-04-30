@@ -88,28 +88,30 @@ public class Superstructure extends SubsystemBase {
                 }
                 else if(DriverStation.isAutonomousEnabled()){
                     wantedState = States.AUTONONFIRE;
+                    currentState = States.AUTONONFIRE;
                 }
                 else {
                     wantedState = States.SHOOTER;
+                    currentState = States.SAFE;
                 }
                 break;
             case AUTO:
-                if(DriverStation.isAutonomous()){
+                if(DriverStation.isAutonomous() && currentState != States.ZERO){
                     this.currentState = States.AUTO;
                 }
                 break;
             case AUTOFERRY:
-                if(DriverStation.isAutonomous()){
+                if(DriverStation.isAutonomous() && currentState != States.ZERO){
                     this.currentState = States.AUTOFERRY;
                 }
                 break;
             case AUTODEPOTSHOOT:
-                if(DriverStation.isAutonomous()){
+                if(DriverStation.isAutonomous() && currentState != States.ZERO){
                     this.currentState = States.AUTODEPOTSHOOT;
                 }
                 break;
             case AUTONONFIRE:
-                if(DriverStation.isAutonomous()){
+                if(DriverStation.isAutonomous() && currentState != States.ZERO){
                     this.currentState = States.AUTONONFIRE;
                 }
                 break;
@@ -143,8 +145,10 @@ public class Superstructure extends SubsystemBase {
                 if(stateZERO()){
                     if(DriverStation.isAutonomousEnabled()){
                         wantedState = States.AUTONONFIRE;
+                        currentState = States.SAFE;
                     }else{
                         wantedState = States.SHOOTER;
+                        currentState = States.SAFE;
                     }
                 }
                 break;
