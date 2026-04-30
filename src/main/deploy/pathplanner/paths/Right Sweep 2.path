@@ -145,13 +145,13 @@
       }
     },
     {
-      "name": "StartShoot",
+      "name": "DepotShoot",
       "waypointRelativePos": 3.759621877110024,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "StartShoot"
+          "name": "DepotShoot"
         }
       }
     }

@@ -72,8 +72,8 @@
         "y": 2.503499464970924
       },
       "nextControl": {
-        "x": 5.796079708271684,
-        "y": 2.448283701933499
+        "x": 5.79607970827168,
+        "y": 2.4482837019334984
       },
       "isLocked": false,
       "linkedName": null
@@ -152,13 +152,13 @@
       }
     },
     {
-      "name": "StartShoot",
+      "name": "DepotShoot",
       "waypointRelativePos": 4.7805536799459585,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "StartShoot"
+          "name": "DepotShoot"
         }
       }
     }
