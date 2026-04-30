@@ -9,12 +9,15 @@ import frc.robot.Constants;
 
 public class IntakeConfigurator {
     public TalonFXConfiguration intakeRollerConfig;
-    public TalonFXConfiguration intakePivotConfig;
+    public TalonFXConfiguration intakeRightPivotConfig;
+    public TalonFXConfiguration intakeLeftPivotConfig;
 
     public IntakeConfigurator() {
         intakeRollerConfig = new TalonFXConfiguration()
                 .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(Constants.intakeRollerGearRatio));
-        intakePivotConfig = new TalonFXConfiguration()
+        intakeRightPivotConfig = new TalonFXConfiguration()
+                .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(Constants.intakePivotGearRatio));
+        intakeLeftPivotConfig = new TalonFXConfiguration()
                 .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(Constants.intakePivotGearRatio));
 
         // intake roller config
@@ -38,25 +41,49 @@ public class IntakeConfigurator {
 
 
         // intake pivot right config
-        intakePivotConfig.CurrentLimits.SupplyCurrentLimit = 20;
-        intakePivotConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-        intakePivotConfig.CurrentLimits.StatorCurrentLimit = 40;
-        intakePivotConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+        intakeRightPivotConfig.CurrentLimits.SupplyCurrentLimit = 20;
+        intakeRightPivotConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+        intakeRightPivotConfig.CurrentLimits.StatorCurrentLimit = 40;
+        intakeRightPivotConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 
         // set break mode and inversion
-        intakePivotConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;//BRAKE NORMALLY, BUT LANE IS GONNA FART
-        intakePivotConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+        intakeRightPivotConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;//BRAKE NORMALLY, BUT LANE IS GONNA FART
+        intakeRightPivotConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
         // create PID gains
-        intakePivotConfig.Slot0.kP = 8.0;
-        intakePivotConfig.Slot0.kI = 0.0;
-        intakePivotConfig.Slot0.kD = 0.0;
-        intakePivotConfig.Slot0.kA = 0.0;
-        intakePivotConfig.Slot0.kV = 0.0;
-        intakePivotConfig.Slot0.kS = 0.0;
-        intakePivotConfig.Slot0.kG = 0.0;
+        intakeRightPivotConfig.Slot0.kP = 8.0;
+        intakeRightPivotConfig.Slot0.kI = 0.0;
+        intakeRightPivotConfig.Slot0.kD = 0.0;
+        intakeRightPivotConfig.Slot0.kA = 0.0;
+        intakeRightPivotConfig.Slot0.kV = 0.0;
+        intakeRightPivotConfig.Slot0.kS = 0.0;
+        intakeRightPivotConfig.Slot0.kG = 0.0;
 
-        intakePivotConfig.MotionMagic.MotionMagicAcceleration = 64;
-        intakePivotConfig.MotionMagic.MotionMagicCruiseVelocity = 128;
+        intakeRightPivotConfig.MotionMagic.MotionMagicAcceleration = 64;
+        intakeRightPivotConfig.MotionMagic.MotionMagicCruiseVelocity = 128;
+
+        
+
+        // intake pivot right config
+        intakeLeftPivotConfig.CurrentLimits.SupplyCurrentLimit = 20;
+        intakeLeftPivotConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+        intakeLeftPivotConfig.CurrentLimits.StatorCurrentLimit = 40;
+        intakeLeftPivotConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+
+        // set break mode and inversion
+        intakeLeftPivotConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;//BRAKE NORMALLY, BUT LANE IS GONNA FART
+        intakeLeftPivotConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+
+        // create PID gains
+        intakeLeftPivotConfig.Slot0.kP = 8.0;
+        intakeLeftPivotConfig.Slot0.kI = 0.0;
+        intakeLeftPivotConfig.Slot0.kD = 0.0;
+        intakeLeftPivotConfig.Slot0.kA = 0.0;
+        intakeLeftPivotConfig.Slot0.kV = 0.0;
+        intakeLeftPivotConfig.Slot0.kS = 0.0;
+        intakeLeftPivotConfig.Slot0.kG = 0.0;
+
+        intakeLeftPivotConfig.MotionMagic.MotionMagicAcceleration = 64;
+        intakeLeftPivotConfig.MotionMagic.MotionMagicCruiseVelocity = 128;
     }
 }

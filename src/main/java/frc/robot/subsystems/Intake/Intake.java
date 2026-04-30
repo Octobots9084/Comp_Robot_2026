@@ -126,6 +126,9 @@ public class Intake extends SubsystemBase {
 
             case EXTENDED:
                 // only works if not climbing
+                if (driverOverride){
+                    wantedState = IntakeStates.INTAKING;
+                }
                 currentState = IntakeStates.EXTENDED;
                 break;
 

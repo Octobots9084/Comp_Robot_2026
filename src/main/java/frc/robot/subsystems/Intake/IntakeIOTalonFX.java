@@ -37,7 +37,7 @@ public class IntakeIOTalonFX implements IntakeIO {
      private VelocityVoltage rollerRequest = new VelocityVoltage(0);
      private MotionMagicVoltage pivotRequest = new MotionMagicVoltage(0);
 
-     private Follower followPivot = new Follower(Constants.intakePivotID, MotorAlignmentValue.Opposed);
+     // private Follower followPivot = new Follower(Constants.intakePivotID, MotorAlignmentValue.Opposed);
      private Follower followRoller = new Follower(Constants.intakeRollerID, MotorAlignmentValue.Opposed);
 
      public IntakeIOTalonFX() {
@@ -48,15 +48,17 @@ public class IntakeIOTalonFX implements IntakeIO {
 
           rollerfollower = new TalonFX(Constants.intakeRollerFollowerID, Constants.krakenBus);
           pivotfollower = new TalonFX(Constants.intakePivotFollowerID, Constants.krakenBus);
+          // pivotfollower = new TalonFX(Constants.intakePivotFollowerID, Constants.krakenBus);
           pivotfollower.setNeutralMode(NeutralModeValue.Coast);//BRAKE NORMALLY, BUT LANE IS GONNA FART
 
           roller.setNeutralMode(NeutralModeValue.Coast);
 
           roller.getConfigurator().apply(config.intakeRollerConfig);
-          pivot.getConfigurator().apply(config.intakePivotConfig);
+          pivot.getConfigurator().apply(config.intakeRightPivotConfig);
+          pivotfollower.getConfigurator().apply(config.intakeLeftPivotConfig);
 
           rollerfollower.setControl(followRoller);
-          pivotfollower.setControl(followPivot);
+          // pivotfollower.setControl(followPivot);
 
           rollerVelocity = roller.getVelocity();
           pivotAngle = pivot.getPosition();
@@ -67,6 +69,7 @@ public class IntakeIOTalonFX implements IntakeIO {
           PhoenixUtil.tryUntilOk(5, () -> BaseStatusSignal.setUpdateFrequencyForAll(50,rollerVelocity,pivotAngle));
           PhoenixUtil.tryUntilOk(5, () -> roller.optimizeBusUtilization(0,1.0));
           PhoenixUtil.tryUntilOk(5, () -> pivot.optimizeBusUtilization(0,1.0));
+          PhoenixUtil.tryUntilOk(5, () -> pivotfollower.optimizeBusUtilization(0,1.0));
 
           PhoenixUtil.registerSignals(
                Constants.krakenBus.isNetworkFD(),
@@ -92,6 +95,7 @@ public class IntakeIOTalonFX implements IntakeIO {
      public void setIntakeState(IntakeStates states) {
           // pivotRequest.Position = states.intakePosition;
           pivot.setControl(pivotRequest.withPosition(states.intakePosition).withFeedForward(1));
+          pivotfollower.setControl(pivotRequest.withPosition(states.intakePosition).withFeedForward(1));
           roller.setControl(rollerRequest.withVelocity(states.rollerRPS));
 
      }
@@ -130,6 +134,7 @@ public class IntakeIOTalonFX implements IntakeIO {
         if (!pressed) {
             setRotateVoltage(0);
             pivot.setPosition(0);
+            pivotfollower.setPosition(0);
             Intake.getInstance().alreadyZeroed = true;
         } else {
           setRotateVoltage(-2);
