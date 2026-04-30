@@ -22,7 +22,8 @@ public class CreatePathDuplicates {
     private static String oldPath;
     private static String newPathName;
     private static String newPath;
-    
+    private static String goalPathFolder;
+        
     public static void main(String[] args) {
         try {
             if (args.length > 0) {
@@ -33,6 +34,7 @@ public class CreatePathDuplicates {
             newPath = "src/main/deploy/pathplanner/paths/" + newPathName + ".path";
             Files.deleteIfExists(Path.of(newPath));
             // File newFile = new File(newPath);
+            goalPathFolder = args[1];
             // newFile.createNewFile();
 
             //RN DOESNT DO MUCH TO THE PATH, NEEDS MORE TESTING
@@ -73,7 +75,11 @@ public class CreatePathDuplicates {
                 } else if (line.contains("\"folder\": ")) {
                     //remove link
                     p1 = line.substring(0, line.indexOf(":") + 1);
-                    Files.writeString(Path.of(newPath), p1 + " "  + "\"Generated Flipped Paths\"," + "\n", StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+                    if (goalPathFolder.equals("")) {
+                      Files.writeString(Path.of(newPath), p1 + " "  + "\"Generated Flipped Paths\"," + "\n", StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+                    } else {
+                      Files.writeString(Path.of(newPath), p1 + " " + goalPathFolder + "," + "\n", StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+                    }
                 } else {
                     if (i == numLines - 1) {
                         Files.writeString(Path.of(newPath), line, StandardOpenOption.CREATE, StandardOpenOption.APPEND);

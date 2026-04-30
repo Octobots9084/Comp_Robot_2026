@@ -9,11 +9,17 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
 public class CreateAutoDuplicates {
-    private static String oldAutoName = "Center Right Hybrid";//put the path name here to duplicate, it will go in Generated Flipped Paths
+
+
+    private static String oldAutoName = "TEST FERRY";//DONT DO \"    //put the path name here to duplicate, it will go in Generated Flipped Autos by default
+    private static String goalAutoFolder = "";//DONT DO \"    //put the auto folder here if you dont want it in Generated Flipped Autos
+    public static String goalPathFolder = "";//DONT DO \"    //put the path folder here if you dont want it in Generated Flipped Paths
+
+
     private static String oldAuto;
     private static String newAutoName;
     private static String newAuto;
-    
+
     public static void main(String[] args) {
         try {
             newAutoName = replaceSideName(oldAutoName);
@@ -21,6 +27,9 @@ public class CreateAutoDuplicates {
             if (newAutoName == null) {
               newAutoName = "(Flipped) " + oldAutoName;
             }
+
+            goalPathFolder = "\"" + goalPathFolder + "\"";
+            goalAutoFolder = "\"" + goalAutoFolder + "\"";
 
             oldAuto = "src/main/deploy/pathplanner/autos/" + oldAutoName + ".auto";
             newAuto = "src/main/deploy/pathplanner/autos/" + newAutoName + ".auto";
@@ -50,15 +59,21 @@ public class CreateAutoDuplicates {
                               path.indexOf("\"pathName\": ") + 13,
                               path.length() - 1
                             )
+                          ,
+                            goalPathFolder
                         });//name, side
                       Files.writeString(Path.of(newAuto), path + "\n", StandardOpenOption.CREATE, StandardOpenOption.APPEND);
                     } else {
-                        CreatePathDuplicates.main(new String[]{line.substring(line.indexOf("\"pathName\": ") + 13, line.length() - line.substring(line.indexOf("\"pathName\": ")).indexOf("\"") - 1)});//name, side
+                        CreatePathDuplicates.main(new String[]{line.substring(line.indexOf("\"pathName\": ") + 13, line.length() - line.substring(line.indexOf("\"pathName\": ")).indexOf("\"") - 1), goalPathFolder});//name, side
                         Files.writeString(Path.of(newAuto), line.substring(0, line.indexOf("\"pathName\": ") + 13) + "(Flipped) " + line.substring(line.indexOf("\"pathName\": ") + 13, line.length() - line.substring(line.indexOf("\"pathName\": ")).indexOf("\"") - 1) + line.substring(line.length() - line.substring(line.indexOf("\"pathName\": ")).indexOf("\"") - 1) + "\n", StandardOpenOption.CREATE, StandardOpenOption.APPEND);
                     }
                 } else if (line.contains("\"folder\": ")) {
                     p1 = line.substring(0, line.indexOf(":") + 1);
-                    Files.writeString(Path.of(newAuto), p1 + " "  + "\"Generated Flipped Autos\"," + "\n", StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+                    if (goalAutoFolder.equals("")) {
+                        Files.writeString(Path.of(newAuto), p1 + " " + "\"Generated Flipped Autos\"," + "\n", StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+                    } else {
+                        Files.writeString(Path.of(newAuto), p1 + " " + goalAutoFolder + "," + "\n", StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+                    }
                 } else {
                     if (i == numLines - 1) {
                         Files.writeString(Path.of(newAuto), line, StandardOpenOption.CREATE, StandardOpenOption.APPEND);
