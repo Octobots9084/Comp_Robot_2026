@@ -45,7 +45,7 @@ public class Intake extends SubsystemBase {
     public static Intake instance;
 
     public static boolean driverOverride = false;
-    public static boolean driverHistoriasisOverride = false;
+    public static boolean driverElephantiasisPart2Override = false;
 
 
     /*True if the zeroing process has been completed. */
@@ -106,8 +106,8 @@ public class Intake extends SubsystemBase {
 
             case INTAKING:
             if (currentState != IntakeStates.ZERO || alreadyZeroed == true) {
-                if(driverHistoriasisOverride){
-                    currentState = IntakeStates.PARTIALEXTENTION;
+                if(driverElephantiasisPart2Override){
+                    currentState = IntakeStates.ELEPHANTIASISPART2;
                 } else if (driverOverride){
                     currentState = IntakeStates.INTAKING;
                 } else {
@@ -194,7 +194,7 @@ public class Intake extends SubsystemBase {
                 break;
             case ELEPHANTIASISPART2:
                 if (elephantiaissTimer<0){
-                    io.setIntakeState(IntakeStates.INTAKING);
+                    io.setIntakeState(IntakeStates.SEMIPARTIALEXTENTION);
                 } else {
                     io.setIntakeState(IntakeStates.PARTIALEXTENTION);
                 }

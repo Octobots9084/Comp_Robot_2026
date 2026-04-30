@@ -21,11 +21,13 @@ import frc.robot.subsystems.Shooter.ShooterStates;
 public class ButtonConfig {
     public static CommandXboxController driverController = new CommandXboxController(0);
     public static CommandXboxController coDriverController = new CommandXboxController(1);
+
+    public Intake intake;
 //     public static CommandXboxController coDriverController = new CommandXboxController(1);
     public Superstructure superstructure = Superstructure.getInstance();
 
     public void initTeleop() {
-
+        intake = Intake.getInstance();
         
         // driverController.leftTrigger().onTrue(new SetIntakeStateIntaking()).onFalse(new SetIntakeStateSafe());
 
@@ -85,10 +87,11 @@ public class ButtonConfig {
                         Shooter.flywheelOverride = false;
                 }));
 
-        driverController.b().onTrue( new InstantCommand( () -> {
-                Intake.driverHistoriasisOverride = true;
+        driverController.leftBumper().onTrue( new InstantCommand( () -> {
+                intake.wantedState = IntakeStates.INTAKING;
+                Intake.driverElephantiasisPart2Override = true;
         })).onFalse( new InstantCommand( () -> {
-                Intake.driverHistoriasisOverride = false;
+                Intake.driverElephantiasisPart2Override = false;
         }));
         coDriverController.a().onTrue(new ToggleAutoFerry());
         
@@ -119,12 +122,12 @@ public class ButtonConfig {
 
 
 
-        driverController.leftBumper().whileTrue(new InstantCommand(() -> {
-                Intake.getInstance().setWantedState(IntakeStates.ELEPHANTIASISPART2);
-        })).onFalse(new InstantCommand(() -> {
-                        Intake.getInstance().setWantedState(IntakeStates.EXTENDED);
+        // driverController.leftBumper().onTrue(new InstantCommand(() -> {
+        //         Intake.getInstance().setWantedState(IntakeStates.ELEPHANTIASISPART2);
+        // })).onFalse(new InstantCommand(() -> {
+        //                 Intake.getInstance().setWantedState(IntakeStates.EXTENDED);
 
-        }));//UNCOMMENT AFTER AUSTION TESTING OF INTAKE (its the real one)
+        // }));//UNCOMMENT AFTER AUSTION TESTING OF INTAKE (its the real one)
 
         // driverController.leftBumper().onTrue(new InstantCommand(() -> {
         //         Intake.getInstance().setWantedState(IntakeStates.ELEPHANTIASISPART2);
