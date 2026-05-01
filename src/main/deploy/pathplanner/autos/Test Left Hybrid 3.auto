@@ -13,13 +13,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Right Sweep Hybrid 1"
+            "pathName": "Left Sweep Hybrid 1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Right Hybrid Shoot 1"
+            "pathName": "Left Hybrid Shoot 1"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StartShoot"
           }
         },
         {
@@ -31,19 +43,31 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Right Sweep Hybrid 2"
+            "pathName": "Left Sweep Hybrid 2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Right Hybrid Shoot 2"
+            "pathName": "Left Hybrid Shoot 2"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StartShoot"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "Right",
+  "folder": null,
   "choreoAuto": false
 }

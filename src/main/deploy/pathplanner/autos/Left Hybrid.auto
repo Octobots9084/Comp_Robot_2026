@@ -25,18 +25,6 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StartShoot"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
             "waitTime": 2.0
           }
         },
@@ -50,18 +38,6 @@
           "type": "path",
           "data": {
             "pathName": "Left Hybrid Shoot 2"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StartShoot"
           }
         }
       ]

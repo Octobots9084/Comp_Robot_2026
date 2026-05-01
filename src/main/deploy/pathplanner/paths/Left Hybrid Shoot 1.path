@@ -34,7 +34,7 @@
   "eventMarkers": [
     {
       "name": "StopShoot",
-      "waypointRelativePos": 0.7886563133018166,
+      "waypointRelativePos": 0.4024307900067515,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -45,7 +45,7 @@
     },
     {
       "name": "StartShoot",
-      "waypointRelativePos": 0.8102633355840647,
+      "waypointRelativePos": 0.43214044564483534,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",

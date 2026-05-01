@@ -194,7 +194,7 @@ public class Intake extends SubsystemBase {
                 break;
             case ELEPHANTIASISPART2:
                 if (elephantiaissTimer<0){
-                    io.setIntakeState(IntakeStates.SEMIPARTIALEXTENTION);
+                    io.setIntakeState(IntakeStates.LESSPARTIALEXTENTION);
                 } else {
                     io.setIntakeState(IntakeStates.PARTIALEXTENTION);
                 }
