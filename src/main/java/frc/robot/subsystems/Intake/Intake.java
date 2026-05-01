@@ -201,8 +201,8 @@ public class Intake extends SubsystemBase {
 
 
                 elephantiaissTimer++;
-                if (elephantiaissTimer > 20){
-                    elephantiaissTimer = -20;
+                if (elephantiaissTimer > 15){
+                    elephantiaissTimer = -15;
                 }
                 break;
         default:

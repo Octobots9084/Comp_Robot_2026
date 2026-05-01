@@ -80,16 +80,16 @@
     },
     {
       "anchor": {
-        "x": 3.3016555555555556,
+        "x": 3.6,
         "y": 0.5300000000000002
       },
       "prevControl": {
-        "x": 4.7507853701062,
+        "x": 5.0491298145506445,
         "y": 0.4868473609129822
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "right trench shoot"
     }
   ],
   "rotationTargets": [

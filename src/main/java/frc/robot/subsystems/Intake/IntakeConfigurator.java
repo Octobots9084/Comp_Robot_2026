@@ -51,7 +51,7 @@ public class IntakeConfigurator {
         intakeRightPivotConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
         // create PID gains
-        intakeRightPivotConfig.Slot0.kP = 8.0;
+        intakeRightPivotConfig.Slot0.kP = 12.0;
         intakeRightPivotConfig.Slot0.kI = 0.0;
         intakeRightPivotConfig.Slot0.kD = 0.0;
         intakeRightPivotConfig.Slot0.kA = 0.0;
@@ -59,8 +59,8 @@ public class IntakeConfigurator {
         intakeRightPivotConfig.Slot0.kS = 0.0;
         intakeRightPivotConfig.Slot0.kG = 0.0;
 
-        intakeRightPivotConfig.MotionMagic.MotionMagicAcceleration = 64+32;
-        intakeRightPivotConfig.MotionMagic.MotionMagicCruiseVelocity = 128+64;
+        intakeRightPivotConfig.MotionMagic.MotionMagicAcceleration = 64*2;
+        intakeRightPivotConfig.MotionMagic.MotionMagicCruiseVelocity = 128*2;
 
         
 
@@ -75,7 +75,7 @@ public class IntakeConfigurator {
         intakeLeftPivotConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
         // create PID gains
-        intakeLeftPivotConfig.Slot0.kP = 8.0;
+        intakeLeftPivotConfig.Slot0.kP = 12.0;
         intakeLeftPivotConfig.Slot0.kI = 0.0;
         intakeLeftPivotConfig.Slot0.kD = 0.0;
         intakeLeftPivotConfig.Slot0.kA = 0.0;
@@ -83,7 +83,7 @@ public class IntakeConfigurator {
         intakeLeftPivotConfig.Slot0.kS = 0.0;
         intakeLeftPivotConfig.Slot0.kG = 0.0;
 
-        intakeLeftPivotConfig.MotionMagic.MotionMagicAcceleration = 64+32;
-        intakeLeftPivotConfig.MotionMagic.MotionMagicCruiseVelocity = 128+64;
+        intakeLeftPivotConfig.MotionMagic.MotionMagicAcceleration = 64*2;
+        intakeLeftPivotConfig.MotionMagic.MotionMagicCruiseVelocity = 128*2;
     }
 }

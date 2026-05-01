@@ -37,19 +37,13 @@
         {
           "type": "path",
           "data": {
+            "pathName": "Right Deploy Intake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
             "pathName": "Right Sweep 2"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 2.0
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StartShoot"
           }
         }
       ]
