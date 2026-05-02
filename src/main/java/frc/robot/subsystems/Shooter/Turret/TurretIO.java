@@ -18,6 +18,16 @@ public interface TurretIO {
         // public double turretCurrent;
         public double turretPositionErr;
         public boolean turretLimitSwitch;
+
+        public double turretVelocity;
+        public double turretCurrent;
+
+        
+        public boolean turretStalled;
+        // inputs.turretZeroFixTime = Shooter.getInstance().turretZeroFixTime;
+        public boolean turretMagnetBreak;
+        public double turretMotorVoltage;
+        public boolean turretAlreadyZeroed;
     }
 
     public default void updateInputs(TurretIOInputs inputs) {
@@ -62,6 +72,17 @@ public interface TurretIO {
         return false;
     }
 
+    public default boolean getTurretMagnetBreak() {
+        return false;
+    }
+
+    public default boolean turretStalled() {
+        return false;
+    }
+    
+    public default void reverseTurretMotor () {
+    }
+    
     public default boolean hoodZeroed() {
         return false;
     }
@@ -69,5 +90,11 @@ public interface TurretIO {
     public default void zeroHoodMotor(){}
 
     public default void setTurretZeroVoltage() {
+    }
+
+    public default void setTurretMotorPosition (double deg) {
+    }
+
+    public default void setTurretMotorVoltage (double v) {
     }
 }
