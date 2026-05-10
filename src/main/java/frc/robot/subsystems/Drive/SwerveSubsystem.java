@@ -234,17 +234,26 @@ public class SwerveSubsystem extends SubsystemBase {
                     wantedState = SwerveStates.SLOW;  
                 }
                 
-                shouldXLock();
 
+                if (!Robot.robotReveal) {
                 io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds()
                         .withSpeeds(calculateSpeedsBasedOnJoystickInputs())
                         .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
-
+                shouldXLock();
+                } else {
+                io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds()
+                        .withSpeeds(calculateSpeedsBasedOnJoystickInputsRobotReveal())
+                        .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
+                }
                 break;
             case SLOW:        
                 //TODO test
+            ChassisSpeeds speeds = calculateSpeedsBasedOnJoystickInputs().div(1.5);
+            if (Robot.robotReveal) {
+                speeds = calculateSpeedsBasedOnJoystickInputsRobotReveal().div(1.5);
+            } else {
                 shouldXLock();
-                ChassisSpeeds speeds = calculateSpeedsBasedOnJoystickInputs().div(1.5);
+            }
 
                 double absolute = Math.sqrt(Math.pow(speeds.vxMetersPerSecond, 2) + Math.pow(speeds.vyMetersPerSecond, 2));
                 double limited = poslimiter.calculate(absolute);
@@ -272,9 +281,17 @@ public class SwerveSubsystem extends SubsystemBase {
 
                 break;
             case ROTATION_LOCK:
+            if (!Robot.robotReveal) {
                 io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds()
                         .withSpeeds(calculateRotLockSpeedsBasedOnJoystickInputs())
                         .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
+                } else {
+                    io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds()
+                        .withSpeeds(calculateRotLockSpeedsBasedOnJoystickInputsRobotReveal())
+                        .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
+                }
+
+                
                 break;
             case REVERSE:
                 io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(-0.3, 0, 0))
@@ -318,6 +335,76 @@ public class SwerveSubsystem extends SubsystemBase {
         }
         return new ChassisSpeeds(xVelocity, yVelocity, angularVelocity);
     }
+
+
+
+
+
+
+    public ChassisSpeeds calculateSpeedsBasedOnJoystickInputsRobotReveal() {
+        double swervelimit = SmartDashboard.getNumber("RobotReveal/Swerve Limiter", 0.5);
+        double rotationlimit = SmartDashboard.getNumber("RobotReveal/Rotation Limiter", 1);
+        // double yMagnitude = MathUtil.applyDeadband(driverLeft.getRawAxis(0),
+        // Constants.leftYDeadband);
+        // double xMagnitude = -MathUtil.applyDeadband(driverLeft.getRawAxis(1),
+        // Constants.leftXDeadband);
+        // double angularMagnitude = -MathUtil.applyDeadband(driverRight.getRawAxis(0),
+        // Constants.rightXDeadband);
+        double yMagnitude = MathUtil.applyDeadband(driverController.getLeftX(), Constants.leftYDeadband);
+        double xMagnitude = MathUtil.applyDeadband(driverController.getLeftY(), Constants.leftXDeadband);
+        double angularMagnitude = -MathUtil.applyDeadband(driverController.getRightX(), Constants.rightXDeadband);
+        angularMagnitude = Math.copySign(angularMagnitude * angularMagnitude, angularMagnitude);
+        double xVelocity = xMagnitude * maxVelocity;
+        double yVelocity = yMagnitude * maxVelocity;
+
+        double angularVelocity = angularMagnitude * maxAngularVelocity;
+
+        if (Constants.isBlueAlliance) {   
+            return new ChassisSpeeds(-xVelocity*swervelimit, -yVelocity*swervelimit, angularVelocity*rotationlimit);
+        }
+        return new ChassisSpeeds(xVelocity*swervelimit, yVelocity*swervelimit, angularVelocity*rotationlimit);
+    }
+
+
+
+    public ChassisSpeeds calculateRotLockSpeedsBasedOnJoystickInputsRobotReveal() {
+        double swervelimit = SmartDashboard.getNumber("RobotReveal/Swerve Limiter", 0.5);
+        double rotationlimit = SmartDashboard.getNumber("RobotReveal/Rotation Limiter", 1);
+        // double yMagnitude = MathUtil.applyDeadband(driverLeft.getRawAxis(0),
+        // Constants.leftYDeadband);
+        // double xMagnitude = -MathUtil.applyDeadband(driverLeft.getRawAxis(1),
+        // Constants.leftXDeadband);
+        // double angularMagnitude = -MathUtil.applyDeadband(driverRight.getRawAxis(0),
+        // Constants.rightXDeadband);
+        double yMagnitude = MathUtil.applyDeadband(driverController.getLeftX(), Constants.leftYDeadband);
+        double xMagnitude = MathUtil.applyDeadband(driverController.getLeftY(), Constants.leftXDeadband);
+        if (getRobotPose().getRotation().getRadians()-rotLockAngle<0.3){
+            if (-MathUtil.applyDeadband(driverController.getRightX(), Constants.rightXDeadband)>0.9){
+                rotLockAngle = (rotLockAngle + Math.PI/2) % (Math.PI*2);
+            }
+            else if (-MathUtil.applyDeadband(driverController.getRightX(), Constants.rightXDeadband)<-0.9){
+                rotLockAngle = (rotLockAngle - Math.PI/2) % (Math.PI*2);
+                
+            }
+        }
+        double angularMagnitude = -MathUtil.applyDeadband(driverController.getRightX(), Constants.rightXDeadband);
+        double xVelocity = xMagnitude * maxVelocity;
+        double yVelocity = yMagnitude * maxVelocity;
+
+        double RotVelocity = angularPidcontroller.calculate(getRobotPose().getRotation().getRadians(),rotLockAngle);
+
+        if (Constants.isBlueAlliance) {   
+            return new ChassisSpeeds(-xVelocity*swervelimit, -yVelocity*swervelimit, RotVelocity*rotationlimit);
+        }
+        return new ChassisSpeeds(xVelocity*swervelimit, yVelocity*swervelimit, RotVelocity*rotationlimit);
+    }
+
+
+
+
+
+
+
 
     public ChassisSpeeds calculateRotLockSpeedsBasedOnJoystickInputs() {
         // double yMagnitude = MathUtil.applyDeadband(driverLeft.getRawAxis(0),

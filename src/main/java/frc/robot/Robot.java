@@ -64,8 +64,20 @@ public class Robot extends LoggedRobot {
   private boolean lastHubPeriod = false;
   public static boolean TeleopStarted = false;
   public static boolean isAllianceSet = false;
+  //changing this to true makes the lights get set in soft dashboard otherwise they get set automatically
+  public static boolean robotReveal = true;
   public Robot() {
     // Set up data receivers & replay source
+            double[] defaultLights = {0, 0, 0, 0};
+        SmartDashboard.putNumberArray("RobotReveal/light Controller", defaultLights);
+        SmartDashboard.putNumber("RobotReveal/Manual Red", 1);
+        SmartDashboard.putNumber("RobotReveal/Manual Green", 1);
+        SmartDashboard.putNumber("RobotReveal/Manual Blue", 1);
+        SmartDashboard.putNumber("RobotReveal/Manual White", 1);
+        
+        SmartDashboard.putNumber("RobotReveal/Swerve Limiter", 0.5);
+        SmartDashboard.putNumber("RobotReveal/Rotation Limiter", 1);
+
     switch (Constants.currentMode) {
       case REAL:
         // Running on a real robot, log to a USB stick ("/U/logs")

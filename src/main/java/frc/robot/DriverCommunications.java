@@ -1,5 +1,7 @@
 package frc.robot;
 
+import java.util.List;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -7,6 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.States;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Drive.SwerveSubsystem;
+import frc.robot.subsystems.Lights.Lights;
 import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Vision.Vision;
 
@@ -17,6 +20,8 @@ public class DriverCommunications {
     public static Field2d fieldPose = new Field2d();
     public static double PhaseClock = 0;
     public static double TeleopTimer = Timer.getMatchTime();
+    static double[] lights = {0,0,0,0};
+
     static void allianceShift(int ShiftEndTime){
         PhaseClock = Math.floor(TeleopTimer - ShiftEndTime);
         if(!Shooter.getInstance().isHubActive()){
@@ -78,9 +83,13 @@ public class DriverCommunications {
         SmartDashboard.putBoolean("Cam/Right", Vision.getInstance().io.CameraConnect(3));
         SmartDashboard.putBoolean("Cam/Back", Vision.getInstance().io.CameraConnect(4));
         SmartDashboard.putNumber("teleopTimer", TeleopTimer);
+        double[] defaultLights = {0, 0, 0, 0};
+        Lights.manualLights = SmartDashboard.getNumberArray("RobotReveal/light Controller", defaultLights);
 
-
-
+        Lights.manualR = SmartDashboard.getNumber("RobotReveal/Manual Red", 255);
+        Lights.manualG = SmartDashboard.getNumber("RobotReveal/Manual Green", 0);
+        Lights.manualB = SmartDashboard.getNumber("RobotReveal/Manual Blue", 200);
+        Lights.manualW = SmartDashboard.getNumber("RobotReveal/Manual White", 0);
 
 
         //SmartDashboard.putBoolean("In Manual?", Superstructure.getInstance().getCurrentState() == States.MANUAL);

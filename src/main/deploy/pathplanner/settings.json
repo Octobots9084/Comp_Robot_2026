@@ -40,5 +40,10 @@
   "brModuleY": -0.305,
   "bumperOffsetX": 0.0,
   "bumperOffsetY": 0.0,
-  "robotFeatures": []
+  "robotFeatures": [
+    "{\"name\":\"Rectangle\",\"type\":\"rounded_rect\",\"data\":{\"center\":{\"x\":0.408,\"y\":0.0},\"size\":{\"width\":0.92,\"length\":0.2},\"borderRadius\":0.05,\"strokeWidth\":0.02,\"filled\":true}}",
+    "{\"name\":\"Line\",\"type\":\"line\",\"data\":{\"start\":{\"x\":0.305,\"y\":-0.46},\"end\":{\"x\":0.305,\"y\":0.46},\"strokeWidth\":0.02}}",
+    "{\"name\":\"Rectangle\",\"type\":\"rounded_rect\",\"data\":{\"center\":{\"x\":-0.1,\"y\":0.0},\"size\":{\"width\":0.92,\"length\":0.82},\"borderRadius\":0.05,\"strokeWidth\":0.02,\"filled\":false}}",
+    "{\"name\":\"Line\",\"type\":\"line\",\"data\":{\"start\":{\"x\":0.32,\"y\":-0.46},\"end\":{\"x\":0.32,\"y\":0.46},\"strokeWidth\":0.02}}"
+  ]
 }

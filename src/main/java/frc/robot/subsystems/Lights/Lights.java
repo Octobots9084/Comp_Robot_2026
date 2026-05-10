@@ -9,6 +9,7 @@ import com.ctre.phoenix6.controls.SolidColor;
 import com.ctre.phoenix6.signals.RGBWColor;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.DriverCommunications;
 import frc.robot.Robot;
 import frc.robot.subsystems.Drive.SwerveSubsystem;
 import frc.robot.subsystems.Shooter.Shooter;
@@ -34,6 +35,11 @@ public class Lights extends SubsystemBase{
     public static Lights currentLightInstance;
     public Shooter shooter = Shooter.getInstance();
     public static LightsIOSystem device;
+    public static double[] manualLights = {0, 0, 0, 0};
+    public static double manualR = 255;
+    public static double manualG = 0;
+    public static double manualB = 200;
+    public static double manualW = 0;
 
     public void periodic() {
         Logger.recordOutput("lightCurrentState", this.lightsCurrentState);
@@ -101,9 +107,12 @@ public class Lights extends SubsystemBase{
     }
 
     public void applyStates() {
-
-            device.candle.setControl(lightsCurrentState.color);
-
+            if (!Robot.robotReveal) {
+                device.candle.setControl(lightsCurrentState.color);
+            } else {
+                // device.candle.setControl(new SolidColor(0,65).withColor(new RGBWColor((int) manualLights[0], (int) manualLights[1], (int) manualLights[2], (int) manualLights[3])));
+                device.candle.setControl(new SolidColor(0,65).withColor(new RGBWColor((int) manualR, (int) manualG, (int) manualB, (int) manualW)));
+            }
         }
     }
        
