@@ -1,5 +1,9 @@
 package frc.robot;
 
+import com.ctre.phoenix6.swerve.SwerveModule;
+import com.ctre.phoenix6.swerve.SwerveRequest;
+
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.auto.runIntake;
@@ -17,6 +21,7 @@ import frc.robot.subsystems.Lights.LightAnimations;
 import frc.robot.subsystems.Lights.Lights;
 import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.ShooterStates;
+import frc.robot.subsystems.Vision.Vision;
 
 public class ButtonConfig {
     public static CommandXboxController driverController = new CommandXboxController(0);
@@ -152,5 +157,14 @@ public class ButtonConfig {
         //         if (target != LightAnimations.INTAKING) Lights.getLightInstance().lightsCurrentState = target;
         // }));
 
+        driverController.povDown().whileTrue(new InstantCommand(() -> {
+                SwerveSubsystem.getInstance().io.setSwerveState(new SwerveRequest.ApplyRobotSpeeds()
+                        .withSpeeds(new ChassisSpeeds((Vision.getInstance().getPieceCamera().getOffsetPitch()*0.05)+0.5,0, Vision.getInstance().getPieceCamera().getCenterOffset()/-10))//maybe need to make -, or put it in y
+                        .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
+                SwerveSubsystem.pieceVision = true;
+        }))
+        .onFalse(new InstantCommand(() -> {
+                SwerveSubsystem.pieceVision = false;
+        }));
     }
 }

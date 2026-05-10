@@ -37,6 +37,7 @@ import frc.robot.Constants.RobotTypes;
  */
 public final class Constants {
   // vision
+  public static final Transform3d tranformCenterRobotToAlgaeCamera = new Transform3d(0.35,0.145,0.15,new Rotation3d(0,0,Math.toRadians(30))); //TODO piecevis
   public static final double VisionSubStateAllignTollerance = 0.1;
   public static final double VisionAllignTollerance = 0.05;
   public static final double VisionAllignRotTolleranceToPerportinalSpeed = 0.5;

@@ -68,4 +68,8 @@ public class Vision extends SubsystemBase{
                 break;
         }
     }
+    
+    public PieceVisionCamera getPieceCamera () {
+        return io.getPieceCamera();
+    }
 }

@@ -66,6 +66,8 @@ public class SwerveSubsystem extends SubsystemBase {
     public double rotLockAngle = 0;
     public SwerveDriveBrake xLockbrake = new SwerveRequest.SwerveDriveBrake();
     public static Timer xLockTimer = new Timer();
+
+    public static boolean pieceVision = false; //TODO piecevis
     //we need to figure out what to call it on
     // The robot pose estimator for tracking swerve odometry and applying vision corrections.
 
@@ -140,7 +142,9 @@ public class SwerveSubsystem extends SubsystemBase {
         Math.acos(this.io.getRotation3d().toMatrix().get(2, 2)));
         SmartDashboard.putBoolean("onRamp", isTilted(0, 3));
         
-        applyStates();
+        if (!pieceVision) { //TODO piecevis
+            applyStates();
+        }
         Logger.recordOutput("isInAllianceZone",this.isInAllianceZone());
         // Logger.recordOutput("front left absolute", io.getAbsoluteEncoderPositions(0));
         // Logger.recordOutput("front right absolute", io.getAbsoluteEncoderPositions(1));
