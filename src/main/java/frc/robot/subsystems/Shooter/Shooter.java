@@ -486,12 +486,13 @@ public class Shooter extends SubsystemBase {
                 ferryOverride = false;
                 // if we're on our side of the field
                 // if (!swerve.isTilted(0, 3) && swerve.isInAllianceZone()) {// !tilted and in alliance
-                if(swerve.isInAllianceZone()){
-                    currentShooterState = ShooterStates.HUB;
-                }else{
-                    currentShooterState = ShooterStates.FERRY;
-                }
-                break;
+                currentShooterState = ShooterStates.HUB;
+                // if(swerve.isInAllianceZone()){
+                //     currentShooterState = ShooterStates.HUB;
+                // }else{
+                //     currentShooterState = ShooterStates.FERRY;
+                // }
+                // break;
             case AUTOHUB:
                 // if we're on our side of the field
                 // if (!swerve.isTilted(0, 3) && swerve.isInAllianceZone()) {
@@ -515,19 +516,19 @@ public class Shooter extends SubsystemBase {
             case AUTOPRESHOOT:
                 currentShooterState = ShooterStates.AUTOPRESHOOT;
             case FERRY:
-                // if we're in neutral or enemy zone
-                // if (!swerve.isInAllianceZone() && !swerve.isTilted(0, 3)) {
-                if(!swerve.isInAllianceZone()){
-                    currentShooterState = ShooterStates.FERRY;
-                }else{
-                    currentShooterState = ShooterStates.HUB;
-                }
-                break;
-            case AUTOFERRY:
-                if(!swerve.isInAllianceZone()){
-                    currentShooterState = ShooterStates.AUTOFERRY;
-                }
-                break;
+            //     // if we're in neutral or enemy zone
+            //     // if (!swerve.isInAllianceZone() && !swerve.isTilted(0, 3)) {
+            //     if(!swerve.isInAllianceZone()){
+            //         currentShooterState = ShooterStates.FERRY;
+            //     }else{
+            //         currentShooterState = ShooterStates.HUB;
+            //     }
+            //     break;
+            // case AUTOFERRY:
+            //     if(!swerve.isInAllianceZone()){
+            //         currentShooterState = ShooterStates.AUTOFERRY;
+            //     }
+            //     break;
             case BUMP:
                 // if we're on the bump
                 currentShooterState = ShooterStates.BUMP;
