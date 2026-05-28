@@ -282,12 +282,6 @@ public class Shooter extends SubsystemBase {
                 
                 isAimedAtHub = isAimedAtHub();
                 turret.setHoodPosition(Constants.maximumHoodPosition);
-                if(swerve.isInAllianceZone()){
-                    if(inEnterTrenchZone()){
-                        if(inTrenchDangerZone()){
-                            wantedShooterState = ShooterStates.TRENCH;
-                        }
-                    }
                     if(driverOverride || coDriverOverride){
                         turret.setHoodPosition(hoodTargetPosition);
                         flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
@@ -317,15 +311,10 @@ public class Shooter extends SubsystemBase {
                             flywheel.setFlywheelVelocity(FlywheelStates.SAFE);
                         }
                     }
-                }else{
-                    //TODO comment this out when testing
-                    if(!inEnterTrenchZone()){
-                        wantedShooterState = ShooterStates.BUMP;
-                    }
-                }
                 break;
             case TRENCH:
              //7.5
+                currentShooterState = ShooterStates.HUB;
                 if((swerve.getRobotPose().getX() < 7.5 && Constants.isBlueAlliance) || (swerve.getRobotPose().getX() > 7.5 && !Constants.isBlueAlliance)){
                     isAimedAtHub();
                 }else{
@@ -344,9 +333,11 @@ public class Shooter extends SubsystemBase {
                     if(swerve.isInAllianceZone()){
                         wantedShooterState = ShooterStates.HUB;
                     }else{
-                        wantedShooterState = ShooterStates.FERRY;
+                        // wantedShooterState = ShooterStates.FERRY;
+                        wantedShooterState = ShooterStates.HUB;
                     }
                 }
+
                 break;
             case AUTOHUB:
             isAimedAtHub = isAimedAtHub();
@@ -439,7 +430,8 @@ public class Shooter extends SubsystemBase {
                         if (DriverStation.isAutonomousEnabled()){
                         wantedShooterState = ShooterStates.AUTONONFIRE;
                         } else {
-                        wantedShooterState = ShooterStates.FERRY;
+                        // wantedShooterState = ShooterStates.FERRY;
+                        wantedShooterState = ShooterStates.HUB;
                         }
                     }
                 // }
@@ -486,81 +478,18 @@ public class Shooter extends SubsystemBase {
                 ferryOverride = false;
                 // if we're on our side of the field
                 // if (!swerve.isTilted(0, 3) && swerve.isInAllianceZone()) {// !tilted and in alliance
-                if(swerve.isInAllianceZone()){
-                    currentShooterState = ShooterStates.HUB;
-                }else{
-                    currentShooterState = ShooterStates.FERRY;
-                }
-                break;
-            case AUTOHUB:
-                // if we're on our side of the field
-                // if (!swerve.isTilted(0, 3) && swerve.isInAllianceZone()) {
-                if(swerve.isInAllianceZone()){
-                    currentShooterState = ShooterStates.AUTOHUB;
-                } else {
-                    currentShooterState = ShooterStates.AUTONONFIRE;
-                }
-                break;
-            case AUTONONFIRE:
-                currentShooterState = ShooterStates.AUTONONFIRE;
-            case AUTODEPOTSHOOT:
-                // if we're on our side of the field
-                // if (!swerve.isTilted(0, 3) && swerve.isInAllianceZone()) {
-                if(swerve.isInAllianceZone()){
-                    currentShooterState = ShooterStates.AUTODEPOTSHOOT;
-                } else {
-                    currentShooterState = ShooterStates.AUTONONFIRE;
-                }
-                break;
-            case AUTOPRESHOOT:
-                currentShooterState = ShooterStates.AUTOPRESHOOT;
-            case FERRY:
-                // if we're in neutral or enemy zone
-                // if (!swerve.isInAllianceZone() && !swerve.isTilted(0, 3)) {
-                if(!swerve.isInAllianceZone()){
-                    currentShooterState = ShooterStates.FERRY;
-                }else{
-                    currentShooterState = ShooterStates.HUB;
-                }
-                break;
-            case AUTOFERRY:
-                if(!swerve.isInAllianceZone()){
-                    currentShooterState = ShooterStates.AUTOFERRY;
-                }
-                break;
-            case BUMP:
-                // if we're on the bump
-                currentShooterState = ShooterStates.BUMP;
-                break;
-            case TRENCH:
-                currentShooterState = ShooterStates.TRENCH;
-                break;
-            case SAFE:
-                // driver input 
-                currentShooterState = ShooterStates.SAFE;
+                // if(swerve.isInAllianceZone()){
+                //     currentShooterState = ShooterStates.HUB;
+                // }else{
+                //     currentShooterState = ShooterStates.FERRY;
+                // }
+                currentShooterState = ShooterStates.HUB;
                 break;
             case ZERO:
                 currentShooterState = ShooterStates.ZERO;
                 break;
-            case MANUAL:
-                currentShooterState = ShooterStates.MANUAL;
-                break;
-            case MANUEL:
-                currentShooterState = ShooterStates.MANUEL;
-                break;
-            case SPIT:
-                currentShooterState = ShooterStates.SPIT;
-                break;
-            case UNJAM:
-                currentShooterState = ShooterStates.UNJAM;
-                break;
-            case SPITTOCONTAINER:
-                currentShooterState = ShooterStates.SPITTOCONTAINER;
-                break;
-            case FIXEDFIRE:
-                currentShooterState = ShooterStates.FIXEDFIRE;
-                break;
             default:
+                currentShooterState = ShooterStates.HUB;
                 break;
         }
     }
