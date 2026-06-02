@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 import frc.robot.Constants;
+import frc.robot.DriverCommunications;
 import frc.robot.Robot;
 import frc.robot.subsystems.Vision.ShooterAngle;
 import frc.robot.subsystems.Vision.ShooterAngleCalculator;
@@ -76,7 +77,10 @@ public class Shooter extends SubsystemBase {
     private Translation2d blueFerryDepot = new Translation2d(4.6239 - 2,6.03+0.5);
     private Translation2d redFerryDepot = new Translation2d(11.917 + 2,2.011-0.5);
     public boolean isAimedAtHub;
+    public boolean isAimedAtShield;
     public boolean isAimedAtFerry;
+    //false if you want to aim to hub, true if you want to aim to shield
+    public boolean aimToShield = true;
     public static boolean flywheelInToleranceOnce = false;
     public static int flywheelDebouncer = 10;
     public double hubBallSpeed = 6.7;
@@ -463,6 +467,42 @@ public class Shooter extends SubsystemBase {
                     Robot.zeroingLights = false;
                 }
                 break;
+            case SHIELD:
+                Logger.recordOutput("rui is bouncing wrong", flywheelDebouncer);
+                
+                isAimedAtShield = isAimedAtShield();
+                turret.setHoodPosition(Constants.maximumHoodPosition);
+                    if(driverOverride || coDriverOverride){
+                        turret.setHoodPosition(hoodTargetPosition);
+                        flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
+                        feeder.setFeederVelocity(FeederStates.SPINUP);
+                        if(isAimedAtShield){
+                            if(flywheel.FlywheelInTolerance(flywheelTolerance)){
+                                //Lights.getLightInstance().lightsWantedState = LightAnimations.SHOOTHUB;
+                                feeder.setFeederVelocity(FeederStates.SCORING);
+                                flywheelDebouncer = 0;
+                            }else if (flywheelDebouncer<flywheelToleranceThreshold){
+                                flywheelDebouncer ++;
+                                feeder.setFeederVelocity(FeederStates.SCORING);
+                            }
+                            else{
+                                feeder.setFeederVelocity(FeederStates.OFF);
+                            }
+                        } else {
+                            flywheelDebouncer ++;
+                            feeder.setFeederVelocity(FeederStates.OFF);
+                        }
+                    }else{
+                        feeder.setFeederVelocity(FeederStates.OFF);
+                        if (flywheelOverride){
+                            flywheel.setFlywheelVelocity(pastShooterAngle.turretFlywheelSpeed);
+                        }
+                        else {
+                            flywheel.setFlywheelVelocity(FlywheelStates.SAFE);
+                        }
+                    }
+                break;
+           
             default:
                 break;
         }
@@ -483,10 +523,16 @@ public class Shooter extends SubsystemBase {
                 // }else{
                 //     currentShooterState = ShooterStates.FERRY;
                 // }
+                if(aimToShield){
+                    wantedShooterState = ShooterStates.SHIELD;
+                }
                 currentShooterState = ShooterStates.HUB;
                 break;
             case ZERO:
                 currentShooterState = ShooterStates.ZERO;
+                break;
+            case SHIELD:
+                currentShooterState = ShooterStates.SHIELD;
                 break;
             default:
                 currentShooterState = ShooterStates.HUB;
@@ -734,6 +780,49 @@ public class Shooter extends SubsystemBase {
         } else {
             YToHub = getYToTarget(hubPoseRed.getY());
             XToHub = getXToTarget(hubPoseRed.getX());
+        }
+
+        Logger.recordOutput("ToHub",new Translation2d(getXToTarget(hubPoseRed.getX()),getYToTarget(hubPoseRed.getY())));
+        ChassisSpeeds fieldRelative = ChassisSpeeds.fromRobotRelativeSpeeds(swerve.io.getChassisSpeeds(), swerve.io.getPose2d().getRotation());
+
+        shooterAngle = ShooterAngleCalculator.getShooterAngle(
+                            getVXOfRobot(fieldRelative),
+                            getVYOfRobot(fieldRelative),
+                            XToHub,
+                            YToHub,
+                    ShooterAngleCalculator.flywheelSpeedMapHub,
+                    ShooterAngleCalculator.timeOfFlightMapHub,
+                    ShooterAngleCalculator.hoodAngleMapHub
+                        );
+
+        if (shooterAngle != null) { // implement passing null when the input is oustisde the bounds of the lookuptable
+            pastShooterAngle = shooterAngle;
+        }
+
+        double proposedAngle = GetProposedAngle();
+
+        turret.setTurretPosition((proposedAngle - fieldRelative.omegaRadiansPerSecond * ShooterAngleCalculator.turretLagTime)/(2*Math.PI));
+        // turret.setTurretPosition(-0.25);
+        
+        Logger.recordOutput("CalculatedCorrectedTurretAngle", 180*proposedAngle/(Math.PI));
+
+        // turret.setHoodPosition(pastShooterAngle.hoodRotation/(2.0*Math.PI));
+        hoodTargetPosition = pastShooterAngle.hoodRotation/(2.0*Math.PI);
+        Logger.recordOutput("CalculatedHoodAngle", pastShooterAngle.hoodRotation/(2*Math.PI));
+
+        // return true;
+        return (turret.hoodInTolerance(.005) && turret.turretInTolerance(0.06));
+    }
+
+    public boolean isAimedAtShield() {
+        double YToHub;
+        double XToHub;
+        if (Constants.isBlueAlliance) {
+            YToHub = getYToTarget(hubPoseBlue.getY())-DriverCommunications.ShieldAdjustmentY;
+            XToHub = getXToTarget(hubPoseBlue.getX())-DriverCommunications.ShieldAdjustmentX;
+        } else {
+            YToHub = getYToTarget(hubPoseRed.getY())-DriverCommunications.ShieldAdjustmentY;
+            XToHub = getXToTarget(hubPoseRed.getX())-DriverCommunications.ShieldAdjustmentX;
         }
 
         Logger.recordOutput("ToHub",new Translation2d(getXToTarget(hubPoseRed.getX()),getYToTarget(hubPoseRed.getY())));

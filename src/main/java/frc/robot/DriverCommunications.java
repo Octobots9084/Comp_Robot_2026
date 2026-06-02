@@ -21,6 +21,13 @@ public class DriverCommunications {
     public static double PhaseClock = 0;
     public static double TeleopTimer = Timer.getMatchTime();
     static double[] lights = {0,0,0,0};
+    public static double ShieldAdjustmentY = 0;
+    public static double ShieldAdjustmentX = 0;
+    public static void driverCommInit(){
+        SmartDashboard.putNumber("Y adjustment", 0);
+        SmartDashboard.putNumber("Y adjustment", 0);
+
+    }
 
     static void allianceShift(int ShiftEndTime){
         PhaseClock = Math.floor(TeleopTimer - ShiftEndTime);
@@ -85,6 +92,8 @@ public class DriverCommunications {
         SmartDashboard.putNumber("teleopTimer", TeleopTimer);
         double[] defaultLights = {0, 0, 0, 0};
         Lights.manualLights = SmartDashboard.getNumberArray("RobotReveal/light Controller", defaultLights);
+        ShieldAdjustmentY = SmartDashboard.getNumber("Y adjustment", 0);
+        ShieldAdjustmentX = SmartDashboard.getNumber("X adjustment", 0);
 
         Lights.manualR = SmartDashboard.getNumber("RobotReveal/Manual Red", 255);
         Lights.manualG = SmartDashboard.getNumber("RobotReveal/Manual Green", 0);

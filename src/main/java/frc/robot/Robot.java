@@ -233,6 +233,7 @@ public class Robot extends LoggedRobot {
     swerve.wantedState = SwerveStates.MANUAL;
     TeleopStarted = true;
     Constants.timer.restart();
+    DriverCommunications.driverCommInit();
 
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to

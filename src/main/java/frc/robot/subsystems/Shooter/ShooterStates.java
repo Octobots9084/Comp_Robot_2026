@@ -17,5 +17,6 @@ public enum ShooterStates {
     UNJAM,
     SPITTOCONTAINER,
     AUTODEPOTSHOOT,
+    SHIELD,
     AUTOPRESHOOT
 }
