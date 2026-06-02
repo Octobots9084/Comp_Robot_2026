@@ -129,6 +129,8 @@ public class Robot extends LoggedRobot {
     swerve = SwerveSubsystem.getInstance();
     // climb = Climb.getInstance();
     // intake = Intake.getInstance();
+    SmartDashboard.putNumber("swerveLimit", 0.3);
+    SmartDashboard.putNumber("rotLimit", 0.3);
   }
 
   /** This function is called periodically during all modes. */

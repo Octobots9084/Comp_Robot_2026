@@ -74,7 +74,7 @@ public class ShooterAngleCalculator {
         flywheelSpeedMapHub.put(4.076567183,32.5-1.0);
         flywheelSpeedMapHub.put(4.515152268,33.5-1.5);
         flywheelSpeedMapHub.put(5.098166337,35.0-1.5);
-        flywheelSpeedMapHub.put(5.506476197,35.5-1.5 );
+        flywheelSpeedMapHub.put(5.506476197,35.5-1.5);
 
         flywheelSpeedMapHubInverse.put(26.0, 1.442809759);
         flywheelSpeedMapHubInverse.put(27.5, 2.01922287);
