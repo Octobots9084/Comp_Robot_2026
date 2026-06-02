@@ -6,6 +6,8 @@
 // at the root directory of this project.
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -27,6 +29,7 @@ import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.ShooterStates;
 import frc.robot.subsystems.Shooter.Turret.Turret;
 import frc.robot.subsystems.Shooter.Turret.TurretIO;
+import frc.robot.subsystems.Vision.MichaelPieceVision;
 import frc.robot.subsystems.Vision.Vision;
 import frc.robot.subsystems.Vision.VisionIOSystem;
 import frc.robot.subsystems.Vision.VisionIO.VisionIOInputs;
@@ -117,6 +120,8 @@ public class Robot extends LoggedRobot {
     swerve = SwerveSubsystem.getInstance();
     // climb = Climb.getInstance();
     // intake = Intake.getInstance();
+    DriverCommunications.pushToElasticInit();
+
   }
 
   /** This function is called periodically during all modes. */
@@ -148,10 +153,11 @@ public class Robot extends LoggedRobot {
     LoggedTracer.record("PhoenixRefresh");
     Logger.recordOutput("IsBlueAlliance",Constants.isBlueAlliance);
     DriverCommunications.pushToElastic();
-    DriverCommunications.fieldPose.setRobotPose(SwerveSubsystem.getInstance().getRobotPose());
+    DriverCommunications.fieldPose2d.setRobotPose(SwerveSubsystem.getInstance().getRobotPose());
 
     // Return to non-RT thread priority (do not modify the first argument)
     // Threads.setCurrentThreadPriority(false, 10);
+    // Vision.getInstance().getPieceCamera().cycle();
   }
 
   /** This function is called once when the robot is disabled. */
@@ -166,6 +172,7 @@ public class Robot extends LoggedRobot {
   /** This function is called periodically when disabled. */
   @Override
   public void disabledPeriodic() {
+    // Vision.getInstance().getPieceCamera().bestPlaceToGo();
     if (!isAllianceSet) {
       Optional<Alliance> ally = DriverStation.getAlliance();
       if (ally.isPresent()) {
@@ -209,6 +216,7 @@ public class Robot extends LoggedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
+    // Vision.getInstance().getPieceCamera().bestPlaceToGo();
   }
 
   /** This function is called once when teleop is enabled. */
@@ -234,6 +242,11 @@ public class Robot extends LoggedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
+    // if (SwerveSubsystem.getInstance().bestPlaceToGo == null)
+    //   DriverCommunications.hasAutoDriveTarget = true;
+    //   SwerveSubsystem.getInstance().hasAutoDriveTarget = true;
+    //   Vision.getInstance().getPieceCamera().bestPlaceToGo();
+
     DriverCommunications.TeleopTimer = Timer.getMatchTime();
     if (lastHubPeriod != Shooter.getInstance().isHubActive()) {
       ButtonConfig.driverController.setRumble(RumbleType.kBothRumble, 1);

@@ -27,6 +27,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Constants.RobotTypes;
+import frc.robot.subsystems.Intake.IntakeStates;
 
 /**
  * This class defines the runtime mode used by AdvantageKit. The mode is always
@@ -36,8 +37,12 @@ import frc.robot.Constants.RobotTypes;
  * (log replay from a file).
  */
 public final class Constants {
+  //variable constants
+  public static double intakePosition = IntakeStates.EXTENDED.intakePosition;
+  public static Transform3d centerToCameraDefaultPosition = new Transform3d();//make fr
+
   // vision
-  public static final Transform3d tranformCenterRobotToAlgaeCamera = new Transform3d(0.35,0.145,0.15,new Rotation3d(0,0,Math.toRadians(30))); //TODO piecevis
+  // public static final Transform3d tranformCenterRobotToAlgaeCamera = new Transform3d(0.35,0.145,0.15,new Rotation3d(0,0,Math.toRadians(30))); //TODO piecevis
   public static final double VisionSubStateAllignTollerance = 0.1;
   public static final double VisionAllignTollerance = 0.05;
   public static final double VisionAllignRotTolleranceToPerportinalSpeed = 0.5;

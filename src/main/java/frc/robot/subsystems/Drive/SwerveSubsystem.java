@@ -13,16 +13,21 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -57,7 +62,7 @@ public class SwerveSubsystem extends SubsystemBase {
    * <br></br><b>Default State</b> - {@link frc.robot.subsystems.Drive.SwerveStates#IDLE IDLE}
    * @param SwerveStates The swerve states contain no information - {@link frc.robot.subsystems.Drive.SwerveStates SwerveStates}
    */
-    private SwerveStates currentState = SwerveStates.IDLE;
+    public SwerveStates currentState = SwerveStates.IDLE;
     public SwerveIO io;
     public CommandXboxController driverController;
     public double maxVelocity;
@@ -66,6 +71,10 @@ public class SwerveSubsystem extends SubsystemBase {
     public double rotLockAngle = 0;
     public SwerveDriveBrake xLockbrake = new SwerveRequest.SwerveDriveBrake();
     public static Timer xLockTimer = new Timer();
+
+    public boolean hasAutoDriveTarget;
+    public Translation3d bestPlaceToGo;
+    private final ProfiledPIDController rotationPID = new ProfiledPIDController(3.0, 0.2, 0.8, new TrapezoidProfile.Constraints(Math.PI * 2, Math.PI * 4));
 
     public static boolean pieceVision = false; //TODO piecevis
     //we need to figure out what to call it on
@@ -113,6 +122,10 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public Pose2d getRobotPose() {
         return io.getPose2d();
+    }
+
+    public Pose3d getRobotPose3d() {
+        return io.getPose3d();
     }
 
     public boolean isInAllianceZone() {
@@ -201,6 +214,9 @@ public class SwerveSubsystem extends SubsystemBase {
 
     private SwerveStates handleStateTransition() {
         switch (wantedState) {
+            case AUTODRIVE:
+                currentState = SwerveStates.AUTODRIVE;
+                return SwerveStates.AUTODRIVE;
             //redid how we handle the states that we switch to without modifications
             case MANUAL, IDLE, ROTATION_LOCK, REVERSE: 
                 if (wantedState == SwerveStates.ROTATION_LOCK && currentState != SwerveStates.ROTATION_LOCK){
@@ -291,7 +307,9 @@ public class SwerveSubsystem extends SubsystemBase {
                 //swervemodules. set control with swerve module states
                 io.setSwerveState(xLockbrake);
                 break;
-                
+            case AUTODRIVE:
+                if (hasAutoDriveTarget)
+                    driveToPosition(bestPlaceToGo); // Pass dt here
             default:
                 break;
 
@@ -390,5 +408,41 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public SwerveStates getCurrentState() {
         return this.currentState;
+    }
+
+    public void driveToPosition(Translation3d pos) {
+        if (pos == null) {return;}
+        Pose2d robotPose = getRobotPose();
+        double distToTargetX = pos.getX() - robotPose.getX();
+        double distToTargetY = pos.getY() - robotPose.getY();
+
+        // double kPt = 2;
+        // double power = 1.1;
+
+        double speedX = Math.signum(distToTargetX) * 2 * Math.pow(Math.abs(distToTargetX), 1.1);
+        double speedY = Math.signum(distToTargetY) * 2 * Math.pow(Math.abs(distToTargetY), 1.1);
+
+        double targetAngleRadians = Math.atan2(pos.getY() - robotPose.getY(), pos.getX() - robotPose.getX());
+        Rotation2d targetRotation = new Rotation2d(targetAngleRadians);
+
+        double error = targetRotation.minus(robotPose.getRotation()).getRadians();
+        error = Math.atan2(Math.sin(error), Math.cos(error));
+
+        double dynamicKp = (Math.abs(error) < 0.2) ? (48) : 24;
+        
+        rotationPID.setP(dynamicKp);
+
+        rotationPID.enableContinuousInput(-Math.PI, Math.PI);
+        double rotationOutput = rotationPID.calculate(
+            robotPose.getRotation().getRadians(), 
+            Math.atan2(distToTargetY, distToTargetX)
+        );
+
+        if (Math.abs(error) > 1) {
+            rotationOutput += Math.signum(rotationOutput);
+        }
+
+        io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds()
+            .withSpeeds(new ChassisSpeeds(speedX, speedY, rotationOutput)));
     }
 }

@@ -3,6 +3,7 @@ package frc.robot;
 import com.ctre.phoenix6.swerve.SwerveModule;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -30,6 +31,9 @@ public class ButtonConfig {
     public Intake intake;
 //     public static CommandXboxController coDriverController = new CommandXboxController(1);
     public Superstructure superstructure = Superstructure.getInstance();
+
+    private SwerveStates lastSwerveWantedState;
+    private SwerveStates lastSwerveCurrentState;
 
     public void initTeleop() {
         intake = Intake.getInstance();
@@ -157,14 +161,36 @@ public class ButtonConfig {
         //         if (target != LightAnimations.INTAKING) Lights.getLightInstance().lightsCurrentState = target;
         // }));
 
-        driverController.povDown().whileTrue(new InstantCommand(() -> {
-                SwerveSubsystem.getInstance().io.setSwerveState(new SwerveRequest.ApplyRobotSpeeds()
-                        .withSpeeds(new ChassisSpeeds((Vision.getInstance().getPieceCamera().getOffsetPitch()*0.05)+0.5,0, Vision.getInstance().getPieceCamera().getCenterOffset()/-10))//maybe need to make -, or put it in y
+        // driverController.povDown().onTrue(new InstantCommand(() -> {
+        //         SwerveSubsystem.getInstance().io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(0, 0, 0))
+        //                 .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
+        //         bestPlaceToGo = Vision.getInstance().getPieceCamera().bestPlaceToGo();
+        //         lastSwerveWantedState = SwerveSubsystem.getInstance().wantedState;
+        //         lastSwerveCurrentState = SwerveSubsystem.getInstance().currentState;
+        // }))
+        // .whileTrue(new InstantCommand(() -> {
+        //         SwerveSubsystem.getInstance().wantedState = SwerveStates.AUTODRIVE;
+        //         SwerveSubsystem.getInstance().driveToPosition(bestPlaceToGo);
+        // }))
+        // .onFalse(new InstantCommand(() -> {
+        //         SwerveSubsystem.getInstance().wantedState = lastSwerveWantedState;
+        //         SwerveSubsystem.getInstance().currentState = lastSwerveCurrentState;
+        //         bestPlaceToGo = null;
+        // }));
+
+        driverController.povDown().onTrue(new InstantCommand(() -> {
+                SwerveSubsystem.getInstance().io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(0, 0, 0))
                         .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
-                SwerveSubsystem.pieceVision = true;
+                SwerveSubsystem.getInstance().bestPlaceToGo = Vision.getInstance().getPieceCamera().bestPlaceToGo();
+                lastSwerveWantedState = SwerveSubsystem.getInstance().wantedState;
+                lastSwerveCurrentState = SwerveSubsystem.getInstance().currentState;
+                SwerveSubsystem.getInstance().wantedState = SwerveStates.AUTODRIVE;
         }))
         .onFalse(new InstantCommand(() -> {
-                SwerveSubsystem.pieceVision = false;
+                SwerveSubsystem.getInstance().wantedState = lastSwerveWantedState;
+                SwerveSubsystem.getInstance().currentState = lastSwerveCurrentState;
+                SwerveSubsystem.getInstance().io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(0, 0, 0))
+                        .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
         }));
     }
 }

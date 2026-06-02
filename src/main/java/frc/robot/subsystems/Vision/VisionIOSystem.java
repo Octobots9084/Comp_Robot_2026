@@ -25,7 +25,7 @@ public class VisionIOSystem implements VisionIO {
     private final PhotonCamera[] cameras;
     // private final PhotonCamera intakeCamera;
     private final PhotonPoseEstimator[] photonEstimators;
-    public final PieceVisionCamera pieceAlignCamera = new PieceVisionCamera("HD_Web_Camera", Constants.tranformCenterRobotToAlgaeCamera);  //TODO piecevis
+    public final MichaelPieceVision pieceAlignCamera = new MichaelPieceVision("HD_Web_Camera", Constants.centerToCameraDefaultPosition);  //TODO change constatns
 
     private Matrix<N3, N1> curStdDevs;
     private final EstimateConsumer estConsumer;
@@ -323,7 +323,7 @@ public class VisionIOSystem implements VisionIO {
         public void accept(Pose2d pose, double timestamp, Matrix<N3, N1> estimationStdDevs);
     }
 
-    public PieceVisionCamera getPieceCamera () {
+    public MichaelPieceVision getPieceCamera () {
         return pieceAlignCamera;
     }
 }

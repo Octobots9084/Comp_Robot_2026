@@ -19,5 +19,6 @@ public enum SwerveStates {
         REVERSE,
         ALIGNCLIMB,
         XLOCK,
-        SLOW
+        SLOW,
+        AUTODRIVE
 }

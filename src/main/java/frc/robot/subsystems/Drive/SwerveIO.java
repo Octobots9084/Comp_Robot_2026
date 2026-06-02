@@ -9,6 +9,7 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -81,6 +82,10 @@ public interface SwerveIO {
 
     default Pose2d getPose2d() {
         return new Pose2d();
+    }
+
+    default Pose3d getPose3d() {
+        return new Pose3d();
     }
 
     default SwerveModule[] getSwerveModules() {
