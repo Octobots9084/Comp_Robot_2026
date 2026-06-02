@@ -18,6 +18,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.util.DriveFeedforwards;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
@@ -27,6 +28,7 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.units.measure.Angle;
@@ -189,6 +191,7 @@ public class SwerveIOSystem extends TunerSwerveDrivetrain implements Subsystem, 
         }
     }
 
+    
     /**
      * Returns a command that applies the specified control request to this swerve
      * drivetrain.
@@ -373,6 +376,15 @@ public class SwerveIOSystem extends TunerSwerveDrivetrain implements Subsystem, 
     public void driveFieldRelative(ChassisSpeeds fieldRelativeSpeeds) {
 
         // this.driveFieldOriented(fieldRelativeSpeeds);
+    }
+
+    public void driveRobotRelative(ChassisSpeeds robotRelativeSpeeds, DriveFeedforwards feedforwards) {
+        setSwerveState(new SwerveRequest.ApplyRobotSpeeds()
+            .withSpeeds(robotRelativeSpeeds)
+            .withDriveRequestType(SwerveModule.DriveRequestType.Velocity)
+            .withWheelForceFeedforwardsX(feedforwards.robotRelativeForcesXNewtons())
+            .withWheelForceFeedforwardsY(feedforwards.robotRelativeForcesYNewtons())
+        );
     }
 
     public void setAllianceColor() {

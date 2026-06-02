@@ -6,6 +6,7 @@ import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.swerve.SwerveDrivetrain;
 import com.ctre.phoenix6.swerve.SwerveModule;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.pathplanner.lib.util.DriveFeedforwards;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -107,6 +108,9 @@ public interface SwerveIO {
     }
 
     public default void driveFieldRelative(ChassisSpeeds fieldRelativeSpeeds) {
+    }
+
+    public default void driveRobotRelative(ChassisSpeeds fieldRelativeSpeeds, DriveFeedforwards feedforwards) {
     }
 
     default void setAllianceColor() {

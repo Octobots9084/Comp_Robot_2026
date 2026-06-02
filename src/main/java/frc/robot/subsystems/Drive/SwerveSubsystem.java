@@ -3,6 +3,21 @@ package frc.robot.subsystems.Drive;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.ctre.phoenix6.swerve.SwerveRequest.SwerveDriveBrake;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.FollowPathCommand;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.controllers.PathFollowingController;
+import com.pathplanner.lib.path.GoalEndState;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.path.Waypoint;
+import com.pathplanner.lib.util.DriveFeedforwards;
+
+import java.util.List;
+import java.util.function.BiConsumer;
+import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
 
 import org.littletonrobotics.junction.Logger;
 
@@ -24,10 +39,16 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -226,9 +247,50 @@ public class SwerveSubsystem extends SubsystemBase {
         }
     }
 
+    public Command followPathCommand(PathPlannerPath path) {
+        try{
+
+            return new FollowPathCommand(
+                    path,
+                    () -> getRobotPose(), // Robot pose supplier
+                    () -> ChassisSpeeds.fromRobotRelativeSpeeds(io.getChassisSpeeds(), io.getPose2d().getRotation()),
+                    this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds, AND feedforwards
+                    new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
+                            new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
+                            new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
+                    ),
+                    RobotConfig.fromGUISettings(), // The robot configuration
+                    () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
+                    this // Reference to this subsystem to set requirements
+            );
+
+
+        } catch (Exception e) {
+            DriverStation.reportError("Big oops: " + e.getMessage(), e.getStackTrace());
+            return Commands.none();
+        }
+    }
+
     
     public void applyStates() {
         switch (currentState) {
+            case FUELTRACKING:
+            //takes in poses sends them to waypointsFromPoses and makes waypoints
+            List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(List.of(new Pose2d(), new Pose2d()));//TODO get michael to give me poses
+            //makes constraints TODO get max velocity and acceleraation
+            PathConstraints constraints = new PathConstraints(1.8, 1.8, 2 * Math.PI, 4 * Math.PI);
+            //makes a path using waypoints and contstraints
+            PathPlannerPath pathToFollow = new PathPlannerPath(
+                waypoints,
+                constraints,
+                null,
+                new GoalEndState(0.0, Rotation2d.fromDegrees(-90)));
+            
+            pathToFollow.preventFlipping = true;
+
+            CommandScheduler.getInstance().schedule(followPathCommand(pathToFollow));
+            break;
+
             case MANUAL:
                 if ((Shooter.driverOverride || Shooter.coDriverOverride) && this.isInAllianceZone()) {
                     wantedState = SwerveStates.SLOW;  
@@ -337,7 +399,9 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
 
-
+        public static List<Waypoint> waypointsFromPoses(List<Pose2d> poses){
+            return PathPlannerPath.waypointsFromPoses(poses);
+        }
 
 
 
@@ -438,6 +502,10 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public void driveFieldRelative(ChassisSpeeds fieldRelativeSpeeds) {
         this.io.driveFieldRelative(fieldRelativeSpeeds);
+    }
+
+    public void driveRobotRelative(ChassisSpeeds robotRelativeSpeeds, DriveFeedforwards feedforwards) {
+        this.io.driveRobotRelative(robotRelativeSpeeds, feedforwards);
     }
 
     /**
