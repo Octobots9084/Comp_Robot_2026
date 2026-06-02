@@ -4,6 +4,7 @@ import java.util.function.Supplier;
 
 import frc.robot.subsystems.Drive.BetaConstants.TunerSwerveDrivetrain;
 import frc.robot.Constants;
+import frc.robot.DriverCommunications;
 import frc.robot.subsystems.Drive.SwerveSubsystem;
 
 import com.ctre.phoenix6.Utils;
@@ -24,6 +25,7 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -89,7 +91,7 @@ public class SwerveIOSystem extends TunerSwerveDrivetrain implements Subsystem, 
 
     @Override
     public Pose2d getPose2d() {
-        return this.getState().Pose;
+        return this.getState().Pose.plus(new Transform2d(0, DriverCommunications.ShieldAdjustmentY, new Rotation2d()));
     }
 
     /**

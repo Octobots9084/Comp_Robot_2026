@@ -818,11 +818,11 @@ public class Shooter extends SubsystemBase {
         double YToHub;
         double XToHub;
         if (Constants.isBlueAlliance) {
-            YToHub = getYToTarget(hubPoseBlue.getY())-DriverCommunications.ShieldAdjustmentY;
-            XToHub = getXToTarget(hubPoseBlue.getX())-DriverCommunications.ShieldAdjustmentX;
+            YToHub = getYToTarget(hubPoseBlue.getY());
+            XToHub = getXToTarget(hubPoseBlue.getX())-DriverCommunications.ShieldAdjustmentY;
         } else {
-            YToHub = getYToTarget(hubPoseRed.getY())-DriverCommunications.ShieldAdjustmentY;
-            XToHub = getXToTarget(hubPoseRed.getX())-DriverCommunications.ShieldAdjustmentX;
+            YToHub = getYToTarget(hubPoseRed.getY());
+            XToHub = getXToTarget(hubPoseRed.getX())-DriverCommunications.ShieldAdjustmentY;
         }
 
         Logger.recordOutput("ToHub",new Translation2d(getXToTarget(hubPoseRed.getX()),getYToTarget(hubPoseRed.getY())));
