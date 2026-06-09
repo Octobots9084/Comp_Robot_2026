@@ -34,12 +34,12 @@ public class MichaelPieceVision {
     private Transform3d intakeCameraPosition;
     private final Translation3d testRobotPos = new Translation3d(2.2,3,0.08);
 
-    private PhotonCamera camera;
+    private PhotonCamera camera;// = new PhotonCamera(Constants.frontRightCameraName);
     public List<PhotonTrackedTarget> targets;
     private double yawRotation;
     private double xTransform;
     private double IFOV = (Math.PI/2)/180;//make right
-    private double halfFuel = 413/2; //TODO make right
+    private double halfFuel = 150/2; //TODO make right
 
     private int fieldMaxX = 17;//TODO: make real nums, round up
     private int fieldMaxY = 8;
@@ -139,13 +139,27 @@ public class MichaelPieceVision {
         return null;
     }
 
-    public boolean hasTargets(){
-        return camera.getLatestResult().hasTargets();
+    public boolean hasTargets() {
+        // boolean test;
+        // PhotonPipelineResult tset;
+        // List<PhotonPipelineResult> tetd;
+        // List<PhotonTrackedTarget> t2;
+        // PhotonTrackedTarget t3;
+        // tetd = camera.getAllUnreadResults();
+        // test = camera.getAllUnreadResults().isEmpty();
+
+        // try {
+        // tset = tetd.get(0);
+        // t2 = tset.getTargets();
+        // t3 = t2.get(0);
+        // t3.getPitch();
+        // } catch (Exception e) {}
+        // tset = camera.getLatestResult();
+        return !camera.getAllUnreadResults().isEmpty();
     }
 
     public Translation3d get3dPoseFieldRelative (PhotonTrackedTarget target) {
-
-        updateIntakeCameraPosition();
+        updateYawAndX();
 
         double depth = getFuelDepthCameraRelative(target);
 
@@ -171,13 +185,15 @@ public class MichaelPieceVision {
     }
 
     public void cycle () {
-        // findTargets();
-        // addTargets();
+        findTargets();
+        addTargets();
         // logPoses();
     }
 
     public void findTargets () {
-        targets = camera.getLatestResult().getTargets();
+        List<PhotonPipelineResult> result = camera.getAllUnreadResults();
+        result.size();
+        targets = result.get(0).getTargets();
     }
 
     public void addTargets () {

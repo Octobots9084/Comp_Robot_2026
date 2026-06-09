@@ -25,7 +25,7 @@ public class VisionIOSystem implements VisionIO {
     private final PhotonCamera[] cameras;
     // private final PhotonCamera intakeCamera;
     private final PhotonPoseEstimator[] photonEstimators;
-    public final MichaelPieceVision pieceAlignCamera = new MichaelPieceVision("HD_Web_Camera", Constants.centerToCameraDefaultPosition);  //TODO change constatns
+    public final MichaelPieceVision pieceAlignCamera = new MichaelPieceVision(Constants.pieceVisionCameraName, Constants.centerToCameraDefaultPosition);  //TODO change constatns
 
     private Matrix<N3, N1> curStdDevs;
     private final EstimateConsumer estConsumer;

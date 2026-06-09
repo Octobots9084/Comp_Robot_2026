@@ -35,6 +35,8 @@ public class ButtonConfig {
     private SwerveStates lastSwerveWantedState;
     private SwerveStates lastSwerveCurrentState;
 
+    private Translation3d bestPlaceToGo;
+
     public void initTeleop() {
         intake = Intake.getInstance();
         
@@ -161,22 +163,22 @@ public class ButtonConfig {
         //         if (target != LightAnimations.INTAKING) Lights.getLightInstance().lightsCurrentState = target;
         // }));
 
-        // driverController.povDown().onTrue(new InstantCommand(() -> {
-        //         SwerveSubsystem.getInstance().io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(0, 0, 0))
-        //                 .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
-        //         bestPlaceToGo = Vision.getInstance().getPieceCamera().bestPlaceToGo();
-        //         lastSwerveWantedState = SwerveSubsystem.getInstance().wantedState;
-        //         lastSwerveCurrentState = SwerveSubsystem.getInstance().currentState;
-        // }))
-        // .whileTrue(new InstantCommand(() -> {
-        //         SwerveSubsystem.getInstance().wantedState = SwerveStates.AUTODRIVE;
-        //         SwerveSubsystem.getInstance().driveToPosition(bestPlaceToGo);
-        // }))
-        // .onFalse(new InstantCommand(() -> {
-        //         SwerveSubsystem.getInstance().wantedState = lastSwerveWantedState;
-        //         SwerveSubsystem.getInstance().currentState = lastSwerveCurrentState;
-        //         bestPlaceToGo = null;
-        // }));
+        driverController.povDown().onTrue(new InstantCommand(() -> {
+                SwerveSubsystem.getInstance().io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(0, 0, 0))
+                        .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
+                bestPlaceToGo = Vision.getInstance().getPieceCamera().bestPlaceToGo();
+                lastSwerveWantedState = SwerveSubsystem.getInstance().wantedState;
+                lastSwerveCurrentState = SwerveSubsystem.getInstance().currentState;
+        }))
+        .whileTrue(new InstantCommand(() -> {
+                SwerveSubsystem.getInstance().wantedState = SwerveStates.AUTODRIVE;
+                SwerveSubsystem.getInstance().driveToPosition(bestPlaceToGo);
+        }))
+        .onFalse(new InstantCommand(() -> {
+                SwerveSubsystem.getInstance().wantedState = lastSwerveWantedState;
+                SwerveSubsystem.getInstance().currentState = lastSwerveCurrentState;
+                bestPlaceToGo = null;
+        }));
 
         driverController.povDown().onTrue(new InstantCommand(() -> {
                 SwerveSubsystem.getInstance().io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(0, 0, 0))
