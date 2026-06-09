@@ -7,15 +7,44 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public abstract class SubsystemHandle <T extends Enum<T>> extends SubsystemBase {
 
+    /*
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     */
+
+
+
+
+
     public T wantedState;
     public T currentState;
 
+    public Class<?> autoLogged;
+
+
+        
     /**WARNING: SystemLocalTimer works in milliseconds. */
     public SystemLocalTimer timer; 
 
     public SubsystemHandle(T defaultState) {
         this.wantedState = defaultState;
         this.currentState = defaultState;
+
+        try {
+            autoLogged = Class.forName(this.getName() + "IOInputsAutoLogged");
+        } catch (ClassNotFoundException e) {
+            // TODO Auto-generated catch block
+            autoLogged = null;
+            e.printStackTrace();
+        }
+
     }
 
     @Override
