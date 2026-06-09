@@ -1,34 +1,16 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.Handle;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public abstract class SubsystemHandle <T extends Enum<T>> extends SubsystemBase {
-
-    /*
-     * 
-     * 
-     * 
-     * 
-     * 
-     * 
-     * 
-     * 
-     * 
-     */
-
-
-
-
+public abstract class SubsystemHandle<T extends Enum<T>> extends SubsystemBase {
 
     public T wantedState;
     public T currentState;
 
     public Class<?> autoLogged;
-
-
         
     /**WARNING: SystemLocalTimer works in milliseconds. */
     public SystemLocalTimer timer; 
@@ -82,7 +64,7 @@ public abstract class SubsystemHandle <T extends Enum<T>> extends SubsystemBase 
             return System.currentTimeMillis() - old;
         }
 
-        /** Returns the current reading of a timer. Creates a timer at 0 if one does not exist.*/
+        /** Returns the current reading of a timer. Creates a timer at about 0 if one does not exist.*/
         public Long time(String id) {
             
             if (!time.containsKey(id)) time.put(id, System.currentTimeMillis());
