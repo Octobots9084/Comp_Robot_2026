@@ -15,7 +15,7 @@ import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import frc.robot.Constants;
 import frc.robot.subsystems.Handle.SubsystemHandle;
 
-public abstract class RollerWithFollowerBase<T extends Enum<T>> extends SubsystemHandle<T> {
+public abstract class RollerWithFollowerSubsystemBase<T extends Enum<T>> extends SubsystemHandle<T> {
     public TalonFX motor;
     public TalonFX follower;
     private String internalName;
@@ -24,7 +24,7 @@ public abstract class RollerWithFollowerBase<T extends Enum<T>> extends Subsyste
     public double motorGearRatio;
     public double followerGearRatio;
 
-    public RollerWithFollowerBase(T e, int rollerId, int followerId, MotorAlignmentValue alignment, String subsystemName, double motorGearRatio, double followerGearRatio) {
+    public RollerWithFollowerSubsystemBase(T e, int rollerId, int followerId, MotorAlignmentValue alignment, String subsystemName, double motorGearRatio, double followerGearRatio) {
         super(e);
         motor = new TalonFX(rollerId, Constants.krakenBus);
         follower = new TalonFX(followerId, Constants.krakenBus);
