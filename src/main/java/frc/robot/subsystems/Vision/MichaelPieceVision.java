@@ -32,13 +32,13 @@ import frc.robot.subsystems.Intake.Intake;
 public class MichaelPieceVision {
     private double inchesToMetersRatio = 0.0254;
     private Transform3d intakeCameraPosition;
-    private final Translation3d testRobotPos = new Translation3d(2.2,3,0.08);
+    private final Translation3d testRobotPos = new Translation3d(0.32,0.32,0.35);
 
     private PhotonCamera camera;// = new PhotonCamera(Constants.frontRightCameraName);
-    public List<PhotonTrackedTarget> targets;
+    public List<PhotonTrackedTarget> targets = List.of();
     private double yawRotation;
     private double xTransform;
-    private double IFOV = (Math.PI/2)/180;//make right
+    private double IFOV = (Math.PI/180)*100;//100 degree IFOV lens//as of 6/15 (last test b4 ny)
     private double halfFuel = 150/2; //TODO make right
 
     private int fieldMaxX = 17;//TODO: make real nums, round up
@@ -110,10 +110,8 @@ public class MichaelPieceVision {
     }
 
     public double[] getCenterOffsets(){
-        PhotonPipelineResult result = camera.getLatestResult();
         
-        if (result.hasTargets()){
-            targets = result.getTargets();
+        if (hasTargets()){
             // return calculateRobotRelativeYaw(target);
             double[] yaws = new double[targets.size()];
             for (int i = 0; i < targets.size(); i++) {
@@ -125,10 +123,8 @@ public class MichaelPieceVision {
     }
 
     public double[] getOffsetPitches() {
-        PhotonPipelineResult result = camera.getLatestResult();
         
-        if (result.hasTargets()){
-            targets = result.getTargets();
+        if (hasTargets()){
             // return calculateRobotRelativeYaw(target);
             double[] pitches = new double[targets.size()];
             for (int i = 0; i < targets.size(); i++) {
@@ -137,6 +133,10 @@ public class MichaelPieceVision {
             return pitches;
         }
         return null;
+    }
+
+    public int numTargets () {
+        return targets.size();
     }
 
     public boolean hasTargets() {
@@ -155,7 +155,8 @@ public class MichaelPieceVision {
         // t3.getPitch();
         // } catch (Exception e) {}
         // tset = camera.getLatestResult();
-        return !camera.getAllUnreadResults().isEmpty();
+        if (targets == null) {return false;}
+        return !targets.isEmpty();
     }
 
     public Translation3d get3dPoseFieldRelative (PhotonTrackedTarget target) {
@@ -172,8 +173,8 @@ public class MichaelPieceVision {
                 new Transform3d(new Translation3d(
                     depth * Math.cos(pitch) * Math.cos(yaw), 
                     depth * Math.cos(pitch) * Math.sin(yaw), 
-                    depth * Math.sin(pitch)
-                ),
+                    0.08
+                ),//z = depth * Math.sin(pitch)
                 new Rotation3d()))
             .getTranslation();
 
@@ -185,24 +186,28 @@ public class MichaelPieceVision {
     }
 
     public void cycle () {
-        findTargets();
         addTargets();
-        // logPoses();
-    }
-
-    public void findTargets () {
-        List<PhotonPipelineResult> result = camera.getAllUnreadResults();
-        result.size();
-        targets = result.get(0).getTargets();
+        logPoses();
     }
 
     public void addTargets () {
-        if (targets == null) {
+        List<PhotonPipelineResult> result = camera.getAllUnreadResults();
+        try {
+            targets = result.get(0).getTargets();
+        } catch (Exception e) {}
+
+        // if (result == null) {
+        //     targets.clear();;
+        // }
+
+
+        
+        if (!hasTargets()) {
             poses = new Translation3d[0];
             return;
         }
-        numTargets = targets.size();//targets.size
-        poses = new Translation3d[numTargets];
+
+        poses = new Translation3d[numTargets()];
 
         for (int i = 0; i < targets.size(); i++) {
             //replace w/ real pose
@@ -372,25 +377,25 @@ public class MichaelPieceVision {
         //for #targets, set i = target pose
 
         // arrayPublisher.set(poses);//REAL
-        poses = new Translation3d[] {
-            new Translation3d(1,1,0.08),
-            new Translation3d(1.1,1.1,0.08),
-            new Translation3d(1.2,1,0.08),
-            new Translation3d(1.3,1.1,0.08),
-            new Translation3d(2,1,0.08),
-            new Translation3d(2,1.2,0.08),
-            new Translation3d(3,1,0.08),
-            new Translation3d(3,1.1,0.08),
-            new Translation3d(3,1.3,0.08),
-            new Translation3d(4,1,0.08),
-            new Translation3d(4,1,0.08),
-            new Translation3d(0.9,1,0.08),
-        };
+        // poses = new Translation3d[] {
+        //     new Translation3d(1,1,0.08),
+        //     new Translation3d(1.1,1.1,0.08),
+        //     new Translation3d(1.2,1,0.08),
+        //     new Translation3d(1.3,1.1,0.08),
+        //     new Translation3d(2,1,0.08),
+        //     new Translation3d(2,1.2,0.08),
+        //     new Translation3d(3,1,0.08),
+        //     new Translation3d(3,1.1,0.08),
+        //     new Translation3d(3,1.3,0.08),
+        //     new Translation3d(4,1,0.08),
+        //     new Translation3d(4,1,0.08),
+        //     new Translation3d(0.9,1,0.08),
+        // };
         fuelLog.set(poses);
-        best = bestPlaceToGo();
-        if (best != null)
-        bestPlaceToGo.set(new Pose3d(best.getX(), best.getY(), 0.08, new Rotation3d()));
-        fakeRobot3d.accept(testRobotPos);
+        // best = bestPlaceToGo();
+        // if (best != null)
+        // bestPlaceToGo.set(new Pose3d(best.getX(), best.getY(), 0.08, new Rotation3d()));
+        // fakeRobot3d.accept(testRobotPos);
         
     }
 

@@ -39,8 +39,6 @@ import frc.robot.subsystems.Intake.IntakeStates;
 public final class Constants {
   //variable constants
   public static double intakePosition = IntakeStates.EXTENDED.intakePosition;
-  public static Transform3d centerToCameraDefaultPosition = new Transform3d();//make fr
-
   // vision
   // public static final Transform3d tranformCenterRobotToAlgaeCamera = new Transform3d(0.35,0.145,0.15,new Rotation3d(0,0,Math.toRadians(30))); //TODO piecevis
   public static final double VisionSubStateAllignTollerance = 0.1;
@@ -68,6 +66,10 @@ public final class Constants {
   public static final Transform3d robotToCamFrontRight = new Transform3d(new Translation3d(-0.28,0.195,0.41),
       new Rotation3d(0, -highCamPitch, (-30/180.0)*Math.PI+Math.PI));
   //-20 +30
+
+  public static Transform3d centerToCameraDefaultPosition = new Transform3d(-0.28,0.09,0.45, new Rotation3d(0, highCamPitch,0));//make fr
+
+
   public static final Transform3d robotToCamFrontLeft = new Transform3d(new Translation3d(-0.28,-0.135,0.24),
       new Rotation3d(0, -LowCamPitch, (30/180.0)*Math.PI + Math.PI));
   public static final Transform3d robotToCamRight = new Transform3d(new Translation3d(-0.265, 0.36, .465),

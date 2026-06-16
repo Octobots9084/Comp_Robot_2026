@@ -73,6 +73,7 @@ public class VisionIOSystem implements VisionIO {
         inputs.backCameraConected = cameras[4].isConnected();
         inputs.visonCycleTime = visonCycleTime;
         inputs.pieceCameraHasTargets = pieceAlignCamera.hasTargets();
+        inputs.pieceCameraNumTargets = pieceAlignCamera.numTargets();
     }
 
     public boolean CameraConnect(int camera){
