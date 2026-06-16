@@ -64,17 +64,17 @@ public abstract class RollerWithFollowerSubsystemBase<T extends Enum<T>> extends
         log("CurrentState", currentState);
         log("WantedState", wantedState);
 
-        log("RollerRPS", 0);
-        log("FollowerRPS", 0);
+        log("RollerRPS", motor.getVelocity().getValueAsDouble());
+        log("FollowerRPS", follower.getVelocity().getValueAsDouble());
 
-        log("rollerTemp", 0);
-        log("followerTemp", 0);
+        log("rollerTemp", motor.getDeviceTemp().getValueAsDouble());
+        log("followerTemp",  follower.getDeviceTemp().getValueAsDouble());
 
-        log("rollerCurrent", 0);
-        log("followerCurrent", 0);
+        log("rollerCurrent", motor.getStatorCurrent().getValueAsDouble());
+        log("followerCurrent", follower.getStatorCurrent().getValueAsDouble());
 
-        log("rollerVoltage", 0);
-        log("followerVoltage", 0);      
+        log("rollerVoltage", motor.getMotorVoltage().getValueAsDouble());
+        log("followerVoltage", follower.getMotorVoltage().getValueAsDouble());      
         
     }
 
