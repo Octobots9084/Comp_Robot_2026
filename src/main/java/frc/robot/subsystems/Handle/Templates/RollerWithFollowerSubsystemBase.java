@@ -36,6 +36,8 @@ public abstract class RollerWithFollowerSubsystemBase<T extends Enum<T>> extends
      //keep this in case we want to reduce parameters   
      //   String[] fullName = this.getClass().getName().split(".");
      //   internalName = fullName[fullName.length - 1];
+
+     
      internalName = subsystemName;
 
 
@@ -78,10 +80,7 @@ public abstract class RollerWithFollowerSubsystemBase<T extends Enum<T>> extends
         
     }
 
-
     public final void log(String name, Object data) {
         Logger.recordOutput(internalName + "/" + name, data.toString());
     }
 }
-
-
