@@ -685,10 +685,10 @@ public class Shooter extends SubsystemBase {
         double XToHub;
         double YToHub;
         if(Constants.isBlueAlliance){
-            YToHub = getYToTarget(hubPoseBlue.getY());
+            YToHub = (getYToTarget(hubPoseBlue.getY())) - DriverCommunications.ShieldAdjustmentX;
             XToHub =  getXToTarget(hubPoseBlue.getX());
         } else {
-            YToHub = getYToTarget(hubPoseRed.getY());
+            YToHub = getYToTarget(hubPoseRed.getY()) - DriverCommunications.ShieldAdjustmentX;
             XToHub =  getXToTarget(hubPoseRed.getX());
         }
         return Math.sqrt(YToHub*YToHub+XToHub*XToHub);

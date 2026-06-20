@@ -23,10 +23,11 @@ public class DriverCommunications {
     static double[] lights = {0,0,0,0};
     public static double ShieldAdjustmentY = 0;
     public static double ShieldAdjustmentX = 0;
+
     public static void driverCommInit(){
         SmartDashboard.putNumber("Y adjustment", 0);
-        SmartDashboard.putNumber("Y adjustment", 0);
-
+        SmartDashboard.putNumber("X adjustment", 0);
+        SmartDashboard.putNumber("Hub Height", 0);
     }
 
     static void allianceShift(int ShiftEndTime){
