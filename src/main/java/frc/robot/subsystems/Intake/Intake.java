@@ -46,6 +46,7 @@ public class Intake extends SubsystemBase {
 
     public static boolean driverOverride = false;
     public static boolean driverElephantiasisPart2Override = false;
+    public static boolean isElephantiasising = false;
 
 
     /*True if the zeroing process has been completed. */
@@ -84,9 +85,11 @@ public class Intake extends SubsystemBase {
         // if (autonomousIntake) {
         //     wantedState = IntakeStates.INTAKING;
         // }only if it intake auto doesnt work
+        
         // This will handle changing between states at the user's request.
         handleStateTransitions();
 
+        isElephantiasising=false;
         // this is where states actually take effect.
         applyStates();
         
@@ -98,7 +101,6 @@ public class Intake extends SubsystemBase {
 
     /** Internal helper method for #periodic(). */
     public void handleStateTransitions() {
-
         switch (wantedState) {
             case SAFE:
                 currentState = IntakeStates.SAFE;
@@ -107,7 +109,7 @@ public class Intake extends SubsystemBase {
             case INTAKING:
             if (currentState != IntakeStates.ZERO || alreadyZeroed == true) {
                 if(driverElephantiasisPart2Override){
-                    currentState = IntakeStates.ELEPHANTIASISPART2;
+                    //wantedState = IntakeStates.ELEPHANTIASISPART2;
                 } else if (driverOverride){
                     currentState = IntakeStates.INTAKING;
                 } else {
@@ -143,11 +145,13 @@ public class Intake extends SubsystemBase {
                     currentState = IntakeStates.ZERO;
                 break;
             case ELEPHANTIASISPART2:
-                    if (currentState!=IntakeStates.ELEPHANTIASISPART2){
-                        elephantiaissTimer = 0;
-                        currentState = IntakeStates.ELEPHANTIASISPART2;
-                    }
-                break;
+            if(!isElephantiasising){
+                isElephantiasising=true;
+                io.setIntakeState(IntakeStates.PARTIALEXTENTION);
+                elephantiaissTimer=50;
+                currentState= IntakeStates.ELEPHANTIASISPART2;
+            }
+            break;
             default:
                 currentState = IntakeStates.SAFE;
                 break;
@@ -193,18 +197,19 @@ public class Intake extends SubsystemBase {
                 }
                 break;
             case ELEPHANTIASISPART2:
-                if (elephantiaissTimer<0){
-                    io.setIntakeState(IntakeStates.LESSPARTIALEXTENTION);
-                } else {
-                    io.setIntakeState(IntakeStates.PARTIALEXTENTION);
+            if(elephantiaissTimer<=0){
+                    if(intakeIsAtSetpoint(3, IntakeStates.PARTIALEXTENTION)){
+                        io.setIntakeState(IntakeStates.SEMIPARTIALEXTENTION);
+                        elephantiaissTimer=50;
+                    }else if(intakeIsAtSetpoint(3, IntakeStates.SEMIPARTIALEXTENTION)){
+                        io.setIntakeState(IntakeStates.PARTIALEXTENTION);
+                        elephantiaissTimer=50;
+                    }   
                 }
-
-
-                elephantiaissTimer++;
-                if (elephantiaissTimer > 15){
-                    elephantiaissTimer = -15;
+                else{
+                    elephantiaissTimer-=1;
                 }
-                break;
+                io.setIntakeState(IntakeStates.PARTIALEXTENTION);
         default:
             io.setIntakeState(currentState);    
             break;
@@ -229,5 +234,8 @@ public class Intake extends SubsystemBase {
     /*Getter for wantedState. Not recommended outside of niche applications.*/
     public IntakeStates getWantedState() {
         return this.wantedState;
+    }
+    public boolean intakeIsAtSetpoint(double tolerance, IntakeStates state){
+        return Math.abs(io.getIntakePosition() - state.intakePosition)<tolerance;
     }
 }

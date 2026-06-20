@@ -90,10 +90,11 @@ public class ButtonConfig {
                 }));
 
         driverController.leftBumper().onTrue( new InstantCommand( () -> {
-                intake.wantedState = IntakeStates.INTAKING;
-                Intake.driverElephantiasisPart2Override = true;
+                intake.wantedState = IntakeStates.ELEPHANTIASISPART2;
+                //override is cringe lmaooo
+                // Intake.driverElephantiasisPart2Override = true;
         })).onFalse( new InstantCommand( () -> {
-                Intake.driverElephantiasisPart2Override = false;
+                // Intake.driverElephantiasisPart2Override = false;
         }));
         coDriverController.a().onTrue(new ToggleAutoFerry());
         

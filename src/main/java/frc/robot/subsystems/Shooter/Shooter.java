@@ -825,6 +825,7 @@ public class Shooter extends SubsystemBase {
             XToHub = getXToTarget(hubPoseRed.getX())-DriverCommunications.ShieldAdjustmentY;
         }
 
+
         Logger.recordOutput("ToHub",new Translation2d(getXToTarget(hubPoseRed.getX()),getYToTarget(hubPoseRed.getY())));
         ChassisSpeeds fieldRelative = ChassisSpeeds.fromRobotRelativeSpeeds(swerve.io.getChassisSpeeds(), swerve.io.getPose2d().getRotation());
 
