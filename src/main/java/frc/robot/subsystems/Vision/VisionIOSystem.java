@@ -1,24 +1,44 @@
 package frc.robot.subsystems.Vision;
 
+// Resizable list that can grow and shrink dynamically
 import java.util.ArrayList;
+// General List interface (often used instead of ArrayList directly)
 import java.util.List;
+// Represents a value that may or may not exist (avoids null)
 import java.util.Optional;
+// AdvantageKit logger for recording data to AdvantageScope
 import org.littletonrobotics.junction.Logger;
+// Stores a robot pose estimated from vision (such as AprilTags)
 import org.photonvision.EstimatedRobotPose;
+// Represents a PhotonVision camera
 import org.photonvision.PhotonCamera;
+// Calculates robot position on the field using detected AprilTags
 import org.photonvision.PhotonPoseEstimator;
+// Contains all vision detections from a single camera frame
 import org.photonvision.targeting.PhotonPipelineResult;
+// Represents one detected target (AprilTag, reflective tape, etc.)
 import org.photonvision.targeting.PhotonTrackedTarget;
+// Mathematical matrix class used for advanced calculations and filters
 import edu.wpi.first.math.Matrix;
+// Utility for quickly creating vectors, often used with matrices
 import edu.wpi.first.math.VecBuilder;
+// PID controller for closed-loop control of mechanisms and movement
 import edu.wpi.first.math.controller.PIDController;
+// Represents a position and rotation on the field (x, y, heading)
 import edu.wpi.first.math.geometry.Pose2d;
+// Represents only a position (x, y) with no rotation
 import edu.wpi.first.math.geometry.Translation2d;
+// Represents robot velocity (forward, sideways, and rotational speeds)
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+// Matrix dimension type representing 1 row or column
 import edu.wpi.first.math.numbers.N1;
+// Matrix dimension type representing 3 rows or columns
 import edu.wpi.first.math.numbers.N3;
+// Identifies the backend being used for a Sendable (advanced dashboard usage)
 import edu.wpi.first.util.sendable.SendableBuilder.BackendKind;
+// Timing utilities such as timestamps and elapsed time measurement
 import edu.wpi.first.wpilibj.Timer;
+// Imports robot-wide constants stored in your Constants class
 import frc.robot.Constants;
 
 public class VisionIOSystem implements VisionIO {
@@ -98,9 +118,11 @@ public class VisionIOSystem implements VisionIO {
 
         boolean doSingletag = true;
 
+        //filtered results is filled with the results from all of the cameras
         FilteredCameraResults[] FilteredResults = new FilteredCameraResults[cameras.length];
-        
+        //loops through all of the results
         for(int i = 0;i < FilteredResults.length;i++)
+            //sends the results to filterPhotonResults which sorts them
             FilteredResults[i]=filterPhotonResults(cameras[i], photonEstimators[i], doSingletag);
 
         int qualityOfBestCamera;
@@ -123,19 +145,19 @@ public class VisionIOSystem implements VisionIO {
 
         if (foundMultiTagHubResult){
             for(int i = 0;i < FilteredResults.length;i++)
-                addVisionEstemation(FilteredResults[i].multiTagHubResults, FilteredResults[i].multiTagHubTargets, true, photonEstimators[i]);
+                addVisionEstimation(FilteredResults[i].multiTagHubResults, FilteredResults[i].multiTagHubTargets, true, photonEstimators[i]);
             qualityOfBestCamera = 3;
         }
         else if (foundMultiTagResult)
         {
             for(int i = 0;i < FilteredResults.length;i++)
-                addVisionEstemation(FilteredResults[i].multiTagResults, FilteredResults[i].multiTagTargets, false, photonEstimators[i]);
+                addVisionEstimation(FilteredResults[i].multiTagResults, FilteredResults[i].multiTagTargets, false, photonEstimators[i]);
             qualityOfBestCamera = 2;
         }
         else if (foundsingleTagResult)
         {
             for(int i = 0;i < FilteredResults.length;i++)
-                addVisionEstemation(FilteredResults[i].singleTagResults, FilteredResults[i].singleTagTargets, false, photonEstimators[i]);
+                addVisionEstimation(FilteredResults[i].singleTagResults, FilteredResults[i].singleTagTargets, false, photonEstimators[i]);
             qualityOfBestCamera = 1;
         }
         else
@@ -202,7 +224,7 @@ public class VisionIOSystem implements VisionIO {
             singleTagTargets
         );
     }
-
+    //checks if its a tag on the hub?? it checks to see if its a hub somewhere...
     private boolean addToHubTagNumber(PhotonPipelineResult result, int i){
         if(
                 result.getTargets().get(i).getFiducialId() == 18
@@ -227,14 +249,19 @@ public class VisionIOSystem implements VisionIO {
         return false;
     }
 
-    private void addVisionEstemation(ArrayList<Optional<EstimatedRobotPose>> filteredResults, ArrayList<Optional<List<PhotonTrackedTarget>>> filteredTargets, boolean ishub, PhotonPoseEstimator photonEstimator){
+    //takes filtered results and targets and sends it to 
+
+    //filter results is and arraylist of optional robotPoses
+    private void addVisionEstimation(ArrayList<Optional<EstimatedRobotPose>> filteredResults, ArrayList<Optional<List<PhotonTrackedTarget>>> filteredTargets, boolean ishub, PhotonPoseEstimator photonEstimator){
         for (int i =0;i < filteredResults.size(); i++){
             updateEstimationStdDevs(filteredResults.get(i), filteredTargets.get(i).get(), ishub, photonEstimator);
-
+            
+            //if the element of filtered result at i is not empty run the lambda 
             filteredResults.get(i).ifPresent(
                 est -> {
                     // Change our trust in the measurement based on the tags we can see
                     var estStdDevs = getEstimationStdDevs();
+                    //takes estimated pose and passes it to swerve need consumer clarification
                     estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
                 });
         }
