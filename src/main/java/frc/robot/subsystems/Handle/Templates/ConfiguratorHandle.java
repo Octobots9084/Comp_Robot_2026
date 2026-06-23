@@ -1,4 +1,4 @@
-package frc.robot.subsystems.Handle;
+package frc.robot.subsystems.Handle.Templates;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;

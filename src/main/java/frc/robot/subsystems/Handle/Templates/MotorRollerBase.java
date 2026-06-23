@@ -9,10 +9,13 @@ public class MotorRollerBase extends TalonFX {
 
     public VelocityVoltage rpmController;
     public TalonFXConfiguration config;
-    
-    public MotorRollerBase(int id, double gearRatio) {
+    public final String name;
+        
+    public MotorRollerBase(int id, String name, double gearRatio) {
         super(id);
         this.rpmController = new VelocityVoltage(0);
+        this.name = name;
+
         config = new TalonFXConfiguration().withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(gearRatio)); 
         this.getConfigurator().apply(config);       
     }
