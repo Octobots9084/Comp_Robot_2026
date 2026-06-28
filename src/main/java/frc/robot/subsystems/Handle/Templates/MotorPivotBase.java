@@ -14,6 +14,8 @@ public class MotorPivotBase extends TalonFX {
     public TalonFXConfiguration config;
     public final String name;
     public Follower follower = null;
+
+    //try to not set the following of motors in the motor
         
     public MotorPivotBase(int id, String name, double gearRatio) {
         super(id);

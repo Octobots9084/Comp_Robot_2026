@@ -12,6 +12,7 @@ public class MotorRollerBase extends TalonFX {
     public TalonFXConfiguration config;
     public final String name;
     public Follower follower = null;
+    public MotionMagicVelocityVoltage motion = new MotionMagicVelocityVoltage(0);
         
     public MotorRollerBase(int id, String name, double gearRatio) {
         super(id);
@@ -20,7 +21,6 @@ public class MotorRollerBase extends TalonFX {
         config = new TalonFXConfiguration().withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(gearRatio));
         this.config.MotionMagic.MotionMagicCruiseVelocity = 10d;         
         this.getConfigurator().apply(config);       
-
     }
 
     /** Set a param to null if you don't want to touch it. It'll handle it. */
@@ -36,8 +36,12 @@ public class MotorRollerBase extends TalonFX {
         follower = new Follower(base.getDeviceID(), value);
         this.setControl(follower);
     }
-
+    /**Will override movement. */
     public void reapplyConfigurator() {
         this.getConfigurator().apply(config);
+    }
+    public void setRPM(double rpm) {
+        if (follower != null) throw new RuntimeException("Don't set the follower " + name + " to move!");
+        this.setControl(motion.withVelocity(rpm));
     }
 }

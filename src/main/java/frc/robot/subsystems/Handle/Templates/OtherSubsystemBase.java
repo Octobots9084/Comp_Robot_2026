@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Handle.SubsystemHandle;
 
 public abstract class OtherSubsystemBase<T extends Enum<T>> extends SubsystemHandle<T> {
+    //change to rollerLeaders, rollerFollowers, pivotLeaders, and pivotFollowers
+    //hashmap of followers with the key being the name to prevent desync
     List<MotorRollerBase> rollers = new ArrayList<>();
     List<MotorPivotBase> pivots = new ArrayList<>(); //todo replace with a dedicated pivot base
     String internalName;
