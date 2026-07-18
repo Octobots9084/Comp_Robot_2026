@@ -67,8 +67,9 @@ public final class Constants {
       new Rotation3d(0, -highCamPitch, (-30/180.0)*Math.PI+Math.PI));
   //-20 +30
 
-  public static Transform3d centerToCameraDefaultPosition = new Transform3d(-0.28,0.09,0.45, new Rotation3d(0, highCamPitch,0));//make fr
-
+  public static Transform3d centerToCameraDefaultPosition = new Transform3d(0.28575,0,0.3429, new Rotation3d(0, 0,0));//i think this is what inside robot pos is :) (7/10/26)
+  //PIECEVISION PIECE VISION //i think its x 0 y 12.5in to end of hopper (need to remove part of crossbeam), idk z, prob keep rot at 0
+//  z=0 x=pos//z=up pos x, no y
 
   public static final Transform3d robotToCamFrontLeft = new Transform3d(new Translation3d(-0.28,-0.135,0.24),
       new Rotation3d(0, -LowCamPitch, (30/180.0)*Math.PI + Math.PI));

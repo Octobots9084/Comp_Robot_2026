@@ -38,7 +38,16 @@ public class MichaelPieceVision {
     public List<PhotonTrackedTarget> targets = List.of();
     private double yawRotation;
     private double xTransform;
-    private double IFOV = (Math.PI/180)*100;//100 degree IFOV lens//as of 6/15 (last test b4 ny)
+
+
+    // Replace these with the values from your calibration.json file
+    // Located in: /home/pi/photonvision/config/calibration.json (or similar)
+    private static final double FX = 762.32; // Example: Replace with your actual fx value
+    private static final double CX = 595.84; // Example: Replace with your actual cx value
+    private static final double FUEL_DIAMETER_METERS = 0.1524; // 6 inches in meters
+    private static final double HALF_FUEL_METERS = FUEL_DIAMETER_METERS / 2.0;
+
+
     private double halfFuel = 150/2; //TODO make right
 
     private int fieldMaxX = 17;//TODO: make real nums, round up
@@ -68,7 +77,8 @@ public class MichaelPieceVision {
 
 
     public void updateIntakeCameraPosition () {
-        intakeCameraPosition = Constants.centerToCameraDefaultPosition.plus(new Transform3d(Intake.getInstance().io.getIntakePosition()*inchesToMetersRatio,0,0,new Rotation3d()));
+        // intakeCameraPosition = Constants.centerToCameraDefaultPosition.plus(new Transform3d(Intake.getInstance().io.getIntakePosition()*inchesToMetersRatio,0,0,new Rotation3d()));
+        intakeCameraPosition = Constants.centerToCameraDefaultPosition;
     }
 
     public void updateYawAndX () {
@@ -79,27 +89,71 @@ public class MichaelPieceVision {
 
 
     public double getFuelDepthCameraRelative(PhotonTrackedTarget target) {
-        List<TargetCorner> corners = target.getDetectedCorners();
+        List<TargetCorner> corners = target.getMinAreaRectCorners();
+        if (corners.size() < 2) return -1;
+
+        // Find the horizontal pixel width of the bounding box
+        double minX = corners.stream().mapToDouble(c -> c.x).min().orElse(0);
+        double maxX = corners.stream().mapToDouble(c -> c.x).max().orElse(0);
+        double pixelWidth = maxX - minX;
+
+        if (pixelWidth <= 0) return -1;
+
+        // Use the pinhole camera model: Depth = (RealWidth * FocalLength) / PixelWidth
+        // This is mathematically superior to manual IFOV/angle-based math
+        return (FUEL_DIAMETER_METERS * FX) / pixelWidth;
+    }
+     
+    // public double getFuelDepthCameraRelative(PhotonTrackedTarget target) {
+    //     List<TargetCorner> corners = target.getDetectedCorners();
         
-        if (corners.size() < 2) {
-            // SmartDashboard.putNumber("algae depth", -1);
-            return -1;
-        }
+    //     if (corners.size() < 2) {
+    //         // SmartDashboard.putNumber("algae depth", -1);
+    //         return -1;
+    //     }
     
-        double minX = Double.MAX_VALUE;
-        double maxX = -Double.MAX_VALUE;
+    //     double minX = Double.MAX_VALUE;
+    //     double maxX = -Double.MAX_VALUE;
     
-        for (TargetCorner corner : corners) {
-            double xAngle = corner.x * IFOV;
-            minX = Math.min(minX, xAngle);
-            maxX = Math.max(maxX, xAngle);
-        }
+    //     for (TargetCorner corner : corners) {
+    //         double xAngle = corner.x * 1;//IFOV
+    //         minX = Math.min(minX, xAngle);
+    //         maxX = Math.max(maxX, xAngle);
+    //     }
     
-        double angularWidth = maxX - minX;//maybe need to make radians
-        double depth = halfFuel / Math.tan(angularWidth / 2); 
+    //     double angularWidth = maxX - minX;//maybe need to make radians
+    //     double depth = halfFuel / Math.tan(angularWidth / 2); 
     
-        // SmartDashboard.putNumber("algae depth", depth);
-        return depth;
+    //     // SmartDashboard.putNumber("algae depth", depth);
+    //     return depth;
+    // }
+
+    public Translation3d get3dPoseFieldRelative(PhotonTrackedTarget target) {
+        double depth = getFuelDepthCameraRelative(target);
+        if (depth < 0) return null;
+
+        // Use PhotonVision's built-in target yaw/pitch
+        // These are already corrected by your calibration
+        double yaw = Math.toRadians(target.getYaw());
+        double pitch = Math.toRadians(target.getPitch());
+
+        // Spherical to Cartesian transformation
+        double targetX = -depth * Math.cos(pitch) * Math.cos(yaw);
+        double targetY = depth * Math.cos(pitch) * Math.sin(yaw);
+        double targetZ = depth * Math.sin(pitch);
+
+        Translation3d targetInCameraSpace = new Translation3d(targetX, targetY, targetZ);
+
+        // Get your robot's current pose
+        Pose3d robotPose = SwerveSubsystem.getInstance().getRobotPose3d();
+        
+        // Transform camera position relative to robot center
+        // Ensure intakeCameraPosition is a Transform3d (x,y,z, rotation)
+        Pose3d cameraPoseFieldRelative = robotPose.transformBy(intakeCameraPosition);
+        
+        return cameraPoseFieldRelative
+                .transformBy(new Transform3d(targetInCameraSpace, new Rotation3d()))
+                .getTranslation();
     }
 
     public double calculateRobotRelativeYaw(PhotonTrackedTarget target){
@@ -157,32 +211,6 @@ public class MichaelPieceVision {
         // tset = camera.getLatestResult();
         if (targets == null) {return false;}
         return !targets.isEmpty();
-    }
-
-    public Translation3d get3dPoseFieldRelative (PhotonTrackedTarget target) {
-        updateYawAndX();
-
-        double depth = getFuelDepthCameraRelative(target);
-
-        double yaw = Math.toRadians(target.getYaw());
-        double pitch = Math.toRadians(target.getPitch());
-
-        return SwerveSubsystem.getInstance().getRobotPose3d()
-            .plus(intakeCameraPosition)
-            .plus(
-                new Transform3d(new Translation3d(
-                    depth * Math.cos(pitch) * Math.cos(yaw), 
-                    depth * Math.cos(pitch) * Math.sin(yaw), 
-                    0.08
-                ),//z = depth * Math.sin(pitch)
-                new Rotation3d()))
-            .getTranslation();
-
-        // return new Translation3d(x,y,depth)
-        //     .rotateBy(robotToCamera.getRotation())
-        //     .plus(robotToCamera.getTranslation())
-        //     .rotateBy(SwerveSubsystem.getInstance().getRobotPose3d().getRotation())
-        //     .plus(SwerveSubsystem.getInstance().getRobotPose3d().getTranslation());
     }
 
     public void cycle () {
