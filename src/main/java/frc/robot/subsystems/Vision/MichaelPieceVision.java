@@ -40,10 +40,7 @@ public class MichaelPieceVision {
     private double xTransform;
 
 
-    // Replace these with the values from your calibration.json file
-    // Located in: /home/pi/photonvision/config/calibration.json (or similar)
-    private static final double FX = 762.32; // Example: Replace with your actual fx value
-    private static final double CX = 595.84; // Example: Replace with your actual cx value
+    private static final double FX = 762.32;
     private static final double FUEL_DIAMETER_METERS = 0.1524; // 6 inches in meters
     private static final double HALF_FUEL_METERS = FUEL_DIAMETER_METERS / 2.0;
 
@@ -132,23 +129,17 @@ public class MichaelPieceVision {
         double depth = getFuelDepthCameraRelative(target);
         if (depth < 0) return null;
 
-        // Use PhotonVision's built-in target yaw/pitch
-        // These are already corrected by your calibration
         double yaw = Math.toRadians(target.getYaw());
         double pitch = Math.toRadians(target.getPitch());
 
-        // Spherical to Cartesian transformation
-        double targetX = -depth * Math.cos(pitch) * Math.cos(yaw);
-        double targetY = depth * Math.cos(pitch) * Math.sin(yaw);
+        double targetX = depth * Math.cos(pitch) * Math.cos(yaw);
+        double targetY = -depth * Math.cos(pitch) * Math.sin(yaw);
         double targetZ = depth * Math.sin(pitch);
 
         Translation3d targetInCameraSpace = new Translation3d(targetX, targetY, targetZ);
 
-        // Get your robot's current pose
         Pose3d robotPose = SwerveSubsystem.getInstance().getRobotPose3d();
         
-        // Transform camera position relative to robot center
-        // Ensure intakeCameraPosition is a Transform3d (x,y,z, rotation)
         Pose3d cameraPoseFieldRelative = robotPose.transformBy(intakeCameraPosition);
         
         return cameraPoseFieldRelative
@@ -157,7 +148,6 @@ public class MichaelPieceVision {
     }
 
     public double calculateRobotRelativeYaw(PhotonTrackedTarget target){
-        //Positive is the far side of the camera and negative is the close side
         double oppositeSide =  getFuelDepthCameraRelative(target)*Math.cos(yawRotation - target.getYaw()) -xTransform; //was yaw
         double adjacentSide = getFuelDepthCameraRelative(target)*Math.sin(yawRotation - target.getYaw()); // was yaw
         return (Math.PI/2)-Math.atan2(oppositeSide,adjacentSide);
