@@ -46,10 +46,16 @@ public class ButtonConfig {
         driverController.leftTrigger().onTrue(new InstantCommand(() -> {Intake.driverOverride = true;Intake.getInstance().wantedState=IntakeStates.INTAKING;})).onFalse(new InstantCommand(() -> {Intake.driverOverride = false;Intake.getInstance().wantedState=IntakeStates.EXTENDED;}));
         // driverController.leftTrigger().onTrue(new InstantCommand(() -> {Intake.driverOverride = true;})).onFalse(new InstantCommand(() -> {Intake.driverOverride = false;}));
 
+        // driverController.x().onTrue(new InstantCommand(() -> {
+        //         superstructure.wantedState = States.UNJAM;
+        // })).onFalse(new InstantCommand(() -> {
+        //         superstructure.wantedState = States.SHOOTER;
+        // }));
+
         driverController.x().onTrue(new InstantCommand(() -> {
-                superstructure.wantedState = States.UNJAM;
+                intake.wantedState = IntakeStates.ZEROBUTITDOESNTBREAK;
         })).onFalse(new InstantCommand(() -> {
-                superstructure.wantedState = States.SHOOTER;
+                intake.wantedState = IntakeStates.BEYONDMAX;
         }));
 
         // driverController.b().onTrue(new InstantCommand(() -> {

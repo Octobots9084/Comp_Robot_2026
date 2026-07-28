@@ -19,6 +19,7 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.networktables.StructPublisher;
@@ -28,6 +29,7 @@ import frc.robot.DriverCommunications;
 import frc.robot.subsystems.Drive.SwerveSubsystem;
 import frc.robot.Constants;
 import frc.robot.subsystems.Intake.Intake;
+import frc.robot.subsystems.Intake.IntakeStates;
 
 public class MichaelPieceVision {
     private double inchesToMetersRatio = 0.0254;
@@ -70,13 +72,26 @@ public class MichaelPieceVision {
         xTransform = Math.abs(robotToCamera.getTranslation().getX());
         this.intakeCameraPosition = robotToCamera;
         Constants.centerToCameraDefaultPosition = robotToCamera;
+        // SmartDashboard.putNumber("roll", 0.66);
+        // SmartDashboard.putNumber("pitch", -9.5);
     }
 
 
     public void updateIntakeCameraPosition () {
         // intakeCameraPosition = Constants.centerToCameraDefaultPosition.plus(new Transform3d(Intake.getInstance().io.getIntakePosition()*inchesToMetersRatio,0,0,new Rotation3d()));
-        intakeCameraPosition = Constants.centerToCameraDefaultPosition;
+        intakeCameraPosition = Constants.centerToCameraDefaultPosition.plus(new Transform3d(
+            Units.inchesToMeters(((9.125)/11.125733)*Intake.getInstance().io.getIntakePosition())
+            ,0.0,//CHANGE THE THINGS UP AND DOWN FROM HERE (extended pos) to be the true full out dist, so set 0 properly and then set extended to like 15 and see what it gets to when enabled
+            Units.inchesToMeters(((-2.125)/11.125733)*Intake.getInstance().io.getIntakePosition())
+            ,new Rotation3d(0,0,0)));
+        // intakeCameraPosition = new Transform3d(0.25,0,0.3125, new Rotation3d(Units.degreesToRadians(SmartDashboard.getNumber("roll", 100)), Units.degreesToRadians(SmartDashboard.getNumber("pitch", 100)),0));
     }
+    //extended val #1:x=0.465, z=0.265 in m
+    //retracted val #1:x=0.25, z=0.3125 in m
+    //might want better measurements
+
+    //9.25 diff
+    // 1.375 diff
 
     public void updateYawAndX () {
         updateIntakeCameraPosition();
@@ -133,7 +148,7 @@ public class MichaelPieceVision {
         double pitch = Math.toRadians(target.getPitch());
 
         double targetX = depth * Math.cos(pitch) * Math.cos(yaw);
-        double targetY = -depth * Math.cos(pitch) * Math.sin(yaw);
+        double targetY = -depth * Math.cos(pitch) * Math.sin(yaw) + 0;
         double targetZ = depth * Math.sin(pitch);
 
         Translation3d targetInCameraSpace = new Translation3d(targetX, targetY, targetZ);
@@ -204,6 +219,7 @@ public class MichaelPieceVision {
     }
 
     public void cycle () {
+        updateYawAndX();
         addTargets();
         logPoses();
     }
