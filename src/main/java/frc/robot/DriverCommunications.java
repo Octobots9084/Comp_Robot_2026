@@ -103,6 +103,7 @@ public class DriverCommunications {
 
         //SmartDashboard.putBoolean("In Manual?", Superstructure.getInstance().getCurrentState() == States.MANUAL);
         //SmartDashboard.putBoolean("Can Shoot", Shooter.getInstance().Shootable());
+        // SmartDashboard.putBoolean("hasTargetjjj", ButtonConfig.hasTarget);
     }    
 
 
@@ -110,6 +111,7 @@ public class DriverCommunications {
         robot3d = NetworkTableInstance.getDefault().getStructTopic("Robot3d", Pose3d.struct).publish();
         autoDriveLocation = NetworkTableInstance.getDefault().getStructTopic("AutoDriveLocation", Pose3d.struct).publish();
         // SmartDashboard.putNumber("tuneKp", 24);
+        SmartDashboard.putBoolean("hasTargetjjj", false);
         // SmartDashboard.putNumber("tuneKi", 0.2);
         // SmartDashboard.putNumber("tuneKd", 0.8);
 

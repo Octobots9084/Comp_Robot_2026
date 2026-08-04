@@ -74,6 +74,9 @@ public class MichaelPieceVision {
         Constants.centerToCameraDefaultPosition = robotToCamera;
         // SmartDashboard.putNumber("roll", 0.66);
         // SmartDashboard.putNumber("pitch", -9.5);
+        poses = new Translation3d[2];
+        poses[0] = new Translation3d(1,2,0.1);
+        poses[1] = new Translation3d(4,3,0.1);
     }
 
 
@@ -85,7 +88,7 @@ public class MichaelPieceVision {
             Units.inchesToMeters(((-2.125)/11.125733)*Intake.getInstance().io.getIntakePosition())
             ,new Rotation3d(0,0,0)));
         // intakeCameraPosition = new Transform3d(0.25,0,0.3125, new Rotation3d(Units.degreesToRadians(SmartDashboard.getNumber("roll", 100)), Units.degreesToRadians(SmartDashboard.getNumber("pitch", 100)),0));
-    }
+    }//IM STUPID AND I LITERALLY HAD IT, IF THIS DOESNT WORK, GO BACK TO m/m*inchestoM(intakepos)
     //extended val #1:x=0.465, z=0.265 in m
     //retracted val #1:x=0.25, z=0.3125 in m
     //might want better measurements
@@ -220,7 +223,7 @@ public class MichaelPieceVision {
 
     public void cycle () {
         updateYawAndX();
-        addTargets();
+        // addTargets();
         logPoses();
     }
 
@@ -277,88 +280,115 @@ public class MichaelPieceVision {
         return numFuel;
     }
 
-    public Translation3d bestPlaceToGo () {
-        int searchRadius = 2;//radius outside of robot, 1 = 3 diameter, 2 = 5;
-        // int[] robotRegion = getRegion(testRobotPos);
-        int[] robotRegion = getRegion(new Translation3d(SwerveSubsystem.getInstance().getRobotPose().getX(), SwerveSubsystem.getInstance().getRobotPose().getY(), 0.08));
-        int[][] top3Regions = new int[3][2];
-        int[] bestRegion = new int[]{-1,-1};
-        double maxRatio = 0;
-        int first = 0;
-        int second = 0;
-        int third = 0;
-        double firstDist = 0;
-        double secondDist = 0;
-        double thirdDist = 0;
-        int currentFuelNum;
+    // public Translation3d bestPlaceToGo () {
+    //     int searchRadius = 5;//radius outside of robot, 1 = 3 diameter, 2 = 5;
+    //     // int[] robotRegion = getRegion(testRobotPos);
+    //     int[] robotRegion = getRegion(new Translation3d(SwerveSubsystem.getInstance().getRobotPose().getX(), SwerveSubsystem.getInstance().getRobotPose().getY(), 0.08));
+    //     int[][] top3Regions = new int[3][2];
+    //     int[] bestRegion = new int[]{-1,-1};
+    //     double maxRatio = 0;
+    //     int first = 0;
+    //     int second = 0;
+    //     int third = 0;
+    //     double firstDist = 0;
+    //     double secondDist = 0;
+    //     double thirdDist = 0;
+    //     int currentFuelNum;
         
-        for (int x = 0; x < searchRadius*2+1; x++) {
-            for (int y = 0; y < searchRadius*2+1; y++) {
-                currentFuelNum = numFuelsInRegion(new int[] {robotRegion[0]-searchRadius+x, robotRegion[1]-searchRadius+y});
-                if (currentFuelNum > first) {
-                    third = second;
-                    top3Regions[2] = top3Regions[1];
+    //     for (int x = 0; x < searchRadius*2+1; x++) {
+    //         for (int y = 0; y < searchRadius*2+1; y++) {
+    //             currentFuelNum = numFuelsInRegion(new int[] {robotRegion[0]-searchRadius+x, robotRegion[1]-searchRadius+y});
+    //             if (currentFuelNum > first) {
+    //                 third = second;
+    //                 top3Regions[2] = top3Regions[1];
                     
-                    second = first;
-                    top3Regions[1] = top3Regions[0];
+    //                 second = first;
+    //                 top3Regions[1] = top3Regions[0];
                     
-                    first = currentFuelNum;
-                    top3Regions[0] = new int[] {robotRegion[0]-searchRadius+x, robotRegion[1]-searchRadius+y};
-                } else if (currentFuelNum > second) {
-                    third = second;
-                    top3Regions[2] = top3Regions[1];
+    //                 first = currentFuelNum;
+    //                 top3Regions[0] = new int[] {robotRegion[0]-searchRadius+x, robotRegion[1]-searchRadius+y};
+    //             } else if (currentFuelNum > second) {
+    //                 third = second;
+    //                 top3Regions[2] = top3Regions[1];
                     
-                    second = currentFuelNum;
-                    top3Regions[1] = new int[] {robotRegion[0]-searchRadius+x, robotRegion[1]-searchRadius+y};
-                } else if (currentFuelNum > third) {
-                    third = currentFuelNum;
-                    top3Regions[2] = new int[] {robotRegion[0]-searchRadius+x, robotRegion[1]-searchRadius+y};
-                }
-            }
-        }//got top 3 regions
+    //                 second = currentFuelNum;
+    //                 top3Regions[1] = new int[] {robotRegion[0]-searchRadius+x, robotRegion[1]-searchRadius+y};
+    //             } else if (currentFuelNum > third) {
+    //                 third = currentFuelNum;
+    //                 top3Regions[2] = new int[] {robotRegion[0]-searchRadius+x, robotRegion[1]-searchRadius+y};
+    //             }
+    //         }
+    //     }//got top 3 regions
 
-        if (first == 0) {
-            DriverCommunications.hasAutoDriveTarget = false;
-            SwerveSubsystem.getInstance().hasAutoDriveTarget = false;
-            SwerveSubsystem.getInstance().bestPlaceToGo = null;
-            return null;
+    //     if (first == 0) {
+    //         DriverCommunications.hasAutoDriveTarget = false;
+    //         SwerveSubsystem.getInstance().hasAutoDriveTarget = false;
+    //         SwerveSubsystem.getInstance().bestPlaceToGo = null;
+    //         return null;
+    //     }
+
+    //     //first neighbors
+    //     first += numFuelsInRegion(new int[] {top3Regions[0][0], top3Regions[0][1] + 1});
+    //     first += numFuelsInRegion(new int[] {top3Regions[0][0], top3Regions[0][1] - 1});
+    //     first += numFuelsInRegion(new int[] {top3Regions[0][0] + 1, top3Regions[0][1]});
+    //     first += numFuelsInRegion(new int[] {top3Regions[0][0] -1, top3Regions[0][1]});
+    //     //second neighbors
+    //     second += numFuelsInRegion(new int[] {top3Regions[1][0], top3Regions[1][1] + 1});
+    //     second += numFuelsInRegion(new int[] {top3Regions[1][0], top3Regions[1][1] - 1});
+    //     second += numFuelsInRegion(new int[] {top3Regions[1][0] + 1, top3Regions[1][1]});
+    //     second += numFuelsInRegion(new int[] {top3Regions[1][0] -1, top3Regions[1][1]});
+    //     //third neighbors
+    //     third += numFuelsInRegion(new int[] {top3Regions[2][0], top3Regions[2][1] + 1});
+    //     third += numFuelsInRegion(new int[] {top3Regions[2][0], top3Regions[2][1] - 1});
+    //     third += numFuelsInRegion(new int[] {top3Regions[2][0] + 1, top3Regions[2][1]});
+    //     third += numFuelsInRegion(new int[] {top3Regions[2][0] -1, top3Regions[2][1]});
+
+    //     //y/x
+    //     firstDist = Math.max(1, Math.hypot(robotRegion[0] - top3Regions[0][0], robotRegion[1] - top3Regions[0][1]));
+    //     secondDist = Math.max(1, Math.hypot(robotRegion[0] - top3Regions[1][0], robotRegion[1] - top3Regions[1][1]));
+    //     thirdDist = Math.max(1, Math.hypot(robotRegion[0] - top3Regions[2][0], robotRegion[1] - top3Regions[2][1]));
+
+        
+
+    //     maxRatio = Math.max((first * (1/firstDist)), Math.max((second * (1/secondDist)), (third * (1/thirdDist))));
+
+    //     if ((first * (1/firstDist)) == maxRatio) {
+    //             bestRegion = top3Regions[0];
+    //     } else if ((second * (1/secondDist)) == maxRatio) {
+    //         bestRegion = top3Regions[1];
+    //     } else if ((third * (1/thirdDist)) == maxRatio) {
+    //         bestRegion = top3Regions[2];
+    //     } 
+
+    //     return new Translation3d(bestRegion[0] + 0.5, bestRegion[1] + 0.5, 0.08);
+    // }//returns nearest center of best region)
+
+
+
+    public Translation3d bestPlaceToGo () {
+        Translation3d closest = null;
+        double dist = 0;
+        for (Translation3d fuel : poses) {
+            if (closest == null) {
+                closest = fuel;
+                dist = fuel.getDistance(new Translation3d(SwerveSubsystem.getInstance().getRobotPose().getX(), SwerveSubsystem.getInstance().getRobotPose().getY(), fuel.getZ()));
+            } else {
+                if(fuel.getDistance(new Translation3d(SwerveSubsystem.getInstance().getRobotPose().getX(), SwerveSubsystem.getInstance().getRobotPose().getY(), fuel.getZ())) < dist) {
+                    closest = fuel;
+                    dist = fuel.getDistance(new Translation3d(SwerveSubsystem.getInstance().getRobotPose().getX(), SwerveSubsystem.getInstance().getRobotPose().getY(), fuel.getZ()));
+                }
+            
+            }
         }
 
-        //first neighbors
-        first += numFuelsInRegion(new int[] {top3Regions[0][0], top3Regions[0][1] + 1});
-        first += numFuelsInRegion(new int[] {top3Regions[0][0], top3Regions[0][1] - 1});
-        first += numFuelsInRegion(new int[] {top3Regions[0][0] + 1, top3Regions[0][1]});
-        first += numFuelsInRegion(new int[] {top3Regions[0][0] -1, top3Regions[0][1]});
-        //second neighbors
-        second += numFuelsInRegion(new int[] {top3Regions[1][0], top3Regions[1][1] + 1});
-        second += numFuelsInRegion(new int[] {top3Regions[1][0], top3Regions[1][1] - 1});
-        second += numFuelsInRegion(new int[] {top3Regions[1][0] + 1, top3Regions[1][1]});
-        second += numFuelsInRegion(new int[] {top3Regions[1][0] -1, top3Regions[1][1]});
-        //third neighbors
-        third += numFuelsInRegion(new int[] {top3Regions[2][0], top3Regions[2][1] + 1});
-        third += numFuelsInRegion(new int[] {top3Regions[2][0], top3Regions[2][1] - 1});
-        third += numFuelsInRegion(new int[] {top3Regions[2][0] + 1, top3Regions[2][1]});
-        third += numFuelsInRegion(new int[] {top3Regions[2][0] -1, top3Regions[2][1]});
-
-        //y/x
-        firstDist = Math.max(1, Math.hypot(robotRegion[0] - top3Regions[0][0], robotRegion[1] - top3Regions[0][1]));
-        secondDist = Math.max(1, Math.hypot(robotRegion[0] - top3Regions[1][0], robotRegion[1] - top3Regions[1][1]));
-        thirdDist = Math.max(1, Math.hypot(robotRegion[0] - top3Regions[2][0], robotRegion[1] - top3Regions[2][1]));
-
-        
-
-        maxRatio = Math.max((first * (1/firstDist)), Math.max((second * (1/secondDist)), (third * (1/thirdDist))));
-
-        if ((first * (1/firstDist)) == maxRatio) {
-                bestRegion = top3Regions[0];
-        } else if ((second * (1/secondDist)) == maxRatio) {
-            bestRegion = top3Regions[1];
-        } else if ((third * (1/thirdDist)) == maxRatio) {
-            bestRegion = top3Regions[2];
-        } 
-
-        return new Translation3d(bestRegion[0] + 0.5, bestRegion[1] + 0.5, 0.08);
+        return closest;
     }//returns nearest center of best region)
+
+
+
+
+
+
 
     public void driveToPosition (Translation3d pos) {
         Pose2d robotPose = SwerveSubsystem.getInstance().getRobotPose();

@@ -2,7 +2,22 @@ package frc.robot.subsystems.Drive;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.ctre.phoenix6.swerve.SwerveRequest.SwerveDriveBrake;
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.events.Event;
+import com.pathplanner.lib.path.ConstraintsZone;
+import com.pathplanner.lib.path.GoalEndState;
+import com.pathplanner.lib.path.IdealStartingState;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.path.PointTowardsZone;
+import com.pathplanner.lib.path.RotationTarget;
+import com.pathplanner.lib.path.Waypoint;
+
+import choreo.trajectory.EventMarker;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.littletonrobotics.junction.Logger;
 
@@ -29,8 +44,12 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -44,6 +63,7 @@ import frc.robot.subsystems.Intake.Intake;
 import frc.robot.subsystems.Intake.IntakeStates;
 import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.ShooterStates;
+import frc.robot.subsystems.Vision.Vision;
 
 public class SwerveSubsystem extends SubsystemBase {
 
@@ -308,8 +328,8 @@ public class SwerveSubsystem extends SubsystemBase {
                 io.setSwerveState(xLockbrake);
                 break;
             case AUTODRIVE:
-                if (hasAutoDriveTarget)
-                    driveToPosition(bestPlaceToGo); // Pass dt here
+                // if (hasAutoDriveTarget)
+                //     driveToPosition(bestPlaceToGo); // Pass dt here
             default:
                 break;
 
@@ -410,39 +430,182 @@ public class SwerveSubsystem extends SubsystemBase {
         return this.currentState;
     }
 
-    public void driveToPosition(Translation3d pos) {
-        if (pos == null) {return;}
-        Pose2d robotPose = getRobotPose();
-        double distToTargetX = pos.getX() - robotPose.getX();
-        double distToTargetY = pos.getY() - robotPose.getY();
+    // public void driveToPosition(Translation3d pos) {
 
-        // double kPt = 2;
-        // double power = 1.1;
+    
+    //     try{
+    //         PathPlannerPath path = createPathToPos(pos);
+    //         CommandScheduler.getInstance().schedule(AutoBuilder.followPath(path));
+    //     } catch (Exception e) {
+            
+    //         return;
+    //     }
+    // }
 
-        double speedX = Math.signum(distToTargetX) * 2 * Math.pow(Math.abs(distToTargetX), 1.1);
-        double speedY = Math.signum(distToTargetY) * 2 * Math.pow(Math.abs(distToTargetY), 1.1);
+    public void collectFuels (Translation3d[] poses) {
 
-        double targetAngleRadians = Math.atan2(pos.getY() - robotPose.getY(), pos.getX() - robotPose.getX());
-        Rotation2d targetRotation = new Rotation2d(targetAngleRadians);
+    
+        try{
+            // for (Translation3d pose : poses) {
+                PathPlannerPath path = createPathToPos(poses);
+            // }
+            // PathPlannerPath path = createPathToPos(poses);
+            CommandScheduler.getInstance().schedule(AutoBuilder.followPath(path));
+        } catch (Exception e) {
+            
+            return;
+        }
+    }
 
-        double error = targetRotation.minus(robotPose.getRotation()).getRadians();
-        error = Math.atan2(Math.sin(error), Math.cos(error));
+    public PathPlannerPath createPathToPos (Translation3d[] poses) {
+        int i = 0;
+        List<Pose2d> posesList = new ArrayList<Pose2d>();
 
-        double dynamicKp = (Math.abs(error) < 0.2) ? (48) : 24;
+        List<RotationTarget> rotationTargets = new ArrayList<RotationTarget>();
+        // List
+        //     new RotationTarget(0.0, ,   // Look straight at start
+        //     new RotationTarget(1.0, Rotation2d.fromDegrees(90))  // Rotate to face 90 degrees at waypoint 1
+        // );
         
-        rotationPID.setP(dynamicKp);
-
-        rotationPID.enableContinuousInput(-Math.PI, Math.PI);
-        double rotationOutput = rotationPID.calculate(
-            robotPose.getRotation().getRadians(), 
-            Math.atan2(distToTargetY, distToTargetX)
+        posesList.add(getRobotPose());
+        rotationTargets.add(new RotationTarget(i, getRobotPose().getRotation()));
+        i++;
+        for (Translation3d pose : poses) {
+            posesList.add(new Pose2d(pose.getX(), pose.getY(), Rotation2d.fromDegrees(0)));
+            rotationTargets.add(new RotationTarget(i, Rotation2d.fromRadians(Math.atan2(pose.getY() - getRobotPose().getY(), pose.getX() - getRobotPose().getX()))));
+            i++;
+        }
+        
+        List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(
+            posesList
         );
 
-        if (Math.abs(error) > 1) {
-            rotationOutput += Math.signum(rotationOutput);
-        }
+        PathConstraints constraints = new PathConstraints(5, 5, 4 * Math.PI, 8 * Math.PI); // The constraints for this path.
+                                            //velocity,acceleration,angularvelocity,angularacceleration
 
-        io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds()
-            .withSpeeds(new ChassisSpeeds(speedX, speedY, rotationOutput)));
+        // PathPlannerPath path = new PathPlannerPath(
+        //         waypoints,
+        //         constraints,
+        //         null, // The ideal starting state, this is only relevant for pre-planned paths, so can be null for on-the-fly paths.
+        //         new GoalEndState(0.0, Rotation2d.fromDegrees(0)) // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
+        // );          //double velocityMPS, Rotation2d rotation
+
+        PathPlannerPath path = new PathPlannerPath(
+            waypoints,
+            rotationTargets,                        // Custom directions
+            new ArrayList<PointTowardsZone>(),      // Empty zones
+            new ArrayList<ConstraintsZone>(),
+            new ArrayList<>(),           // Empty markers
+            constraints,                            // Path constraints
+            null,                                   // No initial state
+            new GoalEndState(0.0, Rotation2d.fromDegrees(90)), // Match target
+            false                                   // Not reversed
+        );
+    // List<Waypoint> waypoints, 
+    // List<RotationTarget> holonomicRotations, 
+    // List<PointTowardsZone> pointTowardsZones, 
+    // List<ConstraintsZone> constraintZones, 
+    // List<EventMarker> eventMarkers, 
+    // PathConstraints globalConstraints, 
+    // IdealStartingState idealStartingState, 
+    // GoalEndState goalEndState, 
+    // boolean reversed) {
+      
+        path.preventFlipping = true;
+
+        return path;
     }
+
+    /*
+     public PathPlannerPath createPathToPos (Translation3d pose) {
+        List<Pose2d> posesList = new ArrayList<Pose2d>();
+
+        List<RotationTarget> rotationTargets = new ArrayList<RotationTarget>();
+        // List
+        //     new RotationTarget(0.0, ,   // Look straight at start
+        //     new RotationTarget(1.0, Rotation2d.fromDegrees(90))  // Rotate to face 90 degrees at waypoint 1
+        // );
+        
+            posesList.add(getRobotPose());
+            posesList.add(new Pose2d(pose.getX(), pose.getY(), Rotation2d.fromDegrees(0)));
+            rotationTargets.add(new RotationTarget(0, Rotation2d.fromRadians(Math.atan2(pose.getY() - getRobotPose().getY(), pose.getX() - getRobotPose().getX()))));
+            rotationTargets.add(new RotationTarget(1, Rotation2d.fromRadians(Math.atan2(pose.getY() - getRobotPose().getY(), pose.getX() - getRobotPose().getX()))));
+        
+        List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(
+            posesList
+        );
+
+        PathConstraints constraints = new PathConstraints(3.0, 3.0, 4 * Math.PI, 8 * Math.PI); // The constraints for this path.
+                                            //velocity,acceleration,angularvelocity,angularacceleration
+
+        // PathPlannerPath path = new PathPlannerPath(
+        //         waypoints,
+        //         constraints,
+        //         null, // The ideal starting state, this is only relevant for pre-planned paths, so can be null for on-the-fly paths.
+        //         new GoalEndState(0.0, Rotation2d.fromDegrees(0)) // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
+        // );          //double velocityMPS, Rotation2d rotation
+
+        PathPlannerPath path = new PathPlannerPath(
+            waypoints,
+            rotationTargets,                        // Custom directions
+            new ArrayList<PointTowardsZone>(),      // Empty zones
+            new ArrayList<ConstraintsZone>(),
+            new ArrayList<>(),           // Empty markers
+            constraints,                            // Path constraints
+            null,                                   // No initial state
+            new GoalEndState(0.0, Rotation2d.fromDegrees(90)), // Match target
+            false                                   // Not reversed
+        );
+    // List<Waypoint> waypoints, 
+    // List<RotationTarget> holonomicRotations, 
+    // List<PointTowardsZone> pointTowardsZones, 
+    // List<ConstraintsZone> constraintZones, 
+    // List<EventMarker> eventMarkers, 
+    // PathConstraints globalConstraints, 
+    // IdealStartingState idealStartingState, 
+    // GoalEndState goalEndState, 
+    // boolean reversed) {
+      
+        path.preventFlipping = true;
+
+        return path;
+    }
+     */
+
+
+
+    /*
+     
+    public PathPlannerPath createPathToPos (Translation3d pose) {
+        // List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(
+        //         new Pose2d(pos.getX(), pos.getY(), Rotation2d.fromRadians(90))//Math.atan2(pos.getY() - getRobotPose().getY(), pos.getX() - getRobotPose().getX())
+        // );
+        List<Pose2d> posesList = new ArrayList<Pose2d>();
+
+        Translation3d endPose = new Translation3d();
+// Translation3d(1,2,0.1);
+        // posesList.add(new Pose2d(1, 2, new Rotation2d(0)));//Rotation2d.fromRadians(Math.atan2(2 - getRobotPose().getY(), 1 - getRobotPose().getX())))
+        for (Translation3d pose : poses) {
+            posesList.add(new Pose2d(pose.getX(), pose.getY(), Rotation2d.fromRadians(Math.atan2(pose.getY() - getRobotPose().getY(), pose.getX() - getRobotPose().getX()))));
+            endPose = pose;
+        }
+        
+        List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(
+            // posesList
+        );
+
+        PathConstraints constraints = new PathConstraints(3.0, 3.0, 4 * Math.PI, 8 * Math.PI); // The constraints for this path.
+                                            //velocity,acceleration,angularvelocity,angularacceleration
+
+        PathPlannerPath path = new PathPlannerPath(
+                waypoints,
+                constraints,
+                null, // The ideal starting state, this is only relevant for pre-planned paths, so can be null for on-the-fly paths.
+                new GoalEndState(0.0, Rotation2d.fromDegrees(30)) // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
+        );          //double velocityMPS, Rotation2d rotation
+
+        path.preventFlipping = true;
+        return path;
+    }
+     */
 }
