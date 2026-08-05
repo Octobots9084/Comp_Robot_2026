@@ -1,6 +1,8 @@
 package frc.robot.subsystems.Vision;
 
 import java.lang.constant.Constable;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -74,9 +76,9 @@ public class MichaelPieceVision {
         Constants.centerToCameraDefaultPosition = robotToCamera;
         // SmartDashboard.putNumber("roll", 0.66);
         // SmartDashboard.putNumber("pitch", -9.5);
-        poses = new Translation3d[2];
-        poses[0] = new Translation3d(1,2,0.1);
-        poses[1] = new Translation3d(4,3,0.1);
+        poses = new Translation3d[0];
+        // poses[0] = new Translation3d(1,2,0.1);
+        // poses[1] = new Translation3d(4,3,0.1);
     }
 
 
@@ -223,7 +225,7 @@ public class MichaelPieceVision {
 
     public void cycle () {
         updateYawAndX();
-        // addTargets();
+        addTargets();
         logPoses();
     }
 
@@ -466,6 +468,32 @@ public class MichaelPieceVision {
     public void logHeatmap () {
         //blank for now
     }
+
+    public static Translation3d[] getCollectableFuel (Translation3d[] poses) {
+        if (poses == null) {return new Translation3d[0];}
+        List<Translation3d> posesList = new ArrayList<Translation3d>();
+        for (Translation3d pose : poses) {
+            if (pose.getZ() < .4) {
+                posesList.add(pose);
+            }
+        }
+        return posesList.toArray(new Translation3d[0]);
+    }
+    
+    public static Translation3d[] sortPosesByDistance(Translation3d[] poses) {
+    if (poses == null) {return new Translation3d[0];}
+    Translation3d robotPos = new Translation3d(SwerveSubsystem.getInstance().getRobotPose().getX(), SwerveSubsystem.getInstance().getRobotPose().getY(), 0); // Grab current position once
+
+    Arrays.sort(poses, (a, b) -> {
+        // Calculate squared distances to skip heavy Math.sqrt() calculations
+        double distSqA = a.getSquaredDistance(robotPos);
+        double distSqB = b.getSquaredDistance(robotPos);
+        
+        return Double.compare(distSqA, distSqB);
+    });
+
+    return poses;
+}
 }
 /*
  

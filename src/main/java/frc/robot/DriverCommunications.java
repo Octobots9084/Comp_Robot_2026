@@ -8,11 +8,13 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.States;
@@ -32,6 +34,13 @@ public class DriverCommunications {
     public static double PhaseClock = 0;
     public static double TeleopTimer = Timer.getMatchTime();
     public static boolean hasAutoDriveTarget;
+    public static StructArrayPublisher<Translation3d> bestPieceVisionDrivePaths = NetworkTableInstance.getDefault()
+    .getStructArrayTopic("bestPieceVisionDrivePaths", Translation3d.struct).publish();
+    
+
+
+
+
     static void allianceShift(int ShiftEndTime){
         PhaseClock = Math.floor(TeleopTimer - ShiftEndTime);
         if(!Shooter.getInstance().isHubActive()){
@@ -104,6 +113,15 @@ public class DriverCommunications {
         //SmartDashboard.putBoolean("In Manual?", Superstructure.getInstance().getCurrentState() == States.MANUAL);
         //SmartDashboard.putBoolean("Can Shoot", Shooter.getInstance().Shootable());
         // SmartDashboard.putBoolean("hasTargetjjj", ButtonConfig.hasTarget);
+        Translation3d[] poses = MichaelPieceVision.sortPosesByDistance(MichaelPieceVision.getCollectableFuel(Vision.getInstance().getPieceCamera().poses));
+        if (poses == null) {
+            poses = new Translation3d[0];
+        }
+        Translation3d[] pieceVisionPaths = new Translation3d[poses.length + 1];
+        System.arraycopy(poses, 0, pieceVisionPaths, 1, poses.length);
+        pieceVisionPaths[0] = new Translation3d(SwerveSubsystem.getInstance().getRobotPose().getTranslation());
+        bestPieceVisionDrivePaths.set(pieceVisionPaths);
+
     }    
 
 

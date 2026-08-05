@@ -44,6 +44,9 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructArrayPublisher;
+import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -55,6 +58,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.ButtonConfig;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.subsystems.States;
@@ -63,6 +67,7 @@ import frc.robot.subsystems.Intake.Intake;
 import frc.robot.subsystems.Intake.IntakeStates;
 import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.ShooterStates;
+import frc.robot.subsystems.Vision.MichaelPieceVision;
 import frc.robot.subsystems.Vision.Vision;
 
 public class SwerveSubsystem extends SubsystemBase {
@@ -108,6 +113,9 @@ public class SwerveSubsystem extends SubsystemBase {
     public SlewRateLimiter poslimiter;
     /**Handles the bot turning too quickly while shooting. */
     public SlewRateLimiter rotlimiter;
+
+    public Command currentPieceVisionDriveCommand = null;
+
 
 
     public SwerveSubsystem(
@@ -444,21 +452,104 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public void collectFuels (Translation3d[] poses) {
 
-    
+    if (poses.length == 0) return;
         try{
             // for (Translation3d pose : poses) {
-                PathPlannerPath path = createPathToPos(poses);
-            // }
-            // PathPlannerPath path = createPathToPos(poses);
-            CommandScheduler.getInstance().schedule(AutoBuilder.followPath(path));
+                SequentialCommandGroup sequence = new SequentialCommandGroup();
+                PathPlannerPath[] paths = createPathsToPos(MichaelPieceVision.sortPosesByDistance(MichaelPieceVision.getCollectableFuel(poses)));
+                 // bestPlaceToGo.set(new Pose3d(best.getX(), best.getY(), 0.08, new Rotation3d()));
+        // fakeRobot3d.accept(testRobotPos);
+
+                for (int i = 0; i < paths.length; i++) {
+                    PathPlannerPath path = paths[i];
+                    sequence.addCommands(AutoBuilder.followPath(path));
+                }
+
+                // Commands.sequence(sequence);
+                
+            currentPieceVisionDriveCommand = sequence;
+            CommandScheduler.getInstance().schedule(currentPieceVisionDriveCommand);
+            
+            // CommandScheduler.getInstance().schedule(AutoBuilder.followPath(path));
         } catch (Exception e) {
             
             return;
         }
     }
 
-    public PathPlannerPath createPathToPos (Translation3d[] poses) {
-        int i = 0;
+    public PathPlannerPath[] createPathsToPos (Translation3d[] poses) {
+    PathPlannerPath[] paths = new PathPlannerPath[poses.length];
+    PathConstraints constraints = new PathConstraints(5, 5, 4 * Math.PI, 8 * Math.PI); 
+
+    for (int k = 0; k < poses.length; k++) {
+        List<Pose2d> posesList = new ArrayList<Pose2d>();
+        List<RotationTarget> rotationTargets = new ArrayList<RotationTarget>();
+
+        // 1. Establish the clean, distinct coordinates for start and target
+        double startX, startY;
+        if (k == 0) {
+            startX = getRobotPose().getX();
+            startY = getRobotPose().getY();
+        } else {
+            startX = poses[k-1].getX();
+            startY = poses[k-1].getY();
+        }
+        Translation3d target = poses[k];
+        
+        // 2. Compute ONE single, straight travel heading vector for this segment
+        Rotation2d travelDirection = new Rotation2d(
+            target.getX() - startX,
+            target.getY() - startY
+        );
+
+        // 3. Add the START pose (Index 0)
+        posesList.add(new Pose2d(startX, startY, travelDirection));
+        rotationTargets.add(new RotationTarget(0, Rotation2d.fromRadians(0))); // Index 0
+
+        // 4. Add the END pose (Index 1) using the SAME vector to eliminate S-curves
+        posesList.add(new Pose2d(target.getX(), target.getY(), travelDirection));
+        
+        // 5. Calculate where you want the bumpers facing at the end of this line
+        Rotation2d targetChassisRotation = Rotation2d.fromRadians(
+            Math.atan2(target.getY() - startY, target.getX() - startX)
+        );
+        rotationTargets.add(new RotationTarget(1, targetChassisRotation)); // Index 1
+
+        List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(posesList);
+
+        int endV = 0;
+        if (poses.length - 1 != k) {
+            endV = 3; // Keep moving if there are more path segments coming up
+        }
+
+        PathPlannerPath path = new PathPlannerPath(
+            waypoints,
+            rotationTargets,                        
+            new ArrayList<PointTowardsZone>(),      
+            new ArrayList<ConstraintsZone>(),
+            new ArrayList<>(),           
+            constraints,                            
+            null,                                   
+            new GoalEndState(endV, targetChassisRotation), 
+            false                                   
+        );
+
+        path.preventFlipping = true;
+        paths[k] = path;
+    }
+
+    return paths;
+}
+
+
+
+
+
+
+    /*
+     
+
+    public PathPlannerPath[] createPathToPos (Translation3d[] poses) {
         List<Pose2d> posesList = new ArrayList<Pose2d>();
 
         List<RotationTarget> rotationTargets = new ArrayList<RotationTarget>();
@@ -467,20 +558,41 @@ public class SwerveSubsystem extends SubsystemBase {
         //     new RotationTarget(1.0, Rotation2d.fromDegrees(90))  // Rotate to face 90 degrees at waypoint 1
         // );
         
-        posesList.add(getRobotPose());
-        rotationTargets.add(new RotationTarget(i, getRobotPose().getRotation()));
-        i++;
-        for (Translation3d pose : poses) {
-            posesList.add(new Pose2d(pose.getX(), pose.getY(), Rotation2d.fromDegrees(0)));
-            rotationTargets.add(new RotationTarget(i, Rotation2d.fromRadians(Math.atan2(pose.getY() - getRobotPose().getY(), pose.getX() - getRobotPose().getX()))));
-            i++;
-        }
-        
-        List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(
-            posesList
-        );
+        // 1. Calculate the direct angle from your current position to the VERY FIRST target pose
+    Translation3d firstTarget = poses[0];
+    Rotation2d travelDirection = new Rotation2d(
+        firstTarget.getX() - getRobotPose().getX(),
+        firstTarget.getY() - getRobotPose().getY()
+    );
 
-        PathConstraints constraints = new PathConstraints(5, 5, 4 * Math.PI, 8 * Math.PI); // The constraints for this path.
+    for (int i = 0; i < poses.length + 1; i++) {
+        if (i == 0) {
+            // OVERRIDE START POSE ROTATION: Use travel direction instead of actual robot gyro heading
+            posesList.add(new Pose2d(getRobotPose().getTranslation(), travelDirection));
+            rotationTargets.add(new RotationTarget(0, Rotation2d.fromRadians(0)));
+        } else {
+            Translation3d pose = poses[i - 1];
+            
+            // If you have multiple segments, calculate the heading to the NEXT point.
+            // For a single point, this will just be the same travelDirection.
+            Rotation2d segmentDirection = travelDirection;
+            if (i < poses.length) {
+                Translation3d nextPose = poses[i];
+                segmentDirection = new Rotation2d(nextPose.getX() - pose.getX(), nextPose.getY() - pose.getY());
+            }
+
+            // FORCE TRAVEL DIRECTION: This guarantees the spline handles face each other perfectly
+            posesList.add(new Pose2d(pose.getX(), pose.getY(), segmentDirection));
+            
+            // Keep your custom holonomic rotation target (where the bumpers face)
+            rotationTargets.add(new RotationTarget(i, Rotation2d.fromRadians(Math.atan2(pose.getY() - getRobotPose().getY(), pose.getX() - getRobotPose().getX()))));
+        }
+    }
+
+    // Pass to waypoints from poses as usual
+    List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(posesList);
+
+        PathConstraints constraints = new PathConstraints(1, 1, 2 * Math.PI, 4 * Math.PI); // The constraints for this path.
                                             //velocity,acceleration,angularvelocity,angularacceleration
 
         // PathPlannerPath path = new PathPlannerPath(
@@ -498,7 +610,7 @@ public class SwerveSubsystem extends SubsystemBase {
             new ArrayList<>(),           // Empty markers
             constraints,                            // Path constraints
             null,                                   // No initial state
-            new GoalEndState(0.0, Rotation2d.fromDegrees(90)), // Match target
+            new GoalEndState(0.0, rotationTargets.get(rotationTargets.size()-1).rotation()), // Match target
             false                                   // Not reversed
         );
     // List<Waypoint> waypoints, 
@@ -515,6 +627,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
         return path;
     }
+     */
 
     /*
      public PathPlannerPath createPathToPos (Translation3d pose) {

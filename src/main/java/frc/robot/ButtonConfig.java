@@ -5,6 +5,8 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.auto.runIntake;
@@ -22,6 +24,7 @@ import frc.robot.subsystems.Lights.LightAnimations;
 import frc.robot.subsystems.Lights.Lights;
 import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.ShooterStates;
+import frc.robot.subsystems.Vision.MichaelPieceVision;
 import frc.robot.subsystems.Vision.Vision;
 
 public class ButtonConfig {
@@ -35,7 +38,10 @@ public class ButtonConfig {
     private SwerveStates lastSwerveWantedState;
     private SwerveStates lastSwerveCurrentState;
 
-    public Translation3d[] poses;
+    public Translation3d[] poses = null;
+
+    public static StructArrayPublisher<Translation3d> currentPieceVisionDrivePaths = NetworkTableInstance.getDefault()
+    .getStructArrayTopic("currentPieceVisionDrivePaths", Translation3d.struct).publish();
 
     public void initTeleop() {
         intake = Intake.getInstance();
@@ -172,6 +178,12 @@ public class ButtonConfig {
         driverController.povDown().onTrue(new InstantCommand(() -> {
                 if (Vision.getInstance().getPieceCamera().poses.length != 0) {
                         poses = Vision.getInstance().getPieceCamera().poses;
+                        Translation3d[] posesLog = MichaelPieceVision.sortPosesByDistance(MichaelPieceVision.getCollectableFuel(poses));
+                        Translation3d[] pieceVisionPaths = new Translation3d[posesLog.length + 1];
+                        System.arraycopy(posesLog, 0, pieceVisionPaths, 1, posesLog.length);
+                        pieceVisionPaths[0] = new Translation3d(SwerveSubsystem.getInstance().getRobotPose().getTranslation());
+                        currentPieceVisionDrivePaths.set(pieceVisionPaths);
+
                         SwerveSubsystem.getInstance().io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(0, 0, 0))
                                 .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
                         // bestPlaceToGo = Vision.getInstance().getPieceCamera().bestPlaceToGo();
@@ -186,10 +198,15 @@ public class ButtonConfig {
                 }
         }))
         .onFalse(new InstantCommand(() -> {
+                SwerveSubsystem.getInstance().currentPieceVisionDriveCommand.cancel();
                 SwerveSubsystem.getInstance().wantedState = lastSwerveWantedState;
                 SwerveSubsystem.getInstance().currentState = lastSwerveCurrentState;
+                poses = null;
                 // bestPlaceToGo = null;
+                currentPieceVisionDrivePaths.set(new Translation3d[0]);
         }));
+
+        
 
         // driverController.povDown().onTrue(new InstantCommand(() -> {
         //         SwerveSubsystem.getInstance().io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(0, 0, 0))
