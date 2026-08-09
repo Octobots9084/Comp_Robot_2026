@@ -33,7 +33,7 @@ import frc.robot.Constants;
 import frc.robot.subsystems.Intake.Intake;
 import frc.robot.subsystems.Intake.IntakeStates;
 
-public class MichaelPieceVision {
+public class PieceVision {
     private double inchesToMetersRatio = 0.0254;
     private Transform3d intakeCameraPosition;
     private final Translation3d testRobotPos = new Translation3d(0.32,0.32,0.35);
@@ -68,7 +68,7 @@ public class MichaelPieceVision {
     private int numTargets = 0;
 
     
-    public MichaelPieceVision(String photonCameraName, Transform3d robotToCamera) {
+    public PieceVision(String photonCameraName, Transform3d robotToCamera) {
         camera = new PhotonCamera(photonCameraName);
         yawRotation = robotToCamera.getRotation().getZ();
         xTransform = Math.abs(robotToCamera.getTranslation().getX());

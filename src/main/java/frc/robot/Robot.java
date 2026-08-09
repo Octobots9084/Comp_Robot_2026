@@ -29,7 +29,7 @@ import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.ShooterStates;
 import frc.robot.subsystems.Shooter.Turret.Turret;
 import frc.robot.subsystems.Shooter.Turret.TurretIO;
-import frc.robot.subsystems.Vision.MichaelPieceVision;
+import frc.robot.subsystems.Vision.PieceVision;
 import frc.robot.subsystems.Vision.Vision;
 import frc.robot.subsystems.Vision.VisionIOSystem;
 import frc.robot.subsystems.Vision.VisionIO.VisionIOInputs;
@@ -44,6 +44,8 @@ import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
+
+import com.pathplanner.lib.util.PathPlannerLogging;
 
 import choreo.trajectory.SwerveSample;
 
@@ -121,7 +123,6 @@ public class Robot extends LoggedRobot {
     // climb = Climb.getInstance();
     // intake = Intake.getInstance();
     DriverCommunications.pushToElasticInit();
-
   }
 
   /** This function is called periodically during all modes. */
@@ -153,12 +154,14 @@ public class Robot extends LoggedRobot {
     LoggedTracer.record("PhoenixRefresh");
     Logger.recordOutput("IsBlueAlliance",Constants.isBlueAlliance);
     DriverCommunications.pushToElastic();
-    DriverCommunications.fieldPose2d.setRobotPose(SwerveSubsystem.getInstance().getRobotPose());
+    DriverCommunications.fieldPose2d.setRobotPose(swerve.getRobotPose());
 
     // Return to non-RT thread priority (do not modify the first argument)
     // Threads.setCurrentThreadPriority(false, 10);
     Vision.getInstance().getPieceCamera().cycle();
-    SwerveSubsystem.getInstance().bestPlaceToGo = Vision.getInstance().getPieceCamera().bestPlaceToGo();
+    swerve.bestPlaceToGo = Vision.getInstance().getPieceCamera().bestPlaceToGo();
+
+    swerve.pieceVisionPath = swerve.createPathsToPos(PieceVision.sortPosesByDistance(PieceVision.getCollectableFuel(Vision.getInstance().getPieceCamera().poses)));
   }
 
   /** This function is called once when the robot is disabled. */
@@ -243,9 +246,9 @@ public class Robot extends LoggedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    // if (SwerveSubsystem.getInstance().bestPlaceToGo == null)
+    // if (swerve.bestPlaceToGo == null)
     //   DriverCommunications.hasAutoDriveTarget = true;
-    //   SwerveSubsystem.getInstance().hasAutoDriveTarget = true;
+    //   swerve.hasAutoDriveTarget = true;
     //   Vision.getInstance().getPieceCamera().bestPlaceToGo();
 
     DriverCommunications.TeleopTimer = Timer.getMatchTime();
@@ -378,6 +381,6 @@ public class Robot extends LoggedRobot {
     }
 
   public void setAllianceColor() {
-    SwerveSubsystem.getInstance().io.setAllianceColor();
+    swerve.io.setAllianceColor();
   }
 }

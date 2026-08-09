@@ -3,6 +3,8 @@ package frc.robot;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
+import com.pathplanner.lib.util.PathPlannerLogging;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -21,7 +23,7 @@ import frc.robot.subsystems.States;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Drive.SwerveSubsystem;
 import frc.robot.subsystems.Shooter.Shooter;
-import frc.robot.subsystems.Vision.MichaelPieceVision;
+import frc.robot.subsystems.Vision.PieceVision;
 import frc.robot.subsystems.Vision.Vision;
 
 public class DriverCommunications {
@@ -36,6 +38,13 @@ public class DriverCommunications {
     public static boolean hasAutoDriveTarget;
     public static StructArrayPublisher<Translation3d> bestPieceVisionDrivePaths = NetworkTableInstance.getDefault()
     .getStructArrayTopic("bestPieceVisionDrivePaths", Translation3d.struct).publish();
+    public static StructArrayPublisher<Translation3d> idk = NetworkTableInstance.getDefault()
+    .getStructArrayTopic("idk", Translation3d.struct).publish();
+
+
+
+    public static StructArrayPublisher<Pose2d> best = NetworkTableInstance.getDefault().getStructArrayTopic("Pathplanner/best", Pose2d.struct).publish();
+    public static StructArrayPublisher<Pose2d> curr = NetworkTableInstance.getDefault().getStructArrayTopic("Pathplanner/curr", Pose2d.struct).publish();
     
 
 
@@ -113,7 +122,7 @@ public class DriverCommunications {
         //SmartDashboard.putBoolean("In Manual?", Superstructure.getInstance().getCurrentState() == States.MANUAL);
         //SmartDashboard.putBoolean("Can Shoot", Shooter.getInstance().Shootable());
         // SmartDashboard.putBoolean("hasTargetjjj", ButtonConfig.hasTarget);
-        Translation3d[] poses = MichaelPieceVision.sortPosesByDistance(MichaelPieceVision.getCollectableFuel(Vision.getInstance().getPieceCamera().poses));
+        Translation3d[] poses = PieceVision.sortPosesByDistance(PieceVision.getCollectableFuel(Vision.getInstance().getPieceCamera().poses));
         if (poses == null) {
             poses = new Translation3d[0];
         }
@@ -121,11 +130,20 @@ public class DriverCommunications {
         System.arraycopy(poses, 0, pieceVisionPaths, 1, poses.length);
         pieceVisionPaths[0] = new Translation3d(SwerveSubsystem.getInstance().getRobotPose().getTranslation());
         bestPieceVisionDrivePaths.set(pieceVisionPaths);
-
+        SmartDashboard.putBoolean("hasTargets", ButtonConfig.hasTargets);
+        SmartDashboard.putNumber("idkL", Vision.getInstance().getPieceCamera().poses.length);
+        idk.set(Vision.getInstance().getPieceCamera().poses);
+        try {
+        best.set(SwerveSubsystem.getInstance().pieceVisionPath.getPathPoses().toArray(new Pose2d[0]));
+        } catch (Exception e) {
+            best.set(new Pose2d[0]);
+        }
     }    
 
 
     public static void pushToElasticInit () {
+        PathPlannerLogging.setLogActivePathCallback(poses -> curr.set(poses.toArray(new Pose2d[0])));
+
         robot3d = NetworkTableInstance.getDefault().getStructTopic("Robot3d", Pose3d.struct).publish();
         autoDriveLocation = NetworkTableInstance.getDefault().getStructTopic("AutoDriveLocation", Pose3d.struct).publish();
         // SmartDashboard.putNumber("tuneKp", 24);

@@ -41,7 +41,7 @@ public interface VisionIO {
     public default void periodic() {
     }
 
-    public default MichaelPieceVision getPieceCamera () {
+    public default PieceVision getPieceCamera () {
         return null;
     }
 }
