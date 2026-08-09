@@ -516,22 +516,25 @@ public class SwerveSubsystem extends SubsystemBase {
                 }
         }
 
-        List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(posesList);
-    
-        PathPlannerPath path = new PathPlannerPath(
-            waypoints,
-            rotationTargets,
-            new ArrayList<PointTowardsZone>(),
-            new ArrayList<ConstraintsZone>(),
-            new ArrayList<>(),
-            constraints,
-            null,
-            new GoalEndState(0, endTargetRotation),
-            false
-        );
-        path.preventFlipping = true;
+        if (posesList != null && !posesList.isEmpty()) {
+            List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(posesList);
+        
+            PathPlannerPath path = new PathPlannerPath(
+                waypoints,
+                rotationTargets,
+                new ArrayList<PointTowardsZone>(),
+                new ArrayList<ConstraintsZone>(),
+                new ArrayList<>(),
+                constraints,
+                null,
+                new GoalEndState(0, endTargetRotation),
+                false
+            );
+            path.preventFlipping = true;
 
-        return path;
+            return path;
+        }
+        return null;
     }
 
     // public PathPlannerPath[] createPathsToPos(Translation3d[] poses) {
