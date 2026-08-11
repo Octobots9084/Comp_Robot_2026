@@ -5,6 +5,7 @@ import org.littletonrobotics.junction.Logger;
 
 import com.pathplanner.lib.util.PathPlannerLogging;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -142,6 +143,7 @@ public class DriverCommunications {
 
 
     public static void pushToElasticInit () {
+        CameraServer.startAutomaticCapture();
         PathPlannerLogging.setLogActivePathCallback(poses -> curr.set(poses.toArray(new Pose2d[0])));
 
         robot3d = NetworkTableInstance.getDefault().getStructTopic("Robot3d", Pose3d.struct).publish();

@@ -190,6 +190,8 @@ public class ButtonConfig {
                         // bestPlaceToGo = Vision.getInstance().getPieceCamera().bestPlaceToGo();
                         lastSwerveWantedState = SwerveSubsystem.getInstance().wantedState;
                         lastSwerveCurrentState = SwerveSubsystem.getInstance().currentState;
+                        SwerveSubsystem.getInstance().wantedState = SwerveStates.AUTODRIVE;
+                        SwerveSubsystem.getInstance().currentState = SwerveStates.AUTODRIVE;
                         Intake.getInstance().wantedState = IntakeStates.INTAKING;
                 }
         }))

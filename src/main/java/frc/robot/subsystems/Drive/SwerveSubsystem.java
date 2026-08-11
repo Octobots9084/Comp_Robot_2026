@@ -464,15 +464,67 @@ public class SwerveSubsystem extends SubsystemBase {
             currentPieceVisionDriveCommand = AutoBuilder.followPath(pieceVisionPath);
             CommandScheduler.getInstance().schedule(currentPieceVisionDriveCommand);
             
+            // driveUntilAtEndPos(pieceVisionPath, 0.05);
+
+            // double poseToleranceMeters = 0.05;
+
+            // Command path2 = currentPieceVisionDriveCommand.until(() -> pieceVisionPath.getPathPoses().get(pieceVisionPath.getPathPoses().size() - 1).getTranslation().getDistance(getRobotPose().getTranslation()) < poseToleranceMeters);
             // CommandScheduler.getInstance().schedule(AutoBuilder.followPath(path));
+            // CommandScheduler.getInstance().schedule(path2);
         } catch (Exception e) {
             
             return;
         }
     }
 
+    /*
+     MUST BE A 2 POINTP 
+     */
+    // public boolean driveUntilAtEndPos (PathPlannerPath path, double toleranceInMeters) {
+    //     if (path == null) return true;
+    //     if (path.getPathPoses().get(path.getPathPoses().size() - 1).getTranslation().getDistance(getRobotPose().getTranslation()) < toleranceInMeters) {
+    //         return true;
+    //     }
+
+    //     List<RotationTarget> rotationTargets = path.getRotationTargets();
+    //     List<Waypoint> waypoints = path.getWaypoints();
+
+    //     // RotationTarget newRotationTarget = new RotationTarget(, null)
+
+    //     waypoints.set(0, PathPlannerPath.waypointsFromPoses(new Pose2d(getRobotPose().getX(), getRobotPose().getY(), new Rotation2d(path.getPathPoses().get(1).getX() - getRobotPose().getX(),path.getPathPoses().get(1).getY() - getRobotPose().getY()))).get(0));
+
+    //     PathConstraints constraints = new PathConstraints(0.5, 0.5, 0.5 * Math.PI, 0.5 * Math.PI);
+    //     // posesList.add(new Pose2d(target.getX(), target.getY(), travelDirection));
+    //     //         Rotation2d targetChassisRotation = Rotation2d.fromRadians(
+    //     //             Math.atan2(target.getY() - startY, target.getX() - startX)
+    //     //         );
+
+    //     //         if (k != poses.length-1) {
+    //     //             rotationTargets.add(new RotationTarget(k+1, targetChassisRotation)); // Index 1
+    //     //         } else {
+    //     //             endTargetRotation = targetChassisRotation;
+    //     //         }
+        
+    //         PathPlannerPath path2 = new PathPlannerPath(
+    //             waypoints,
+    //             path.getRotationTargets(),
+    //             new ArrayList<PointTowardsZone>(),
+    //             new ArrayList<ConstraintsZone>(),
+    //             new ArrayList<>(),
+    //             constraints,
+    //             null,
+    //             new GoalEndState(0, Rotation2d.fromRadians(Math.atan2(path.getPathPoses().get(1).getY() - getRobotPose().getY(), path.getPathPoses().get(1).getX() - getRobotPose().getX()))),
+    //             false
+    //         );
+    //         path.preventFlipping = true;
+
+    //     CommandScheduler.getInstance().schedule(AutoBuilder.followPath(path2));
+
+    //     return false;
+    // }
+
     public PathPlannerPath createPathsToPos(Translation3d[] poses) {
-        PathConstraints constraints = new PathConstraints(2, 2, 1 * Math.PI, 1 * Math.PI);
+        PathConstraints constraints = new PathConstraints(0.5, 0.5, 0.5 * Math.PI, 0.5 * Math.PI);
 
         Rotation2d endTargetRotation = null;
         double startX;

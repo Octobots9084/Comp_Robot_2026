@@ -4,6 +4,8 @@ import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.Drive.SwerveStates;
+import frc.robot.subsystems.Drive.SwerveSubsystem;
 import frc.robot.subsystems.Lights.LightAnimations;
 import frc.robot.subsystems.Lights.Lights;
 
@@ -109,6 +111,8 @@ public class Intake extends SubsystemBase {
                 if(driverElephantiasisPart2Override){
                     currentState = IntakeStates.ELEPHANTIASISPART2;
                 } else if (driverOverride){
+                    currentState = IntakeStates.INTAKING;
+                } else if (SwerveSubsystem.getInstance().currentState == SwerveStates.AUTODRIVE) {
                     currentState = IntakeStates.INTAKING;
                 } else {
                     wantedState = IntakeStates.EXTENDED;
