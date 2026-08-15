@@ -22,6 +22,7 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -90,6 +91,11 @@ public class SwerveIOSystem extends TunerSwerveDrivetrain implements Subsystem, 
     @Override
     public Pose2d getPose2d() {
         return this.getState().Pose;
+    }
+
+    @Override
+    public Pose3d getPose3d() {
+        return new Pose3d(this.getState().Pose);
     }
 
     /**
