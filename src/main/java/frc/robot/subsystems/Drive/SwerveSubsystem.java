@@ -68,6 +68,7 @@ import frc.robot.subsystems.Intake.IntakeStates;
 import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.ShooterStates;
 import frc.robot.subsystems.Vision.PieceVision;
+import frc.robot.subsystems.Vision.ShooterAngleCalculator;
 import frc.robot.subsystems.Vision.Vision;
 
 public class SwerveSubsystem extends SubsystemBase {
@@ -253,6 +254,9 @@ public class SwerveSubsystem extends SubsystemBase {
                     rotLockAngle = (Math.PI/2)*Math.round(getRobotPose().getRotation().getRadians()/(Math.PI/2));
                 }
                 return wantedState;
+            case TRENCHLOCK:
+                rotLockAngle = 90;
+                return wantedState;
             case SLOW:
                 if (currentState != SwerveStates.IDLE)
                     return wantedState;
@@ -289,6 +293,28 @@ public class SwerveSubsystem extends SubsystemBase {
                 io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds()
                         .withSpeeds(calculateSpeedsBasedOnJoystickInputs())
                         .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
+
+                break;
+            case TRENCHLOCK:
+                // if (Shooter.getInstance().inEnterTrenchZone()) {
+
+                    //force it to not go away from it
+                    double halfFieldY = 4;//idk what ha;f is
+                    if (getRobotPose().getY() > halfFieldY) {//left?
+                        io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds()
+                                .withSpeeds(calculateSpeedsBasedOnJoystickInputsForceTrench(false))
+                                .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
+                    } else {//right?
+                        io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds()
+                                .withSpeeds(calculateSpeedsBasedOnJoystickInputsForceTrench(true))
+                                .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
+                    }
+                // }
+                
+                if(Shooter.getInstance().inTrenchDangerZone()){
+                    //force it to stay right
+
+                }
 
                 break;
             case SLOW:        
@@ -369,6 +395,115 @@ public class SwerveSubsystem extends SubsystemBase {
             return new ChassisSpeeds(-xVelocity, -yVelocity, angularVelocity);
         }
         return new ChassisSpeeds(xVelocity, yVelocity, angularVelocity);
+    }
+    
+    public double getXToTarget(double poseX){
+        ChassisSpeeds fieldRelative = ChassisSpeeds.fromRobotRelativeSpeeds(io.getChassisSpeeds(), getRobotPose().getRotation());
+        return poseX - (getRobotPose().getX()
+            + Constants.TurretDistFromCenter
+                * Math.cos(((getRobotPose().getRotation().getRadians() + fieldRelative.omegaRadiansPerSecond * ShooterAngleCalculator.lagTime) + Constants.TurretAngleFromCenter)) + fieldRelative.vxMetersPerSecond * ShooterAngleCalculator.lagTime);
+    }
+
+    public double getDistanceToClosestTrench(){
+        double distToRedTrench = Math.abs(getXToTarget(Constants.redTrenchX));
+        double distToBlueTrench = Math.abs(getXToTarget(Constants.blueTrenchX));
+        if(distToBlueTrench < distToRedTrench){
+            return distToBlueTrench;
+        }
+        return distToRedTrench;
+    }
+
+    public ChassisSpeeds calculateSpeedsBasedOnJoystickInputsForceTrench(boolean onRight) {
+        double yMagnitude = MathUtil.applyDeadband(driverController.getLeftX(), Constants.leftYDeadband);
+        double xMagnitude = MathUtil.applyDeadband(driverController.getLeftY(), Constants.leftXDeadband);
+        
+        double rawRightX = -MathUtil.applyDeadband(driverController.getRightX(), Constants.rightXDeadband);
+
+        // Directly set the target angle based on stick position
+        if (rawRightX > 0.9) {
+            rotLockAngle = 0.0; // Replace with your desired angle when pushing right
+        } else if (rawRightX < -0.9) {
+            rotLockAngle = Math.PI; // Replace with your desired angle when pushing left
+        }
+
+        double xVelocity = xMagnitude * maxVelocity;
+        double yVelocity = yMagnitude * maxVelocity;
+
+
+        double rot = getRobotPose().getRotation().getDegrees();
+
+        //0-360
+
+        
+        if (Math.abs(rot) < 90) {
+            rotLockAngle = 0;
+        } else {
+            rotLockAngle = 180;
+        }
+        
+        double dR = 0;
+        if (rotLockAngle == 0) {
+            dR = rotLockAngle - rot;
+        } else {
+            if (Math.signum(rot) < 0) {
+                rot += 360;
+            }
+                dR = rotLockAngle - rot;
+        }
+
+
+
+        double RotVelocity = Math.signum(dR) * ((-0.000375 * Math.pow(Math.abs(dR), 2)) + (0.100058 * Math.abs(dR)));
+
+        boolean goingCorrectWay = false;
+        if (onRight) {
+            if (yVelocity < 0) { // forces right
+            goingCorrectWay = true;
+            }
+        } else {
+            if (yVelocity > 0) { // forces left
+            goingCorrectWay = true;
+            }
+        }
+        //right = 0.45 - 0.65
+        //left  = 7.35 - 7.55
+
+        //maxSpeed = 3.75
+        double distFromEdge = getRobotPose().getY();
+        if (distFromEdge > 4) {
+            distFromEdge = 8 - distFromEdge;
+        }
+
+        if (goingCorrectWay) {
+            if (distFromEdge < .45) {
+                yVelocity *= 0.1;
+            } else if (distFromEdge < .65) {
+                yVelocity *= 0.2;
+            } else if (distFromEdge < .8) {
+                yVelocity *= 0.3;
+            } else if (distFromEdge < 2) {
+                yVelocity *= 1.2;
+            }
+        } else {
+            yVelocity *= 0.1;
+        }
+
+        if (getDistanceToClosestTrench() < 1.5 && distFromEdge > .8) {
+            xVelocity *= 0.6;
+        }
+        else if (getDistanceToClosestTrench() < 2 && distFromEdge > 1.5) {
+            xVelocity *= 0.8;
+        } 
+        // else
+        // if (getDistanceToClosestTrench() < 3 && distFromEdge < 2.5) {
+        //     xVelocity *= 0.8;
+        // } 
+        
+
+        if (Constants.isBlueAlliance) {
+            return new ChassisSpeeds(-xVelocity, -yVelocity, RotVelocity);
+        }
+        return new ChassisSpeeds(xVelocity, yVelocity, RotVelocity);
     }
 
     public ChassisSpeeds calculateRotLockSpeedsBasedOnJoystickInputs() {

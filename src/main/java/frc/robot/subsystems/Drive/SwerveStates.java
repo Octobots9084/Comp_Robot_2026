@@ -20,5 +20,6 @@ public enum SwerveStates {
         ALIGNCLIMB,
         XLOCK,
         SLOW,
-        AUTODRIVE
+        AUTODRIVE,
+        TRENCHLOCK
 }

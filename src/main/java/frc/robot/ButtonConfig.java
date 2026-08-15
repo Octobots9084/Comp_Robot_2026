@@ -69,7 +69,7 @@ public class ButtonConfig {
         //         if (SwerveSubsystem.getInstance().wantedState == SwerveStates.ROTATION_LOCK) {
         //                 SwerveSubsystem.getInstance().wantedState = SwerveStates.MANUAL;
         //         } else {
-        //                 SwerveSubsystem.getInstance().wantedState = SwerveStates.ROTATION_LOCK;
+                        SwerveSubsystem.getInstance().wantedState = SwerveStates.ROTATION_LOCK;
         //         }
         // }));
 
@@ -215,7 +215,12 @@ public class ButtonConfig {
                 }
         }));
 
-        
+        driverController.povRight().onTrue(new InstantCommand(() -> {
+                SwerveSubsystem.getInstance().wantedState = SwerveStates.TRENCHLOCK;
+        }))
+        .onFalse(new InstantCommand(() -> {
+                SwerveSubsystem.getInstance().wantedState = SwerveStates.MANUAL;
+        }));
 
         // driverController.povDown().onTrue(new InstantCommand(() -> {
         //         SwerveSubsystem.getInstance().io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(0, 0, 0))

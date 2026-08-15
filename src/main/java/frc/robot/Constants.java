@@ -159,8 +159,8 @@ public final class Constants {
 
   public static RobotTypes robotType = RobotTypes.COMP;
 
-  public static double redTrenchX = 11.7;
-  public static double blueTrenchX = 4.8;
+  public static double redTrenchX = 11.7;//11.9?
+  public static double blueTrenchX = 4.8;//4.6?
   public static double outpostTrenchY = 7.4375;
   public static double depotTrenchY = 0.625;
 
