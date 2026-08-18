@@ -2,11 +2,14 @@ package frc.robot;
 
 import com.ctre.phoenix6.swerve.SwerveModule;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.auto.runIntake;
@@ -40,6 +43,9 @@ public class ButtonConfig {
 
     public Translation3d[] poses = null;
     public static boolean hasTargets = false;
+
+    public static boolean startTrenchAlign = false;
+    public static boolean stopTrenchAlign = false;
 
     public static StructArrayPublisher<Translation3d> currentPieceVisionDrivePaths = NetworkTableInstance.getDefault()
     .getStructArrayTopic("currentPieceVisionDrivePaths", Translation3d.struct).publish();
@@ -216,10 +222,60 @@ public class ButtonConfig {
         }));
 
         driverController.povRight().onTrue(new InstantCommand(() -> {
-                SwerveSubsystem.getInstance().wantedState = SwerveStates.TRENCHLOCK;
+                        lastSwerveWantedState = SwerveSubsystem.getInstance().wantedState;
+                        lastSwerveCurrentState = SwerveSubsystem.getInstance().currentState;
+                        // SwerveSubsystem.getInstance().wantedState = SwerveStates.AUTODRIVE;
+                        // SwerveSubsystem.getInstance().currentState = SwerveStates.AUTODRIVE;
+                        SwerveSubsystem.getInstance().wantedState = SwerveStates.AUTODRIVE;
+                        SwerveSubsystem.getInstance().currentState = SwerveStates.AUTODRIVE;
+                        SwerveSubsystem.getInstance().alignToTrenchEnterance();
+                        CommandScheduler.getInstance().schedule(SwerveSubsystem.getInstance().currentTrenchAlignCommand);
+        }))
+        .whileTrue(new InstantCommand(() -> {
+        //         //if commands not null, and command is not done, align.
+        //         //command is done if 
+        //         SmartDashboard.putBoolean("startTrenchAlign", startTrenchAlign);
+        //         SmartDashboard.putBoolean("stopTrenchAlign", stopTrenchAlign);
+                // if (SwerveSubsystem.getInstance().currentTrenchAlignCommand != null && SwerveSubsystem.getInstance().currentTrenchAlignCommand.isFinished()) {
+                        // if (SwerveSubsystem.getInstance().currentTrenchAlignCommand != null) {
+                        //         SwerveSubsystem.getInstance().currentTrenchAlignCommand.cancel();
+                        // }
+
+                        // SwerveSubsystem.getInstance().wantedState = lastSwerveWantedState;
+                        // SwerveSubsystem.getInstance().currentState = lastSwerveCurrentState;
+                        // SmartDashboard.putBoolean("trenchcommanddone", SwerveSubsystem.getInstance().currentTrenchAlignCommand);
+                        
+                // }
+
+                // if (SwerveSubsystem.getInstance().getRobotPose().getTranslation().getDistance(SwerveSubsystem.getInstance().currentTrenchAlignCommand.))
+                
+        //         if (startTrenchAlign && SwerveSubsystem.getInstance().currentTrenchAlignCommand == null) {
+        //                 endTrenchAlign();
+        //         }
+                
+                
+        //         if (!stopTrenchAlign) {
+        //         }
+        //         // if (SwerveSubsystem.getInstance().currentTrenchAlignCommand != null && SwerveSubsystem.getInstance().currentTrenchAlignCommand.isFinished()) {
+        //         //         endTrenchAlign();
+        //         // }
+        //         // if (command is done and start) {
+        //         //         endTrenchAlign();
+        //         // }
+        //         //         if ( &&  && startTrenchAlign) {
+                                
+        //         //         } else {
+        //         //         }
         }))
         .onFalse(new InstantCommand(() -> {
-                SwerveSubsystem.getInstance().wantedState = SwerveStates.MANUAL;
+                // endTrenchAlign();
+                
+                if (SwerveSubsystem.getInstance().currentTrenchAlignCommand != null) {
+                        SwerveSubsystem.getInstance().currentTrenchAlignCommand.cancel();
+                }
+
+                SwerveSubsystem.getInstance().wantedState = lastSwerveWantedState;
+                SwerveSubsystem.getInstance().currentState = lastSwerveCurrentState;
         }));
 
         // driverController.povDown().onTrue(new InstantCommand(() -> {
@@ -236,5 +292,10 @@ public class ButtonConfig {
         //         SwerveSubsystem.getInstance().io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds().withSpeeds(new ChassisSpeeds(0, 0, 0))
         //                 .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
         // }));
+    }
+
+    public void endTrenchAlign () {
+        startTrenchAlign = false;
+        stopTrenchAlign = true;
     }
 }

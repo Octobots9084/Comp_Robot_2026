@@ -117,7 +117,11 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public Command currentPieceVisionDriveCommand = null;
 
+    public Command currentTrenchAlignCommand = null;
+
     public PathPlannerPath pieceVisionPath;
+    
+    public static StructArrayPublisher<Pose2d> travelAngleLog = NetworkTableInstance.getDefault().getStructArrayTopic("travelAngleLog", Pose2d.struct).publish();
     
 
 
@@ -255,7 +259,7 @@ public class SwerveSubsystem extends SubsystemBase {
                 }
                 return wantedState;
             case TRENCHLOCK:
-                rotLockAngle = 90;
+                // rotLockAngle = 90;
                 return wantedState;
             case SLOW:
                 if (currentState != SwerveStates.IDLE)
@@ -299,22 +303,24 @@ public class SwerveSubsystem extends SubsystemBase {
                 // if (Shooter.getInstance().inEnterTrenchZone()) {
 
                     //force it to not go away from it
-                    double halfFieldY = 4;//idk what ha;f is
-                    if (getRobotPose().getY() > halfFieldY) {//left?
-                        io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds()
-                                .withSpeeds(calculateSpeedsBasedOnJoystickInputsForceTrench(false))
-                                .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
-                    } else {//right?
-                        io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds()
-                                .withSpeeds(calculateSpeedsBasedOnJoystickInputsForceTrench(true))
-                                .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
-                    }
+                    // double halfFieldY = 4;//idk what ha;f is
+                    // if (getRobotPose().getY() > halfFieldY) {//left?
+                    //     // io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds()
+                    //     //         .withSpeeds(calculateSpeedsBasedOnJoystickInputsForceTrench(false))
+                    //     //         .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
+                    // } else {//right?
+                    //     // io.setSwerveState(new SwerveRequest.ApplyFieldSpeeds()
+                    //     //         .withSpeeds(calculateSpeedsBasedOnJoystickInputsForceTrench(true))
+                    //     //         .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage));
+                    // }
                 // }
-                
-                if(Shooter.getInstance().inTrenchDangerZone()){
-                    //force it to stay right
 
-                }
+                // alignToTrenchEnterance();
+                
+                // if(Shooter.getInstance().inTrenchDangerZone()){
+                //     //force it to stay right
+
+                // }
 
                 break;
             case SLOW:        
@@ -370,6 +376,114 @@ public class SwerveSubsystem extends SubsystemBase {
                 break;
 
         }
+    }
+
+    public void logd() {
+        ChassisSpeeds currentSpeeds = inputs.Speeds;
+
+        double travelAngleRad = Math.atan2(currentSpeeds.vyMetersPerSecond, currentSpeeds.vxMetersPerSecond);
+
+        Pose2d[] travelAngleLogArray = new Pose2d[2];
+        travelAngleLogArray[0] = getRobotPose();
+        travelAngleLogArray[1] = new Pose2d(getRobotPose().getX() + Math.cos(travelAngleRad), getRobotPose().getY() + Math.sin(travelAngleRad), new Rotation2d());
+
+        travelAngleLog.set(travelAngleLogArray);
+    }
+
+    public void alignToTrenchEnterance () {
+
+        double halfFieldY = 4;
+        double halfFieldX = 8.3;
+        double redHalfTrenchX = 12;
+        double blueHalfTrenchX = 4.5;
+        
+        ChassisSpeeds currentSpeeds = inputs.Speeds;
+
+
+        PathConstraints constraints = new PathConstraints(maxVelocity, maxVelocity, maxAngularVelocity, maxAngularVelocity);
+
+        double startX = 0;
+        double startY = 0;
+
+        Pose2d target = null;
+
+        startX = getRobotPose().getX();
+        startY = getRobotPose().getY();
+
+        
+        double y = getRobotPose().getY();
+        double x = getRobotPose().getX();
+
+        if (x < blueHalfTrenchX) {//alliance
+            if (y > halfFieldY) {//right
+                //top right align
+                target = new Pose2d(3.5,7.45, new Rotation2d());//13.1=bottomred//3.5 is blue
+            } else {
+                //top left align
+                target = new Pose2d(3.5,0.55, new Rotation2d());
+            }
+        } else if (x > redHalfTrenchX) {//enemy
+            if (y > halfFieldY) {//right
+                //bottom right align
+                target = new Pose2d(13.1,7.45, new Rotation2d());
+            } else {
+                //bottom left align
+                target = new Pose2d(13.1,0.55, new Rotation2d());
+            }
+        } else {//middle, use trajectory
+            if (y > halfFieldY) {//right
+                if (Math.abs(Units.radiansToDegrees(Math.atan2(currentSpeeds.vyMetersPerSecond, -currentSpeeds.vxMetersPerSecond))) < 90) {//red side
+                    target = new Pose2d(5.7,7.45, new Rotation2d());
+                } else {//blue side
+                    target = new Pose2d(10.7,7.45, new Rotation2d());
+                }
+            } else {
+                if (Math.abs(Units.radiansToDegrees(Math.atan2(currentSpeeds.vyMetersPerSecond, -currentSpeeds.vxMetersPerSecond))) < 90) {//red side
+                    target = new Pose2d(5.7,.55, new Rotation2d());
+                } else {//blue side
+                    target = new Pose2d(10.7,.55, new Rotation2d());
+                }
+            }
+        }
+
+        if (target == null) return;
+
+
+        Rotation2d travelDirection = new Rotation2d(
+            target.getX() - startX,
+            target.getY() - startY
+        );
+
+        List<Pose2d> poses = new ArrayList<Pose2d>();
+        poses.add(new Pose2d(startX, startY, travelDirection));
+
+        poses.add(new Pose2d(target.getX(), target.getY(), travelDirection));
+
+        
+        double endTargetRotation = 0;
+        double rot = getRobotPose().getRotation().getDegrees();
+
+        if (Math.abs(rot) < 90) {
+            endTargetRotation = 0;
+        } else {
+            endTargetRotation = 180;
+        }
+
+        List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(poses);
+    
+        PathPlannerPath path = new PathPlannerPath(
+            waypoints,
+            new ArrayList<RotationTarget>(),
+            new ArrayList<PointTowardsZone>(),
+            new ArrayList<ConstraintsZone>(),
+            new ArrayList<>(),
+            constraints,
+            null,
+            new GoalEndState(1, Rotation2d.fromDegrees(endTargetRotation)),
+            false
+        );
+        path.preventFlipping = true;
+        currentTrenchAlignCommand = AutoBuilder.followPath(path);
     }
 
 

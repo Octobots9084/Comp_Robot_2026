@@ -64,6 +64,7 @@ public class DriverCommunications {
     }
     
     public static void pushToElastic() {
+        SwerveSubsystem.getInstance().logd();
         if(Robot.TeleopStarted){ //if in teleop
             if (TeleopTimer > 130) { //in transition period
                 PhaseIndication = "Transition Period";
